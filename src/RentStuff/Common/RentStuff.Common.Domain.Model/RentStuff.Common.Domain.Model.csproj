@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C6C90B57-616B-4D09-BA23-1C9C42AC93AD}</ProjectGuid>
+    <ProjectGuid>{199A41D2-A685-4E0C-98FE-C5524099B5F2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RentStuff.Property.Domain.Model</RootNamespace>
-    <AssemblyName>RentStuff.Property.Domain.Model</AssemblyName>
+    <RootNamespace>RentStuff.Common.Domain.Model</RootNamespace>
+    <AssemblyName>RentStuff.Common.Domain.Model</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,18 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HouseAggregate\Address.cs" />
-    <Compile Include="HouseAggregate\House.cs" />
-    <Compile Include="HouseAggregate\IHouseRepository.cs" />
-    <Compile Include="HouseAggregate\PropertyType.cs" />
-    <Compile Include="HouseAggregate\Size.cs" />
+    <Compile Include="Assertion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Common\RentStuff.Common.Domain.Model\RentStuff.Common.Domain.Model.csproj">
-      <Project>{199a41d2-a685-4e0c-98fe-c5524099b5f2}</Project>
-      <Name>RentStuff.Common.Domain.Model</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

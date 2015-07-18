@@ -1,0 +1,24 @@
+﻿<?xml version="1.0"?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.Model.HouseAggregate">
+  <class name="House" table="house" lazy="false">
+    <id name="Id">
+      <column name="id"/>
+      <generator class="native" />
+    </id>
+    <property name="Price" column="price"/>
+    <property name="ForRent" column="for_rent"/>
+    <property name="NumberOfBedrooms" column="number_of_bedrooms"/>
+    <property name="NumberOfKitchens" column="number_of_kitchens"/>
+    <property name="NumberOfBathrooms" column="number_of_bathrooms"/>
+    <property name="FamiliesOnly" column="families_only"/>
+    <property name="GirlsOnly" column="girls_only"/>
+    <property name="InternetAvailable" column="internet_available"/>
+    <property name="LandlinePhoneAvailable" column="landline_phone_available"/>
+    <property name="CableTvAvailable" column="cable_tv_available"/>
+    <property name="GarageAvailable" column="garage_available"/>
+    <property name="SmokingAllowed" column="smoking_allowed"/>
+    <property name="PropertyType" column="property_type"/>
+    <property name="OwnerEmail" column="owner_email"/>
+  </class>
+</hibernate-mapping>
