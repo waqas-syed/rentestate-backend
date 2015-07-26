@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using Spring.Transaction;
 using Spring.Transaction.Interceptor;
@@ -18,6 +18,12 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         public void SaveorUpdate(House house)
         {
             CurrentSession.SaveOrUpdate(house);
+        }
+
+        [Transaction(TransactionPropagation.Required, ReadOnly = false)]
+        public void Delete(House house)
+        {
+            CurrentSession.Delete(house);
         }
 
         /// <summary>
@@ -40,6 +46,16 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         public House GetHouseByOwnerEmail(string email)
         {
             return CurrentSession.QueryOver<House>().Where(x => x.OwnerEmail == email).SingleOrDefault();
+        }
+
+        /// <summary>
+        /// Get all the houses
+        /// </summary>
+        /// <returns></returns>
+        [Transaction]
+        public IList<House> GetAllHouses()
+        {
+            return CurrentSession.QueryOver<House>().List<House>();
         }
     }
 }

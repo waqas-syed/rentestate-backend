@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace RentStuff.Property.Domain.Model.HouseAggregate
 {
     /// <summary>
@@ -13,6 +15,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         void SaveorUpdate(House house);
 
         /// <summary>
+        /// Deletes the house object from the database
+        /// </summary>
+        /// <param name="house"></param>
+        void Delete(House house);
+
+        /// <summary>
         /// Gets the house by the given id
         /// </summary>
         /// <param name="id"></param>
@@ -25,5 +33,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <param name="email"></param>
         /// <returns></returns>
         House GetHouseByOwnerEmail(string email);
+
+        /// <summary>
+        /// Get all the houses
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        IList<House> GetAllHouses();
     }
 }

@@ -23,7 +23,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int numberOfKitchens = 1;
             long price = 90000;
 
-            PropertyType propertyType = PropertyType.House;
             House house = new House.HouseBuilder().OwnerEmail(email).Location(address)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).ForRent(true).CableTvAvailable(true).FamiliesOnly(true)
@@ -49,6 +48,48 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
             Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
+
+            RemoveHouseObject(houseRepository, house);
+        }
+
+        [Test]
+        public void SaveHouseAndRetreiveByEmailTest_TestsThatHouseUInstancesAreSavedToTheDatabaseAsExpected_VerifiesThroughDatabaseQuery()
+        {
+            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            string email = "w@12344321.com";
+            Address address = new Address("House # 818", "Islamabad", "Pakistan");
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            long price = 90000;
+
+            House house = new House.HouseBuilder().OwnerEmail(email).Location(address)
+                .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
+                .NumberOfKitchens(numberOfKitchens).ForRent(true).CableTvAvailable(true).FamiliesOnly(true)
+                .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
+                .PropertyType(PropertyType.Apartment).Price(price).Build();
+
+            houseRepository.SaveorUpdate(house);
+
+            House retreivedHouse = houseRepository.GetHouseByOwnerEmail(email);
+
+            Assert.NotNull(retreivedHouse);
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
+            Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
+            Assert.AreEqual(house.ForRent, retreivedHouse.FamiliesOnly);
+            Assert.AreEqual(house.GarageAvailable, retreivedHouse.LandlinePhoneAvailable);
+            Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
+            Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
+            Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
+
+            RemoveHouseObject(houseRepository, house);
+        }
+
+        private void RemoveHouseObject(IHouseRepository houseRepository, House house)
+        {
+            houseRepository.Delete(house);
         }
     }
 }

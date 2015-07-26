@@ -315,6 +315,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             /// <returns></returns>
             public House Build()
             {
+                // For now, we only deal with rented houses
+                _forRent = true;
                 return new House(_location, _price, _forRent, _numberOfBedrooms, _numberOfKitchens,
                                  _numberOfBathrooms, _familiesOnly, _girlsOnly, _internetAvailable,
                                  _landlinePhoneAvailable, _cableTvAvailable, _size, _garageAvailable,
