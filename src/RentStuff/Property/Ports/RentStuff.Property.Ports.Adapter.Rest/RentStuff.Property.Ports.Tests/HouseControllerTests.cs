@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Web.Http;
 using System.Web.Http.Results;
 using NUnit.Framework;
 using RentStuff.Property.Domain.Model.HouseAggregate;
@@ -11,7 +12,7 @@ namespace RentStuff.Property.Ports.Tests
     public class HouseControllerTests
     {
         [Test]
-        public void InitializeHouseControllerTest_VerifiesThatTheControllerIsInitializedAsExpected_VerfiesThroughInstanceValue()
+        public void SaveAndGetHouseInstanceByEmailTest_TestsThatHouseIsSavedAndRetreivedAsExpected_VerfiesThroughInstanceValue()
         {
             HouseController houseController = (HouseController) ContextRegistry.GetContext()["HouseController"];
             Assert.NotNull(houseController);
@@ -22,7 +23,10 @@ namespace RentStuff.Property.Ports.Tests
                 .WithInternetAvailable(true).LandlinePhoneAvailable(true).Build();
             houseController.Save(house);
             IHttpActionResult httpActionResult = houseController.Get(ownerEmail);
-            House houseResponse = ((OkNegotiatedContentResult<House>) httpActionResult).Content;
+            IList<House> houseList = ((OkNegotiatedContentResult<IList<House>>) httpActionResult).Content;
+            Assert.NotNull(houseList);
+            Assert.AreEqual(1, houseList.Count);
+            House houseResponse = houseList[0];
             Assert.NotNull(houseResponse);
             Assert.AreEqual(house.OwnerEmail, houseResponse.OwnerEmail);
             Assert.AreEqual(house.NumberOfBathrooms, houseResponse.NumberOfBathrooms);
@@ -37,6 +41,64 @@ namespace RentStuff.Property.Ports.Tests
 
             // Remove the house instance
             DeleteHouse(houseResponse.Id);
+        }
+
+        [Test]
+        public void SaveAndGetAllHousesTest_TestsThatHousesAreSavedAndRetreivedAsExpected_VerfiesThroughInstanceValue()
+        {
+            HouseController houseController = (HouseController)ContextRegistry.GetContext()["HouseController"];
+            Assert.NotNull(houseController);
+
+            string ownerEmail = "thorin@oakenshield123.com";
+
+            // House # 1
+            House house1 = new House.HouseBuilder().OwnerEmail(ownerEmail).NumberOfBathrooms(2).NumberOfBedrooms(3)
+                .NumberOfKitchens(1).Price(55000).PropertyType(PropertyType.Apartment).CableTvAvailable(true)
+                .WithInternetAvailable(true).LandlinePhoneAvailable(true).Build();
+            houseController.Save(house1);
+
+            // Hopuse # 2
+            House house2 = new House.HouseBuilder().OwnerEmail(ownerEmail).NumberOfBathrooms(2).NumberOfBedrooms(3)
+                .NumberOfKitchens(1).Price(55000).PropertyType(PropertyType.Apartment).CableTvAvailable(true)
+                .WithInternetAvailable(true).LandlinePhoneAvailable(true).Build();
+            houseController.Save(house2);
+
+            IHttpActionResult httpActionResult = houseController.Get(ownerEmail);
+            IList<House> houseList = ((OkNegotiatedContentResult<IList<House>>)httpActionResult).Content;
+            Assert.NotNull(houseList);
+            Assert.AreEqual(2, houseList.Count);
+
+            // Checking assertions on House # 1
+            House houseResponse1 = houseList[0];
+            Assert.NotNull(houseResponse1);
+            Assert.AreEqual(house1.OwnerEmail, houseResponse1.OwnerEmail);
+            Assert.AreEqual(house1.NumberOfBathrooms, houseResponse1.NumberOfBathrooms);
+            Assert.AreEqual(house1.NumberOfBedrooms, houseResponse1.NumberOfBedrooms);
+            Assert.AreEqual(house1.NumberOfKitchens, houseResponse1.NumberOfKitchens);
+            Assert.AreEqual(house1.InternetAvailable, houseResponse1.InternetAvailable);
+            Assert.AreEqual(house1.CableTvAvailable, houseResponse1.CableTvAvailable);
+            Assert.IsTrue(house1.ForRent);
+            Assert.AreEqual(house1.ForRent, houseResponse1.ForRent);
+            Assert.AreEqual(house1.PropertyType, houseResponse1.PropertyType);
+            Assert.AreEqual(house1.Price, houseResponse1.Price);
+
+            // Checking assertions on House # 1
+            House houseResponse2 = houseList[1];
+            Assert.NotNull(houseResponse2);
+            Assert.AreEqual(house2.OwnerEmail, houseResponse2.OwnerEmail);
+            Assert.AreEqual(house2.NumberOfBathrooms, houseResponse2.NumberOfBathrooms);
+            Assert.AreEqual(house2.NumberOfBedrooms, houseResponse2.NumberOfBedrooms);
+            Assert.AreEqual(house2.NumberOfKitchens, houseResponse2.NumberOfKitchens);
+            Assert.AreEqual(house2.InternetAvailable, houseResponse2.InternetAvailable);
+            Assert.AreEqual(house2.CableTvAvailable, houseResponse2.CableTvAvailable);
+            Assert.IsTrue(house2.ForRent);
+            Assert.AreEqual(house2.ForRent, houseResponse2.ForRent);
+            Assert.AreEqual(house2.PropertyType, houseResponse2.PropertyType);
+            Assert.AreEqual(house2.Price, houseResponse2.Price);
+
+            // Remove the house instance
+            DeleteHouse(houseResponse1.Id);
+            DeleteHouse(houseResponse2.Id);
         }
 
         private void DeleteHouse(long id)

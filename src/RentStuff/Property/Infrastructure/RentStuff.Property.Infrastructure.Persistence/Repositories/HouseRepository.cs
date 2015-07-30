@@ -43,9 +43,9 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="email"></param>
         /// <returns></returns>
         [Transaction]
-        public House GetHouseByOwnerEmail(string email)
+        public IList<House> GetHouseByOwnerEmail(string email)
         {
-            return CurrentSession.QueryOver<House>().Where(x => x.OwnerEmail == email).SingleOrDefault();
+            return CurrentSession.QueryOver<House>().Where(x => x.OwnerEmail == email).List<House>();
         }
 
         /// <summary>

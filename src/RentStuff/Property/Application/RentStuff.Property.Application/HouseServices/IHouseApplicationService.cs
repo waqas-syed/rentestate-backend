@@ -29,7 +29,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// Gets the house by providing the owner's email id
         /// </summary>
         /// <returns></returns>
-        House GetHouseByEmail(string email);
+        IList<House> GetHouseByEmail(string email);
 
         /// <summary>
         /// Get all houses

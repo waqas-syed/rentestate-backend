@@ -56,7 +56,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// Gets the house by providing the owner's email id
         /// </summary>
         /// <returns></returns>
-        public House GetHouseByEmail(string email)
+        public IList<House> GetHouseByEmail(string email)
         {
             return _houseRepository.GetHouseByOwnerEmail(email);
         }

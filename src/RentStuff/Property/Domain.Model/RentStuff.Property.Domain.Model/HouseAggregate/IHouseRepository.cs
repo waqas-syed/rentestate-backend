@@ -32,7 +32,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        House GetHouseByOwnerEmail(string email);
+        IList<House> GetHouseByOwnerEmail(string email);
 
         /// <summary>
         /// Get all the houses
