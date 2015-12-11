@@ -19,9 +19,9 @@ namespace RentStuff.Property.Ports.Tests
 
             string ownerEmail = "thorin@oakenshield123.com";
             House house = new House.HouseBuilder().OwnerEmail(ownerEmail).NumberOfBathrooms(2).NumberOfBedrooms(3)
-                .NumberOfKitchens(1).Price(55000).PropertyType(PropertyType.Apartment).CableTvAvailable(true)
+                .NumberOfKitchens(1).MonthlyRent(55000).PropertyType(PropertyType.Apartment).CableTvAvailable(true)
                 .WithInternetAvailable(true).LandlinePhoneAvailable(true).Build();
-            houseController.Save(house);
+            houseController.Post(house);
             IHttpActionResult httpActionResult = houseController.Get(ownerEmail);
             IList<House> houseList = ((OkNegotiatedContentResult<IList<House>>) httpActionResult).Content;
             Assert.NotNull(houseList);
@@ -37,7 +37,7 @@ namespace RentStuff.Property.Ports.Tests
             Assert.IsTrue(house.ForRent);
             Assert.AreEqual(house.ForRent, houseResponse.ForRent);
             Assert.AreEqual(house.PropertyType, houseResponse.PropertyType);
-            Assert.AreEqual(house.Price, houseResponse.Price);
+            Assert.AreEqual(house.MonthlyRent, houseResponse.MonthlyRent);
 
             // Remove the house instance
             DeleteHouse(houseResponse.Id);
@@ -53,15 +53,15 @@ namespace RentStuff.Property.Ports.Tests
 
             // House # 1
             House house1 = new House.HouseBuilder().OwnerEmail(ownerEmail).NumberOfBathrooms(2).NumberOfBedrooms(3)
-                .NumberOfKitchens(1).Price(55000).PropertyType(PropertyType.Apartment).CableTvAvailable(true)
+                .NumberOfKitchens(1).MonthlyRent(55000).PropertyType(PropertyType.Apartment).CableTvAvailable(true)
                 .WithInternetAvailable(true).LandlinePhoneAvailable(true).Build();
-            houseController.Save(house1);
+            houseController.Post(house1);
 
             // Hopuse # 2
             House house2 = new House.HouseBuilder().OwnerEmail(ownerEmail).NumberOfBathrooms(2).NumberOfBedrooms(3)
-                .NumberOfKitchens(1).Price(55000).PropertyType(PropertyType.Apartment).CableTvAvailable(true)
+                .NumberOfKitchens(1).MonthlyRent(55000).PropertyType(PropertyType.Apartment).CableTvAvailable(true)
                 .WithInternetAvailable(true).LandlinePhoneAvailable(true).Build();
-            houseController.Save(house2);
+            houseController.Post(house2);
 
             IHttpActionResult httpActionResult = houseController.Get(ownerEmail);
             IList<House> houseList = ((OkNegotiatedContentResult<IList<House>>)httpActionResult).Content;
@@ -80,7 +80,7 @@ namespace RentStuff.Property.Ports.Tests
             Assert.IsTrue(house1.ForRent);
             Assert.AreEqual(house1.ForRent, houseResponse1.ForRent);
             Assert.AreEqual(house1.PropertyType, houseResponse1.PropertyType);
-            Assert.AreEqual(house1.Price, houseResponse1.Price);
+            Assert.AreEqual(house1.MonthlyRent, houseResponse1.MonthlyRent);
 
             // Checking assertions on House # 1
             House houseResponse2 = houseList[1];
@@ -94,7 +94,7 @@ namespace RentStuff.Property.Ports.Tests
             Assert.IsTrue(house2.ForRent);
             Assert.AreEqual(house2.ForRent, houseResponse2.ForRent);
             Assert.AreEqual(house2.PropertyType, houseResponse2.PropertyType);
-            Assert.AreEqual(house2.Price, houseResponse2.Price);
+            Assert.AreEqual(house2.MonthlyRent, houseResponse2.MonthlyRent);
 
             // Remove the house instance
             DeleteHouse(houseResponse1.Id);

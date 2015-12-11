@@ -8,6 +8,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
     {
         House,
         Apartment,
-        Hostel
+        Hostel,
+        Hotel
     }
 }

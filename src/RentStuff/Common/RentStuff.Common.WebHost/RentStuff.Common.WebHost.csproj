@@ -58,6 +58,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="mysql.data, Version=6.2.2.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\libs\mysql.data.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -171,6 +175,10 @@
     <ProjectReference Include="..\..\Property\Application\RentStuff.Property.Application\RentStuff.Property.Application.csproj">
       <Project>{0ccf9f64-68ff-487c-a46a-b25349f249a5}</Project>
       <Name>RentStuff.Property.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Property\Infrastructure\RentStuff.Property.Infrastructure.Persistence\RentStuff.Property.Infrastructure.Persistence.csproj">
+      <Project>{8cc19802-c300-4e6b-9137-83db9d94a481}</Project>
+      <Name>RentStuff.Property.Infrastructure.Persistence</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Property\Ports\RentStuff.Property.Ports.Adapter.Rest\RentStuff.Property.Ports.Adapter.Rest.csproj">
       <Project>{f5927692-6840-4b54-a8aa-ec37152112df}</Project>

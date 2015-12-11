@@ -6,8 +6,7 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
       <column name="id"/>
       <generator class="native" />
     </id>
-    <property name="Price" column="price"/>
-    <property name="ForRent" column="for_rent"/>
+    <property name="MonthlyRent" column="monthly_rent"/>
     <property name="NumberOfBedrooms" column="number_of_bedrooms"/>
     <property name="NumberOfKitchens" column="number_of_kitchens"/>
     <property name="NumberOfBathrooms" column="number_of_bathrooms"/>

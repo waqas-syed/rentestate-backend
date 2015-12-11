@@ -28,7 +28,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 
         [Route("house")]
         [HttpPost]
-        public IHttpActionResult Save([FromBody]House house)
+        public IHttpActionResult Post([FromBody]House house)
         {
             try
             {

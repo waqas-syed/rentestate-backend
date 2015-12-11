@@ -25,9 +25,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             House house = new House.HouseBuilder().OwnerEmail(email).Location(address)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
-                .NumberOfKitchens(numberOfKitchens).ForRent(true).CableTvAvailable(true).FamiliesOnly(true)
+                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).Price(price).Build();
+                .PropertyType(PropertyType.Apartment).MonthlyRent(price).Build();
 
             houseRepository.SaveorUpdate(house);
 
@@ -43,7 +43,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
-            Assert.AreEqual(house.ForRent, retreivedHouse.FamiliesOnly);
+            Assert.AreEqual(house.FamiliesOnly, retreivedHouse.FamiliesOnly);
             Assert.AreEqual(house.GarageAvailable, retreivedHouse.LandlinePhoneAvailable);
             Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
@@ -65,20 +65,21 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             House house = new House.HouseBuilder().OwnerEmail(email).Location(address)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
-                .NumberOfKitchens(numberOfKitchens).ForRent(true).CableTvAvailable(true).FamiliesOnly(true)
+                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).Price(price).Build();
+                .PropertyType(PropertyType.Apartment).MonthlyRent(price).Build();
 
             houseRepository.SaveorUpdate(house);
 
-            House retreivedHouse = houseRepository.GetHouseByOwnerEmail(email);
+            IList<House> retreivedHouses = houseRepository.GetHouseByOwnerEmail(email);
 
+            House retreivedHouse = retreivedHouses[0];
             Assert.NotNull(retreivedHouse);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
-            Assert.AreEqual(house.ForRent, retreivedHouse.FamiliesOnly);
+            Assert.AreEqual(house.FamiliesOnly, retreivedHouse.FamiliesOnly);
             Assert.AreEqual(house.GarageAvailable, retreivedHouse.LandlinePhoneAvailable);
             Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);

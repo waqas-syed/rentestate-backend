@@ -9,8 +9,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
     public class House
     {
         private Address _location;
-        private long _price;
-        private bool _forRent;
+        private long _monthlyRent;
         private int _numberOfBedrooms;
         private int _numberOfKitchens;
         private int _numberOfBathrooms;
@@ -35,14 +34,13 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public House(Address location, long price, bool forRent, int numberOfBedrooms,
+        public House(Address location, long monthlyRent, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool girlsOnly,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Size size, 
             bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail)
         {
             _location = location;
-            _price = price;
-            _forRent = forRent;
+            _monthlyRent = monthlyRent;
             _numberOfBedrooms = numberOfBedrooms;
             _numberOfKitchens = numberOfKitchens;
             _numberOfBathrooms = numberOfBathrooms;
@@ -79,23 +77,14 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <summary>
         /// Monthly Rent
         /// </summary>
-        public long Price
+        public long MonthlyRent
         {
-            get { return _price; }
+            get { return _monthlyRent; }
             set
             {
                 Assertion.AssertNumberNotZero(value);
-                _price = value;
+                _monthlyRent = value;
             }
-        }
-
-        /// <summary>
-        /// Is the property for rent or for sale
-        /// </summary>
-        public bool ForRent
-        {
-            get { return _forRent; }
-            set { _forRent = value; }
         }
 
         public int NumberOfBedrooms
@@ -182,8 +171,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public class HouseBuilder
         {
             private Address _location;
-            private long _price;
-            private bool _forRent;
+            private long _monthlyRent;
             private int _numberOfBedrooms;
             private int _numberOfKitchens;
             private int _numberOfBathrooms;
@@ -212,22 +200,11 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             /// <summary>
             /// Price
             /// </summary>
-            /// <param name="price"></param>
+            /// <param name="monthlyRent"></param>
             /// <returns></returns>
-            public HouseBuilder Price(long price)
+            public HouseBuilder MonthlyRent(long monthlyRent)
             {
-                _price = price;
-                return this;
-            }
-
-            /// <summary>
-            /// is the property for rent or for sale
-            /// </summary>
-            /// <param name="forRent"></param>
-            /// <returns></returns>
-            public HouseBuilder ForRent(bool forRent)
-            {
-                _forRent = forRent;
+                _monthlyRent = monthlyRent;
                 return this;
             }
 
@@ -315,9 +292,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             /// <returns></returns>
             public House Build()
             {
-                // For now, we only deal with rented houses
-                _forRent = true;
-                return new House(_location, _price, _forRent, _numberOfBedrooms, _numberOfKitchens,
+                return new House(_location, _monthlyRent, _numberOfBedrooms, _numberOfKitchens,
                                  _numberOfBathrooms, _familiesOnly, _girlsOnly, _internetAvailable,
                                  _landlinePhoneAvailable, _cableTvAvailable, _size, _garageAvailable,
                                  _smokingAllowed, _propertyType, _ownerEmail);

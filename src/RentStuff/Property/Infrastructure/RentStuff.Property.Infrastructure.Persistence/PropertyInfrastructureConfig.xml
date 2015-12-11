@@ -3,7 +3,7 @@
          xmlns:db="http://www.springframework.net/database"
          xmlns:tx="http://www.springframework.net/tx">
 
-  <!-- Database Configuration -->
+  <!-- Database Configuration: Provider = MySql .NET Connector dlls. -->
   <db:provider id="DbProvider"
                    provider="MySql-6.2.2"
                    connectionString="Server=localhost;Database=rentstuff;User ID=root;Password=root;"/>
