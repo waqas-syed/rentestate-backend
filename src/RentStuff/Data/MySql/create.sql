@@ -35,11 +35,6 @@ CREATE TABLE IF NOT EXISTS `house` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
--- Dumping data for table rentstuff.house: ~0 rows (approximately)
-/*!40000 ALTER TABLE `house` DISABLE KEYS */;
-INSERT INTO `house` (`id`, `owner_email`, `price`, `for_rent`, `number_of_bedrooms`, `number_of_kitchens`, `number_of_bathrooms`, `families_only`, `girls_only`, `internet_available`, `landline_phone_available`, `cable_tv_available`, `garage_available`, `smoking_allowed`, `property_type`) VALUES
-	(11, 'w@12344321.com', 90000, 1, 3, 1, 1, 1, 0, 1, 1, 1, 1, 0, '1'),
-	(12, 'w@12344321.com', 90000, 1, 3, 1, 1, 1, 0, 1, 1, 1, 1, 0, '1');
 /*!40000 ALTER TABLE `house` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
