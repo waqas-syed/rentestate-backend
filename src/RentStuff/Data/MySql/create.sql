@@ -1,26 +1,62 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               10.0.17-MariaDB - mariadb.org binary distribution
--- Server OS:                    Win64
--- HeidiSQL Version:             9.1.0.4867
--- --------------------------------------------------------
+-- MySQL dump 10.13  Distrib 5.7.9, for Win32 (AMD64)
+--
+-- Host: 127.0.0.1    Database: rentstuff
+-- ------------------------------------------------------
+-- Server version	5.7.10-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Dumping database structure for rentstuff
-CREATE DATABASE IF NOT EXISTS `rentstuff` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `rentstuff`;
+--
+-- Table structure for table `geo_location`
+--
 
+DROP TABLE IF EXISTS `geo_location`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `geo_location` (
+  `geo_name_id` int(11) NOT NULL,
+  `name` varchar(200) DEFAULT NULL,
+  `ascii_name` varchar(200) DEFAULT NULL,
+  `alternate_names` varchar(10000) DEFAULT NULL,
+  `latitude` decimal(10,6) DEFAULT NULL,
+  `longitude` decimal(10,6) DEFAULT NULL,
+  `feature_class` char(1) DEFAULT NULL,
+  `feature_code` varchar(10) DEFAULT NULL,
+  `country_code` varchar(3) DEFAULT NULL,
+  `cc2` varchar(200) DEFAULT NULL,
+  `admin1_code` varchar(20) DEFAULT NULL,
+  `admin2_code` varchar(80) DEFAULT NULL,
+  `admin3_code` varchar(20) DEFAULT NULL,
+  `admin4_code` varchar(20) DEFAULT NULL,
+  `population` bigint(8) DEFAULT NULL,
+  `elevation` int(11) DEFAULT NULL,
+  `dem` int(11) DEFAULT NULL,
+  `timezone` varchar(40) DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`geo_name_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Dumping structure for table rentstuff.house
-CREATE TABLE IF NOT EXISTS `house` (
+--
+-- Table structure for table `house`
+--
+
+DROP TABLE IF EXISTS `house`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `house` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `owner_email` varchar(50) DEFAULT NULL,
-  `price` bigint(20) DEFAULT NULL,
-  `for_rent` tinyint(1) DEFAULT NULL,
+  `monthly_rent` bigint(20) DEFAULT NULL,
   `number_of_bedrooms` int(11) DEFAULT NULL,
   `number_of_kitchens` int(11) DEFAULT NULL,
   `number_of_bathrooms` int(11) DEFAULT NULL,
@@ -33,9 +69,16 @@ CREATE TABLE IF NOT EXISTS `house` (
   `smoking_allowed` tinyint(1) DEFAULT NULL,
   `property_type` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
-/*!40000 ALTER TABLE `house` ENABLE KEYS */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2015-12-12 23:24:38
