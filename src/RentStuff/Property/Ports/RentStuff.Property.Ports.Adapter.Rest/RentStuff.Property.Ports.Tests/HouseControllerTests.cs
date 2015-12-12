@@ -34,8 +34,6 @@ namespace RentStuff.Property.Ports.Tests
             Assert.AreEqual(house.NumberOfKitchens, houseResponse.NumberOfKitchens);
             Assert.AreEqual(house.InternetAvailable, houseResponse.InternetAvailable);
             Assert.AreEqual(house.CableTvAvailable, houseResponse.CableTvAvailable);
-            Assert.IsTrue(house.ForRent);
-            Assert.AreEqual(house.ForRent, houseResponse.ForRent);
             Assert.AreEqual(house.PropertyType, houseResponse.PropertyType);
             Assert.AreEqual(house.MonthlyRent, houseResponse.MonthlyRent);
 
@@ -77,8 +75,6 @@ namespace RentStuff.Property.Ports.Tests
             Assert.AreEqual(house1.NumberOfKitchens, houseResponse1.NumberOfKitchens);
             Assert.AreEqual(house1.InternetAvailable, houseResponse1.InternetAvailable);
             Assert.AreEqual(house1.CableTvAvailable, houseResponse1.CableTvAvailable);
-            Assert.IsTrue(house1.ForRent);
-            Assert.AreEqual(house1.ForRent, houseResponse1.ForRent);
             Assert.AreEqual(house1.PropertyType, houseResponse1.PropertyType);
             Assert.AreEqual(house1.MonthlyRent, houseResponse1.MonthlyRent);
 
@@ -91,8 +87,6 @@ namespace RentStuff.Property.Ports.Tests
             Assert.AreEqual(house2.NumberOfKitchens, houseResponse2.NumberOfKitchens);
             Assert.AreEqual(house2.InternetAvailable, houseResponse2.InternetAvailable);
             Assert.AreEqual(house2.CableTvAvailable, houseResponse2.CableTvAvailable);
-            Assert.IsTrue(house2.ForRent);
-            Assert.AreEqual(house2.ForRent, houseResponse2.ForRent);
             Assert.AreEqual(house2.PropertyType, houseResponse2.PropertyType);
             Assert.AreEqual(house2.MonthlyRent, houseResponse2.MonthlyRent);
 
