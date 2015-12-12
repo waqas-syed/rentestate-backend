@@ -9,7 +9,7 @@
                    connectionString="Server=localhost;Database=rentstuff;User ID=root;Password=root;"/>
 
   <!-- NHibernate SessionFactory configuration -->
-  <object id="NHibernateSessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate30">
+  <object id="NHibernateSessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate4">
     <property name="DbProvider" ref="DbProvider"/>
     <property name="MappingAssemblies">
       <list>
@@ -33,7 +33,7 @@
 
   <!-- Transaction Management Strategy - local database transactions -->
   <object id="transactionManager"
-        type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate30">
+        type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate4">
     <property name="DbProvider" ref="DbProvider"/>
     <property name="SessionFactory" ref="NHibernateSessionFactory"/>
   </object>

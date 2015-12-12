@@ -1,7 +1,7 @@
 ﻿using System.Web.Http;
 using Spring.Context.Support;
 
-namespace RentStuff.Common.WebHost.App_Start
+namespace RentStuff.Common.WebHost
 {
     public static class WebApiConfig
     {

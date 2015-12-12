@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Optimization;
 using System.Web.Routing;
-using RentStuff.Common.WebHost.App_Start;
 
 namespace RentStuff.Common.WebHost
 {
