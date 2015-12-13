@@ -32,7 +32,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="houseId"></param>
         /// <returns></returns>
         [Transaction]
-        public House GetHouseById(long houseId)
+        public House GetHouseById(string houseId)
         {
             return CurrentSession.QueryOver<House>().Where(x => x.Id == houseId).SingleOrDefault();
         }

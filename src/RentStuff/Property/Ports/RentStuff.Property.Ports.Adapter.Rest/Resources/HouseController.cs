@@ -46,11 +46,11 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 
         [Route("house")]
         [HttpDelete]
-        public IHttpActionResult Delete([FromBody]long houseId)
+        public IHttpActionResult Delete([FromBody]string houseId)
         {
             try
             {
-                if (houseId != 0)
+                if (!string.IsNullOrEmpty(houseId))
                 {
                     _houseApplicationService.DeleteHouseById(houseId);
                 }

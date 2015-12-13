@@ -23,7 +23,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// Delete the house by providing the id
         /// </summary>
         /// <param name="id"></param>
-        void DeleteHouseById(long id);
+        void DeleteHouseById(string id);
 
         /// <summary>
         /// Gets the house by providing the owner's email id

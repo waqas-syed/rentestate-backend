@@ -80,6 +80,10 @@
     <Compile Include="Repositories\HouseRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\RentStuff.Common.Domain.Model\RentStuff.Common.Domain.Model.csproj">
+      <Project>{199a41d2-a685-4e0c-98fe-c5524099b5f2}</Project>
+      <Name>RentStuff.Common.Domain.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Domain.Model\RentStuff.Property.Domain.Model\RentStuff.Property.Domain.Model.csproj">
       <Project>{c6c90b57-616b-4d09-ba23-1c9c42ac93ad}</Project>
       <Name>RentStuff.Property.Domain.Model</Name>
@@ -98,6 +102,11 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="NHibernateMappings\Location.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

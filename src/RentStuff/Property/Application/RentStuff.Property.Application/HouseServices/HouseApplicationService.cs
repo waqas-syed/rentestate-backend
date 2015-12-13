@@ -40,7 +40,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// Delete the house by providing the id
         /// </summary>
         /// <param name="id"></param>
-        public void DeleteHouseById(long id)
+        public void DeleteHouseById(string id)
         {
             House house = _houseRepository.GetHouseById(id);
             if (house != null)

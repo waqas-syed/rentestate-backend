@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HouseAggregate\Address.cs" />
+    <Compile Include="HouseAggregate\Location.cs" />
     <Compile Include="HouseAggregate\House.cs" />
     <Compile Include="HouseAggregate\IHouseRepository.cs" />
     <Compile Include="HouseAggregate\PropertyType.cs" />

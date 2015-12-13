@@ -95,7 +95,7 @@ namespace RentStuff.Property.Ports.Tests
             DeleteHouse(houseResponse2.Id);
         }
 
-        private void DeleteHouse(long id)
+        private void DeleteHouse(string id)
         {
             HouseController houseController = (HouseController)ContextRegistry.GetContext()["HouseController"];
             houseController.Delete(id);

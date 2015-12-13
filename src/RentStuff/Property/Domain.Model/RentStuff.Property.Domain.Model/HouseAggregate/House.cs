@@ -1,4 +1,5 @@
 ﻿
+using System;
 using RentStuff.Common.Domain.Model;
 
 namespace RentStuff.Property.Domain.Model.HouseAggregate
@@ -6,14 +7,15 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
     /// <summary>
     /// House Aggregate. A house that can be put on rent or sale
     /// </summary>
-    public class House
+    public class House : Entity
     {
-        private Address _location;
+        private Location _location;
         private long _monthlyRent;
         private int _numberOfBedrooms;
         private int _numberOfKitchens;
         private int _numberOfBathrooms;
         private bool _familiesOnly;
+        private bool _boysOnly;
         private bool _girlsOnly;
         private bool _internetAvailable;
         private bool _landlinePhoneAvailable;
@@ -23,6 +25,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         private bool _smokingAllowed;
         private PropertyType _propertyType;
         private string _ownerEmail;
+        private string _ownerPhoneNumber;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
@@ -34,10 +37,10 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public House(Address location, long monthlyRent, int numberOfBedrooms,
-            int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool girlsOnly,
+        public House(Location location, long monthlyRent, int numberOfBedrooms,
+            int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Size size, 
-            bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail)
+            bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail, string ownerPhoneNumber)
         {
             _location = location;
             _monthlyRent = monthlyRent;
@@ -45,6 +48,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             _numberOfKitchens = numberOfKitchens;
             _numberOfBathrooms = numberOfBathrooms;
             _familiesOnly = familiesOnly;
+            _boysOnly = boysOnly;
             _girlsOnly = girlsOnly;
             _internetAvailable = internetAvailable;
             _landlinePhoneAvailable = landlinePhoneAvailable;
@@ -54,17 +58,13 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             _smokingAllowed = smokingAllowed;
             _propertyType = propertyType;
             _ownerEmail = ownerEmail;
+            _ownerPhoneNumber = ownerPhoneNumber;
         }
-
-        /// <summary>
-        /// House id
-        /// </summary>
-        public int Id { get; private set; }
 
         /// <summary>
         /// Location
         /// </summary>
-        public Address Location
+        public Location Location
         {
             get { return _location; }
             set
@@ -117,6 +117,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             set { _girlsOnly = value; }
         }
 
+        public bool BoysOnly
+        {
+            get { return _boysOnly; }
+            set { _boysOnly = value; }
+        }
+
         public bool InternetAvailable
         {
             get { return _internetAvailable; }
@@ -165,17 +171,24 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             set { _ownerEmail = value; }
         }
 
+        public string OwnerPhoneNumber
+        {
+            get { return _ownerPhoneNumber; }
+            set { _ownerPhoneNumber = value; }
+        }
+
         /// <summary>
         /// House Builder
         /// </summary>
         public class HouseBuilder
         {
-            private Address _location;
+            private Location _location;
             private long _monthlyRent;
             private int _numberOfBedrooms;
             private int _numberOfKitchens;
             private int _numberOfBathrooms;
             private bool _familiesOnly;
+            private bool _boysOnly;
             private bool _girlsOnly;
             private bool _internetAvailable;
             private bool _landlinePhoneAvailable;
@@ -185,13 +198,14 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private bool _smokingAllowed;
             private PropertyType _propertyType;
             private string _ownerEmail;
+            private string _ownerPhoneNumber;
 
             /// <summary>
             /// Location
             /// </summary>
             /// <param name="location"></param>
             /// <returns></returns>
-            public HouseBuilder Location(Address location)
+            public HouseBuilder Location(Location location)
             {
                 _location = location;
                 return this;
@@ -229,6 +243,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             public HouseBuilder FamiliesOnly(bool familiesOnly)
             {
                 _familiesOnly = familiesOnly;
+                return this;
+            }
+
+            public HouseBuilder BoysOnly(bool boysOnly)
+            {
+                _boysOnly = boysOnly;
                 return this;
             }
 
@@ -286,6 +306,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
 
+            public HouseBuilder OwnerPhoneNumber(string ownerPhoneNumber)
+            {
+                _ownerPhoneNumber = ownerPhoneNumber;
+                return this;
+            }
+
             /// <summary>
             /// Build a new instance of House
             /// </summary>
@@ -293,9 +319,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             public House Build()
             {
                 return new House(_location, _monthlyRent, _numberOfBedrooms, _numberOfKitchens,
-                                 _numberOfBathrooms, _familiesOnly, _girlsOnly, _internetAvailable,
+                                 _numberOfBathrooms, _familiesOnly, _boysOnly, _girlsOnly, _internetAvailable,
                                  _landlinePhoneAvailable, _cableTvAvailable, _size, _garageAvailable,
-                                 _smokingAllowed, _propertyType, _ownerEmail);
+                                 _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber);
             }
         }
     }
