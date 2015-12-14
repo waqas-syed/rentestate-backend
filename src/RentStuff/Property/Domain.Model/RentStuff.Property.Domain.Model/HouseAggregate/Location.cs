@@ -8,9 +8,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
     {
         private decimal _latitude;
         private decimal _longitude;
-        private string _streetAddress;
-        private string _city;
-        private string _country;
+        private string _houseNo;
+        private string _streetNo;
+        private string _area;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
@@ -22,13 +22,13 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public Location(decimal latitude, decimal longitude, string streetAddress, string city, string country)
+        public Location(decimal latitude, decimal longitude, string houseNo, string streetNo, string area)
         {
             _latitude = latitude;
             _longitude = longitude;
-            _streetAddress = streetAddress;
-            _city = city;
-            _country = country;
+            _houseNo = houseNo;
+            _streetNo = streetNo;
+            _area = area;
         }
 
         /// <summary>
@@ -55,30 +55,30 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         }
 
         /// <summary>
-        /// Street Address
+        /// House Number
         /// </summary>
-        public string StreetAddress
+        public string HouseNo
         {
-            get { return _streetAddress; } 
-            private set { _streetAddress = value; }
+            get { return _houseNo; } 
+            private set { _houseNo = value; }
         }
 
         /// <summary>
-        /// City
+        /// Street Number
         /// </summary>
-        public string City
+        public string StreetNo
         {
-            get { return _city; }
-            private set { _city = value; }
+            get { return _streetNo; }
+            private set { _streetNo = value; }
         }
 
         /// <summary>
-        /// Country
+        /// Area that contains Town, State, City and Country
         /// </summary>
-        public string Country
+        public string Area
         {
-            get { return _country; }
-            private set { _country = value; }
+            get { return _area; }
+            private set { _area = value; }
         }
     }
 }

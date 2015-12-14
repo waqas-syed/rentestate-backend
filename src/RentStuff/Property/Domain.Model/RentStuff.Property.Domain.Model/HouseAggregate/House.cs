@@ -42,23 +42,23 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Size size, 
             bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail, string ownerPhoneNumber)
         {
-            _location = location;
-            _monthlyRent = monthlyRent;
-            _numberOfBedrooms = numberOfBedrooms;
-            _numberOfKitchens = numberOfKitchens;
-            _numberOfBathrooms = numberOfBathrooms;
-            _familiesOnly = familiesOnly;
-            _boysOnly = boysOnly;
-            _girlsOnly = girlsOnly;
-            _internetAvailable = internetAvailable;
-            _landlinePhoneAvailable = landlinePhoneAvailable;
-            _cableTvAvailable = cableTvAvailable;
-            _size = size;
-            _garageAvailable = garageAvailable;
-            _smokingAllowed = smokingAllowed;
-            _propertyType = propertyType;
-            _ownerEmail = ownerEmail;
-            _ownerPhoneNumber = ownerPhoneNumber;
+            Location = location;
+            MonthlyRent = monthlyRent;
+            NumberOfBedrooms = numberOfBedrooms;
+            NumberOfKitchens = numberOfKitchens;
+            NumberOfBathrooms = numberOfBathrooms;
+            FamiliesOnly = familiesOnly;
+            BoysOnly = boysOnly;
+            GirlsOnly = girlsOnly;
+            InternetAvailable = internetAvailable;
+            LandlinePhoneAvailable = landlinePhoneAvailable;
+            CableTvAvailable = cableTvAvailable;
+            Size = size;
+            GarageAvailable = garageAvailable;
+            SmokingAllowed = smokingAllowed;
+            PropertyType = propertyType;
+            OwnerEmail = ownerEmail;
+            OwnerPhoneNumber = ownerPhoneNumber;
         }
 
         /// <summary>
@@ -102,7 +102,25 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public bool FamiliesOnly
         {
             get { return _familiesOnly; }
-            set { _familiesOnly = value; }
+            set
+            {
+                if (value)
+                {
+                    if (!_boysOnly & !_girlsOnly)
+                    {
+                        _familiesOnly = true;
+                    }
+                    else
+                    {
+                        throw new ArgumentException(
+                            "Cannot mark FamiliesOnly when either BoysOnly or GirlsOnly is marked true already");
+                    }
+                }
+                else
+                {
+                    _familiesOnly = false;
+                }
+            }
         }
 
         public int NumberOfBathrooms
@@ -114,13 +132,49 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public bool GirlsOnly
         {
             get { return _girlsOnly; }
-            set { _girlsOnly = value; }
+            set
+            {
+                if (value)
+                {
+                    if (!_boysOnly & !_familiesOnly)
+                    {
+                        _girlsOnly = true;
+                    }
+                    else
+                    {
+                        throw new ArgumentException(
+                            "Cannot mark GirlsOnly when either BoysOnly or FamiliesOnly is marked true already");
+                    }
+                }
+                else
+                {
+                    _girlsOnly = false;
+                }
+            }
         }
 
         public bool BoysOnly
         {
             get { return _boysOnly; }
-            set { _boysOnly = value; }
+            set
+            {
+                if (value)
+                {
+                    if(!_girlsOnly & !_familiesOnly)
+                    {
+                        _boysOnly = true;
+                    }
+                else
+                    {
+                        throw new ArgumentException(
+                            "Cannot mark BoysOnly when either GirlsOnly or FamiliesOnly is marked true already");
+                    }
+                }
+                else
+                {
+                    _boysOnly = false;
+                }
+            }
         }
 
         public bool InternetAvailable

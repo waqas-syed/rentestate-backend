@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentStuff.Property.Applicat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentStuff.Property.Ports.Tests", "Property\Ports\RentStuff.Property.Ports.Adapter.Rest\RentStuff.Property.Ports.Tests\RentStuff.Property.Ports.Tests.csproj", "{48820D20-88B1-4641-8160-5014E9A6402E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentStuff.Property.Infrastructure.Services", "Property\Infrastructure\RentStuff.Property.Infrastructure.Services\RentStuff.Property.Infrastructure.Services.csproj", "{FCDBF9A2-1338-43E8-9B43-1B7798277F05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +92,10 @@ Global
 		{48820D20-88B1-4641-8160-5014E9A6402E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48820D20-88B1-4641-8160-5014E9A6402E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48820D20-88B1-4641-8160-5014E9A6402E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCDBF9A2-1338-43E8-9B43-1B7798277F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCDBF9A2-1338-43E8-9B43-1B7798277F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCDBF9A2-1338-43E8-9B43-1B7798277F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCDBF9A2-1338-43E8-9B43-1B7798277F05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +111,7 @@ Global
 		{A0B1BC04-A6F9-40CF-B8CB-29F7662DB517} = {FC5C8102-EF10-4F01-BF01-DF21D83A94E8}
 		{8CC19802-C300-4E6B-9137-83DB9D94A481} = {9E864800-0C66-4330-A79D-1950BD8F3481}
 		{EC5F3B68-1A9A-422C-8852-B0227BCE7183} = {9E864800-0C66-4330-A79D-1950BD8F3481}
+		{FCDBF9A2-1338-43E8-9B43-1B7798277F05} = {9E864800-0C66-4330-A79D-1950BD8F3481}
 		{5B4ED24E-BE26-4A1B-AF37-A30373B09DC2} = {139B8879-4E88-48E0-AC8C-606D565B8701}
 		{0CCF9F64-68FF-487C-A46A-B25349F249A5} = {735CB2CB-2F7E-4D9F-AD8D-CEB0992E818A}
 		{E194A013-A570-4651-A709-9904C402DF07} = {735CB2CB-2F7E-4D9F-AD8D-CEB0992E818A}

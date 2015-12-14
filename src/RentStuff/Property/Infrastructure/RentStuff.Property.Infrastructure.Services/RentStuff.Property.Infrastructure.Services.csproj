@@ -4,13 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0CCF9F64-68FF-487C-A46A-B25349F249A5}</ProjectGuid>
+    <ProjectGuid>{FCDBF9A2-1338-43E8-9B43-1B7798277F05}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RentStuff.Property.Application</RootNamespace>
-    <AssemblyName>RentStuff.Property.Application</AssemblyName>
+    <RootNamespace>RentStuff.Property.Infrastructure.Services</RootNamespace>
+    <AssemblyName>RentStuff.Property.Infrastructure.Services</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,8 +32,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -39,39 +50,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HouseServices\Commands\CreateHouseCommand.cs" />
-    <Compile Include="HouseServices\HouseApplicationService.cs" />
-    <Compile Include="HouseServices\IHouseApplicationService.cs" />
+    <Compile Include="LocationServices\GeocodingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Common\RentStuff.Common.Domain.Model\RentStuff.Common.Domain.Model.csproj">
-      <Project>{199a41d2-a685-4e0c-98fe-c5524099b5f2}</Project>
-      <Name>RentStuff.Common.Domain.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Domain.Model\RentStuff.Property.Domain.Model\RentStuff.Property.Domain.Model.csproj">
-      <Project>{c6c90b57-616b-4d09-ba23-1c9c42ac93ad}</Project>
-      <Name>RentStuff.Property.Domain.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\RentStuff.Property.Infrastructure.Persistence\RentStuff.Property.Infrastructure.Persistence.csproj">
-      <Project>{8cc19802-c300-4e6b-9137-83db9d94a481}</Project>
-      <Name>RentStuff.Property.Infrastructure.Persistence</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\RentStuff.Property.Infrastructure.Services\RentStuff.Property.Infrastructure.Services.csproj">
-      <Project>{fcdbf9a2-1338-43e8-9b43-1b7798277f05}</Project>
-      <Name>RentStuff.Property.Infrastructure.Services</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="PropertyApplicationConfig.xml">
+    <EmbeddedResource Include="PropertyInfrastructureServicesConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain.Model\RentStuff.Property.Domain.Model\RentStuff.Property.Domain.Model.csproj">
+      <Project>{c6c90b57-616b-4d09-ba23-1c9c42ac93ad}</Project>
+      <Name>RentStuff.Property.Domain.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 
 namespace RentStuff.Property.Application.HouseServices
@@ -11,7 +12,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <summary>
         /// Saves a new house instance to the database
         /// </summary>
-        void SaveNewHouseOffer(House house);
+        void SaveNewHouseOffer(CreateHouseCommand house);
 
         /// <summary>
         /// Delete the given house instance

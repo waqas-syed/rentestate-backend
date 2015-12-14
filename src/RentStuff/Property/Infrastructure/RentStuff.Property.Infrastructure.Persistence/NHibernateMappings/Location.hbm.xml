@@ -8,8 +8,8 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
     </id>
     <property name="Latitude" column="latitude"/>
     <property name="Longitude" column="longitude"/>
-    <property name="StreetAddress" column="street_address"/>
-    <property name="City" column="city"/>
-    <property name="Country" column="country"/>
+    <property name="HouseNo" column="house_no"/>
+    <property name="StreetNo" column="street_no"/>
+    <property name="Area" column="area"/>
   </class>
 </hibernate-mapping>

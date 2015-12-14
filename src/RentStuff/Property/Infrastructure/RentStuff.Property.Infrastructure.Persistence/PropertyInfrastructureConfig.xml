@@ -45,6 +45,9 @@
   <object id="HouseRepository" type="RentStuff.Property.Infrastructure.Persistence.Repositories.HouseRepository, RentStuff.Property.Infrastructure.Persistence">
     <property name="SessionFactory" ref="NHibernateSessionFactory"/>
   </object>
+  <object id="LocationRepository" type="RentStuff.Property.Infrastructure.Persistence.Repositories.LocationRepository, RentStuff.Property.Infrastructure.Persistence">
+    <property name="SessionFactory" ref="NHibernateSessionFactory"/>
+  </object>
 
   <tx:attribute-driven/>
 </objects>

@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeocodingServiceTests.cs" />
     <Compile Include="HouseRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -99,6 +100,10 @@
     <ProjectReference Include="..\RentStuff.Property.Infrastructure.Persistence\RentStuff.Property.Infrastructure.Persistence.csproj">
       <Project>{8cc19802-c300-4e6b-9137-83db9d94a481}</Project>
       <Name>RentStuff.Property.Infrastructure.Persistence</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RentStuff.Property.Infrastructure.Services\RentStuff.Property.Infrastructure.Services.csproj">
+      <Project>{fcdbf9a2-1338-43e8-9b43-1b7798277f05}</Project>
+      <Name>RentStuff.Property.Infrastructure.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

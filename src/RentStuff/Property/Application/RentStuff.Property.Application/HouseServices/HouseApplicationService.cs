@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Management.Instrumentation;
+using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
+using RentStuff.Property.Domain.Model.Services;
 
 namespace RentStuff.Property.Application.HouseServices
 {
@@ -10,20 +13,50 @@ namespace RentStuff.Property.Application.HouseServices
     public class HouseApplicationService : IHouseApplicationService
     {
         private IHouseRepository _houseRepository;
+        private IGeocodingService _geocodingService;
+        private ILocationRepository _locationRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public HouseApplicationService(IHouseRepository houseRepository)
+        public HouseApplicationService(IHouseRepository houseRepository, IGeocodingService geocodingService,
+            ILocationRepository locationRepository)
         {
             _houseRepository = houseRepository;
+            _geocodingService = geocodingService;
+            _locationRepository = locationRepository;
         }
 
         /// <summary>
         /// Saves a new house instance to the database
         /// </summary>
-        public void SaveNewHouseOffer(House house)
+        public void SaveNewHouseOffer(CreateHouseCommand createHouseCommand)
         {
+            // Get the coordinates for the location using the Geocoding API service
+            Tuple<decimal,decimal> coordinates = _geocodingService.GetCoordinatesFromAddress(createHouseCommand.Area);
+
+            // Create the location value object instance for the current house
+            Location location = new Location(coordinates.Item1, coordinates.Item2, createHouseCommand.HouseNo,
+                createHouseCommand.StreetNo, createHouseCommand.Area);
+            _locationRepository.SaveOrUpdate(location);
+
+            PropertyType propertyType = default(PropertyType);
+            if (!string.IsNullOrEmpty(createHouseCommand.PropertyType))
+            {
+                Enum.TryParse(createHouseCommand.PropertyType, out propertyType);
+            }
+
+            // Create the new house instance
+            House house = new House.HouseBuilder().BoysOnly(createHouseCommand.BoysOnly)
+                .CableTvAvailable(createHouseCommand.CableTvAvailable).FamiliesOnly(createHouseCommand.FamiliesOnly)
+                .GarageAvailable(createHouseCommand.GarageAvailable).GirlsOnly(createHouseCommand.GirlsOnly)
+                .LandlinePhoneAvailable(createHouseCommand.LandlinePhoneAvailable).MonthlyRent(createHouseCommand.MonthlyRent)
+                .NumberOfBathrooms(createHouseCommand.NumberOfBathrooms).NumberOfBedrooms(createHouseCommand.NumberOfBedrooms)
+                .NumberOfKitchens(createHouseCommand.NumberOfKitchens).OwnerEmail(createHouseCommand.OwnerEmail)
+                .OwnerPhoneNumber(createHouseCommand.OwnerPhoneNumber).SmokingAllowed(createHouseCommand.SmokingAllowed)
+                .WithInternetAvailable(createHouseCommand.InternetAvailable).Location(location).PropertyType(propertyType).Build();
+            
+            // Save new the house instance
             _houseRepository.SaveorUpdate(house);
         }
 

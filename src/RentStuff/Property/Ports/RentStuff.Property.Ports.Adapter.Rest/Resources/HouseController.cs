@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 using RentStuff.Property.Application.HouseServices;
+using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 
 namespace RentStuff.Property.Ports.Adapter.Rest.Resources
@@ -28,13 +25,14 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 
         [Route("house")]
         [HttpPost]
-        public IHttpActionResult Post([FromBody]House house)
+        public IHttpActionResult Post([FromBody]CreateHouseCommand house)
         {
             try
             {
                 if (house != null)
                 {
                     _houseApplicationService.SaveNewHouseOffer(house);
+                    return Ok();
                 }
                 return BadRequest();
             }
@@ -53,6 +51,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 if (!string.IsNullOrEmpty(houseId))
                 {
                     _houseApplicationService.DeleteHouseById(houseId);
+                    return Ok();
                 }
                 return BadRequest();
             }
@@ -71,6 +70,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 if (house != null)
                 {
                     _houseApplicationService.DeleteHouse(house);
+                    return Ok();
                 }
                 return BadRequest();
             }
@@ -94,7 +94,6 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 {
                     return Ok(_houseApplicationService.GetAllHouses());
                 }
-                return BadRequest();
             }
             catch (Exception)
             {

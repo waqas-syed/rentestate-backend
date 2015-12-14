@@ -17,7 +17,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         {
             IHouseRepository houseRepository = (IHouseRepository) ContextRegistry.GetContext()["HouseRepository"];
             string email = "w@12344321.com";
-            Location address = new Location(22, 100, "House # 818", "Islamabad", "Pakistan");
+            Location address = new Location(22M, 100M, "House # 818", "13", "Islamabad, Pakistan");
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
@@ -57,7 +57,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         {
             IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
             string email = "w@12344321.com";
-            Location address = new Location(22, 100, "House # 818", "Islamabad", "Pakistan");
+            Location address = new Location(22, 100, "House # 818", "141", "Islamabad, Pakistan");
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
