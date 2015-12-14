@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using RentStuff.Property.Domain.Model.Services;
@@ -20,6 +21,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.IsNotNull(coordinates);
             Assert.AreEqual(37.4220459, coordinates.Item1);
             Assert.AreEqual(-122.0841477, coordinates.Item2);
+            Thread.Sleep(2000);
         }
     }
 }

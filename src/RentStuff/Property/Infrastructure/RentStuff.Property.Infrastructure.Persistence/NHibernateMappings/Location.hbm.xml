@@ -11,5 +11,6 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
     <property name="HouseNo" column="house_no"/>
     <property name="StreetNo" column="street_no"/>
     <property name="Area" column="area"/>
+    <one-to-one name="House" constrained="true" foreign-key="none" class="House"/>
   </class>
 </hibernate-mapping>

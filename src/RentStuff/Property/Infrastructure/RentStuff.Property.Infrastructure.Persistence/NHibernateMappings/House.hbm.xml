@@ -21,6 +21,6 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
     <property name="PropertyType" column="property_type"/>
     <property name="OwnerEmail" column="owner_email"/>
     <property name="OwnerPhoneNumber" column="owner_phone_number"/>
-    <many-to-one name="Location" column="location_id" class="Location"/>
+    <many-to-one name="Location" unique="true" column="location_id"/>
   </class>
 </hibernate-mapping>

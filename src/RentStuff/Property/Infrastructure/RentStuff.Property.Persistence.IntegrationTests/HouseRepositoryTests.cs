@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using RentStuff.Property.Domain.Model.HouseAggregate;
+using RentStuff.Property.Infrastructure.Persistence.Repositories;
 using Spring.Context.Support;
 
 namespace RentStuff.Property.Persistence.IntegrationTests
@@ -16,21 +18,24 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         public void SaveHouseTest_TestsThatHouseUInstancesAreSavedToTheDatabaseAsExpected_VerifiesThroughDatabaseQuery()
         {
             IHouseRepository houseRepository = (IHouseRepository) ContextRegistry.GetContext()["HouseRepository"];
+            ILocationRepository locationRepository = (ILocationRepository)ContextRegistry.GetContext()["LocationRepository"];
             string email = "w@12344321.com";
-            Location address = new Location(22M, 100M, "House # 818", "13", "Islamabad, Pakistan");
+            
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
             long price = 90000;
 
-            House house = new House.HouseBuilder().OwnerEmail(email).Location(address)
+            House house = new House.HouseBuilder().OwnerEmail(email)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
                 .PropertyType(PropertyType.Apartment).MonthlyRent(price).Build();
-
+            Location location = new Location(22M, 100M, "House # 818", "13", "Islamabad, Pakistan", house);
+            locationRepository.SaveOrUpdate(location);
+            house.Location = location;
             houseRepository.SaveorUpdate(house);
-
+            
             //House retreivedHouse = houseRepository.GetHouseByOwnerEmail(email);
 
             House retreivedHouse = houseRepository.GetHouseById(house.Id);
@@ -56,19 +61,23 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         public void SaveHouseAndRetreiveByEmailTest_TestsThatHouseUInstancesAreSavedToTheDatabaseAsExpected_VerifiesThroughDatabaseQuery()
         {
             IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            ILocationRepository locationRepository = (ILocationRepository)ContextRegistry.GetContext()["LocationRepository"];
             string email = "w@12344321.com";
-            Location address = new Location(22, 100, "House # 818", "141", "Islamabad, Pakistan");
+            
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
             long price = 90000;
 
-            House house = new House.HouseBuilder().OwnerEmail(email).Location(address)
+            House house = new House.HouseBuilder().OwnerEmail(email)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
                 .PropertyType(PropertyType.Apartment).MonthlyRent(price).Build();
 
+            Location location = new Location(22, 100, "House # 818", "141", "Islamabad, Pakistan", house);
+            locationRepository.SaveOrUpdate(location);
+            house.Location = location;
             houseRepository.SaveorUpdate(house);
 
             IList<House> retreivedHouses = houseRepository.GetHouseByOwnerEmail(email);
@@ -91,6 +100,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         private void RemoveHouseObject(IHouseRepository houseRepository, House house)
         {
             houseRepository.Delete(house);
+            Thread.Sleep(2000);
         }
     }
 }

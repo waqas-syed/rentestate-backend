@@ -11,6 +11,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         private string _houseNo;
         private string _streetNo;
         private string _area;
+        private House _house;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
@@ -22,13 +23,14 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public Location(decimal latitude, decimal longitude, string houseNo, string streetNo, string area)
+        public Location(decimal latitude, decimal longitude, string houseNo, string streetNo, string area, House house)
         {
             _latitude = latitude;
             _longitude = longitude;
             _houseNo = houseNo;
             _streetNo = streetNo;
             _area = area;
+            _house = house;
         }
 
         /// <summary>
@@ -79,6 +81,15 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         {
             get { return _area; }
             private set { _area = value; }
+        }
+
+        /// <summary>
+        /// House
+        /// </summary>
+        public House House
+        {
+            get { return _house; }
+            set { _house = value; }
         }
     }
 }

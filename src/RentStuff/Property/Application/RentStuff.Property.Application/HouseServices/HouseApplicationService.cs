@@ -35,11 +35,6 @@ namespace RentStuff.Property.Application.HouseServices
             // Get the coordinates for the location using the Geocoding API service
             Tuple<decimal,decimal> coordinates = _geocodingService.GetCoordinatesFromAddress(createHouseCommand.Area);
 
-            // Create the location value object instance for the current house
-            Location location = new Location(coordinates.Item1, coordinates.Item2, createHouseCommand.HouseNo,
-                createHouseCommand.StreetNo, createHouseCommand.Area);
-            _locationRepository.SaveOrUpdate(location);
-
             PropertyType propertyType = default(PropertyType);
             if (!string.IsNullOrEmpty(createHouseCommand.PropertyType))
             {
@@ -54,10 +49,18 @@ namespace RentStuff.Property.Application.HouseServices
                 .NumberOfBathrooms(createHouseCommand.NumberOfBathrooms).NumberOfBedrooms(createHouseCommand.NumberOfBedrooms)
                 .NumberOfKitchens(createHouseCommand.NumberOfKitchens).OwnerEmail(createHouseCommand.OwnerEmail)
                 .OwnerPhoneNumber(createHouseCommand.OwnerPhoneNumber).SmokingAllowed(createHouseCommand.SmokingAllowed)
-                .WithInternetAvailable(createHouseCommand.InternetAvailable).Location(location).PropertyType(propertyType).Build();
-            
+                .WithInternetAvailable(createHouseCommand.InternetAvailable).PropertyType(propertyType).Build();
+
+            // Create the location value object instance for the current house
+            Location location = new Location(coordinates.Item1, coordinates.Item2, createHouseCommand.HouseNo,
+                createHouseCommand.StreetNo, createHouseCommand.Area, house);
+            // Save the location instance first so House has a reference to it in the database
+            _locationRepository.SaveOrUpdate(location);
+            house.Location = location;
             // Save new the house instance
             _houseRepository.SaveorUpdate(house);
+
+            
         }
 
         /// <summary>

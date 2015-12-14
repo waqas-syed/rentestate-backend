@@ -69,7 +69,6 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             get { return _location; }
             set
             {
-                Assertion.AssertNotNull(value);
                 _location = value;
             }
         }
