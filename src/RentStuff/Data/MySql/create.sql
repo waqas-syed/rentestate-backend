@@ -55,7 +55,7 @@ DROP TABLE IF EXISTS `house`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `house` (
   `id` varchar(120) NOT NULL,
-  `db_id` bigint(20) NOT NULL  AUTO_INCREMENT,
+  `db_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `owner_email` varchar(50) DEFAULT NULL,
   `monthly_rent` bigint(20) DEFAULT NULL,
   `number_of_bedrooms` int(11) DEFAULT NULL,
@@ -69,6 +69,9 @@ CREATE TABLE `house` (
   `garage_available` tinyint(1) DEFAULT NULL,
   `smoking_allowed` tinyint(1) DEFAULT NULL,
   `property_type` varchar(50) DEFAULT NULL,
+  `boys_only` tinyint(1) DEFAULT NULL,
+  `owner_phone_number` varchar(60) DEFAULT NULL,
+  `location_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -83,14 +86,15 @@ DROP TABLE IF EXISTS `location`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `location` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `latitude` decimal(10,6) DEFAULT NULL,
   `longitude` decimal(10,6) DEFAULT NULL,
-  `street_address` varchar(2000) DEFAULT NULL,
-  `city` varchar(100) DEFAULT NULL,
-  `country` varchar(50) DEFAULT NULL,
+  `house_no` varchar(100) DEFAULT NULL,
+  `street_no` varchar(10) DEFAULT NULL,
+  `area` varchar(300) DEFAULT NULL,
+  `house_id` varchar(120) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -102,4 +106,4 @@ CREATE TABLE `location` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-12-13 15:11:49
+-- Dump completed on 2015-12-15 21:16:12

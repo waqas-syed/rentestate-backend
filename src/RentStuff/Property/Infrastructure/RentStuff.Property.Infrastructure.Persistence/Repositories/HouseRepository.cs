@@ -49,6 +49,18 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         }
 
         /// <summary>
+        /// Get the house by latitude and longitude
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <returns></returns>
+        [Transaction]
+        public IList<House> GetHouseByCoordinates(decimal latitude, decimal longitude)
+        {
+            return CurrentSession.QueryOver<House>().Where(x => x.Location.Latitude == latitude).Where(x => x.Location.Longitude == longitude).List<House>();
+        }
+
+        /// <summary>
         /// Get all the houses
         /// </summary>
         /// <returns></returns>

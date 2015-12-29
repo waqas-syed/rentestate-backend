@@ -123,6 +123,16 @@ namespace RentStuff.Property.Ports.Tests
             }
         }
 
+        [Test]
+        public void GetHousesByAddressTest_TestsIfTheHousesInTheSorroundingsAreReturnedGivenOneAddress_VeririfesThroughTheReturnValue()
+        {
+            if (_runTests)
+            {
+                HouseController houseController = (HouseController)ContextRegistry.GetContext()["HouseController"];
+                houseController.Get(null, "Pindora, Rawalpindi, Punjab, Pakistan");
+            }
+        }
+
         private void DeleteHouse(string id)
         {
             HouseController houseController = (HouseController)ContextRegistry.GetContext()["HouseController"];

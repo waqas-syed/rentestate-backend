@@ -82,11 +82,15 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 
         [Route("house")]
         [HttpGet]
-        public IHttpActionResult Get(string email = null)
+        public IHttpActionResult Get(string email = null, string address = null)
         {
             try
             {
-                if (email != null)
+                if (address != null)
+                {
+                    return Ok(_houseApplicationService.SearchHousesByAddress(address));
+                }
+                else if (email != null)
                 {
                     return Ok(_houseApplicationService.GetHouseByEmail(email));
                 }

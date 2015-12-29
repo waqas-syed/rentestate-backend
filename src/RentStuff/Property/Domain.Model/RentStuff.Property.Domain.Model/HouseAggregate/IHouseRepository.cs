@@ -35,9 +35,16 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         IList<House> GetHouseByOwnerEmail(string email);
 
         /// <summary>
+        /// Get the house by providing the latitude and longitude
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <returns></returns>
+        IList<House> GetHouseByCoordinates(decimal latitude, decimal longitude);
+
+        /// <summary>
         /// Get all the houses
         /// </summary>
-        /// <param name="email"></param>
         /// <returns></returns>
         IList<House> GetAllHouses();
     }

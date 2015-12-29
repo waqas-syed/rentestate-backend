@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 
@@ -31,6 +32,13 @@ namespace RentStuff.Property.Application.HouseServices
         /// </summary>
         /// <returns></returns>
         IList<House> GetHouseByEmail(string email);
+
+        /// <summary>
+        /// Search nearby houses by providing the address
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        IList<House> SearchHousesByAddress(string address);
 
         /// <summary>
         /// Get all houses
