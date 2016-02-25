@@ -19,6 +19,9 @@
 -- Table structure for table `geo_location`
 --
 
+create database rentstuff;
+use rentstuff;
+
 DROP TABLE IF EXISTS `geo_location`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -72,6 +75,11 @@ CREATE TABLE `house` (
   `boys_only` tinyint(1) DEFAULT NULL,
   `owner_phone_number` varchar(60) DEFAULT NULL,
   `location_id` int(11) DEFAULT NULL,
+  `latitude` decimal(10,6) DEFAULT NULL,
+  `longitude` decimal(10,6) DEFAULT NULL,
+  `house_no` varchar(100) DEFAULT NULL,
+  `street_no` varchar(10) DEFAULT NULL,
+  `area` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`)

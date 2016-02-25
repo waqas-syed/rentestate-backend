@@ -1,4 +1,5 @@
 ﻿
+using System.Collections;
 using System.Collections.Generic;
 
 namespace RentStuff.Property.Domain.Model.HouseAggregate
@@ -47,5 +48,13 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         /// <returns></returns>
         IList<House> GetAllHouses();
+
+        /// <summary>
+        /// Gets the houses by their coordinates
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <returns></returns>
+        IList SearchHousesByCoordinates(decimal latitude, decimal longitude);
     }
 }

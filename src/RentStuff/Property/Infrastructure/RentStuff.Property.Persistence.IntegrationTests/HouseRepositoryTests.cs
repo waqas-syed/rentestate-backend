@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,10 +31,11 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).MonthlyRent(price).Build();
+                .PropertyType(PropertyType.Apartment).MonthlyRent(price).Latitude(33.29M).Latitude(73.41M)
+                .HouseNo("123").Area("Harley Street").StreetNo("13").Build();
             Location location = new Location(22M, 100M, "House # 818", "13", "Islamabad, Pakistan", house);
             locationRepository.SaveOrUpdate(location);
-            house.Location = location;
+            //house.Location = location;
             houseRepository.SaveorUpdate(house);
             
             //House retreivedHouse = houseRepository.GetHouseByOwnerEmail(email);
@@ -77,7 +79,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             Location location = new Location(22, 100, "House # 818", "141", "Islamabad, Pakistan", house);
             locationRepository.SaveOrUpdate(location);
-            house.Location = location;
+            //house.Location = location;
             houseRepository.SaveorUpdate(house);
 
             IList<House> retreivedHouses = houseRepository.GetHouseByOwnerEmail(email);
@@ -95,6 +97,35 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
 
             RemoveHouseObject(houseRepository, house);
+        }
+
+        [Test]
+        public void RetrieveHouseByCoordinates_GetsTheHousesUsingTheirCoordinates_VerifiesThroughReturnValue()
+        {
+            decimal initialLatitude = 33.29M;
+            decimal initialLongitude = 73.41M;
+            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
+            IList searchHousesByCoordinates = houseRepository.SearchHousesByCoordinates(33.29M, 73.41M);
+            Assert.NotNull(searchHousesByCoordinates);
+        }
+
+        private void SaveMultipleHouses(IHouseRepository houseRepository, decimal latitude, decimal longitude)
+        {
+            decimal initialLatitude = latitude;
+            decimal initialLongitude = longitude;
+            for (int i = 0; i < 20; i++)
+            {
+                initialLatitude += .005M;
+                initialLongitude += .005M;
+                House house = new House.HouseBuilder().OwnerEmail("dummy@dumdum123.com" + i)
+                .NumberOfBedrooms(1).NumberOfBathrooms(1)
+                .NumberOfKitchens(1).CableTvAvailable(true).FamiliesOnly(true)
+                .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
+                .PropertyType(PropertyType.Apartment).MonthlyRent(50000).Latitude(initialLatitude).Longitude(initialLongitude)
+                .HouseNo("123").Area("Harley Street").StreetNo("13").Build();
+                houseRepository.SaveorUpdate(house);
+            }
         }
 
         private void RemoveHouseObject(IHouseRepository houseRepository, House house)

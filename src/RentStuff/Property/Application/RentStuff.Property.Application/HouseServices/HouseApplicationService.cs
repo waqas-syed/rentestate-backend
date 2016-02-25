@@ -109,19 +109,19 @@ namespace RentStuff.Property.Application.HouseServices
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
             // Get 20 coordinates within the range of around 30 kilometers radius
             // ToDo: Get the Location using latitude longitude and get the House with each location as relationship. and return back
-            IList coordinatesList = _locationRepository.GetLocationByCoordinates(coordinates.Item1, coordinates.Item2);
+            return (IList<House>) _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2);
 
-            // ToDo: 
-            IList<House> houselist = new List<House>();
-            foreach (dynamic coordinate in coordinatesList)
-            {
-                House currentHouse = _houseRepository.GetHouseByCoordinates(coordinate[0], coordinate[1]);
-                if (currentHouse != null)
-                {
-                    houselist.Add(currentHouse);
-                }
-            }
-            return houselist;
+            //// ToDo: 
+            //IList<House> houselist = new List<House>();
+            //foreach (dynamic coordinate in coordinatesList)
+            //{
+            //    House currentHouse = _houseRepository.GetHouseByCoordinates(coordinate[0], coordinate[1]);
+            //    if (currentHouse != null)
+            //    {
+            //        houselist.Add(currentHouse);
+            //    }
+            //}
+            //return houselist;
         }
 
         /// <summary>

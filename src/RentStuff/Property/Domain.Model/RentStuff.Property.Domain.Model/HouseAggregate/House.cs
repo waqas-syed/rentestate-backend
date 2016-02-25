@@ -9,7 +9,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
     /// </summary>
     public class House : Entity
     {
-        private Location _location;
+        //private Location _location;
         private long _monthlyRent;
         private int _numberOfBedrooms;
         private int _numberOfKitchens;
@@ -26,6 +26,11 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         private PropertyType _propertyType;
         private string _ownerEmail;
         private string _ownerPhoneNumber;
+        private decimal _latitude;
+        private decimal _longitude;
+        private string _houseNo;
+        private string _streetNo;
+        private string _area;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
@@ -40,9 +45,10 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public House(Location location, long monthlyRent, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Size size, 
-            bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail, string ownerPhoneNumber)
+            bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail, string ownerPhoneNumber,
+            decimal latitude, decimal longitude, string houseNo, string streetNo, string area)
         {
-            Location = location;
+            //Location = location;
             MonthlyRent = monthlyRent;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
@@ -59,19 +65,24 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             PropertyType = propertyType;
             OwnerEmail = ownerEmail;
             OwnerPhoneNumber = ownerPhoneNumber;
+            _latitude = latitude;
+            _longitude = longitude;
+            _houseNo = houseNo;
+            _streetNo = streetNo;
+            _area = area;
         }
 
         /// <summary>
         /// Location
         /// </summary>
-        public Location Location
-        {
-            get { return _location; }
-            set
-            {
-                _location = value;
-            }
-        }
+        //public Location Location
+        //{
+        //    get { return _location; }
+        //    set
+        //    {
+        //        _location = value;
+        //    }
+        //}
 
         /// <summary>
         /// Monthly Rent
@@ -231,6 +242,51 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         }
 
         /// <summary>
+        /// Latitude
+        /// </summary>
+        public decimal Latitude
+        {
+            get { return _latitude; }
+            private set { _latitude = value; }
+        }
+
+        /// <summary>
+        /// Longitude
+        /// </summary>
+        public decimal Longitude
+        {
+            get { return _longitude; }
+            private set { _longitude = value; }
+        }
+
+        /// <summary>
+        /// House Number
+        /// </summary>
+        public string HouseNo
+        {
+            get { return _houseNo; }
+            private set { _houseNo = value; }
+        }
+
+        /// <summary>
+        /// Street Number
+        /// </summary>
+        public string StreetNo
+        {
+            get { return _streetNo; }
+            private set { _streetNo = value; }
+        }
+
+        /// <summary>
+        /// Area that contains Town, State, City and Country
+        /// </summary>
+        public string Area
+        {
+            get { return _area; }
+            private set { _area = value; }
+        }
+
+        /// <summary>
         /// House Builder
         /// </summary>
         public class HouseBuilder
@@ -252,6 +308,11 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private PropertyType _propertyType;
             private string _ownerEmail;
             private string _ownerPhoneNumber;
+            private decimal _latitude;
+            private decimal _longitude;
+            private string _houseNo;
+            private string _streetNo;
+            private string _area;
 
             /// <summary>
             /// Location
@@ -365,6 +426,36 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
 
+            public HouseBuilder Latitude(decimal latitude)
+            {
+                _latitude = latitude;
+                return this;
+            }
+
+            public HouseBuilder Longitude(decimal longitude)
+            {
+                _longitude = longitude;
+                return this;
+            }
+
+            public HouseBuilder HouseNo(string houseNo)
+            {
+                _houseNo = houseNo;
+                return this;
+            }
+
+            public HouseBuilder StreetNo(string streetNo)
+            {
+                _streetNo = streetNo;
+                return this;
+            }
+
+            public HouseBuilder Area(string area)
+            {
+                _area = area;
+                return this;
+            }
+
             /// <summary>
             /// Build a new instance of House
             /// </summary>
@@ -374,7 +465,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return new House(_location, _monthlyRent, _numberOfBedrooms, _numberOfKitchens,
                                  _numberOfBathrooms, _familiesOnly, _boysOnly, _girlsOnly, _internetAvailable,
                                  _landlinePhoneAvailable, _cableTvAvailable, _size, _garageAvailable,
-                                 _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber);
+                                 _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber, _latitude, _longitude,
+                                 _houseNo, _streetNo, _area);
             }
         }
     }

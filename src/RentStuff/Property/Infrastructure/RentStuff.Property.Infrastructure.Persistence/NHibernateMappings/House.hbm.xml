@@ -21,6 +21,11 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
     <property name="PropertyType" column="property_type"/>
     <property name="OwnerEmail" column="owner_email"/>
     <property name="OwnerPhoneNumber" column="owner_phone_number"/>
-    <many-to-one name="Location" unique="true" column="location_id"/>
+    <property name="Latitude" column="latitude"/>
+    <property name="Longitude" column="longitude"/>
+    <property name="HouseNo" column="house_no"/>
+    <property name="StreetNo" column="street_no"/>
+    <property name="Area" column="area"/>
+    <!--<many-to-one name="Location" unique="true" column="location_id"/>-->
   </class>
 </hibernate-mapping>

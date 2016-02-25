@@ -12,7 +12,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         public void GetNearestCoordinatesTest_TestsThatTheNearstCoordinatesAreReturnedAsExpected_VerifiesThroughTheReturnValue()
         {
             ILocationRepository locationRepository = (ILocationRepository)ContextRegistry.GetContext()["LocationRepository"];
-            IList coordinatesList = locationRepository.GetLocationByCoordinates(22, 100);
+            IList coordinatesList = locationRepository.GetLocationByCoordinates(33, 73);
             Assert.NotNull(coordinatesList);
             Assert.AreEqual(20, coordinatesList.Count);
         }
