@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using RentStuff.Common.Domain.Model;
 
 namespace RentStuff.Property.Domain.Model.HouseAggregate
@@ -65,11 +64,11 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             PropertyType = propertyType;
             OwnerEmail = ownerEmail;
             OwnerPhoneNumber = ownerPhoneNumber;
-            _latitude = latitude;
-            _longitude = longitude;
-            _houseNo = houseNo;
-            _streetNo = streetNo;
-            _area = area;
+            Latitude = latitude;
+            Longitude = longitude;
+            HouseNo = houseNo;
+            StreetNo = streetNo;
+            Area = area;
         }
 
         /// <summary>
@@ -247,7 +246,11 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public decimal Latitude
         {
             get { return _latitude; }
-            private set { _latitude = value; }
+            private set
+            {
+                Assertion.AssertDecimalNotZero(value);
+                _latitude = value;
+            }
         }
 
         /// <summary>
@@ -256,7 +259,11 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public decimal Longitude
         {
             get { return _longitude; }
-            private set { _longitude = value; }
+            private set
+            {
+                Assertion.AssertDecimalNotZero(value);
+                _longitude = value;
+            }
         }
 
         /// <summary>
@@ -283,7 +290,11 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public string Area
         {
             get { return _area; }
-            private set { _area = value; }
+            private set
+            {
+                Assertion.AssertStringNotNullorEmpty(value);
+                _area = value;
+            }
         }
 
         /// <summary>

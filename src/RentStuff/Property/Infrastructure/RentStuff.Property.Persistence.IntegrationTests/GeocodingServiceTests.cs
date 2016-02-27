@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using RentStuff.Property.Domain.Model.Services;
 using Spring.Context.Support;
@@ -19,9 +15,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
             Tuple<decimal,decimal> coordinates = geocodingService.GetCoordinatesFromAddress("1600+Amphitheatre+Parkway,+Mountain+View,+CA");
             Assert.IsNotNull(coordinates);
-            Assert.AreEqual(37.4220459, coordinates.Item1);
-            Assert.AreEqual(-122.0841477, coordinates.Item2);
-            Thread.Sleep(2000);
+            Assert.AreEqual(37.4224504, coordinates.Item1);
+            Assert.AreEqual(-122.0840859, coordinates.Item2);
         }
     }
 }

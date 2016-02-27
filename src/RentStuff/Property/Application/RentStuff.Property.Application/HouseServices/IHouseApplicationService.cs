@@ -13,7 +13,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <summary>
         /// Saves a new house instance to the database
         /// </summary>
-        void SaveNewHouseOffer(CreateHouseCommand house);
+        bool SaveNewHouseOffer(CreateHouseCommand house);
 
         /// <summary>
         /// Delete the given house instance

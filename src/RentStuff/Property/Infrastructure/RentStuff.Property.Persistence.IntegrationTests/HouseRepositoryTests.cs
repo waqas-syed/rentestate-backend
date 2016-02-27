@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using NUnit.Framework;
+using RentStuff.Common;
 using RentStuff.Property.Domain.Model.HouseAggregate;
-using RentStuff.Property.Infrastructure.Persistence.Repositories;
 using Spring.Context.Support;
 
 namespace RentStuff.Property.Persistence.IntegrationTests
@@ -15,11 +10,27 @@ namespace RentStuff.Property.Persistence.IntegrationTests
     [TestFixture]
     public class HouseRepositoryTests
     {
+        private DatabaseUtility _databaseUtility;
+
+        [SetUp]
+        public void Setup()
+        {
+            var connection = ConfigurationManager.ConnectionStrings["MySql"].ToString();
+            _databaseUtility = new DatabaseUtility(connection);
+            _databaseUtility.Create();
+            //_databaseUtility.Populate();
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+            _databaseUtility.Create();
+        }   
+
         [Test]
         public void SaveHouseTest_TestsThatHouseUInstancesAreSavedToTheDatabaseAsExpected_VerifiesThroughDatabaseQuery()
         {
             IHouseRepository houseRepository = (IHouseRepository) ContextRegistry.GetContext()["HouseRepository"];
-            ILocationRepository locationRepository = (ILocationRepository)ContextRegistry.GetContext()["LocationRepository"];
             string email = "w@12344321.com";
             
             int numberOfBedrooms = 3;
@@ -31,21 +42,14 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).MonthlyRent(price).Latitude(33.29M).Latitude(73.41M)
-                .HouseNo("123").Area("Harley Street").StreetNo("13").Build();
-            Location location = new Location(22M, 100M, "House # 818", "13", "Islamabad, Pakistan", house);
-            locationRepository.SaveOrUpdate(location);
-            //house.Location = location;
+                .PropertyType(PropertyType.Apartment).MonthlyRent(price).Latitude(33.29M).Longitude(73.41M)
+                .HouseNo("123").Area("Pindora").StreetNo("13").Build();
+            
             houseRepository.SaveorUpdate(house);
             
-            //House retreivedHouse = houseRepository.GetHouseByOwnerEmail(email);
-
             House retreivedHouse = houseRepository.GetHouseById(house.Id);
 
             Assert.NotNull(retreivedHouse);
-            /*Assert.AreEqual(house.Location.StreetAddress, retreivedHouse.Location.StreetAddress);
-            Assert.AreEqual(house.Location.City, retreivedHouse.Location.City);
-            Assert.AreEqual(house.Location.Country, retreivedHouse.Location.Country);*/
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
@@ -55,17 +59,19 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
             Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
-
-            RemoveHouseObject(houseRepository, house);
+            Assert.AreEqual(house.Latitude, retreivedHouse.Latitude);
+            Assert.AreEqual(house.Longitude, retreivedHouse.Longitude);
+            Assert.AreEqual(house.HouseNo, retreivedHouse.HouseNo);
+            Assert.AreEqual(house.Area, retreivedHouse.Area);
+            Assert.AreEqual(house.StreetNo, retreivedHouse.StreetNo);
         }
 
         [Test]
         public void SaveHouseAndRetreiveByEmailTest_TestsThatHouseUInstancesAreSavedToTheDatabaseAsExpected_VerifiesThroughDatabaseQuery()
         {
             IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
-            ILocationRepository locationRepository = (ILocationRepository)ContextRegistry.GetContext()["LocationRepository"];
             string email = "w@12344321.com";
-            
+
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
@@ -75,11 +81,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).MonthlyRent(price).Build();
+                .PropertyType(PropertyType.Apartment).MonthlyRent(price).Latitude(33.29M).Longitude(73.41M)
+                .HouseNo("123").Area("Pindora").StreetNo("13").Build();
 
-            Location location = new Location(22, 100, "House # 818", "141", "Islamabad, Pakistan", house);
-            locationRepository.SaveOrUpdate(location);
-            //house.Location = location;
             houseRepository.SaveorUpdate(house);
 
             IList<House> retreivedHouses = houseRepository.GetHouseByOwnerEmail(email);
@@ -95,8 +99,11 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
             Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
-
-            RemoveHouseObject(houseRepository, house);
+            Assert.AreEqual(house.Latitude, retreivedHouse.Latitude);
+            Assert.AreEqual(house.Longitude, retreivedHouse.Longitude);
+            Assert.AreEqual(house.HouseNo, retreivedHouse.HouseNo);
+            Assert.AreEqual(house.Area, retreivedHouse.Area);
+            Assert.AreEqual(house.StreetNo, retreivedHouse.StreetNo);
         }
 
         [Test]
@@ -106,8 +113,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             decimal initialLongitude = 73.41M;
             IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
             SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
-            IList searchHousesByCoordinates = houseRepository.SearchHousesByCoordinates(33.29M, 73.41M);
-            Assert.NotNull(searchHousesByCoordinates);
+            IList<House> retreivedHouses = houseRepository.SearchHousesByCoordinates(initialLatitude, initialLongitude);
+            Assert.NotNull(retreivedHouses);
+            VerifyRetereivedHouses(retreivedHouses, initialLatitude, initialLongitude);
         }
 
         private void SaveMultipleHouses(IHouseRepository houseRepository, decimal latitude, decimal longitude)
@@ -128,10 +136,17 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             }
         }
 
-        private void RemoveHouseObject(IHouseRepository houseRepository, House house)
+        private void VerifyRetereivedHouses(IList<House> retreivedHouses, decimal latitude, decimal longitude)
         {
-            houseRepository.Delete(house);
-            Thread.Sleep(2000);
+            decimal initialLatitude = latitude;
+            decimal initialLongitude = longitude;
+            foreach (var retreivedHouse in retreivedHouses)
+            {
+                initialLatitude += .005M;
+                initialLongitude += .005M;
+                Assert.AreEqual(initialLatitude, retreivedHouse.Latitude);
+                Assert.AreEqual(initialLongitude, retreivedHouse.Longitude);
+            }
         }
     }
 }

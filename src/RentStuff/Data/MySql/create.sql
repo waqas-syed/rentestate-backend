@@ -19,9 +19,6 @@
 -- Table structure for table `geo_location`
 --
 
-create database rentstuff;
-use rentstuff;
-
 DROP TABLE IF EXISTS `geo_location`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;

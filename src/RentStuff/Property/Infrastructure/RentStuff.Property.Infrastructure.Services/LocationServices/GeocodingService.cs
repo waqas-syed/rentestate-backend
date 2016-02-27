@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
@@ -34,8 +35,18 @@ namespace RentStuff.Property.Infrastructure.Services.LocationServices
                     // by calling .Result you are synchronously reading the result
                     string responseString = responseContent.ReadAsStringAsync().Result;
 
-                    dynamic coordinates = JObject.Parse(responseString);
-                    return new Tuple<decimal, decimal>((decimal)coordinates.results[0].geometry.location.lat.Value, (decimal)coordinates.results[0].geometry.location.lng.Value);
+                    JObject coordinates = JObject.Parse(responseString);
+                    try
+                    {
+                        return
+                            new Tuple<decimal, decimal>(
+                                (decimal) coordinates["results"][0]["geometry"]["location"]["lat"],
+                                (decimal) coordinates["results"][0]["geometry"]["location"]["lng"]);
+                    }
+                    catch (Exception)
+                    {
+                        throw new InvalidDataException("Geocoding error; Could not retreive coordinates from the given address");
+                    }
                 }
             }
             return null;

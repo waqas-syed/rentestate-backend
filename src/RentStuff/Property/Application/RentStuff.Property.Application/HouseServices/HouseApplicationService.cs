@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Management.Instrumentation;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
@@ -15,27 +15,28 @@ namespace RentStuff.Property.Application.HouseServices
     {
         private IHouseRepository _houseRepository;
         private IGeocodingService _geocodingService;
-        private ILocationRepository _locationRepository;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public HouseApplicationService(IHouseRepository houseRepository, IGeocodingService geocodingService,
-            ILocationRepository locationRepository)
+        public HouseApplicationService(IHouseRepository houseRepository, IGeocodingService geocodingService)
         {
             _houseRepository = houseRepository;
             _geocodingService = geocodingService;
-            _locationRepository = locationRepository;
         }
 
         /// <summary>
         /// Saves a new house instance to the database
         /// </summary>
-        public void SaveNewHouseOffer(CreateHouseCommand createHouseCommand)
+        public bool SaveNewHouseOffer(CreateHouseCommand createHouseCommand)
         {
             // Get the coordinates for the location using the Geocoding API service
             Tuple<decimal,decimal> coordinates = _geocodingService.GetCoordinatesFromAddress(createHouseCommand.Area);
 
+            if (coordinates == null || coordinates.Item1 == decimal.Zero || coordinates.Item2 == decimal.Zero)
+            {
+                throw new InvalidDataException("Could not find coordinates from the given address");
+            }
             PropertyType propertyType = default(PropertyType);
             if (!string.IsNullOrEmpty(createHouseCommand.PropertyType))
             {
@@ -44,24 +45,30 @@ namespace RentStuff.Property.Application.HouseServices
 
             // Create the new house instance
             House house = new House.HouseBuilder().BoysOnly(createHouseCommand.BoysOnly)
-                .CableTvAvailable(createHouseCommand.CableTvAvailable).FamiliesOnly(createHouseCommand.FamiliesOnly)
-                .GarageAvailable(createHouseCommand.GarageAvailable).GirlsOnly(createHouseCommand.GirlsOnly)
-                .LandlinePhoneAvailable(createHouseCommand.LandlinePhoneAvailable).MonthlyRent(createHouseCommand.MonthlyRent)
-                .NumberOfBathrooms(createHouseCommand.NumberOfBathrooms).NumberOfBedrooms(createHouseCommand.NumberOfBedrooms)
-                .NumberOfKitchens(createHouseCommand.NumberOfKitchens).OwnerEmail(createHouseCommand.OwnerEmail)
-                .OwnerPhoneNumber(createHouseCommand.OwnerPhoneNumber).SmokingAllowed(createHouseCommand.SmokingAllowed)
-                .WithInternetAvailable(createHouseCommand.InternetAvailable).PropertyType(propertyType).Build();
+                .CableTvAvailable(createHouseCommand.CableTvAvailable)
+                .FamiliesOnly(createHouseCommand.FamiliesOnly)
+                .GarageAvailable(createHouseCommand.GarageAvailable)
+                .GirlsOnly(createHouseCommand.GirlsOnly)
+                .LandlinePhoneAvailable(createHouseCommand.LandlinePhoneAvailable)
+                .MonthlyRent(createHouseCommand.MonthlyRent)
+                .NumberOfBathrooms(createHouseCommand.NumberOfBathrooms)
+                .NumberOfBedrooms(createHouseCommand.NumberOfBedrooms)
+                .NumberOfKitchens(createHouseCommand.NumberOfKitchens)
+                .OwnerEmail(createHouseCommand.OwnerEmail)
+                .OwnerPhoneNumber(createHouseCommand.OwnerPhoneNumber)
+                .SmokingAllowed(createHouseCommand.SmokingAllowed)
+                .WithInternetAvailable(createHouseCommand.InternetAvailable)
+                .PropertyType(propertyType)
+                .Latitude(coordinates.Item1)
+                .Longitude(coordinates.Item2)
+                .HouseNo(createHouseCommand.HouseNo)
+                .StreetNo(createHouseCommand.StreetNo)
+                .Area(createHouseCommand.Area).Build();
 
-            // Create the location value object instance for the current house
-            Location location = new Location(coordinates.Item1, coordinates.Item2, createHouseCommand.HouseNo,
-                createHouseCommand.StreetNo, createHouseCommand.Area, house);
-            // Save the location instance first so House has a reference to it in the database
-            _locationRepository.SaveOrUpdate(location);
-            house.Location = location;
-            // Save new the house instance
+            // Save the new house instance
             _houseRepository.SaveorUpdate(house);
 
-            
+            return true;
         }
 
         /// <summary>
@@ -108,20 +115,7 @@ namespace RentStuff.Property.Application.HouseServices
             // Get the coordinates for the location using the Geocoding API service
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
             // Get 20 coordinates within the range of around 30 kilometers radius
-            // ToDo: Get the Location using latitude longitude and get the House with each location as relationship. and return back
             return (IList<House>) _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2);
-
-            //// ToDo: 
-            //IList<House> houselist = new List<House>();
-            //foreach (dynamic coordinate in coordinatesList)
-            //{
-            //    House currentHouse = _houseRepository.GetHouseByCoordinates(coordinate[0], coordinate[1]);
-            //    if (currentHouse != null)
-            //    {
-            //        houselist.Add(currentHouse);
-            //    }
-            //}
-            //return houselist;
         }
 
         /// <summary>

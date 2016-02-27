@@ -42,5 +42,17 @@ namespace RentStuff.Common.Domain.Model
                 throw new NullReferenceException("Given nuumber is 0");
             }
         }
+
+        /// <summary>
+        /// Checks that the given number is not zero
+        /// </summary>
+        /// <param name="currentNumber"></param>
+        public static void AssertDecimalNotZero(decimal currentNumber)
+        {
+            if (currentNumber == Decimal.Zero)
+            {
+                throw new NullReferenceException("Given nuumber is 0");
+            }
+        }
     }
 }
