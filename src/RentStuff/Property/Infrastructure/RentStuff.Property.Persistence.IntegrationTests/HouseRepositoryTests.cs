@@ -118,6 +118,18 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             VerifyRetereivedHouses(retreivedHouses, initialLatitude, initialLongitude);
         }
 
+        [Test]
+        public void RetrieveHouseByCoordinatesFailTest_ChecksByProvidingTheWrongCoordinatesThatNoHouseIsRetreived_VerifiesThroughReturnValue()
+        {
+            decimal initialLatitude = 33.29M;
+            decimal initialLongitude = 73.41M;
+            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
+            IList<House> retreivedHouses = houseRepository.SearchHousesByCoordinates(29.00M, 69.00M);
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(0, retreivedHouses.Count);
+        }
+
         private void SaveMultipleHouses(IHouseRepository houseRepository, decimal latitude, decimal longitude)
         {
             decimal initialLatitude = latitude;
