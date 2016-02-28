@@ -21,8 +21,6 @@ namespace RentStuff.Property.Application.HouseServices.Commands
         private string _propertyType;
         private string _ownerEmail;
         private string _ownerPhoneNumber;
-        private decimal _latitude;
-        private decimal _longitude;
         private string _houseNo;
         private string _streetNo;
         private string _area;
@@ -31,8 +29,7 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, 
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber, 
-            decimal latitude, decimal longitude, string houseNo, 
-            string streetNo, string area)
+            string houseNo, string streetNo, string area)
         {
             _monthlyRent = monthlyRent;
             _numberOfBedrooms = numberOfBedrooms;
@@ -49,8 +46,6 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             _propertyType = propertyType;
             _ownerEmail = ownerEmail;
             _ownerPhoneNumber = ownerPhoneNumber;
-            _latitude = latitude;
-            _longitude = longitude;
             _houseNo = houseNo;
             _streetNo = streetNo;
             _area = area;
@@ -147,18 +142,6 @@ namespace RentStuff.Property.Application.HouseServices.Commands
         {
             get { return _ownerPhoneNumber; }
             private set { _ownerPhoneNumber = value; }
-        }
-
-        public decimal Latitude
-        {
-            get { return _latitude; }
-            private set { _latitude = value; }
-        }
-
-        public decimal Lontitude
-        {
-            get { return _longitude; }
-            private set { _longitude = value; }
         }
 
         public string HouseNo

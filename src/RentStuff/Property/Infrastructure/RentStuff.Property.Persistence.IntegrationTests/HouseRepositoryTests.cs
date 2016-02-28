@@ -25,7 +25,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         public void Teardown()
         {
             _databaseUtility.Create();
-        }   
+        }
 
         [Test]
         public void SaveHouseTest_TestsThatHouseUInstancesAreSavedToTheDatabaseAsExpected_VerifiesThroughDatabaseQuery()
