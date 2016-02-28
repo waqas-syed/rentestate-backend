@@ -42,9 +42,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="mysql.data">
-      <HintPath>..\..\..\..\..\..\libs\mysql.data.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -72,6 +69,7 @@
       <HintPath>..\..\..\..\packages\Spring.Data.NHibernate4.2.0.1\lib\net45\Spring.Data.NHibernate4.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -101,27 +99,31 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Common\RentStuff.Common.Domain.Model\RentStuff.Common.Domain.Model.csproj">
+    <ProjectReference Include="..\..\..\Common\RentStuff.Common.Domain.Model\RentStuff.Common.Domain.Model.csproj">
       <Project>{199a41d2-a685-4e0c-98fe-c5524099b5f2}</Project>
       <Name>RentStuff.Common.Domain.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Application\RentStuff.Property.Application\RentStuff.Property.Application.csproj">
+    <ProjectReference Include="..\..\..\Common\RentStuff.Common\RentStuff.Common.csproj">
+      <Project>{85eed18f-3c13-49ef-9c12-48fdb2661896}</Project>
+      <Name>RentStuff.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Application\RentStuff.Property.Application\RentStuff.Property.Application.csproj">
       <Project>{0ccf9f64-68ff-487c-a46a-b25349f249a5}</Project>
       <Name>RentStuff.Property.Application</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Domain.Model\RentStuff.Property.Domain.Model\RentStuff.Property.Domain.Model.csproj">
+    <ProjectReference Include="..\..\Domain.Model\RentStuff.Property.Domain.Model\RentStuff.Property.Domain.Model.csproj">
       <Project>{c6c90b57-616b-4d09-ba23-1c9c42ac93ad}</Project>
       <Name>RentStuff.Property.Domain.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\RentStuff.Property.Infrastructure.Persistence\RentStuff.Property.Infrastructure.Persistence.csproj">
+    <ProjectReference Include="..\..\Infrastructure\RentStuff.Property.Infrastructure.Persistence\RentStuff.Property.Infrastructure.Persistence.csproj">
       <Project>{8cc19802-c300-4e6b-9137-83db9d94a481}</Project>
       <Name>RentStuff.Property.Infrastructure.Persistence</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\RentStuff.Property.Infrastructure.Services\RentStuff.Property.Infrastructure.Services.csproj">
+    <ProjectReference Include="..\..\Infrastructure\RentStuff.Property.Infrastructure.Services\RentStuff.Property.Infrastructure.Services.csproj">
       <Project>{fcdbf9a2-1338-43e8-9b43-1b7798277f05}</Project>
       <Name>RentStuff.Property.Infrastructure.Services</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RentStuff.Property.Ports.Adapter.Rest.csproj">
+    <ProjectReference Include="..\RentStuff.Property.Ports.Adapter.Rest\RentStuff.Property.Ports.Adapter.Rest.csproj">
       <Project>{f5927692-6840-4b54-a8aa-ec37152112df}</Project>
       <Name>RentStuff.Property.Ports.Adapter.Rest</Name>
     </ProjectReference>

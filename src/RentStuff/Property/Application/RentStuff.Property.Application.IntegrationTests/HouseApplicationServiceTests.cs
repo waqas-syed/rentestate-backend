@@ -92,8 +92,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
             Assert.AreEqual(Enum.Parse(typeof(PropertyType), house.PropertyType), retreivedHouse.PropertyType);
-            Assert.AreEqual(Math.Round(latitude, 3), Math.Round(retreivedHouse.Latitude, 3));
-            Assert.AreEqual(Math.Round(longitude, 3), Math.Round(retreivedHouse.Longitude, 3));
+            Assert.AreEqual(decimal.Round(latitude, 5), decimal.Round(retreivedHouse.Latitude, 5));
+            Assert.AreEqual(decimal.Round(longitude, 5), decimal.Round(retreivedHouse.Longitude, 5));
             Assert.AreEqual(house.HouseNo, retreivedHouse.HouseNo);
             Assert.AreEqual(house.Area, retreivedHouse.Area);
             Assert.AreEqual(house.StreetNo, retreivedHouse.StreetNo);
@@ -137,8 +137,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
             Assert.AreEqual(Enum.Parse(typeof(PropertyType), house.PropertyType), retreivedHouse.PropertyType);
-            Assert.AreEqual(Math.Round(coordinates.Item1, 3), Math.Round(retreivedHouse.Latitude, 3));
-            Assert.AreEqual(Math.Round(coordinates.Item2, 3), Math.Round(retreivedHouse.Longitude, 3));
+            Assert.AreEqual(decimal.Round(coordinates.Item1, 5), decimal.Round(retreivedHouse.Latitude, 5));
+            Assert.AreEqual(decimal.Round(coordinates.Item2, 5), decimal.Round(retreivedHouse.Longitude, 5));
             Assert.AreEqual(house.HouseNo, retreivedHouse.HouseNo);
             Assert.AreEqual(house.Area, retreivedHouse.Area);
             Assert.AreEqual(house.StreetNo, retreivedHouse.StreetNo);
