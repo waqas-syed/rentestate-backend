@@ -86,7 +86,10 @@ namespace RentStuff.Property.Application.HouseServices
             house.UpdateHouse(updateHouseCommand.MonthlyRent, updateHouseCommand.NumberOfBedrooms, updateHouseCommand.NumberOfKitchens,
                 updateHouseCommand.NumberOfBathrooms, updateHouseCommand.FamiliesOnly, updateHouseCommand.BoysOnly, 
                 updateHouseCommand.GirlsOnly, updateHouseCommand.InternetAvailable, updateHouseCommand.LandlinePhoneAvailable,
-                updateHouseCommand.CableTvAvailable, updateHouseCommand.GarageAvailable, updateHouseCommand.);
+                updateHouseCommand.CableTvAvailable, new Dimension(DimensionType.Acre, updateHouseCommand.DimensionStringValue, updateHouseCommand.DimensionIntValue), 
+                    updateHouseCommand.GarageAvailable, updateHouseCommand.SmokingAllowed,updateHouseCommand.PropertyType,
+                    updateHouseCommand.OwnerEmail, updateHouseCommand.OwnerPhoneNumber, updateHouseCommand.Latitude,
+                    updateHouseCommand.Longitude, updateHouseCommand.HouseNo, updateHouseCommand.StreetNo, updateHouseCommand.Area);
 
             _houseRepository.SaveorUpdate(house);
             return true;

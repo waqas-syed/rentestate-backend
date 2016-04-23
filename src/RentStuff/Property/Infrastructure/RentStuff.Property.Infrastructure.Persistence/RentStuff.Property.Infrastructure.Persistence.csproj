@@ -113,6 +113,7 @@
   <ItemGroup>
     <EmbeddedResource Include="NHibernateMappings\Dimension.hbm.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -25,12 +25,18 @@ namespace RentStuff.Property.Application.HouseServices.Commands
         private string _houseNo;
         private string _streetNo;
         private string _area;
+        private string _dimensionType;
+        private string _dimensionStringValue;
+        private int _dimensionIntValue;
+        private decimal _latitude;
+        private decimal _longitude;
 
         public UpdateHouseCommand(string id, long monthlyRent, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, 
-            bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber, 
-            string houseNo, string streetNo, string area)
+            bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
+            string houseNo, string streetNo, string area, string dimensionType, string dimensionStringValue, int dimensionIntValue,
+            decimal latitude, decimal longitude)
         {
             _id = id;
             _monthlyRent = monthlyRent;
@@ -51,6 +57,11 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             _houseNo = houseNo;
             _streetNo = streetNo;
             _area = area;
+            _dimensionType = dimensionType;
+            _dimensionStringValue = dimensionStringValue;
+            _dimensionIntValue = dimensionIntValue;
+            _latitude = latitude;
+            _longitude = longitude;
         }
 
         public string Id
@@ -171,6 +182,36 @@ namespace RentStuff.Property.Application.HouseServices.Commands
         {
             get { return _area; }
             private set { _area = value; }
+        }
+
+        public string DimensionType
+        {
+            get { return _dimensionType; }
+            private set { _dimensionType = value; }
+        }
+
+        public string DimensionStringValue
+        {
+            get { return _dimensionStringValue; }
+            private set { _dimensionStringValue = value; }
+        }
+
+        public int DimensionIntValue
+        {
+            get { return _dimensionIntValue; }
+            private set { _dimensionIntValue = value; }
+        }
+
+        public decimal Latitude
+        {
+            get { return _latitude; }
+            private set { _latitude = value; }
+        }
+
+        public decimal Longitude
+        {
+            get { return _longitude; }
+            private set { _longitude = value; }
         }
     }
 }
