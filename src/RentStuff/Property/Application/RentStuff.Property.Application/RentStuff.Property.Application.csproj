@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HouseServices\Commands\CreateHouseCommand.cs" />
+    <Compile Include="HouseServices\Commands\UpdateHouseCommand.cs" />
     <Compile Include="HouseServices\HouseApplicationService.cs" />
     <Compile Include="HouseServices\IHouseApplicationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

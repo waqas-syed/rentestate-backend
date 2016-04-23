@@ -8,7 +8,6 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
     /// </summary>
     public class House : Entity
     {
-        //private Location _location;
         private long _monthlyRent;
         private int _numberOfBedrooms;
         private int _numberOfKitchens;
@@ -19,7 +18,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         private bool _internetAvailable;
         private bool _landlinePhoneAvailable;
         private bool _cableTvAvailable;
-        private Size _size;
+        private Dimension _dimension;
         private bool _garageAvailable;
         private bool _smokingAllowed;
         private PropertyType _propertyType;
@@ -41,13 +40,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public House(Location location, long monthlyRent, int numberOfBedrooms,
+        public House(long monthlyRent, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
-            bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Size size, 
+            bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension, 
             bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail, string ownerPhoneNumber,
             decimal latitude, decimal longitude, string houseNo, string streetNo, string area)
         {
-            //Location = location;
             MonthlyRent = monthlyRent;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
@@ -58,7 +56,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             InternetAvailable = internetAvailable;
             LandlinePhoneAvailable = landlinePhoneAvailable;
             CableTvAvailable = cableTvAvailable;
-            Size = size;
+            Size = dimension;
             GarageAvailable = garageAvailable;
             SmokingAllowed = smokingAllowed;
             PropertyType = propertyType;
@@ -72,16 +70,54 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         }
 
         /// <summary>
-        /// Location
+        /// House instance updates itself with the given values
         /// </summary>
-        //public Location Location
-        //{
-        //    get { return _location; }
-        //    set
-        //    {
-        //        _location = value;
-        //    }
-        //}
+        /// <param name="monthlyRent"></param>
+        /// <param name="numberOfBedrooms"></param>
+        /// <param name="numberOfKitchens"></param>
+        /// <param name="numberOfBathrooms"></param>
+        /// <param name="familiesOnly"></param>
+        /// <param name="boysOnly"></param>
+        /// <param name="girlsOnly"></param>
+        /// <param name="internetAvailable"></param>
+        /// <param name="landlinePhoneAvailable"></param>
+        /// <param name="cableTvAvailable"></param>
+        /// <param name="size"></param>
+        /// <param name="garageAvailable"></param>
+        /// <param name="smokingAllowed"></param>
+        /// <param name="propertyType"></param>
+        /// <param name="ownerEmail"></param>
+        /// <param name="ownerPhoneNumber"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="houseNo"></param>
+        /// <param name="streetNo"></param>
+        /// <param name="area"></param>
+        public void UpdateHouse(long monthlyRent, int numberOfBedrooms,
+            int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
+            bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension size,
+            bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
+            decimal latitude, decimal longitude, string houseNo, string streetNo, string area)
+        {
+            MonthlyRent = monthlyRent;
+            NumberOfBedrooms = numberOfBedrooms;
+            NumberOfKitchens = numberOfKitchens;
+            NumberOfBathrooms = numberOfBathrooms;
+            FamiliesOnly = familiesOnly;
+            BoysOnly = boysOnly;
+            GirlsOnly = girlsOnly;
+            InternetAvailable = internetAvailable;
+            LandlinePhoneAvailable = landlinePhoneAvailable;
+            CableTvAvailable = cableTvAvailable;
+            GarageAvailable = garageAvailable;
+            SmokingAllowed = smokingAllowed;
+            PropertyType = (PropertyType)Enum.Parse(typeof(PropertyType), propertyType);
+            OwnerEmail = ownerEmail;
+            OwnerPhoneNumber = ownerPhoneNumber;
+            HouseNo = houseNo;
+            StreetNo = streetNo;
+            Area = area;
+        }
 
         /// <summary>
         /// Monthly Rent
@@ -204,10 +240,10 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             set { _cableTvAvailable = value; }
         }
 
-        public Size Size
+        public Dimension Size
         {
-            get { return _size; } 
-            set { _size = value; }
+            get { return _dimension; } 
+            set { _dimension = value; }
         }
 
         public bool GarageAvailable
@@ -272,7 +308,11 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public string HouseNo
         {
             get { return _houseNo; }
-            private set { _houseNo = value; }
+            set
+            {
+                Assertion.AssertStringNotNullorEmpty(value);
+                _houseNo = value;
+            }
         }
 
         /// <summary>
@@ -281,7 +321,11 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public string StreetNo
         {
             get { return _streetNo; }
-            private set { _streetNo = value; }
+            set
+            {
+                Assertion.AssertStringNotNullorEmpty(value);
+                _streetNo = value;
+            }
         }
 
         /// <summary>
@@ -290,7 +334,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public string Area
         {
             get { return _area; }
-            private set
+            set
             {
                 Assertion.AssertStringNotNullorEmpty(value);
                 _area = value;
@@ -313,7 +357,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private bool _internetAvailable;
             private bool _landlinePhoneAvailable;
             private bool _cableTvAvailable;
-            private Size _size;
+            private Dimension _dimension;
             private bool _garageAvailable;
             private bool _smokingAllowed;
             private PropertyType _propertyType;
@@ -324,17 +368,6 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private string _houseNo;
             private string _streetNo;
             private string _area;
-
-            /// <summary>
-            /// Location
-            /// </summary>
-            /// <param name="location"></param>
-            /// <returns></returns>
-            public HouseBuilder Location(Location location)
-            {
-                _location = location;
-                return this;
-            }
 
             /// <summary>
             /// Price
@@ -401,9 +434,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
 
-            public HouseBuilder Size(Size size)
+            public HouseBuilder Dimension(Dimension dimension)
             {
-                _size = size;
+                _dimension = dimension;
                 return this;
             }
 
@@ -473,9 +506,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             /// <returns></returns>
             public House Build()
             {
-                return new House(_location, _monthlyRent, _numberOfBedrooms, _numberOfKitchens,
+                return new House(_monthlyRent, _numberOfBedrooms, _numberOfKitchens,
                                  _numberOfBathrooms, _familiesOnly, _boysOnly, _girlsOnly, _internetAvailable,
-                                 _landlinePhoneAvailable, _cableTvAvailable, _size, _garageAvailable,
+                                 _landlinePhoneAvailable, _cableTvAvailable, _dimension, _garageAvailable,
                                  _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber, _latitude, _longitude,
                                  _houseNo, _streetNo, _area);
             }

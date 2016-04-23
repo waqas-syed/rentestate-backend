@@ -72,6 +72,27 @@ namespace RentStuff.Property.Application.HouseServices
         }
 
         /// <summary>
+        /// Updates an exisitng house
+        /// </summary>
+        /// <param name="updateHouseCommand"></param>
+        /// <returns></returns>
+        public bool UpdateHouse(UpdateHouseCommand updateHouseCommand)
+        {
+            House house = _houseRepository.GetHouseById(updateHouseCommand.Id);
+            if (house == null)
+            {
+                throw new InstanceNotFoundException(string.Format("House not found for id: {0}", updateHouseCommand.Id));
+            }
+            house.UpdateHouse(updateHouseCommand.MonthlyRent, updateHouseCommand.NumberOfBedrooms, updateHouseCommand.NumberOfKitchens,
+                updateHouseCommand.NumberOfBathrooms, updateHouseCommand.FamiliesOnly, updateHouseCommand.BoysOnly, 
+                updateHouseCommand.GirlsOnly, updateHouseCommand.InternetAvailable, updateHouseCommand.LandlinePhoneAvailable,
+                updateHouseCommand.CableTvAvailable, updateHouseCommand.GarageAvailable, updateHouseCommand.);
+
+            _houseRepository.SaveorUpdate(house);
+            return true;
+        }
+
+        /// <summary>
         /// Delete the given house instance
         /// </summary>
         /// <param name="house"></param>

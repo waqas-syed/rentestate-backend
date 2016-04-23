@@ -41,13 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HouseAggregate\DimensionType.cs" />
     <Compile Include="HouseAggregate\GeoLocation.cs" />
     <Compile Include="HouseAggregate\ILocationRepository.cs" />
     <Compile Include="HouseAggregate\Location.cs" />
     <Compile Include="HouseAggregate\House.cs" />
     <Compile Include="HouseAggregate\IHouseRepository.cs" />
     <Compile Include="HouseAggregate\PropertyType.cs" />
-    <Compile Include="HouseAggregate\Size.cs" />
+    <Compile Include="HouseAggregate\Dimension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IGeocodingService.cs" />
   </ItemGroup>

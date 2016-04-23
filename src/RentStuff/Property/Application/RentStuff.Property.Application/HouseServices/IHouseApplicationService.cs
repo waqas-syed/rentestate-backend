@@ -16,6 +16,13 @@ namespace RentStuff.Property.Application.HouseServices
         bool SaveNewHouseOffer(CreateHouseCommand house);
 
         /// <summary>
+        /// Update an existing house
+        /// </summary>
+        /// <param name="updateHouseCommand"></param>
+        /// <returns></returns>
+        bool UpdateHouse(UpdateHouseCommand updateHouseCommand);
+
+        /// <summary>
         /// Delete the given house instance
         /// </summary>
         /// <param name="house"></param>
