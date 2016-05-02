@@ -17,6 +17,14 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         private decimal _decimalValue;
 
         /// <summary>
+        /// Default Constructor
+        /// </summary>
+        public Dimension()
+        {
+            
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
         public Dimension(DimensionType dimensionType, string stringValue, decimal decimalValue)

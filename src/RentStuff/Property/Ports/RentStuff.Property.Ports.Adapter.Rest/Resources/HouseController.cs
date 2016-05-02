@@ -1,4 +1,10 @@
 ﻿using System;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Mime;
+using System.Web;
+using System.Web.Hosting;
 using System.Web.Http;
 using RentStuff.Property.Application.HouseServices;
 using RentStuff.Property.Application.HouseServices.Commands;
@@ -23,7 +29,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             _houseApplicationService = houseApplicationService;
         }
 
-        [Route("house")]
+        /*[Route("house")]
         [HttpPost]
         public IHttpActionResult Post([FromBody]CreateHouseCommand house)
         {
@@ -33,6 +39,44 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 {
                     _houseApplicationService.SaveNewHouseOffer(house);
                     return Ok();
+                }
+                return BadRequest();
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
+        }*/
+
+        [Route("house")]
+        [HttpPost]
+        public IHttpActionResult Post()
+        {
+            try
+            {
+                var result = new HttpResponseMessage(HttpStatusCode.OK);
+                var httpRequest = HttpContext.Current.Request;
+                if (Request.Content.IsMimeMultipartContent())
+                {
+                    Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider()).ContinueWith((task) =>
+                    {
+                        MultipartMemoryStreamProvider provider = task.Result;
+                        foreach (HttpContent content in provider.Contents)
+                        {
+                            Stream stream = content.ReadAsStreamAsync().Result;
+                            //var image = MediaTypeNames.Image.FromStream(stream);
+                            var testName = content.Headers.ContentDisposition.Name;
+                            String filePath = HostingEnvironment.MapPath("~/Images/");
+                            String[] headerValues = (String[])Request.Headers.GetValues("UniqueId");
+                            String fileName = headerValues[0] + ".jpg";
+                            String fullPath = Path.Combine(filePath, fileName);
+                            //image.Save(fullPath);
+                        }
+                    });
+                }
+                else
+                {
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable, "This request is not properly formatted"));
                 }
                 return BadRequest();
             }

@@ -6,26 +6,8 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
       <column name="id"/>
       <generator class="assigned" />
     </id>
-    <property name="MonthlyRent" column="monthly_rent"/>
-    <property name="NumberOfBedrooms" column="number_of_bedrooms"/>
-    <property name="NumberOfKitchens" column="number_of_kitchens"/>
-    <property name="NumberOfBathrooms" column="number_of_bathrooms"/>
-    <property name="FamiliesOnly" column="families_only"/>
-    <property name="BoysOnly" column="boys_only"/>
-    <property name="GirlsOnly" column="girls_only"/>
-    <property name="InternetAvailable" column="internet_available"/>
-    <property name="LandlinePhoneAvailable" column="landline_phone_available"/>
-    <property name="CableTvAvailable" column="cable_tv_available"/>
-    <property name="GarageAvailable" column="garage_available"/>
-    <property name="SmokingAllowed" column="smoking_allowed"/>
-    <property name="PropertyType" column="property_type"/>
-    <property name="OwnerEmail" column="owner_email"/>
-    <property name="OwnerPhoneNumber" column="owner_phone_number"/>
-    <property name="Latitude" column="latitude"/>
-    <property name="Longitude" column="longitude"/>
-    <property name="HouseNo" column="house_no"/>
-    <property name="StreetNo" column="street_no"/>
-    <property name="Area" column="area"/>
-    <!--<many-to-one name="Location" unique="true" column="location_id"/>-->
+    <property name="DimensionType" column="dimension_type"/>
+    <property name="StringValue" column="string_value"/>
+    <property name="DecimalValue" column="decimal_value"/>
   </class>
 </hibernate-mapping>
