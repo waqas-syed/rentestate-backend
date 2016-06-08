@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.9, for Win32 (AMD64)
 --
--- Host: 127.0.0.1    Database: rentstuff
+-- Host: localhost    Database: rentstuff
 -- ------------------------------------------------------
 -- Server version	5.7.10-log
 
@@ -14,6 +14,23 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `dimension`
+--
+
+DROP TABLE IF EXISTS `dimension`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dimension` (
+  `id` varchar(75) NOT NULL,
+  `dimension_type` varchar(30) DEFAULT NULL,
+  `string_value` varchar(30) DEFAULT NULL,
+  `decimal_value` decimal(6,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `geo_location`
@@ -71,35 +88,16 @@ CREATE TABLE `house` (
   `property_type` varchar(50) DEFAULT NULL,
   `boys_only` tinyint(1) DEFAULT NULL,
   `owner_phone_number` varchar(60) DEFAULT NULL,
-  `location_id` int(11) DEFAULT NULL,
   `latitude` decimal(10,6) DEFAULT NULL,
   `longitude` decimal(10,6) DEFAULT NULL,
   `house_no` varchar(100) DEFAULT NULL,
   `street_no` varchar(10) DEFAULT NULL,
   `area` varchar(300) DEFAULT NULL,
+  `dimension_id` varchar(75) DEFAULT NULL,
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `location`
---
-
-DROP TABLE IF EXISTS `location`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `location` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `latitude` decimal(10,6) DEFAULT NULL,
-  `longitude` decimal(10,6) DEFAULT NULL,
-  `house_no` varchar(100) DEFAULT NULL,
-  `street_no` varchar(10) DEFAULT NULL,
-  `area` varchar(300) DEFAULT NULL,
-  `house_id` varchar(120) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -111,4 +109,4 @@ CREATE TABLE `location` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-12-15 21:16:12
+-- Dump completed on 2016-06-09  1:58:20
