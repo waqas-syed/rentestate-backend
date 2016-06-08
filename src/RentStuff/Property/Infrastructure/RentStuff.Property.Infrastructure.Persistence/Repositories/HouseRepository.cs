@@ -26,6 +26,12 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         }
 
         [Transaction(TransactionPropagation.Required, ReadOnly = false)]
+        public void SaveorUpdateDimension(Dimension dimension)
+        {
+            CurrentSession.SaveOrUpdate(dimension);
+        }
+
+        [Transaction(TransactionPropagation.Required, ReadOnly = false)]
         public void Delete(House house)
         {
             CurrentSession.Delete(house);

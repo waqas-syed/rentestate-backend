@@ -24,12 +24,15 @@ namespace RentStuff.Property.Application.HouseServices.Commands
         private string _houseNo;
         private string _streetNo;
         private string _area;
+        private string _dimensionType;
+        private string _dimensionStringValue;
+        private decimal _dimensionIntValue;
 
         public CreateHouseCommand(long monthlyRent, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, 
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber, 
-            string houseNo, string streetNo, string area)
+            string houseNo, string streetNo, string area, string dimensionType, string dimensionStringValue, decimal dimensionIntValue)
         {
             _monthlyRent = monthlyRent;
             _numberOfBedrooms = numberOfBedrooms;
@@ -49,6 +52,9 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             _houseNo = houseNo;
             _streetNo = streetNo;
             _area = area;
+            _dimensionType = dimensionType;
+            _dimensionStringValue = dimensionStringValue;
+            _dimensionIntValue = dimensionIntValue;
         }
 
         public long MonthlyRent
@@ -160,6 +166,24 @@ namespace RentStuff.Property.Application.HouseServices.Commands
         {
             get { return _area; }
             private set { _area = value; }
+        }
+        
+        public string DimensionType
+        {
+            get { return _dimensionType; }
+            private set { _dimensionType = value; }
+        }
+
+        public string DimensionStringValue
+        {
+            get { return _dimensionStringValue; }
+            private set { _dimensionStringValue = value; }
+        }
+
+        public decimal DimensionIntValue
+        {
+            get { return _dimensionIntValue; }
+            private set { _dimensionIntValue = value; }
         }
     }
 }

@@ -56,7 +56,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             InternetAvailable = internetAvailable;
             LandlinePhoneAvailable = landlinePhoneAvailable;
             CableTvAvailable = cableTvAvailable;
-            Size = dimension;
+            Dimension = dimension;
             GarageAvailable = garageAvailable;
             SmokingAllowed = smokingAllowed;
             PropertyType = propertyType;
@@ -240,7 +240,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             set { _cableTvAvailable = value; }
         }
 
-        public Dimension Size
+        public Dimension Dimension
         {
             get { return _dimension; } 
             set { _dimension = value; }

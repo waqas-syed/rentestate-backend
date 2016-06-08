@@ -15,6 +15,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         private string _stringValue;
         // Or the value can either be mentioned as a decimal
         private decimal _decimalValue;
+        //private House _house;
 
         /// <summary>
         /// Default Constructor
@@ -32,6 +33,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             DimensionType = dimensionType;
             StringValue = stringValue;
             DecimalValue = decimalValue;
+            //House = house;
         }
 
         /// <summary>
@@ -89,5 +91,14 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 }
             }
         }
+
+        /// <summary>
+        /// House to which this dimension is related to
+        /// </summary>
+        /*public House House
+        {
+            get { return _house; }
+            set { _house = value; }
+        }*/
     }
 }

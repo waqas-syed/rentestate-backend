@@ -172,6 +172,10 @@
       <Project>{8cc19802-c300-4e6b-9137-83db9d94a481}</Project>
       <Name>RentStuff.Property.Infrastructure.Persistence</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Property\Infrastructure\RentStuff.Property.Infrastructure.Services\RentStuff.Property.Infrastructure.Services.csproj">
+      <Project>{fcdbf9a2-1338-43e8-9b43-1b7798277f05}</Project>
+      <Name>RentStuff.Property.Infrastructure.Services</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Property\Ports\RentStuff.Property.Ports.Adapter.Rest\RentStuff.Property.Ports.Adapter.Rest.csproj">
       <Project>{f5927692-6840-4b54-a8aa-ec37152112df}</Project>
       <Name>RentStuff.Property.Ports.Adapter.Rest</Name>

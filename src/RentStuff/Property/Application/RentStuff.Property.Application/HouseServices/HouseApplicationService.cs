@@ -43,6 +43,8 @@ namespace RentStuff.Property.Application.HouseServices
                 Enum.TryParse(createHouseCommand.PropertyType, out propertyType);
             }
 
+            var dimension = new Dimension((DimensionType)Enum.Parse(typeof(DimensionType), createHouseCommand.DimensionType), createHouseCommand.DimensionStringValue, createHouseCommand.DimensionIntValue);
+            _houseRepository.SaveorUpdateDimension(dimension);
             // Create the new house instance
             House house = new House.HouseBuilder().BoysOnly(createHouseCommand.BoysOnly)
                 .CableTvAvailable(createHouseCommand.CableTvAvailable)
@@ -61,6 +63,7 @@ namespace RentStuff.Property.Application.HouseServices
                 .PropertyType(propertyType)
                 .Latitude(coordinates.Item1)
                 .Longitude(coordinates.Item2)
+                .Dimension(dimension)
                 .HouseNo(createHouseCommand.HouseNo)
                 .StreetNo(createHouseCommand.StreetNo)
                 .Area(createHouseCommand.Area).Build();

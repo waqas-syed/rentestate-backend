@@ -6,6 +6,7 @@ using System.Net.Mime;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Http;
+using Newtonsoft.Json;
 using RentStuff.Property.Application.HouseServices;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
@@ -29,15 +30,17 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             _houseApplicationService = houseApplicationService;
         }
 
-        /*[Route("house")]
+        [Route("house")]
         [HttpPost]
-        public IHttpActionResult Post([FromBody]CreateHouseCommand house)
+        public IHttpActionResult Post([FromBody]Object house)
         {
             try
             {
                 if (house != null)
                 {
-                    _houseApplicationService.SaveNewHouseOffer(house);
+                    var jsonString = house.ToString();
+                    CreateHouseCommand houseReborn = JsonConvert.DeserializeObject<CreateHouseCommand>(jsonString);
+                    _houseApplicationService.SaveNewHouseOffer(houseReborn);
                     return Ok();
                 }
                 return BadRequest();
@@ -46,14 +49,16 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             {
                 return InternalServerError();
             }
-        }*/
+        }
 
-        [Route("house")]
+        /*[Route("house")]
         [HttpPost]
         public IHttpActionResult Post()
         {
             try
             {
+                //var jsonString = house.ToString();
+                //CreateHouseCommand houseResult = JsonConvert.DeserializeObject<CreateHouseCommand>(jsonString);
                 var result = new HttpResponseMessage(HttpStatusCode.OK);
                 var httpRequest = HttpContext.Current.Request;
                 if (Request.Content.IsMimeMultipartContent())
@@ -84,7 +89,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             {
                 return InternalServerError();
             }
-        }
+        }*/
 
         [Route("house")]
         [HttpDelete]

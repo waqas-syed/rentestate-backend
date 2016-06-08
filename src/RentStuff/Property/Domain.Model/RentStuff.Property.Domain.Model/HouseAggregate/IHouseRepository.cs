@@ -15,6 +15,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <param name="house"></param>
         void SaveorUpdate(House house);
 
+        void SaveorUpdateDimension(Dimension dimension);
+
         /// <summary>
         /// Deletes the house object from the database
         /// </summary>
