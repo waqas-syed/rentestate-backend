@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Http;
@@ -51,31 +53,30 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
         }
 
-        /*[Route("house")]
+        [Route("HouseImageUpload")]
         [HttpPost]
         public IHttpActionResult Post()
         {
             try
             {
-                //var jsonString = house.ToString();
-                //CreateHouseCommand houseResult = JsonConvert.DeserializeObject<CreateHouseCommand>(jsonString);
                 var result = new HttpResponseMessage(HttpStatusCode.OK);
                 var httpRequest = HttpContext.Current.Request;
                 if (Request.Content.IsMimeMultipartContent())
                 {
+                    Request.Content.LoadIntoBufferAsync().Wait();
                     Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider()).ContinueWith((task) =>
                     {
                         MultipartMemoryStreamProvider provider = task.Result;
                         foreach (HttpContent content in provider.Contents)
                         {
                             Stream stream = content.ReadAsStreamAsync().Result;
-                            //var image = MediaTypeNames.Image.FromStream(stream);
+                            var image = Image.FromStream(stream);
                             var testName = content.Headers.ContentDisposition.Name;
                             String filePath = HostingEnvironment.MapPath("~/Images/");
-                            String[] headerValues = (String[])Request.Headers.GetValues("UniqueId");
-                            String fileName = headerValues[0] + ".jpg";
+                            //String[] headerValues = (String[])Request.Headers.GetValues("UniqueId");
+                            String fileName = /*headerValues[0]*/ Guid.NewGuid().ToString() + ".jpg";
                             String fullPath = Path.Combine(filePath, fileName);
-                            //image.Save(fullPath);
+                            image.Save(fullPath);
                         }
                     });
                 }
@@ -87,9 +88,9 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
             catch (Exception)
             {
-                return InternalServerError();
+                return null;
             }
-        }*/
+        }
 
         [Route("house")]
         [HttpDelete]
