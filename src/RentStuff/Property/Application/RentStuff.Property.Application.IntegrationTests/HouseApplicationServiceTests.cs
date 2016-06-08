@@ -47,7 +47,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string streetNo = "13";
             string area = "1600+Amphitheatre+Parkway,+Mountain+View,+CA";
             var createNewHouseCommand = new CreateHouseCommand(monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
-                false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area);
+                false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area, null, null, 0);
             bool houseCreated = houseApplicationService.SaveNewHouseOffer(createNewHouseCommand);
             Assert.IsTrue(houseCreated);
         }
@@ -75,7 +75,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             decimal latitude = coordinates.Item1;
             decimal longitude = coordinates.Item2;
             var house = new CreateHouseCommand(monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
-                false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area);
+                false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
+                null, null, 0);
             bool houseCreated = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsTrue(houseCreated);
 
@@ -116,7 +117,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             string houseNo = "747";
             string streetNo = "13";
             var house = new CreateHouseCommand(monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
-            false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area);
+            false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area, null, null,
+            0);
             houseApplicationService.SaveNewHouseOffer(house);
 
             IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
@@ -162,7 +164,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             string houseNo = "747";
             string streetNo = "13";
             var house = new CreateHouseCommand(monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
-            false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area);
+            false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area, null,
+            null, 0);
             houseApplicationService.SaveNewHouseOffer(house);
 
             IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];

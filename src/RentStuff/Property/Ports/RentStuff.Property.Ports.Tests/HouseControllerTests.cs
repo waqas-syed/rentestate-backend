@@ -50,7 +50,7 @@ namespace RentStuff.Property.Ports.Tests
 
                 CreateHouseCommand house = new CreateHouseCommand(105000, 2, 2, 2, false, true, false, true, true,
                     true, true, true, "Apartment", ownerEmail, ownerPhoneNumber, houseNo, streetNo,
-                    "1600 Amphitheatre Parkway, Mountain View, CA");
+                    "1600 Amphitheatre Parkway, Mountain View, CA", null, null, 0);
                 houseController.Post(house);
                 IHttpActionResult httpActionResult = houseController.Get(ownerEmail);
                 IList<House> houseList = ((OkNegotiatedContentResult<IList<House>>) httpActionResult).Content;
@@ -90,7 +90,7 @@ namespace RentStuff.Property.Ports.Tests
 
                 CreateHouseCommand house1 = new CreateHouseCommand(105000, 2, 2, 2, false, true, false, true, true,
                     true, true, true, "Apartment", ownerEmail1, ownerPhoneNumber1, houseNo1, streetNo1,
-                    "1600+Amphitheatre+Parkway,+Mountain+View,+CA");
+                    "1600+Amphitheatre+Parkway,+Mountain+View,+CA", null, null, 0);
                 houseController.Post(house1);
 
                 string ownerEmail2 = "thorin@oakenshield1234.com";
@@ -101,7 +101,7 @@ namespace RentStuff.Property.Ports.Tests
                 // Hopuse # 2
                 CreateHouseCommand house2 = new CreateHouseCommand(150000, 2, 2, 2, true, false, false, true, true,
                     true, true, true, "House", ownerEmail2, ownerPhoneNumber2, houseNo2, streetNo2,
-                    "1600+Amphitheatre+Parkway,+Mountain+View,+CA");
+                    "1600+Amphitheatre+Parkway,+Mountain+View,+CA", null, null, 0);
                 houseController.Post(house2);
 
                 IHttpActionResult httpActionResult = houseController.Get();
@@ -162,7 +162,7 @@ namespace RentStuff.Property.Ports.Tests
                 string area = "1600 Amphitheatre Parkway, Mountain View, CA";
 
                 CreateHouseCommand house = new CreateHouseCommand(105000, 2, 2, 2, false, true, false, true, true,
-                    true, true, true, "Apartment", ownerEmail, ownerPhoneNumber, houseNo, streetNo, area);
+                    true, true, true, "Apartment", ownerEmail, ownerPhoneNumber, houseNo, streetNo, area, null, null, 0);
                 houseController.Post(house);
                 IHttpActionResult httpActionResult = houseController.Get(null, area);
                 IList<House> houseList = ((OkNegotiatedContentResult<IList<House>>)httpActionResult).Content;
