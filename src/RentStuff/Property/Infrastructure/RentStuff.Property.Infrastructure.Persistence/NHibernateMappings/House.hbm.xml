@@ -30,6 +30,10 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
       <!-- Use many-to-one for a foreign key -->
       <column name="dimension_id" />
     </many-to-one>
+    <bag name="HouseImages" table="HouseImages" lazy="false">
+      <key column="house_id" />
+      <element column="image_id" type="string" />
+    </bag>
     <!--<many-to-one name="Location" unique="true" column="location_id"/>-->
   </class>
 </hibernate-mapping>

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using RentStuff.Common.Domain.Model;
 
 namespace RentStuff.Property.Domain.Model.HouseAggregate
@@ -29,6 +31,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         private string _houseNo;
         private string _streetNo;
         private string _area;
+        private IList<string> _houseImages = new List<string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
@@ -117,6 +120,23 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             HouseNo = houseNo;
             StreetNo = streetNo;
             Area = area;
+        }
+
+        /// <summary>
+        /// Add Image's ID to this House
+        /// </summary>
+        public void AddImage(string id)
+        {
+            _houseImages.Add(id);
+        }
+
+        /// <summary>
+        /// Get the list of Images for this House
+        /// </summary>
+        /// <returns></returns>
+        public IList<string> GetImageList()
+        {
+            return _houseImages;
         }
 
         /// <summary>
@@ -339,6 +359,15 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 Assertion.AssertStringNotNullorEmpty(value);
                 _area = value;
             }
+        }
+
+        /// <summary>
+        /// Images IDs for this house
+        /// </summary>
+        public IList<string> HouseImages
+        {
+            get { return _houseImages; }
+            set { _houseImages = value; }
         }
 
         /// <summary>

@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Mime;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
@@ -53,6 +57,29 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
         }
 
+        [Route("GetHouseImages")]
+        [HttpGet]
+        public HttpResponseMessage Get(string houseId)
+        {
+            House house = _houseApplicationService.GetHouseById(houseId);
+            if (house == null)
+            {
+                throw new NullReferenceException("No house found for ID: " + houseId);
+            }
+            var result = new HttpResponseMessage(HttpStatusCode.OK);
+            foreach (var imageId in house.HouseImages)
+            {
+                String filePath = HostingEnvironment.MapPath("~/Images/" + imageId + ".jpg");
+                FileStream fileStream = new FileStream(filePath, FileMode.Open);
+                Image image = Image.FromStream(fileStream);
+                MemoryStream memoryStream = new MemoryStream();
+                image.Save(memoryStream, ImageFormat.Jpeg);
+                result.Content = new ByteArrayContent(memoryStream.ToArray());
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+            }
+            return result;
+        }
+
         [Route("HouseImageUpload")]
         [HttpPost]
         public IHttpActionResult Post()
@@ -66,6 +93,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     Request.Content.LoadIntoBufferAsync().Wait();
                     Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider()).ContinueWith((task) =>
                     {
+                        IList<string> imagesList = new List<string>();
                         MultipartMemoryStreamProvider provider = task.Result;
                         foreach (HttpContent content in provider.Contents)
                         {
@@ -73,22 +101,27 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                             var image = Image.FromStream(stream);
                             var testName = content.Headers.ContentDisposition.Name;
                             String filePath = HostingEnvironment.MapPath("~/Images/");
-                            //String[] headerValues = (String[])Request.Headers.GetValues("UniqueId");
-                            String fileName = /*headerValues[0]*/ Guid.NewGuid().ToString() + ".jpg";
+                            
+                            string imageId = Guid.NewGuid().ToString();
+                            String fileName = imageId + ".jpg";
                             String fullPath = Path.Combine(filePath, fileName);
                             image.Save(fullPath);
+                            
+                            imagesList.Add(imageId);
                         }
+                        String[] headerValues = (String[])Request.Headers.GetValues("HouseId");
+                        _houseApplicationService.AddImagesToHouse(headerValues[0], imagesList);
                     });
                 }
                 else
                 {
                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable, "This request is not properly formatted"));
                 }
-                return BadRequest();
+                return Ok();
             }
             catch (Exception)
             {
-                return null;
+                return InternalServerError();
             }
         }
 
@@ -132,7 +165,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 
         [Route("house")]
         [HttpGet]
-        public IHttpActionResult Get(string email = null, string address = null)
+        public IHttpActionResult Get(string email = null, string address = null, string id = null)
         {
             try
             {
@@ -143,6 +176,10 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 else if (email != null)
                 {
                     return Ok(_houseApplicationService.GetHouseByEmail(email));
+                }
+                else if (!string.IsNullOrEmpty(id))
+                {
+                    return Ok(_houseApplicationService.GetHouseById(id));
                 }
                 else
                 {

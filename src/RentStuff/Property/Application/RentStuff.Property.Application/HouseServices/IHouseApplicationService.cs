@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 
@@ -41,6 +42,13 @@ namespace RentStuff.Property.Application.HouseServices
         IList<House> GetHouseByEmail(string email);
 
         /// <summary>
+        /// Get House by it's ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Domain.Model.HouseAggregate.House GetHouseById(string id);
+
+        /// <summary>
         /// Search nearby houses by providing the address
         /// </summary>
         /// <param name="address"></param>
@@ -52,5 +60,10 @@ namespace RentStuff.Property.Application.HouseServices
         /// </summary>
         /// <returns></returns>
         IList<House> GetAllHouses();
+
+        /// <summary>
+        /// Add images to an existing House instance
+        /// </summary>
+        void AddImagesToHouse(string houseId, IList<string> imagesList);
     }
 }

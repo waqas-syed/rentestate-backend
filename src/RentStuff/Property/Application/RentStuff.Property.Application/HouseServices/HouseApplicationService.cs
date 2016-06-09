@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Management.Instrumentation;
+using System.Net.Http;
+using System.Web.Hosting;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.Services;
@@ -133,6 +136,17 @@ namespace RentStuff.Property.Application.HouseServices
         }
 
         /// <summary>
+        /// Get House by it's ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public House GetHouseById(string id)
+        {
+            return _houseRepository.GetHouseById(id);
+        }
+
+
+        /// <summary>
         /// Search nearby houses by providing the address
         /// </summary>
         /// <param name="address"></param>
@@ -152,6 +166,24 @@ namespace RentStuff.Property.Application.HouseServices
         public IList<House> GetAllHouses()
         {
             return _houseRepository.GetAllHouses();
+        }
+
+        /// <summary>
+        /// Add images to an existing house instance
+        /// </summary>
+        /// <param name="houseId"></param>
+        /// <param name="imagesList"></param>
+        public void AddImagesToHouse(string houseId, IList<string> imagesList)
+        {
+            House house = _houseRepository.GetHouseById(houseId);
+            if (house != null)
+            {
+                foreach (var imageId in imagesList)
+                {
+                    house.AddImage(imageId);
+                }
+                _houseRepository.SaveorUpdate(house);
+            }
         }
     }
 }
