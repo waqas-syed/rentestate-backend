@@ -67,6 +67,8 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 throw new NullReferenceException("No house found for ID: " + houseId);
             }
             var result = new HttpResponseMessage(HttpStatusCode.OK);
+            var multipartContent = new MultipartContent();
+                        
             foreach (var imageId in house.HouseImages)
             {
                 String filePath = HostingEnvironment.MapPath("~/Images/" + imageId + ".jpg");
@@ -74,9 +76,22 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 Image image = Image.FromStream(fileStream);
                 MemoryStream memoryStream = new MemoryStream();
                 image.Save(memoryStream, ImageFormat.Jpeg);
-                result.Content = new ByteArrayContent(memoryStream.ToArray());
-                result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+                
+                var byteArrayContent = new ByteArrayContent(memoryStream.ToArray());
+                byteArrayContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+                byteArrayContent.Headers.ContentLength = memoryStream.ToArray().Length;
+                
+                //var fileStream = new FileStream(HostingEnvironment.MapPath("~/Images/" + imageId + ".jpg"),
+                  //  FileMode.Open);
+                //var file1Content = new StreamContent(fileStream);
+
+                //file1Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("image/jpeg");
+                //multipartContent.Add(byteArrayContent);
+                //fileStream.Close();
+                //fileStream.Flush();
             }
+            result.Content = multipartContent;
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
             return result;
         }
 
