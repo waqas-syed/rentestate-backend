@@ -18,7 +18,7 @@
 --
 -- Table structure for table `dimension`
 --
-USE rentstuff;
+
 DROP TABLE IF EXISTS `dimension`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -99,6 +99,20 @@ CREATE TABLE `house` (
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `propertytype`
+--
+
+DROP TABLE IF EXISTS `propertytype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `propertytype` (
+  `property_id` int(11) NOT NULL AUTO_INCREMENT,
+  `property_type` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`property_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -109,4 +123,4 @@ CREATE TABLE `house` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-09  1:58:20
+-- Dump completed on 2016-12-07 10:50:43
