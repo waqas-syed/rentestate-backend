@@ -62,6 +62,12 @@ namespace RentStuff.Property.Application.HouseServices
         IList<House> GetAllHouses();
 
         /// <summary>
+        /// Get the types of property avaialable on our partal: House, Apartment, Hostel, Room
+        /// </summary>
+        /// <returns></returns>
+        IList<string> GetPropertyTypes();
+
+        /// <summary>
         /// Add images to an existing House instance
         /// </summary>
         void AddImagesToHouse(string houseId, IList<string> imagesList);

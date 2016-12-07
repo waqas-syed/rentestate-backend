@@ -5,6 +5,7 @@ using NHibernate;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using Spring.Transaction;
 using Spring.Transaction.Interceptor;
+using NHibernate.Transform;
 
 namespace RentStuff.Property.Infrastructure.Persistence.Repositories
 {
@@ -101,6 +102,18 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         public IList<House> GetAllHouses()
         {
             return CurrentSession.QueryOver<House>().List<House>();
+        }
+
+        /// <summary>
+        /// Get the list of property types
+        /// </summary>
+        /// <returns></returns>
+        [Transaction]
+        public IList<string> GetPropertyTypes()
+        {
+            ISQLQuery query = CurrentSession.CreateSQLQuery("SELECT * FROM PropertyType");
+            IList<string> propertyTypes = query.SetResultTransformer(Transformers.AliasToBean<string>()).List<string>();
+            return propertyTypes;
         }
     }
 }

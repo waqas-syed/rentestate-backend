@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<bag name="PropertyTypes" table="propertytypes">
+  <key column="id" />
+  <element column="LicenceId" type="Taxi.DomainObjects.Licence, Taxi.DomainObjects, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+</bag>

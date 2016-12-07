@@ -206,5 +206,19 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 return InternalServerError();
             }
         }
+
+        [Route("property-types")]
+        [HttpGet]
+        public IHttpActionResult Get()
+        {
+            try
+            {
+                return Ok(_houseApplicationService.GetPropertyTypes());
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
+        }
     }
 }

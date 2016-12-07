@@ -169,6 +169,15 @@ namespace RentStuff.Property.Application.HouseServices
         }
 
         /// <summary>
+        /// Get the types of peroperty: Apartment, House, Hostel, Room
+        /// </summary>
+        /// <returns></returns>
+        public IList<string> GetPropertyTypes()
+        {
+            return _houseRepository.GetPropertyTypes();
+        }
+
+        /// <summary>
         /// Add images to an existing house instance
         /// </summary>
         /// <param name="houseId"></param>
