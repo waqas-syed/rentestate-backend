@@ -18,7 +18,7 @@
 --
 -- Dumping data for table `dimension`
 --
-
+USE rentstuff;
 LOCK TABLES `dimension` WRITE;
 /*!40000 ALTER TABLE `dimension` DISABLE KEYS */;
 INSERT INTO `dimension` VALUES ('0f443ce9-f84b-442e-9922-bb16cf88c4ea','1',NULL,5.0000),('2a3eeb36-9a28-43fe-897e-5d03bcfdb074','1',NULL,5.0000),('2c2d0206-bb79-4895-b842-2575613bdb2b','1',NULL,5.0000);
