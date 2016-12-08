@@ -8,6 +8,7 @@ using System.Web.Hosting;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.Services;
+using System.Linq;
 
 namespace RentStuff.Property.Application.HouseServices
 {
@@ -174,7 +175,8 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         public IList<string> GetPropertyTypes()
         {
-            return _houseRepository.GetPropertyTypes();
+            IList<string> propertyTypeList = Enum.GetNames(typeof(PropertyType)).ToList();
+            return propertyTypeList;
         }
 
         /// <summary>

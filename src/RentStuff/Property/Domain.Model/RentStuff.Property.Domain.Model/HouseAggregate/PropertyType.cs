@@ -6,7 +6,6 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
     /// </summary>
     public enum PropertyType
     {
-        NotSpecified,
         House,
         Apartment,
         Hostel,

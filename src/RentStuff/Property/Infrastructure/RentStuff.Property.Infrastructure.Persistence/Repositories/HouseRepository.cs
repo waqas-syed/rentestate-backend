@@ -103,17 +103,5 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         {
             return CurrentSession.QueryOver<House>().List<House>();
         }
-
-        /// <summary>
-        /// Get the list of property types
-        /// </summary>
-        /// <returns></returns>
-        [Transaction]
-        public IList<string> GetPropertyTypes()
-        {
-            ISQLQuery query = CurrentSession.CreateSQLQuery("SELECT * FROM PropertyType");
-            IList<string> propertyTypes = query.SetResultTransformer(Transformers.AliasToBean<string>()).List<string>();
-            return propertyTypes;
-        }
     }
 }
