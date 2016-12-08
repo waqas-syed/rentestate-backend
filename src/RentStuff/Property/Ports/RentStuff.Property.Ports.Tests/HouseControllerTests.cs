@@ -52,7 +52,7 @@ namespace RentStuff.Property.Ports.Tests
                     true, true, true, "Apartment", ownerEmail, ownerPhoneNumber, houseNo, streetNo,
                     "1600 Amphitheatre Parkway, Mountain View, CA", null, null, 0);
                 houseController.Post(house);
-                IHttpActionResult httpActionResult = houseController.Get(ownerEmail);
+                IHttpActionResult httpActionResult = (IHttpActionResult)houseController.Get(ownerEmail);
                 IList<House> houseList = ((OkNegotiatedContentResult<IList<House>>) httpActionResult).Content;
                 Assert.NotNull(houseList);
                 Assert.AreEqual(1, houseList.Count);
