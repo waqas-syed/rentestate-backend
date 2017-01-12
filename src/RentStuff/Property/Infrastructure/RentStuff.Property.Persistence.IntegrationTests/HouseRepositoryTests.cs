@@ -160,5 +160,63 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 Assert.AreEqual(initialLongitude, retreivedHouse.Longitude);
             }
         }
+
+        [Category("Integration")]
+        [Test]
+        private void SaveImagesToHouse_ChecksThatAfterAddingImagesHouseIsSavedAsExpected_VerifiesByRetrievingAfterSaving()
+        {
+            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            string email = "w@12344321.com";
+
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            long price = 90000;
+
+            House house = new House.HouseBuilder().OwnerEmail(email)
+                .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
+                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
+                .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
+                .PropertyType(PropertyType.Apartment).MonthlyRent(price).Latitude(33.29M).Longitude(73.41M)
+                .HouseNo("123").Area("Pindora").StreetNo("13").Build();
+
+            houseRepository.SaveorUpdate(house);
+
+            var image1 = "123";
+            var image2 = "1234";
+            var image3 = "12345";
+            house.AddImage(image1);
+            house.AddImage(image2);
+            house.AddImage(image3);
+
+            houseRepository.SaveorUpdate(house);
+
+            House retreivedHouse = houseRepository.GetHouseById(house.Id);
+            Assert.IsNotNull(retreivedHouse);
+            Assert.AreEqual(3, retreivedHouse.HouseImages.Count);
+
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
+            Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
+            Assert.AreEqual(house.FamiliesOnly, retreivedHouse.FamiliesOnly);
+            Assert.AreEqual(house.GarageAvailable, retreivedHouse.LandlinePhoneAvailable);
+            Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
+            Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
+            Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
+            Assert.AreEqual(house.Latitude, retreivedHouse.Latitude);
+            Assert.AreEqual(house.Longitude, retreivedHouse.Longitude);
+            Assert.AreEqual(house.HouseNo, retreivedHouse.HouseNo);
+            Assert.AreEqual(house.Area, retreivedHouse.Area);
+            Assert.AreEqual(house.StreetNo, retreivedHouse.StreetNo);
+
+            Assert.AreEqual(image1, retreivedHouse.HouseImages[0]);
+            Assert.AreEqual(image2, retreivedHouse.HouseImages[1]);
+            Assert.AreEqual(image3, retreivedHouse.HouseImages[2]);
+
+            IList<House> allHouses = houseRepository.GetAllHouses();
+            Assert.IsNotNull(allHouses);
+            Assert.AreNotEqual(0, allHouses.Count);
+        }
     }
 }
