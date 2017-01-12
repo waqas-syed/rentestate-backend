@@ -134,17 +134,19 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         {
             decimal initialLatitude = latitude;
             decimal initialLongitude = longitude;
+            int rentPrice = 50000;
             for (int i = 0; i < 20; i++)
             {
                 initialLatitude += .005M;
                 initialLongitude += .005M;
-                House house = new House.HouseBuilder().OwnerEmail("dummy@dumdum123.com" + i)
+                House house = new House.HouseBuilder().OwnerEmail("dummy@dumdum123456" + i + ".com")
                 .NumberOfBedrooms(1).NumberOfBathrooms(1)
                 .NumberOfKitchens(1).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).MonthlyRent(50000).Latitude(initialLatitude).Longitude(initialLongitude)
-                .HouseNo("123").Area("Harley Street").StreetNo("13").Build();
+                .PropertyType(PropertyType.Apartment).MonthlyRent(rentPrice).Latitude(initialLatitude).Longitude(initialLongitude)
+                .HouseNo("123" + i).Area("Harley Street" + i).StreetNo("13" + i).Build();
                 houseRepository.SaveorUpdate(house);
+                rentPrice++;
             }
         }
 
