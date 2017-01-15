@@ -10,6 +10,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
     /// </summary>
     public class House : Entity
     {
+        private string _title;
         private long _monthlyRent;
         private int _numberOfBedrooms;
         private int _numberOfKitchens;
@@ -43,12 +44,13 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public House(long monthlyRent, int numberOfBedrooms,
+        public House(string title, long monthlyRent, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension, 
             bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail, string ownerPhoneNumber,
             decimal latitude, decimal longitude, string houseNo, string streetNo, string area)
         {
+            Title = title;
             MonthlyRent = monthlyRent;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
@@ -137,6 +139,16 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public IList<string> GetImageList()
         {
             return _houseImages;
+        }
+
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                Assertion.AssertStringNotNullorEmpty(value);
+                _title = value;
+            }
         }
 
         /// <summary>
@@ -375,6 +387,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         public class HouseBuilder
         {
+            private string _title;
             private Location _location;
             private long _monthlyRent;
             private int _numberOfBedrooms;
@@ -398,11 +411,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private string _streetNo;
             private string _area;
 
-            /// <summary>
-            /// Price
-            /// </summary>
-            /// <param name="monthlyRent"></param>
-            /// <returns></returns>
+            public HouseBuilder Title(string title)
+            {
+                _title = title;
+                return this;
+            }
+
             public HouseBuilder MonthlyRent(long monthlyRent)
             {
                 _monthlyRent = monthlyRent;
@@ -535,7 +549,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             /// <returns></returns>
             public House Build()
             {
-                return new House(_monthlyRent, _numberOfBedrooms, _numberOfKitchens,
+                return new House(_title, _monthlyRent, _numberOfBedrooms, _numberOfKitchens,
                                  _numberOfBathrooms, _familiesOnly, _boysOnly, _girlsOnly, _internetAvailable,
                                  _landlinePhoneAvailable, _cableTvAvailable, _dimension, _garageAvailable,
                                  _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber, _latitude, _longitude,

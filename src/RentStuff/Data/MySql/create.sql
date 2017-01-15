@@ -73,11 +73,11 @@ DROP TABLE IF EXISTS `house`;
 CREATE TABLE `house` (
   `id` varchar(120) NOT NULL,
   `db_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `owner_email` varchar(50) DEFAULT NULL,
-  `monthly_rent` bigint(20) DEFAULT NULL,
-  `number_of_bedrooms` int(11) DEFAULT NULL,
-  `number_of_kitchens` int(11) DEFAULT NULL,
-  `number_of_bathrooms` int(11) DEFAULT NULL,
+  `owner_email` varchar(50) NOT NULL,
+  `monthly_rent` bigint(20) NOT NULL,
+  `number_of_bedrooms` int(11) NOT NULL,
+  `number_of_kitchens` int(11) NOT NULL,
+  `number_of_bathrooms` int(11) NOT NULL,
   `families_only` tinyint(1) DEFAULT NULL,
   `girls_only` tinyint(1) DEFAULT NULL,
   `internet_available` tinyint(1) DEFAULT NULL,
@@ -87,13 +87,14 @@ CREATE TABLE `house` (
   `smoking_allowed` tinyint(1) DEFAULT NULL,
   `property_type` varchar(50) DEFAULT NULL,
   `boys_only` tinyint(1) DEFAULT NULL,
-  `owner_phone_number` varchar(60) DEFAULT NULL,
-  `latitude` decimal(10,6) DEFAULT NULL,
-  `longitude` decimal(10,6) DEFAULT NULL,
+  `owner_phone_number` varchar(60) NOT NULL,
+  `latitude` decimal(10,6) NOT NULL,
+  `longitude` decimal(10,6) NOT NULL,
   `house_no` varchar(100) DEFAULT NULL,
   `street_no` varchar(10) DEFAULT NULL,
   `area` varchar(300) DEFAULT NULL,
   `dimension_id` varchar(75) DEFAULT NULL,
+  `title` varchar(200) NOT NULL,
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -122,4 +123,4 @@ CREATE TABLE `houseimages` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-12 15:14:38
+-- Dump completed on 2017-01-15 21:43:37

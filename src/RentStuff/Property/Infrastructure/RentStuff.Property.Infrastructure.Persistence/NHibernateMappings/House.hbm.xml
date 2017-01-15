@@ -6,6 +6,7 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
       <column name="id"/>
       <generator class="assigned" />
     </id>
+    <property name="Title" column="title"/>
     <property name="MonthlyRent" column="monthly_rent"/>
     <property name="NumberOfBedrooms" column="number_of_bedrooms"/>
     <property name="NumberOfKitchens" column="number_of_kitchens"/>

@@ -32,13 +32,14 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         {
             IHouseRepository houseRepository = (IHouseRepository) ContextRegistry.GetContext()["HouseRepository"];
             string email = "w@12344321.com";
-            
+            string title = "MGM Grand";
+            string phoneNumber = "123456789";
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
             long price = 90000;
 
-            House house = new House.HouseBuilder().OwnerEmail(email)
+            House house = new House.HouseBuilder().Title(title).OwnerEmail(email).OwnerPhoneNumber(phoneNumber)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
@@ -71,13 +72,15 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         {
             IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
             string email = "w@12344321.com";
+            string title = "MGM Grand";
+            string phoneNumber = "123456789";
 
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
             long price = 90000;
 
-            House house = new House.HouseBuilder().OwnerEmail(email)
+            House house = new House.HouseBuilder().Title(title).OwnerPhoneNumber(phoneNumber).OwnerEmail(email)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
@@ -139,8 +142,10 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             {
                 initialLatitude += .005M;
                 initialLongitude += .005M;
-                House house = new House.HouseBuilder().OwnerEmail("dummy@dumdum123456" + i + ".com")
-                .NumberOfBedrooms(1).NumberOfBathrooms(1)
+                string title = "MGM Grand";
+                string phoneNumber = "123456789";
+                House house = new House.HouseBuilder().Title(title).OwnerEmail("dummy@dumdum123456" + i + ".com")
+                .NumberOfBedrooms(1).NumberOfBathrooms(1).OwnerPhoneNumber(phoneNumber)
                 .NumberOfKitchens(1).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
                 .PropertyType(PropertyType.Apartment).MonthlyRent(rentPrice).Latitude(initialLatitude).Longitude(initialLongitude)
@@ -169,13 +174,15 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         {
             IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
             string email = "w@12344321.com";
+            string title = "MGM Grand";
+            string phoneNumber = "123456789";
 
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
             long price = 90000;
 
-            House house = new House.HouseBuilder().OwnerEmail(email)
+            House house = new House.HouseBuilder().Title(title).OwnerEmail(email).OwnerPhoneNumber(phoneNumber)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
