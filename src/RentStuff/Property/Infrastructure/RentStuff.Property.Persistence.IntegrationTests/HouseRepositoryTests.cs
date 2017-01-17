@@ -24,7 +24,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         [TearDown]
         public void Teardown()
         {
-            _databaseUtility.Create();
+            //_databaseUtility.Create();
         }
 
         [Test]
@@ -142,7 +142,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             {
                 initialLatitude += .005M;
                 initialLongitude += .005M;
-                string title = "MGM Grand";
+                string title = "MGM Grand" + i;
                 string phoneNumber = "123456789";
                 House house = new House.HouseBuilder().Title(title).OwnerEmail("dummy@dumdum123456" + i + ".com")
                 .NumberOfBedrooms(1).NumberOfBathrooms(1).OwnerPhoneNumber(phoneNumber)

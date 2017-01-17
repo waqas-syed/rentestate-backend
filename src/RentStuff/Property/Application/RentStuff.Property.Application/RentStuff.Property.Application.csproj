@@ -44,6 +44,7 @@
       <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -55,6 +56,7 @@
     <Compile Include="HouseServices\Commands\CreateHouseCommand.cs" />
     <Compile Include="HouseServices\Commands\UpdateHouseCommand.cs" />
     <Compile Include="HouseServices\HouseApplicationService.cs" />
+    <Compile Include="HouseServices\Representation\HouseRepresentation.cs" />
     <Compile Include="HouseServices\IHouseApplicationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

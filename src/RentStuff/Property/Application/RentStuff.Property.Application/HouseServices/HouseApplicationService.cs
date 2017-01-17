@@ -9,6 +9,7 @@ using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.Services;
 using System.Linq;
+using RentStuff.Property.Application.HouseServices.Representation;
 
 namespace RentStuff.Property.Application.HouseServices
 {
@@ -131,9 +132,10 @@ namespace RentStuff.Property.Application.HouseServices
         /// Gets the house by providing the owner's email id
         /// </summary>
         /// <returns></returns>
-        public IList<House> GetHouseByEmail(string email)
+        public IList<HouseRepresentation> GetHouseByEmail(string email)
         {
-            return _houseRepository.GetHouseByOwnerEmail(email);
+            IList<House> houses = _houseRepository.GetHouseByOwnerEmail(email);
+            return ConvertHouseToRepresentation(houses);
         }
 
         /// <summary>
@@ -152,21 +154,23 @@ namespace RentStuff.Property.Application.HouseServices
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        public IList<House> SearchHousesByAddress(string address)
+        public IList<HouseRepresentation> SearchHousesByAddress(string address)
         {
             // Get the coordinates for the location using the Geocoding API service
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
             // Get 20 coordinates within the range of around 30 kilometers radius
-            return (IList<House>) _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2);
+            IList<House> houses = _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2);
+            return ConvertHouseToRepresentation(houses);
         }
 
         /// <summary>
         /// Gets all the houses
         /// </summary>
         /// <returns></returns>
-        public IList<House> GetAllHouses()
+        public IList<HouseRepresentation> GetAllHouses()
         {
-            return _houseRepository.GetAllHouses();
+            IList<House> houses = _houseRepository.GetAllHouses();
+            return ConvertHouseToRepresentation(houses);
         }
 
         /// <summary>
@@ -195,6 +199,21 @@ namespace RentStuff.Property.Application.HouseServices
                 }
                 _houseRepository.SaveorUpdate(house);
             }
+        }
+
+        private IList<HouseRepresentation> ConvertHouseToRepresentation(IList<House> houses)
+        {
+            IList<HouseRepresentation> houseRepresentations = new List<HouseRepresentation>();
+            if (houses != null && houses.Count > 0)
+            {
+                foreach (var house in houses)
+                {
+                    HouseRepresentation houseRepresentation = new HouseRepresentation(house.Title, house.Area, 
+                        house.MonthlyRent, house.PropertyType.ToString(), house.Dimension, house.NumberOfBedrooms, house.NumberOfBathrooms);
+                    houseRepresentations.Add(houseRepresentation);
+                }
+            }
+            return houseRepresentations;
         }
     }
 }

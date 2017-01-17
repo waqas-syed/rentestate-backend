@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using RentStuff.Property.Application.HouseServices.Commands;
+using RentStuff.Property.Application.HouseServices.Representation;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 
 namespace RentStuff.Property.Application.HouseServices
@@ -36,12 +37,6 @@ namespace RentStuff.Property.Application.HouseServices
         void DeleteHouseById(string id);
 
         /// <summary>
-        /// Gets the house by providing the owner's email id
-        /// </summary>
-        /// <returns></returns>
-        IList<House> GetHouseByEmail(string email);
-
-        /// <summary>
         /// Get House by it's ID
         /// </summary>
         /// <param name="id"></param>
@@ -49,17 +44,23 @@ namespace RentStuff.Property.Application.HouseServices
         Domain.Model.HouseAggregate.House GetHouseById(string id);
 
         /// <summary>
+        /// Gets the house by providing the owner's email id
+        /// </summary>
+        /// <returns></returns>
+        IList<HouseRepresentation> GetHouseByEmail(string email);
+        
+        /// <summary>
         /// Search nearby houses by providing the address
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        IList<House> SearchHousesByAddress(string address);
+        IList<HouseRepresentation> SearchHousesByAddress(string address);
 
         /// <summary>
         /// Get all houses
         /// </summary>
         /// <returns></returns>
-        IList<House> GetAllHouses();
+        IList<HouseRepresentation> GetAllHouses();
 
         /// <summary>
         /// Get the types of property avaialable on our partal: House, Apartment, Hostel, Room
