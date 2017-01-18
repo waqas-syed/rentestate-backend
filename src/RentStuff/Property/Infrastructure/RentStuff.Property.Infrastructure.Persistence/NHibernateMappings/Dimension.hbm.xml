@@ -9,9 +9,9 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
     <property name="DimensionType" column="dimension_type"/>
     <property name="StringValue" column="string_value"/>
     <property name="DecimalValue" column="decimal_value"/>
-    <!--<one-to-one name="House"
+    <one-to-one name="House"
                       constrained="true"
                       foreign-key="none"
-                      class="House" />-->
+                      class="House" />
   </class>
 </hibernate-mapping>

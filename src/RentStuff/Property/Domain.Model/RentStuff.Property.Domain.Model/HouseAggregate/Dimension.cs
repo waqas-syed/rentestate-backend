@@ -15,7 +15,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         private string _stringValue;
         // Or the value can either be mentioned as a decimal
         private decimal _decimalValue;
-        //private House _house;
+        private House _house;
 
         /// <summary>
         /// Default Constructor
@@ -28,12 +28,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public Dimension(DimensionType dimensionType, string stringValue, decimal decimalValue)
+        public Dimension(DimensionType dimensionType, string stringValue, decimal decimalValue, House house)
         {
             DimensionType = dimensionType;
             StringValue = stringValue;
             DecimalValue = decimalValue;
-            //House = house;
+            House = house;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public DimensionType DimensionType
         {
             get { return _dimensionType; }
-            set { _dimensionType = value; }
+            private set { _dimensionType = value; }
         }
 
         /// <summary>
@@ -95,10 +95,10 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <summary>
         /// House to which this dimension is related to
         /// </summary>
-        /*public House House
+        public House House
         {
             get { return _house; }
-            set { _house = value; }
-        }*/
+            private set { _house = value; }
+        }
     }
 }

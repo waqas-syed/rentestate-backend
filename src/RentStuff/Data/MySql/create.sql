@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `dimension`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dimension` (
   `id` varchar(75) NOT NULL,
-  `dimension_type` varchar(30) DEFAULT NULL,
+  `dimension_type` varchar(30) NOT NULL,
   `string_value` varchar(30) DEFAULT NULL,
   `decimal_value` decimal(6,4) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -93,7 +93,7 @@ CREATE TABLE `house` (
   `house_no` varchar(100) DEFAULT NULL,
   `street_no` varchar(10) DEFAULT NULL,
   `area` varchar(300) DEFAULT NULL,
-  `dimension_id` varchar(75) DEFAULT NULL,
+  `dimension_id` varchar(75) NOT NULL,
   `title` varchar(200) NOT NULL,
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
@@ -123,4 +123,4 @@ CREATE TABLE `houseimages` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-15 21:43:37
+-- Dump completed on 2017-01-18 10:53:12

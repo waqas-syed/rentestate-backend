@@ -27,7 +27,7 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
     <property name="HouseNo" column="house_no"/>
     <property name="StreetNo" column="street_no"/>
     <property name="Area" column="area"/>
-    <many-to-one name="Dimension" unique="true" class="Dimension">
+    <many-to-one name="Dimension" unique="true" class="Dimension" not-found="ignore">
       <!-- Use many-to-one for a foreign key -->
       <column name="dimension_id" />
     </many-to-one>
