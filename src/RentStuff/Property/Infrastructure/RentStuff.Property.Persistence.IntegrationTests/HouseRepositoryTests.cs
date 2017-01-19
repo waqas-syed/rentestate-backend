@@ -3,6 +3,7 @@ using System.Configuration;
 using NUnit.Framework;
 using RentStuff.Common;
 using RentStuff.Property.Domain.Model.HouseAggregate;
+using RentStuff.Property.Domain.Model.Services;
 using Spring.Context.Support;
 
 namespace RentStuff.Property.Persistence.IntegrationTests
@@ -117,6 +118,46 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.Dimension.DimensionType, retreivedHouse.Dimension.DimensionType);
             Assert.AreEqual(house.Dimension.DecimalValue, retreivedHouse.Dimension.DecimalValue);
             Assert.AreEqual(house.Dimension.StringValue, retreivedHouse.Dimension.StringValue);
+        }
+
+        [Test]
+        public void RetrieveSingleHouseByCoordinates_GetsTheHouseUsingItsCoordinates_VerifiesThroughReturnValue()
+        {
+            string area = "Pindora, Rawalpindi, Pakistan";
+            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+            var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(area);
+            string title = "Special House";
+            string phoneNumber = "123456789";
+            int rent = 50000;
+            House house = new House.HouseBuilder().Title(title).OwnerEmail("special@spsp123456.com")
+            .NumberOfBedrooms(1).NumberOfBathrooms(1).OwnerPhoneNumber(phoneNumber)
+            .NumberOfKitchens(1).CableTvAvailable(true).FamiliesOnly(true)
+            .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
+            .PropertyType(PropertyType.Apartment).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
+            .Longitude(coordinatesFromAddress.Item2)
+            .HouseNo("S-123").Area("Champions Street").StreetNo("13").Build();
+            Dimension dimension = new Dimension(DimensionType.Kanal, "5", 0, house);
+            house.Dimension = dimension;
+            houseRepository.SaveorUpdateDimension(dimension);
+            houseRepository.SaveorUpdate(house);
+            House house2 = new House.HouseBuilder().Title(title).OwnerEmail("special2@spsp123456.com")
+            .NumberOfBedrooms(1).NumberOfBathrooms(1).OwnerPhoneNumber(phoneNumber)
+            .NumberOfKitchens(1).CableTvAvailable(true).FamiliesOnly(true)
+            .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
+            .PropertyType(PropertyType.Apartment).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
+            .Longitude(coordinatesFromAddress.Item2)
+            .HouseNo("S2-123").Area("Champions Street 2").StreetNo("2-13").Build();
+            Dimension dimension2 = new Dimension(DimensionType.Kanal, "5", 0, house2);
+            house2.Dimension = dimension2;
+            houseRepository.SaveorUpdateDimension(dimension2);
+            houseRepository.SaveorUpdate(house2);
+            decimal initialLatitude = 33.29M;
+            decimal initialLongitude = 73.41M;
+            SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
+            var retreivedHouses = houseRepository.SearchHousesByCoordinates(coordinatesFromAddress.Item1, coordinatesFromAddress.Item2);
+            Assert.NotNull(retreivedHouses);
+            //VerifyRetereivedHouses(retreivedHouses, initialLatitude, initialLongitude);
         }
 
         [Test]

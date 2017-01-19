@@ -26,10 +26,6 @@ namespace RentStuff.Common.WebHost
             config.Formatters.Remove(config.Formatters.XmlFormatter);
 
             config.DependencyResolver = new SpringDependencyResolver(ContextRegistry.GetContext());
-
-            var connection = ConfigurationManager.ConnectionStrings["MySql"].ToString();
-            var databaseUtility = new DatabaseUtility(connection);
-            databaseUtility.Create();
         }
     }
 }
