@@ -31,8 +31,14 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public Dimension(DimensionType dimensionType, string stringValue, decimal decimalValue, House house)
         {
             DimensionType = dimensionType;
-            StringValue = stringValue;
-            DecimalValue = decimalValue;
+            if (!string.IsNullOrWhiteSpace(stringValue))
+            {
+                StringValue = stringValue;
+            }
+            else
+            {
+                DecimalValue = decimalValue;
+            }
             House = house;
         }
 
@@ -60,17 +66,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public string StringValue
         {
             get { return _stringValue; }
-            private set
-            {
-                if (_decimalValue==decimal.Zero)
-                {
-                    _stringValue = value;   
-                }
-                else
-                {
-                    throw new InvalidDataException("Cannot assign string value when decimal value is already assigned for type Dimension");
-                }
-            }
+            private set { _stringValue = value; }
         }
 
         /// <summary>
@@ -79,17 +75,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public decimal DecimalValue
         {
             get { return _decimalValue; }
-            private set
-            {
-                if (string.IsNullOrEmpty(_stringValue))
-                {
-                    _decimalValue = value;
-                }
-                else
-                {
-                    throw new InvalidDataException("Cannot assign decimal value when string value is already assigned for type Dimension");
-                }
-            }
+            private set { _decimalValue = value; }
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Configuration;
+using System.Web.Http;
 using Spring.Context.Support;
 using System.Web.Http.Cors;
 using RentStuff.Common;
@@ -25,6 +26,10 @@ namespace RentStuff.Common.WebHost
             config.Formatters.Remove(config.Formatters.XmlFormatter);
 
             config.DependencyResolver = new SpringDependencyResolver(ContextRegistry.GetContext());
+
+            var connection = ConfigurationManager.ConnectionStrings["MySql"].ToString();
+            var databaseUtility = new DatabaseUtility(connection);
+            databaseUtility.Create();
         }
     }
 }

@@ -47,11 +47,9 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 Enum.TryParse(createHouseCommand.PropertyType, out propertyType);
             }
-
-            var dimension = new Dimension((DimensionType)Enum.Parse(typeof(DimensionType), createHouseCommand.DimensionType), createHouseCommand.DimensionStringValue, createHouseCommand.DimensionIntValue);
-            _houseRepository.SaveorUpdateDimension(dimension);
+            
             // Create the new house instance
-            House house = new House.HouseBuilder().BoysOnly(createHouseCommand.BoysOnly)
+            House house = new House.HouseBuilder().Title(createHouseCommand.Title).BoysOnly(createHouseCommand.BoysOnly)
                 .CableTvAvailable(createHouseCommand.CableTvAvailable)
                 .FamiliesOnly(createHouseCommand.FamiliesOnly)
                 .GarageAvailable(createHouseCommand.GarageAvailable)
@@ -68,10 +66,14 @@ namespace RentStuff.Property.Application.HouseServices
                 .PropertyType(propertyType)
                 .Latitude(coordinates.Item1)
                 .Longitude(coordinates.Item2)
-                .Dimension(dimension)
                 .HouseNo(createHouseCommand.HouseNo)
                 .StreetNo(createHouseCommand.StreetNo)
                 .Area(createHouseCommand.Area).Build();
+            var dimension = new Dimension((DimensionType)Enum.Parse(typeof(DimensionType), 
+                createHouseCommand.DimensionType), createHouseCommand.DimensionStringValue, 
+                createHouseCommand.DimensionIntValue, house);
+            _houseRepository.SaveorUpdateDimension(dimension);
+            house.Dimension = dimension;
 
             // Save the new house instance
             _houseRepository.SaveorUpdate(house);
@@ -91,10 +93,12 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 throw new InstanceNotFoundException(string.Format("House not found for id: {0}", updateHouseCommand.Id));
             }
+            var dimension = new Dimension(DimensionType.Acre, updateHouseCommand.DimensionStringValue,
+                updateHouseCommand.DimensionIntValue, house);
             house.UpdateHouse(updateHouseCommand.MonthlyRent, updateHouseCommand.NumberOfBedrooms, updateHouseCommand.NumberOfKitchens,
                 updateHouseCommand.NumberOfBathrooms, updateHouseCommand.FamiliesOnly, updateHouseCommand.BoysOnly, 
                 updateHouseCommand.GirlsOnly, updateHouseCommand.InternetAvailable, updateHouseCommand.LandlinePhoneAvailable,
-                updateHouseCommand.CableTvAvailable, new Dimension(DimensionType.Acre, updateHouseCommand.DimensionStringValue, updateHouseCommand.DimensionIntValue), 
+                updateHouseCommand.CableTvAvailable, dimension, 
                     updateHouseCommand.GarageAvailable, updateHouseCommand.SmokingAllowed,updateHouseCommand.PropertyType,
                     updateHouseCommand.OwnerEmail, updateHouseCommand.OwnerPhoneNumber, updateHouseCommand.Latitude,
                     updateHouseCommand.Longitude, updateHouseCommand.HouseNo, updateHouseCommand.StreetNo, updateHouseCommand.Area);

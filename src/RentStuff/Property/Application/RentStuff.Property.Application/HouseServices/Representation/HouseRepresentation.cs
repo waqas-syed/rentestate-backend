@@ -18,11 +18,11 @@ namespace RentStuff.Property.Application.HouseServices.Representation
             {
                 if (!string.IsNullOrWhiteSpace(dimension.StringValue))
                 {
-                    Dimension = dimension.StringValue + dimension.DimensionType.ToString();
+                    Dimension = dimension.StringValue + " " + dimension.DimensionType.ToString();
                 }
                 else if (!dimension.DecimalValue.Equals(0))
                 {
-                    Dimension = dimension.DecimalValue + dimension.DimensionType.ToString();
+                    Dimension = dimension.DecimalValue + " " + dimension.DimensionType.ToString();
                 }
             }
             Bedrooms = bedrooms;

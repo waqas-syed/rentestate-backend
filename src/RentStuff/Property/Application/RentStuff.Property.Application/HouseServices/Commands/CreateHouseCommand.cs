@@ -6,6 +6,7 @@ namespace RentStuff.Property.Application.HouseServices.Commands
     /// </summary>
     public class CreateHouseCommand
     {
+        private string _title;
         private long _monthlyRent;
         private int _numberOfBedrooms;
         private int _numberOfKitchens;
@@ -28,12 +29,13 @@ namespace RentStuff.Property.Application.HouseServices.Commands
         private string _dimensionStringValue;
         private decimal _dimensionIntValue;
 
-        public CreateHouseCommand(long monthlyRent, int numberOfBedrooms,
+        public CreateHouseCommand(string title, long monthlyRent, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, 
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber, 
             string houseNo, string streetNo, string area, string dimensionType, string dimensionStringValue, decimal dimensionIntValue)
         {
+            _title = title;
             _monthlyRent = monthlyRent;
             _numberOfBedrooms = numberOfBedrooms;
             _numberOfKitchens = numberOfKitchens;
@@ -55,6 +57,15 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             _dimensionType = dimensionType;
             _dimensionStringValue = dimensionStringValue;
             _dimensionIntValue = dimensionIntValue;
+        }
+
+        public string Title
+        {
+            get { return _title; }
+            private set
+            {
+                _title = value;
+            }
         }
 
         public long MonthlyRent
