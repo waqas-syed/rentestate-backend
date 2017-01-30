@@ -154,7 +154,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdate(house2);
             decimal initialLatitude = 33.29M;
             decimal initialLongitude = 73.41M;
-            SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
+            //SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
             var retreivedHouses = houseRepository.SearchHousesByCoordinates(coordinatesFromAddress.Item1, coordinatesFromAddress.Item2);
             Assert.NotNull(retreivedHouses);
             //VerifyRetereivedHouses(retreivedHouses, initialLatitude, initialLongitude);
