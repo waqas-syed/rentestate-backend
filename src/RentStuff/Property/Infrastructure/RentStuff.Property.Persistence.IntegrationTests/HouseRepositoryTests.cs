@@ -40,13 +40,18 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
             long price = 90000;
-            
+            string houseNo = "123";
+            string area = "Pindora";
+            string streetNo = "13";
+            decimal latitude = 33.29M;
+            decimal longitude = 73.41M;
+
             House house = new House.HouseBuilder().Title(title).OwnerEmail(email).OwnerPhoneNumber(phoneNumber)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).MonthlyRent(price).Latitude(33.29M).Longitude(73.41M)
-                .HouseNo("123").Area("Pindora").StreetNo("13").Build();
+                .PropertyType(PropertyType.Apartment).MonthlyRent(price).Latitude(latitude).Longitude(longitude)
+                .HouseNo(houseNo).Area(area).StreetNo(streetNo).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, null, 5, house);
             house.Dimension = dimension;
             houseRepository.SaveorUpdateDimension(dimension);

@@ -293,19 +293,36 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public PropertyType PropertyType
         {
             get { return _propertyType; }
-            set { _propertyType = value; }
+            set
+            {
+                _propertyType = value;
+            }
         }
 
+        /// <summary>
+        /// Email of the owner of the posted submission
+        /// </summary>
         public string OwnerEmail
         {
             get { return _ownerEmail; }
-            set { _ownerEmail = value; }
+            set
+            {
+                Assertion.AssertStringNotNullorEmpty(value);
+                _ownerEmail = value;
+            }
         }
 
+        /// <summary>
+        /// Phone number of the owner of the posted submission
+        /// </summary>
         public string OwnerPhoneNumber
         {
             get { return _ownerPhoneNumber; }
-            set { _ownerPhoneNumber = value; }
+            set
+            {
+                Assertion.AssertStringNotNullorEmpty(value);
+                _ownerPhoneNumber = value;
+            }
         }
 
         /// <summary>
