@@ -232,7 +232,27 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
             IList<House> retreivedHouses = houseRepository.SearchHousesByCoordinates(initialLatitude, initialLongitude);
             Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(20, retreivedHouses.Count);
             VerifyRetereivedHouses(retreivedHouses, initialLatitude, initialLongitude);
+        }
+
+        [Test]
+        public void RetrieveHouseByCoordinatesAndPropertyType_GetsTheHousesUsingTheirCoordinates_VerifiesThroughReturnValue()
+        {
+            // Save multiple houses, retreive them by specifying coordinates and verify all of them
+            decimal initialLatitude = 33.29M;
+            decimal initialLongitude = 73.41M;
+            PropertyType propertyType = PropertyType.House;
+            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
+            IList<House> retreivedHouses = houseRepository.SearchHousesByCoordinatesAndPropertyType(initialLatitude,
+                initialLongitude, propertyType);
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(10, retreivedHouses.Count);
+            // This method will check the houses that are multiple of 2, as the provided PropertyType was saved in the
+            // SaveMultipleHouses() method when the loop was a multiple of 2, and the values correspond to the loop number
+            // (which was a multiple of 2)
+            VerifyRetereivedHousesWithPropertyType(retreivedHouses, initialLatitude, initialLongitude, propertyType);
         }
 
         [Test]
@@ -248,6 +268,13 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(0, retreivedHouses.Count);
         }
 
+        /// <summary>
+        /// Values are saved in this method based on the loop number, so they can be verified in batches after they 
+        /// are retreived
+        /// </summary>
+        /// <param name="houseRepository"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
         private void SaveMultipleHouses(IHouseRepository houseRepository, decimal latitude, decimal longitude)
         {
             decimal initialLatitude = latitude;
@@ -258,15 +285,28 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 initialLatitude += .005M;
                 initialLongitude += .005M;
                 string title = "MGM Grand" + i;
-                string phoneNumber = "123456789";
-                
-                House house = new House.HouseBuilder().Title(title).OwnerEmail("dummy@dumdum123456" + i + ".com")
-                .NumberOfBedrooms(1).NumberOfBathrooms(1).OwnerPhoneNumber(phoneNumber)
-                .NumberOfKitchens(1).CableTvAvailable(true).FamiliesOnly(true)
-                .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).MonthlyRent(rentPrice).Latitude(initialLatitude).Longitude(initialLongitude)
-                .HouseNo("123" + i).Area("Harley Street" + i).StreetNo("13" + i).Build();
-                Dimension dimension = new Dimension(DimensionType.Kanal, null, 5, house);
+                string phoneNumber = "123456789" + i;
+                string email = "dummy@dumdum123456-" + i + ".com";
+                string houseNo = "123" + i;
+                string area = "Harley Street" + i;
+                string streetNo = i.ToString();
+                DimensionType dimensionType = DimensionType.Kanal;
+
+                var propertyType = i%2 == 0 ? PropertyType.House : PropertyType.Apartment;
+
+                House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
+                    .NumberOfBedrooms(i).NumberOfBathrooms(i).OwnerPhoneNumber(phoneNumber)
+                    .NumberOfKitchens(i).CableTvAvailable(false).FamiliesOnly(true)
+                    .GarageAvailable(false)
+                    .LandlinePhoneAvailable(true)
+                    .SmokingAllowed(false)
+                    .WithInternetAvailable(true)
+                    .PropertyType(propertyType)
+                    .Latitude(initialLatitude)
+                    .Longitude(initialLongitude)
+                    .MonthlyRent(rentPrice)
+                    .HouseNo(houseNo).Area(area).StreetNo(streetNo).Build();
+                Dimension dimension = new Dimension(dimensionType, i.ToString(), 0, house);
                 house.Dimension = dimension;
                 houseRepository.SaveorUpdateDimension(dimension);
                 houseRepository.SaveorUpdate(house);
@@ -278,12 +318,104 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         {
             decimal initialLatitude = latitude;
             decimal initialLongitude = longitude;
-            foreach (var retreivedHouse in retreivedHouses)
+            for (int i = 0; i < retreivedHouses.Count; i++)
             {
                 initialLatitude += .005M;
                 initialLongitude += .005M;
-                Assert.AreEqual(initialLatitude, retreivedHouse.Latitude);
-                Assert.AreEqual(initialLongitude, retreivedHouse.Longitude);
+                string title = "MGM Grand" + i;
+                string phoneNumber = "123456789" + i;
+                string email = "dummy@dumdum123456-" + i + ".com";
+                string houseNo = "123" + i;
+                string area = "Harley Street" + i;
+                string streetNo = i.ToString();
+                
+                DimensionType dimensionType = DimensionType.Kanal;
+
+                Assert.AreEqual(initialLatitude, retreivedHouses[i].Latitude);
+                Assert.AreEqual(initialLongitude, retreivedHouses[i].Longitude);
+                Assert.AreEqual(title, retreivedHouses[i].Title);
+                Assert.AreEqual(phoneNumber, retreivedHouses[i].OwnerPhoneNumber);
+                Assert.AreEqual(email, retreivedHouses[i].OwnerEmail);
+                Assert.AreEqual(i, retreivedHouses[i].NumberOfBathrooms);
+                Assert.AreEqual(i, retreivedHouses[i].NumberOfBathrooms);
+                Assert.AreEqual(i, retreivedHouses[i].NumberOfBedrooms);
+                Assert.AreEqual(i, retreivedHouses[i].NumberOfKitchens);
+                Assert.AreEqual(true, retreivedHouses[i].FamiliesOnly);
+                Assert.AreEqual(true, retreivedHouses[i].LandlinePhoneAvailable);
+                Assert.AreEqual(false, retreivedHouses[i].SmokingAllowed);
+                Assert.AreEqual(true, retreivedHouses[i].InternetAvailable);
+                Assert.AreEqual(i%2 == 0 ? PropertyType.House : PropertyType.Apartment, retreivedHouses[i].PropertyType);
+
+                Assert.AreEqual(houseNo, retreivedHouses[i].HouseNo);
+                Assert.AreEqual(area, retreivedHouses[i].Area);
+                Assert.AreEqual(streetNo, retreivedHouses[i].StreetNo);
+                Assert.AreEqual(dimensionType, retreivedHouses[i].Dimension.DimensionType);
+                Assert.AreEqual(i.ToString(), retreivedHouses[i].Dimension.StringValue);
+            }
+        }
+
+        /// <summary>
+        /// Loops through houses. These houses contain values that are multiple of 2, as these are only for the selected 
+        /// PropertyType, which were populated in the SaveMultipleHouses() method when the loop number was multiple of 2
+        /// </summary>
+        /// <param name="retreivedHouses"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="propertyType"></param>
+        private void VerifyRetereivedHousesWithPropertyType(IList<House> retreivedHouses, decimal latitude, decimal longitude,
+            PropertyType propertyType)
+        {
+            decimal initialLatitude = latitude;
+            decimal initialLongitude = longitude;
+            for (int i = 0; i < retreivedHouses.Count; i++)
+            {
+                initialLatitude += .005M;
+                initialLongitude += .005M;
+                string title = "MGM Grand" + i;
+                string phoneNumber = "123456789" + i;
+                string email = "dummy@dumdum123456-" + i + ".com";
+                string houseNo = "123" + i;
+                string area = "Harley Street" + i;
+                string streetNo = i.ToString();
+                
+                // Here we use (i + i) because these houses wer saved in the SaveMultipleHouses() method when the loop number 
+                // was a multiple of 2. And the values are corresponding to the loop number(0, 2, 4, 6 ...)
+                if (i != 0)
+                {
+                    initialLatitude += .005M;
+                    initialLongitude += .005M;
+
+                    title = "MGM Grand" + (i + i);
+                    phoneNumber = "123456789" + (i + i);
+                    email = "dummy@dumdum123456-" + (i + i) + ".com";
+                    houseNo = "123" + (i + i);
+                    area = "Harley Street" + (i + i);
+                    streetNo = (i + i).ToString();
+                }
+
+
+                DimensionType dimensionType = DimensionType.Kanal;
+
+                Assert.AreEqual(initialLatitude, retreivedHouses[i].Latitude);
+                Assert.AreEqual(initialLongitude, retreivedHouses[i].Longitude);
+                Assert.AreEqual(title, retreivedHouses[i].Title);
+                Assert.AreEqual(phoneNumber, retreivedHouses[i].OwnerPhoneNumber);
+                Assert.AreEqual(email, retreivedHouses[i].OwnerEmail);
+                Assert.AreEqual(i+i, retreivedHouses[i].NumberOfBathrooms);
+                Assert.AreEqual(i+i, retreivedHouses[i].NumberOfBathrooms);
+                Assert.AreEqual(i+i, retreivedHouses[i].NumberOfBedrooms);
+                Assert.AreEqual(i+i, retreivedHouses[i].NumberOfKitchens);
+                Assert.AreEqual(true, retreivedHouses[i].FamiliesOnly);
+                Assert.AreEqual(true, retreivedHouses[i].LandlinePhoneAvailable);
+                Assert.AreEqual(false, retreivedHouses[i].SmokingAllowed);
+                Assert.AreEqual(true, retreivedHouses[i].InternetAvailable);
+                Assert.AreEqual(propertyType, retreivedHouses[i].PropertyType);
+
+                Assert.AreEqual(houseNo, retreivedHouses[i].HouseNo);
+                Assert.AreEqual(area, retreivedHouses[i].Area);
+                Assert.AreEqual(streetNo, retreivedHouses[i].StreetNo);
+                Assert.AreEqual(dimensionType, retreivedHouses[i].Dimension.DimensionType);
+                Assert.AreEqual((i+i).ToString(), retreivedHouses[i].Dimension.StringValue);
             }
         }
 
@@ -326,6 +458,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.IsNotNull(retreivedHouse);
             Assert.AreEqual(3, retreivedHouse.HouseImages.Count);
 
+            Assert.AreEqual(title, retreivedHouse.Title);
+            Assert.AreEqual(phoneNumber, retreivedHouse.OwnerPhoneNumber);
+            Assert.AreEqual(email, retreivedHouse.OwnerEmail);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
@@ -417,6 +552,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(1, retreivedHouses.Count);
 
             // Verification of House # 1
+            Assert.AreEqual(title, retreivedHouses[0].Title);
+            Assert.AreEqual(phoneNumber, retreivedHouses[0].OwnerPhoneNumber);
+            Assert.AreEqual(email, retreivedHouses[0].OwnerEmail);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
@@ -476,6 +614,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdate(house);
 
             // Saving House # 2
+            string title2 = "Title # 2";
             string email2 = "special2@spsp123456.com";
             string houseNo2 = "S2-123";
             string streetNo2 = "2-13";
@@ -485,7 +624,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int numberOfKitchens2 = 3;
             int rent2 = 100000;
             PropertyType propertyType2 = PropertyType.House;
-            House house2 = new House.HouseBuilder().Title(title).OwnerEmail(email2)
+            House house2 = new House.HouseBuilder().Title(title2).OwnerEmail(email2)
             .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
             .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false).FamiliesOnly(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
@@ -503,6 +642,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(1, retreivedHouses.Count);
 
             // Verification of House # 2
+            Assert.AreEqual(title2, retreivedHouses[0].Title);
             Assert.AreEqual(house2.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house2.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house2.NumberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
@@ -523,6 +663,414 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(dimension2.DimensionType, retreivedHouses[0].Dimension.DimensionType);
             Assert.AreEqual(dimension2.DecimalValue, retreivedHouses[0].Dimension.DecimalValue);
             Assert.AreEqual(dimension2.StringValue, retreivedHouses[0].Dimension.StringValue);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void SearchMultipleHousesByCoordinates_ChecksIfNearbyHousesAreReturned_VerifiesByReturnValue()
+        {
+            // Save 3 houses in locations nearby and 2 houses that are in other places. 
+            // Search should get the 3 houses located near theserched location
+            
+            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+            
+            // Saving House # 1: Near the search location, should be in the search results
+            string area = "Pindora, Rawalpindi, Pakistan";
+            var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(area);
+            string houseNo = "House # 1";
+            string streetNo = "1";
+            string title = "Title # 1";
+            string phoneNumber = "1234567891";
+            string email = "special@spsp123456-1.com";
+            int numberOfBathrooms = 1;
+            int numberOfBedrooms = 1;
+            int numberOfKitchens = 1;
+            int rent = 100;
+            PropertyType propertyType = PropertyType.House;
+            House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
+            .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
+            .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
+            .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
+            .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
+            .Longitude(coordinatesFromAddress.Item2)
+            .HouseNo(houseNo).Area(area).StreetNo(streetNo).Build();
+            Dimension dimension = new Dimension(DimensionType.Kanal, "1", 0, house);
+            house.Dimension = dimension;
+            houseRepository.SaveorUpdateDimension(dimension);
+            houseRepository.SaveorUpdate(house);
+
+            // Saving House # 2: Near the search location, should be in the search results
+            string title2 = "Title # 2";
+            string area2 = "Satellite Town, Rawalpindi, Pakistan";
+            var coordinatesFromAddress2 = geocodingService.GetCoordinatesFromAddress(area2);
+            string email2 = "special2@spsp12345-2.com";
+            string houseNo2 = "House # 2";
+            string streetNo2 = "2";
+            string phoneNumber2 = "1234567892";
+            int numberOfBathrooms2 = 2;
+            int numberOfBedrooms2 = 2;
+            int numberOfKitchens2 = 2;
+            int rent2 = 200;
+            PropertyType propertyType2 = PropertyType.House;
+            
+            House house2 = new House.HouseBuilder().Title(title2).OwnerEmail(email2)
+            .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
+            .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false).FamiliesOnly(false)
+            .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
+            .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress2.Item1)
+            .Longitude(coordinatesFromAddress2.Item2)
+            .HouseNo(houseNo2).Area(area2).StreetNo(streetNo2).Build();
+            Dimension dimension2 = new Dimension(DimensionType.Kanal, "2", 0, house2);
+            house2.Dimension = dimension2;
+            houseRepository.SaveorUpdateDimension(dimension2);
+            houseRepository.SaveorUpdate(house2);
+
+            // Saving House # 3: Outside the bounds of the search location, should not be in the search results
+            string area3 = "Kahuta, Pakistan";
+            var coordinatesFromAddress3 = geocodingService.GetCoordinatesFromAddress(area3);
+            string title3 = "Title # 3";
+            string email3 = "special2@spsp123456-3.com";
+            string houseNo3 = "House # 3";
+            string streetNo3 = "3";
+            string phoneNumber3 = "1234567893";
+            int numberOfBathrooms3 = 3;
+            int numberOfBedrooms3 = 3;
+            int numberOfKitchens3 = 3;
+            int rent3 = 300;
+            PropertyType propertyType3 = PropertyType.House;
+
+            House house3 = new House.HouseBuilder().Title(title3).OwnerEmail(email3)
+            .NumberOfBedrooms(numberOfBedrooms3).NumberOfBathrooms(numberOfBathrooms3).OwnerPhoneNumber(phoneNumber3)
+            .NumberOfKitchens(numberOfKitchens3).CableTvAvailable(false).FamiliesOnly(false)
+            .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
+            .PropertyType(propertyType3).MonthlyRent(rent3).Latitude(coordinatesFromAddress3.Item1)
+            .Longitude(coordinatesFromAddress3.Item2)
+            .HouseNo(houseNo3).Area(area3).StreetNo(streetNo3).Build();
+            Dimension dimension3 = new Dimension(DimensionType.Kanal, "3", 0, house3);
+            house3.Dimension = dimension3;
+            houseRepository.SaveorUpdateDimension(dimension3);
+            houseRepository.SaveorUpdate(house3);
+
+            // Saving House # 4: Should be in the search results
+            string area4 = "I-9, Islamabad, Pakistan";
+            var coordinatesFromAddress4 = geocodingService.GetCoordinatesFromAddress(area4);
+            string title4 = "Title # 4";
+            string email4 = "special2@spsp123456-4.com";
+            string houseNo4 = "House # 4";
+            string streetNo4 = "4";
+            string phoneNumber4 = "1234567894";
+            int numberOfBathrooms4 = 4;
+            int numberOfBedrooms4 = 4;
+            int numberOfKitchens4 = 4;
+            int rent4 = 400;
+            PropertyType propertyType4 = PropertyType.House;
+
+            House house4 = new House.HouseBuilder().Title(title4).OwnerEmail(email4)
+            .NumberOfBedrooms(numberOfBedrooms4).NumberOfBathrooms(numberOfBathrooms4).OwnerPhoneNumber(phoneNumber4)
+            .NumberOfKitchens(numberOfKitchens4).CableTvAvailable(false).FamiliesOnly(false)
+            .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
+            .PropertyType(propertyType4).MonthlyRent(rent4).Latitude(coordinatesFromAddress4.Item1)
+            .Longitude(coordinatesFromAddress4.Item2)
+            .HouseNo(houseNo4).Area(area4).StreetNo(streetNo4).Build();
+            Dimension dimension4 = new Dimension(DimensionType.Kanal, "4", 0, house4);
+            house4.Dimension = dimension4;
+            houseRepository.SaveorUpdateDimension(dimension4);
+            houseRepository.SaveorUpdate(house4);
+
+            // Saving House # 5: Should NOT be in the search results
+            string area5 = "Haripur, Pakistan";
+            var coordinatesFromAddress5 = geocodingService.GetCoordinatesFromAddress(area5);
+            string title5 = "Title # 5";
+            string email5 = "special2@spsp123456-5.com";
+            string houseNo5 = "House # 5";
+            string streetNo5 = "5";
+            string phoneNumber5 = "1234567895";
+            int numberOfBathrooms5 = 5;
+            int numberOfBedrooms5 = 5;
+            int numberOfKitchens5 = 5;
+            int rent5 = 100000;
+            PropertyType propertyType5 = PropertyType.House;
+
+            House house5 = new House.HouseBuilder().Title(title5).OwnerEmail(email5)
+            .NumberOfBedrooms(numberOfBedrooms5).NumberOfBathrooms(numberOfBathrooms5).OwnerPhoneNumber(phoneNumber5)
+            .NumberOfKitchens(numberOfKitchens5).CableTvAvailable(false).FamiliesOnly(false)
+            .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
+            .PropertyType(propertyType5).MonthlyRent(rent5).Latitude(coordinatesFromAddress5.Item1)
+            .Longitude(coordinatesFromAddress5.Item2)
+            .HouseNo(houseNo5).Area(area5).StreetNo(streetNo5).Build();
+            Dimension dimension5 = new Dimension(DimensionType.Kanal, "5", 0, house5);
+            house5.Dimension = dimension5;
+            houseRepository.SaveorUpdateDimension(dimension5);
+            houseRepository.SaveorUpdate(house5);
+
+            var retreivedHouses = houseRepository.SearchHousesByCoordinatesAndPropertyType(coordinatesFromAddress.Item1,
+                coordinatesFromAddress.Item2, PropertyType.House);
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(3, retreivedHouses.Count);
+
+            // Verification of House # 1
+            Assert.AreEqual(title, retreivedHouses[0].Title);
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
+            Assert.AreEqual(house.NumberOfKitchens, retreivedHouses[0].NumberOfKitchens);
+            Assert.AreEqual(house.FamiliesOnly, retreivedHouses[0].FamiliesOnly);
+            Assert.AreEqual(house.GarageAvailable, retreivedHouses[0].LandlinePhoneAvailable);
+            Assert.AreEqual(house.SmokingAllowed, retreivedHouses[0].SmokingAllowed);
+            Assert.AreEqual(house.InternetAvailable, retreivedHouses[0].InternetAvailable);
+            Assert.AreEqual(house.PropertyType, retreivedHouses[0].PropertyType);
+            Assert.AreEqual(house.Latitude, retreivedHouses[0].Latitude);
+            Assert.AreEqual(house.Longitude, retreivedHouses[0].Longitude);
+            Assert.AreEqual(house.HouseNo, retreivedHouses[0].HouseNo);
+            Assert.AreEqual(house.Area, retreivedHouses[0].Area);
+            Assert.AreEqual(house.StreetNo, retreivedHouses[0].StreetNo);
+            Assert.AreEqual(email, house.OwnerEmail);
+            Assert.AreEqual(house.OwnerEmail, retreivedHouses[0].OwnerEmail);
+            Assert.AreEqual(house.OwnerPhoneNumber, retreivedHouses[0].OwnerPhoneNumber);
+            Assert.AreEqual(dimension.DimensionType, retreivedHouses[0].Dimension.DimensionType);
+            Assert.AreEqual(dimension.DecimalValue, retreivedHouses[0].Dimension.DecimalValue);
+            Assert.AreEqual(dimension.StringValue, retreivedHouses[0].Dimension.StringValue);
+
+            // Verification of House # 2
+            Assert.AreEqual(title2, retreivedHouses[1].Title);
+            Assert.AreEqual(house2.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
+            Assert.AreEqual(house2.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
+            Assert.AreEqual(house2.NumberOfBedrooms, retreivedHouses[1].NumberOfBedrooms);
+            Assert.AreEqual(house2.NumberOfKitchens, retreivedHouses[1].NumberOfKitchens);
+            Assert.AreEqual(house2.FamiliesOnly, retreivedHouses[1].FamiliesOnly);
+            Assert.AreEqual(house2.GarageAvailable, retreivedHouses[1].LandlinePhoneAvailable);
+            Assert.AreEqual(house2.SmokingAllowed, retreivedHouses[1].SmokingAllowed);
+            Assert.AreEqual(house2.InternetAvailable, retreivedHouses[1].InternetAvailable);
+            Assert.AreEqual(house2.PropertyType, retreivedHouses[1].PropertyType);
+            Assert.AreEqual(house2.Latitude, retreivedHouses[1].Latitude);
+            Assert.AreEqual(house2.Longitude, retreivedHouses[1].Longitude);
+            Assert.AreEqual(house2.HouseNo, retreivedHouses[1].HouseNo);
+            Assert.AreEqual(house2.Area, retreivedHouses[1].Area);
+            Assert.AreEqual(house2.StreetNo, retreivedHouses[1].StreetNo);
+            Assert.AreEqual(email2, house2.OwnerEmail);
+            Assert.AreEqual(house2.OwnerEmail, retreivedHouses[1].OwnerEmail);
+            Assert.AreEqual(house2.OwnerPhoneNumber, retreivedHouses[1].OwnerPhoneNumber);
+            Assert.AreEqual(dimension2.DimensionType, retreivedHouses[1].Dimension.DimensionType);
+            Assert.AreEqual(dimension2.DecimalValue, retreivedHouses[1].Dimension.DecimalValue);
+            Assert.AreEqual(dimension2.StringValue, retreivedHouses[1].Dimension.StringValue);
+
+            // Verification of House # 4
+            Assert.AreEqual(title4, retreivedHouses[2].Title);
+            Assert.AreEqual(house4.NumberOfBathrooms, retreivedHouses[2].NumberOfBathrooms);
+            Assert.AreEqual(house4.NumberOfBathrooms, retreivedHouses[2].NumberOfBathrooms);
+            Assert.AreEqual(house4.NumberOfBedrooms, retreivedHouses[2].NumberOfBedrooms);
+            Assert.AreEqual(house4.NumberOfKitchens, retreivedHouses[2].NumberOfKitchens);
+            Assert.AreEqual(house4.FamiliesOnly, retreivedHouses[2].FamiliesOnly);
+            Assert.AreEqual(house4.GarageAvailable, retreivedHouses[2].LandlinePhoneAvailable);
+            Assert.AreEqual(house4.SmokingAllowed, retreivedHouses[2].SmokingAllowed);
+            Assert.AreEqual(house4.InternetAvailable, retreivedHouses[2].InternetAvailable);
+            Assert.AreEqual(house4.PropertyType, retreivedHouses[2].PropertyType);
+            Assert.AreEqual(house4.Latitude, retreivedHouses[2].Latitude);
+            Assert.AreEqual(house4.Longitude, retreivedHouses[2].Longitude);
+            Assert.AreEqual(house4.HouseNo, retreivedHouses[2].HouseNo);
+            Assert.AreEqual(house4.Area, retreivedHouses[2].Area);
+            Assert.AreEqual(house4.StreetNo, retreivedHouses[2].StreetNo);
+            Assert.AreEqual(email4, house4.OwnerEmail);
+            Assert.AreEqual(house4.OwnerEmail, retreivedHouses[2].OwnerEmail);
+            Assert.AreEqual(house4.OwnerPhoneNumber, retreivedHouses[2].OwnerPhoneNumber);
+            Assert.AreEqual(dimension4.DimensionType, retreivedHouses[2].Dimension.DimensionType);
+            Assert.AreEqual(dimension4.DecimalValue, retreivedHouses[2].Dimension.DecimalValue);
+            Assert.AreEqual(dimension4.StringValue, retreivedHouses[2].Dimension.StringValue);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void SearchMultipleHousesByCoordinatesAndPropertyType_ChecksIfNearbyHousesAreReturned_VerifiesByReturnValue()
+        {
+            // Save 3 houses in locations nearby, 2 have same PropertyType but 1 has different
+            // Save 2 houses that are in other places. 
+            // Search should get the 2 houses located near the serched location and also the exact PropertyType
+
+            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+
+            // Saving House # 1: Should be in the search results
+            string area = "Pindora, Rawalpindi, Pakistan";
+            var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(area);
+            string houseNo = "House # 1";
+            string streetNo = "1";
+            string title = "Title # 1";
+            string phoneNumber = "1234567891";
+            string email = "special@spsp123456-1.com";
+            int numberOfBathrooms = 1;
+            int numberOfBedrooms = 1;
+            int numberOfKitchens = 1;
+            int rent = 100;
+            PropertyType propertyType = PropertyType.House;
+            House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
+            .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
+            .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
+            .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
+            .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
+            .Longitude(coordinatesFromAddress.Item2)
+            .HouseNo(houseNo).Area(area).StreetNo(streetNo).Build();
+            Dimension dimension = new Dimension(DimensionType.Kanal, "1", 0, house);
+            house.Dimension = dimension;
+            houseRepository.SaveorUpdateDimension(dimension);
+            houseRepository.SaveorUpdate(house);
+
+            // Saving House # 2: Should NOT be in the search results, different property type
+            string title2 = "Title # 2";
+            string area2 = "Satellite Town, Rawalpindi, Pakistan";
+            var coordinatesFromAddress2 = geocodingService.GetCoordinatesFromAddress(area2);
+            string email2 = "special2@spsp12345-2.com";
+            string houseNo2 = "House # 2";
+            string streetNo2 = "2";
+            string phoneNumber2 = "1234567892";
+            int numberOfBathrooms2 = 2;
+            int numberOfBedrooms2 = 2;
+            int numberOfKitchens2 = 2;
+            int rent2 = 200;
+            PropertyType propertyType2 = PropertyType.Apartment;
+
+            House house2 = new House.HouseBuilder().Title(title2).OwnerEmail(email2)
+            .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
+            .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false).FamiliesOnly(false)
+            .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
+            .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress2.Item1)
+            .Longitude(coordinatesFromAddress2.Item2)
+            .HouseNo(houseNo2).Area(area2).StreetNo(streetNo2).Build();
+            Dimension dimension2 = new Dimension(DimensionType.Kanal, "2", 0, house2);
+            house2.Dimension = dimension2;
+            houseRepository.SaveorUpdateDimension(dimension2);
+            houseRepository.SaveorUpdate(house2);
+
+            // Saving House # 3: Should NOT be in the search results, outside bounds of search location
+            string area3 = "Kahuta, Pakistan";
+            var coordinatesFromAddress3 = geocodingService.GetCoordinatesFromAddress(area3);
+            string title3 = "Title # 3";
+            string email3 = "special2@spsp123456-3.com";
+            string houseNo3 = "House # 3";
+            string streetNo3 = "3";
+            string phoneNumber3 = "1234567893";
+            int numberOfBathrooms3 = 3;
+            int numberOfBedrooms3 = 3;
+            int numberOfKitchens3 = 3;
+            int rent3 = 300;
+            PropertyType propertyType3 = PropertyType.House;
+
+            House house3 = new House.HouseBuilder().Title(title3).OwnerEmail(email3)
+            .NumberOfBedrooms(numberOfBedrooms3).NumberOfBathrooms(numberOfBathrooms3).OwnerPhoneNumber(phoneNumber3)
+            .NumberOfKitchens(numberOfKitchens3).CableTvAvailable(false).FamiliesOnly(false)
+            .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
+            .PropertyType(propertyType3).MonthlyRent(rent3).Latitude(coordinatesFromAddress3.Item1)
+            .Longitude(coordinatesFromAddress3.Item2)
+            .HouseNo(houseNo3).Area(area3).StreetNo(streetNo3).Build();
+            Dimension dimension3 = new Dimension(DimensionType.Kanal, "3", 0, house3);
+            house3.Dimension = dimension3;
+            houseRepository.SaveorUpdateDimension(dimension3);
+            houseRepository.SaveorUpdate(house3);
+
+            // Saving House # 4: Should be in the search results
+            string area4 = "I-9, Islamabad, Pakistan";
+            var coordinatesFromAddress4 = geocodingService.GetCoordinatesFromAddress(area4);
+            string title4 = "Title # 4";
+            string email4 = "special2@spsp123456-4.com";
+            string houseNo4 = "House # 4";
+            string streetNo4 = "4";
+            string phoneNumber4 = "1234567894";
+            int numberOfBathrooms4 = 4;
+            int numberOfBedrooms4 = 4;
+            int numberOfKitchens4 = 4;
+            int rent4 = 400;
+            PropertyType propertyType4 = PropertyType.House;
+
+            House house4 = new House.HouseBuilder().Title(title4).OwnerEmail(email4)
+            .NumberOfBedrooms(numberOfBedrooms4).NumberOfBathrooms(numberOfBathrooms4).OwnerPhoneNumber(phoneNumber4)
+            .NumberOfKitchens(numberOfKitchens4).CableTvAvailable(false).FamiliesOnly(false)
+            .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
+            .PropertyType(propertyType4).MonthlyRent(rent4).Latitude(coordinatesFromAddress4.Item1)
+            .Longitude(coordinatesFromAddress4.Item2)
+            .HouseNo(houseNo4).Area(area4).StreetNo(streetNo4).Build();
+            Dimension dimension4 = new Dimension(DimensionType.Kanal, "4", 0, house4);
+            house4.Dimension = dimension4;
+            houseRepository.SaveorUpdateDimension(dimension4);
+            houseRepository.SaveorUpdate(house4);
+
+            // Saving House # 5: Should NOT be in the search results, outside bounds of search location
+            string area5 = "Haripur, Pakistan";
+            var coordinatesFromAddress5 = geocodingService.GetCoordinatesFromAddress(area5);
+            string title5 = "Title # 5";
+            string email5 = "special2@spsp123456-5.com";
+            string houseNo5 = "House # 5";
+            string streetNo5 = "5";
+            string phoneNumber5 = "1234567895";
+            int numberOfBathrooms5 = 5;
+            int numberOfBedrooms5 = 5;
+            int numberOfKitchens5 = 5;
+            int rent5 = 500;
+            PropertyType propertyType5 = PropertyType.House;
+
+            House house5 = new House.HouseBuilder().Title(title5).OwnerEmail(email5)
+            .NumberOfBedrooms(numberOfBedrooms5).NumberOfBathrooms(numberOfBathrooms5).OwnerPhoneNumber(phoneNumber5)
+            .NumberOfKitchens(numberOfKitchens5).CableTvAvailable(false).FamiliesOnly(false)
+            .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
+            .PropertyType(propertyType5).MonthlyRent(rent5).Latitude(coordinatesFromAddress5.Item1)
+            .Longitude(coordinatesFromAddress5.Item2)
+            .HouseNo(houseNo5).Area(area5).StreetNo(streetNo5).Build();
+            Dimension dimension5 = new Dimension(DimensionType.Kanal, "5", 0, house5);
+            house5.Dimension = dimension5;
+            houseRepository.SaveorUpdateDimension(dimension5);
+            houseRepository.SaveorUpdate(house5);
+
+            var retreivedHouses = houseRepository.SearchHousesByCoordinatesAndPropertyType(coordinatesFromAddress.Item1,
+                coordinatesFromAddress.Item2, PropertyType.House);
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(2, retreivedHouses.Count);
+
+            // Verification of House # 1
+            Assert.AreEqual(title, retreivedHouses[0].Title);
+            Assert.AreEqual(phoneNumber, retreivedHouses[0].OwnerPhoneNumber);
+            Assert.AreEqual(email, retreivedHouses[0].OwnerEmail);
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
+            Assert.AreEqual(house.NumberOfKitchens, retreivedHouses[0].NumberOfKitchens);
+            Assert.AreEqual(house.FamiliesOnly, retreivedHouses[0].FamiliesOnly);
+            Assert.AreEqual(house.GarageAvailable, retreivedHouses[0].LandlinePhoneAvailable);
+            Assert.AreEqual(house.SmokingAllowed, retreivedHouses[0].SmokingAllowed);
+            Assert.AreEqual(house.InternetAvailable, retreivedHouses[0].InternetAvailable);
+            Assert.AreEqual(house.PropertyType, retreivedHouses[0].PropertyType);
+            Assert.AreEqual(house.Latitude, retreivedHouses[0].Latitude);
+            Assert.AreEqual(house.Longitude, retreivedHouses[0].Longitude);
+            Assert.AreEqual(house.HouseNo, retreivedHouses[0].HouseNo);
+            Assert.AreEqual(house.Area, retreivedHouses[0].Area);
+            Assert.AreEqual(house.StreetNo, retreivedHouses[0].StreetNo);
+            Assert.AreEqual(email, house.OwnerEmail);
+            Assert.AreEqual(house.OwnerEmail, retreivedHouses[0].OwnerEmail);
+            Assert.AreEqual(house.OwnerPhoneNumber, retreivedHouses[0].OwnerPhoneNumber);
+            Assert.AreEqual(dimension.DimensionType, retreivedHouses[0].Dimension.DimensionType);
+            Assert.AreEqual(dimension.DecimalValue, retreivedHouses[0].Dimension.DecimalValue);
+            Assert.AreEqual(dimension.StringValue, retreivedHouses[0].Dimension.StringValue);
+
+            // Verification of House # 4
+            Assert.AreEqual(title4, retreivedHouses[1].Title);
+            Assert.AreEqual(house4.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
+            Assert.AreEqual(house4.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
+            Assert.AreEqual(house4.NumberOfBedrooms, retreivedHouses[1].NumberOfBedrooms);
+            Assert.AreEqual(house4.NumberOfKitchens, retreivedHouses[1].NumberOfKitchens);
+            Assert.AreEqual(house4.FamiliesOnly, retreivedHouses[1].FamiliesOnly);
+            Assert.AreEqual(house4.GarageAvailable, retreivedHouses[1].LandlinePhoneAvailable);
+            Assert.AreEqual(house4.SmokingAllowed, retreivedHouses[1].SmokingAllowed);
+            Assert.AreEqual(house4.InternetAvailable, retreivedHouses[1].InternetAvailable);
+            Assert.AreEqual(house4.PropertyType, retreivedHouses[1].PropertyType);
+            Assert.AreEqual(house4.Latitude, retreivedHouses[1].Latitude);
+            Assert.AreEqual(house4.Longitude, retreivedHouses[1].Longitude);
+            Assert.AreEqual(house4.HouseNo, retreivedHouses[1].HouseNo);
+            Assert.AreEqual(house4.Area, retreivedHouses[1].Area);
+            Assert.AreEqual(house4.StreetNo, retreivedHouses[1].StreetNo);
+            Assert.AreEqual(email4, house4.OwnerEmail);
+            Assert.AreEqual(house4.OwnerEmail, retreivedHouses[1].OwnerEmail);
+            Assert.AreEqual(house4.OwnerPhoneNumber, retreivedHouses[1].OwnerPhoneNumber);
+            Assert.AreEqual(dimension4.DimensionType, retreivedHouses[1].Dimension.DimensionType);
+            Assert.AreEqual(dimension4.DecimalValue, retreivedHouses[1].Dimension.DecimalValue);
+            Assert.AreEqual(dimension4.StringValue, retreivedHouses[1].Dimension.StringValue);
         }
     }
 }
