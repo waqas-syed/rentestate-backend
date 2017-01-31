@@ -48,7 +48,7 @@ namespace RentStuff.Property.Ports.Tests
                 string houseNo = "CT-141/A";
                 string streetNo = "14";
 
-                CreateHouseCommand house = new CreateHouseCommand(105000, 2, 2, 2, false, true, false, true, true,
+                CreateHouseCommand house = new CreateHouseCommand("House For Rent", 105000, 2, 2, 2, false, true, false, true, true,
                     true, true, true, "Apartment", ownerEmail, ownerPhoneNumber, houseNo, streetNo,
                     "1600 Amphitheatre Parkway, Mountain View, CA", null, null, 0);
                 houseController.Post(house);
@@ -88,7 +88,7 @@ namespace RentStuff.Property.Ports.Tests
                 string houseNo1 = "CT-141/A";
                 string streetNo1 = "14";
 
-                CreateHouseCommand house1 = new CreateHouseCommand(105000, 2, 2, 2, false, true, false, true, true,
+                CreateHouseCommand house1 = new CreateHouseCommand("House For Rent", 105000, 2, 2, 2, false, true, false, true, true,
                     true, true, true, "Apartment", ownerEmail1, ownerPhoneNumber1, houseNo1, streetNo1,
                     "1600+Amphitheatre+Parkway,+Mountain+View,+CA", null, null, 0);
                 houseController.Post(house1);
@@ -99,7 +99,7 @@ namespace RentStuff.Property.Ports.Tests
                 string streetNo2 = "13";
 
                 // Hopuse # 2
-                CreateHouseCommand house2 = new CreateHouseCommand(150000, 2, 2, 2, true, false, false, true, true,
+                CreateHouseCommand house2 = new CreateHouseCommand("House For Rent", 150000, 2, 2, 2, true, false, false, true, true,
                     true, true, true, "House", ownerEmail2, ownerPhoneNumber2, houseNo2, streetNo2,
                     "1600+Amphitheatre+Parkway,+Mountain+View,+CA", null, null, 0);
                 houseController.Post(house2);
@@ -161,7 +161,7 @@ namespace RentStuff.Property.Ports.Tests
                 string streetNo = "14";
                 string area = "1600 Amphitheatre Parkway, Mountain View, CA";
 
-                CreateHouseCommand house = new CreateHouseCommand(105000, 2, 2, 2, false, true, false, true, true,
+                CreateHouseCommand house = new CreateHouseCommand("House For Rent", 105000, 2, 2, 2, false, true, false, true, true,
                     true, true, true, "Apartment", ownerEmail, ownerPhoneNumber, houseNo, streetNo, area, null, null, 0);
                 houseController.Post(house);
                 IHttpActionResult httpActionResult = houseController.Get(null, area);

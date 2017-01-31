@@ -57,6 +57,14 @@ namespace RentStuff.Property.Application.HouseServices
         IList<HouseRepresentation> SearchHousesByAddress(string address);
 
         /// <summary>
+        /// Search the house by providing the address and propertyType
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="propertyType"></param>
+        /// <returns></returns>
+        IList<HouseRepresentation> SearchHousesByAddressAndPropertyType(string address, string propertyType);
+
+        /// <summary>
         /// Get all houses
         /// </summary>
         /// <returns></returns>

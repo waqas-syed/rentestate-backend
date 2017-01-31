@@ -95,6 +95,30 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         }
 
         /// <summary>
+        /// Searches houses by coordinates and given propertytype
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="propertyType"></param>
+        /// <returns></returns>
+        [Transaction]
+        public IList<House> SearchHousesByCoordinatesAndPropertyType(decimal latitude, decimal longitude, PropertyType propertyType)
+        {
+            IList houses = CurrentSession.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house HAVING distance < :radius AND property_type=:propertyType ORDER BY distance LIMIT 0 , 20")
+                .AddEntity(typeof(House))
+                //.AddScalar("latitude", NHibernateUtil.Decimal)
+                //.AddScalar("longitude", NHibernateUtil.Decimal)
+                //.AddScalar("distance", NHibernateUtil.Decimal)
+                .SetParameter("inputLatitude", latitude)
+                .SetParameter("inputLongitude", longitude)
+                .SetParameter("propertyType", propertyType)
+                .SetParameter("radius", _radius)
+                .List();
+
+            return houses.Cast<House>().ToList();
+        }
+
+        /// <summary>
         /// Get all the houses
         /// </summary>
         /// <returns></returns>

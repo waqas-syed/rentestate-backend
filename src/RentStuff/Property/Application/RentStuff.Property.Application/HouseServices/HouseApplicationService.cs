@@ -168,6 +168,22 @@ namespace RentStuff.Property.Application.HouseServices
         }
 
         /// <summary>
+        /// Search nearby houses by providing the area and property type
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="propertyType"></param>
+        /// <returns></returns>
+        public IList<HouseRepresentation> SearchHousesByAddressAndPropertyType(string address, string propertyType)
+        {
+            // Get the coordinates for the location using the Geocoding API service
+            var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
+            // Get 20 coordinates within the range of around 30 kilometers radius
+            IList<House> houses = _houseRepository.SearchHousesByCoordinatesAndPropertyType(coordinates.Item1, 
+                coordinates.Item2, (PropertyType)Enum.Parse(typeof(PropertyType), propertyType));
+            return ConvertHouseToRepresentation(houses);
+        }
+
+        /// <summary>
         /// Gets all the houses
         /// </summary>
         /// <returns></returns>

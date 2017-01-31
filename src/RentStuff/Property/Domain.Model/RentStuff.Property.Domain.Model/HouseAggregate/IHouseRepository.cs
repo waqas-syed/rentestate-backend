@@ -58,5 +58,14 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <param name="longitude"></param>
         /// <returns></returns>
         IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude);
+
+        /// <summary>
+        /// Gets the houses by coordinates and property type
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="propertyType"></param>
+        /// <returns></returns>
+        IList<House> SearchHousesByCoordinatesAndPropertyType(decimal latitude, decimal longitude, PropertyType propertyType);
     }
 }

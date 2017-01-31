@@ -180,13 +180,13 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 
         [Route("house")]
         [HttpGet]
-        public IHttpActionResult Get(string email = null, string address = null, string id = null)
+        public IHttpActionResult Get(string email = null, string area = null, string propertyType = null, string id = null)
         {
             try
             {
-                if (address != null)
+                if (area != null && propertyType != null)
                 {
-                    return Ok(_houseApplicationService.SearchHousesByAddress(address));
+                    return Ok(_houseApplicationService.SearchHousesByAddressAndPropertyType(area, propertyType));
                 }
                 else if (email != null)
                 {
