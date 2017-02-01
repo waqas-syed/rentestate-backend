@@ -51,7 +51,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 }
                 return BadRequest();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 return InternalServerError();
             }

@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Web.Http;
 using System.Web.Http.Results;
+using log4net;
+using log4net.Appender;
+using log4net.Layout;
+using log4net.Repository.Hierarchy;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using RentStuff.Common;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
+using RentStuff.Property.Domain.Model.Services;
 using RentStuff.Property.Ports.Adapter.Rest.Resources;
 using Spring.Context.Support;
 
@@ -25,14 +31,26 @@ namespace RentStuff.Property.Ports.Tests
         {
             var connection = ConfigurationManager.ConnectionStrings["MySql"].ToString();
             _databaseUtility = new DatabaseUtility(connection);
-            _databaseUtility.Create();
+            _databaseUtility.Create();            
             //_databaseUtility.Populate();
+            ShowNhibernateLogging();
         }
 
         [TearDown]
         public void Teardown()
         {
             _databaseUtility.Create();
+        }
+
+        /// <summary>
+        /// Shows the SQL output in the Output window.
+        /// </summary>
+        private void ShowNhibernateLogging()
+        {
+            var hierarchy = (Hierarchy)LogManager.GetRepository();
+            var logger = (Logger)hierarchy.GetLogger("NHibernate.SQL");
+            logger.AddAppender(new TraceAppender() { Layout = new SimpleLayout() });
+            hierarchy.Configured = true;
         }
 
         [Test]
@@ -43,15 +61,37 @@ namespace RentStuff.Property.Ports.Tests
                 HouseController houseController = (HouseController) ContextRegistry.GetContext()["HouseController"];
                 Assert.NotNull(houseController);
 
+                string title = "House For Rent";
+                int rent = 105000;
                 string ownerEmail = "thorin@oakenshield123.com";
                 string ownerPhoneNumber = "+923211234567";
                 string houseNo = "CT-141/A";
                 string streetNo = "14";
+                int numberOfBathrooms = 1;
+                int numberOfBedrooms = 1;
+                int numberOfKitchens = 1;
+                bool familiesOnly = false;
+                bool boysOnly = false;
+                bool girlsOnly = true;
+                bool internetAvailable = true;
+                bool landlinePhoneAvailable = true;
+                bool cableTvAvailable = true;
+                bool garageAvailable = true;
+                bool smokingAllowed = true;
+                string propertyType = PropertyType.Apartment.ToString();
+                //string area = "1600 Amphitheatre Parkway, Mountain View, CA";
+                string area = "Pindora, Rawalpindi, Pakistan";
+                string dimensionType = DimensionType.Kanal.ToString();
+                string dimensionString = "5";
+                decimal dimensionDecimal = 0;
 
-                CreateHouseCommand house = new CreateHouseCommand("House For Rent", 105000, 2, 2, 2, false, true, false, true, true,
-                    true, true, true, "Apartment", ownerEmail, ownerPhoneNumber, houseNo, streetNo,
-                    "1600 Amphitheatre Parkway, Mountain View, CA", null, null, 0);
-                houseController.Post(house);
+                CreateHouseCommand house = new CreateHouseCommand(title, rent,numberOfBedrooms, numberOfKitchens, 
+                    numberOfBathrooms,
+                    familiesOnly, boysOnly, girlsOnly, internetAvailable, landlinePhoneAvailable,
+                    cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber, 
+                    houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal);
+                IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
+                
                 IHttpActionResult httpActionResult = (IHttpActionResult)houseController.Get(ownerEmail);
                 IList<House> houseList = ((OkNegotiatedContentResult<IList<House>>) httpActionResult).Content;
                 Assert.NotNull(houseList);
@@ -62,15 +102,33 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
                 Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
                 Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
+                Assert.AreEqual(familiesOnly, retreivedHouse.FamiliesOnly);
                 Assert.AreEqual(house.FamiliesOnly, retreivedHouse.FamiliesOnly);
-                Assert.AreEqual(house.GarageAvailable, retreivedHouse.LandlinePhoneAvailable);
+                Assert.AreEqual(boysOnly, retreivedHouse.BoysOnly);
+                Assert.AreEqual(house.BoysOnly, retreivedHouse.BoysOnly);
+                Assert.AreEqual(girlsOnly, retreivedHouse.GirlsOnly);
+                Assert.AreEqual(house.GirlsOnly, retreivedHouse.GirlsOnly);
+                Assert.AreEqual(landlinePhoneAvailable, retreivedHouse.LandlinePhoneAvailable);
+                Assert.AreEqual(house.LandlinePhoneAvailable, retreivedHouse.LandlinePhoneAvailable);
+                Assert.AreEqual(garageAvailable, retreivedHouse.GarageAvailable);
+                Assert.AreEqual(house.GarageAvailable, retreivedHouse.GarageAvailable);
+                Assert.AreEqual(smokingAllowed, retreivedHouse.SmokingAllowed);
                 Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
-                Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
+                Assert.AreEqual(internetAvailable, retreivedHouse.InternetAvailable);
+                Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);                
+                Assert.AreEqual(Enum.Parse(typeof(PropertyType), propertyType), retreivedHouse.PropertyType);
                 Assert.AreEqual(Enum.Parse(typeof(PropertyType), house.PropertyType), retreivedHouse.PropertyType);
-                Assert.AreEqual(decimal.Round(37.4224504M, 5), decimal.Round(retreivedHouse.Latitude, 5));
-                Assert.AreEqual(decimal.Round(-122.0840859M, 5), decimal.Round(retreivedHouse.Longitude, 5));
+
+                IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+                var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(area);
+                Assert.AreEqual(coordinatesFromAddress.Item1, retreivedHouse.Latitude);
+                Assert.AreEqual(coordinatesFromAddress.Item2, retreivedHouse.Longitude);
+
+                Assert.AreEqual(houseNo, retreivedHouse.HouseNo);
                 Assert.AreEqual(house.HouseNo, retreivedHouse.HouseNo);
+                Assert.AreEqual(area, retreivedHouse.Area);
                 Assert.AreEqual(house.Area, retreivedHouse.Area);
+                Assert.AreEqual(streetNo, retreivedHouse.StreetNo);
                 Assert.AreEqual(house.StreetNo, retreivedHouse.StreetNo);
             }
         }
