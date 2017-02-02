@@ -8,5 +8,6 @@ namespace RentStuff.Common
     public class Constants
     {
         public const string DOMAINURL = "http://localhost:11803";
+        public const string HOUSEIMAGESDIRECTORY = "~/Images/";
     }
 }

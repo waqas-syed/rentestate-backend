@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Hosting;
 using System.Web.Http;
 using Newtonsoft.Json;
+using RentStuff.Common;
 using RentStuff.Property.Application.HouseServices;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
@@ -71,8 +72,8 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         {
             try
             {
-                var result = new HttpResponseMessage(HttpStatusCode.OK);
-                var httpRequest = HttpContext.Current.Request;
+                //var result = new HttpResponseMessage(HttpStatusCode.OK);
+                //var httpRequest = HttpContext.Current.Request;
                 if (Request.Content.IsMimeMultipartContent())
                 {
                     Request.Content.LoadIntoBufferAsync().Wait();
@@ -85,14 +86,14 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                             Stream stream = content.ReadAsStreamAsync().Result;
                             var image = Image.FromStream(stream);
                             var testName = content.Headers.ContentDisposition.Name;
-                            String filePath = HostingEnvironment.MapPath("~/Images/");
+                            String filePath = HostingEnvironment.MapPath(Constants.HOUSEIMAGESDIRECTORY);
 
                             string imageId = Guid.NewGuid().ToString();
                             String fileName = imageId + ".jpg";
                             String fullPath = Path.Combine(filePath, fileName);
                             image.Save(fullPath);
 
-                            imagesList.Add(imageId);
+                            imagesList.Add(fileName);
                         }
                         String[] headerValues = (String[])Request.Headers.GetValues("HouseId");
                         _houseApplicationService.AddImagesToHouse(headerValues[0], imagesList);
@@ -104,7 +105,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 }
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 return InternalServerError();
             }
@@ -153,7 +154,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         
             foreach (var imageId in house.HouseImages)
             {
-                String filePath = HostingEnvironment.MapPath("~/Images/" + imageId + ".jpg");
+                String filePath = HostingEnvironment.MapPath(Constants.HOUSEIMAGESDIRECTORY + imageId);
                 FileStream fileStream = new FileStream(filePath, FileMode.Open);
                 Image image = Image.FromStream(fileStream);
                 MemoryStream memoryStream = new MemoryStream();

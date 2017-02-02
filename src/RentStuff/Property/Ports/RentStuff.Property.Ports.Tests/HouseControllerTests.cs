@@ -192,7 +192,7 @@ namespace RentStuff.Property.Ports.Tests
                 string dimensionType = DimensionType.Kanal.ToString();
                 string dimensionString = "1";
                 decimal dimensionDecimal = 0;
-
+                
                 CreateHouseCommand house = new CreateHouseCommand(title, rent, numberOfBedrooms, numberOfKitchens,
                     numberOfBathrooms,
                     familiesOnly, boysOnly, girlsOnly, internetAvailable, landlinePhoneAvailable,
@@ -386,45 +386,6 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house2.OwnerEmail, retreivedHouses[1].OwnerEmail);
                 Assert.AreEqual(ownerPhoneNumber2, retreivedHouses[1].OwnerPhoneNumber);
                 Assert.AreEqual(house2.OwnerPhoneNumber, retreivedHouses[1].OwnerPhoneNumber);
-            }
-        }
-
-        [Test]
-        public void SearchHousesByAddressSuccessTest_TestsIfTheHousesInTheSorroundingsAreReturnedGivenOneAddress_VeririfesThroughTheReturnValue()
-        {
-            if (_runTests)
-            {
-                HouseController houseController = (HouseController)ContextRegistry.GetContext()["HouseController"];
-                Assert.NotNull(houseController);
-
-                string ownerEmail = "thorin@oakenshield123.com";
-                string ownerPhoneNumber = "+923211234567";
-                string houseNo = "CT-141/A";
-                string streetNo = "14";
-                string area = "1600 Amphitheatre Parkway, Mountain View, CA";
-
-                CreateHouseCommand house = new CreateHouseCommand("House For Rent", 105000, 2, 2, 2, false, true, false, true, true,
-                    true, true, true, "Apartment", ownerEmail, ownerPhoneNumber, houseNo, streetNo, area, null, null, 0);
-                houseController.Post(house);
-                IHttpActionResult httpActionResult = houseController.GetHouse(null, area);
-                IList<House> houseList = ((OkNegotiatedContentResult<IList<House>>)httpActionResult).Content;
-                Assert.NotNull(houseList);
-                Assert.AreEqual(1, houseList.Count);
-                House retreivedHouse = houseList[0];
-                Assert.NotNull(retreivedHouse);
-                Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
-                Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
-                Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
-                Assert.AreEqual(house.FamiliesOnly, retreivedHouse.FamiliesOnly);
-                Assert.AreEqual(house.GarageAvailable, retreivedHouse.LandlinePhoneAvailable);
-                Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
-                Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
-                Assert.AreEqual(Enum.Parse(typeof(PropertyType), house.PropertyType), retreivedHouse.PropertyType);
-                Assert.AreEqual(decimal.Round(37.4224504M, 5), decimal.Round(retreivedHouse.Latitude, 5));
-                Assert.AreEqual(decimal.Round(-122.0840859M, 5), decimal.Round(retreivedHouse.Longitude, 5));
-                Assert.AreEqual(house.HouseNo, retreivedHouse.HouseNo);
-                Assert.AreEqual(house.Area, retreivedHouse.Area);
-                Assert.AreEqual(house.StreetNo, retreivedHouse.StreetNo);
             }
         }
     }
