@@ -15,7 +15,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <summary>
         /// Saves a new house instance to the database
         /// </summary>
-        bool SaveNewHouseOffer(CreateHouseCommand house);
+        string SaveNewHouseOffer(CreateHouseCommand house);
 
         /// <summary>
         /// Update an existing house

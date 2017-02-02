@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 
@@ -8,8 +9,11 @@ namespace RentStuff.Property.Application.HouseServices.Representation
     [DataContract]
     public class HouseRepresentation
     {
-        public HouseRepresentation(string title, string area, long rent, string propertyType, Dimension dimension, int bedrooms, int bathrooms)
+        public HouseRepresentation(string houseId, string title, string area, long rent, string propertyType, 
+            Dimension dimension, int numberOfBedrooms, int numberOfBathrooms, int numberOfKitchens,
+            string ownerEmail, string ownerPhoneNumber, IList<string> imageList)
         {
+            HouseId = houseId;
             Title = title;
             Area = area;
             Rent = rent;
@@ -25,9 +29,16 @@ namespace RentStuff.Property.Application.HouseServices.Representation
                     Dimension = dimension.DecimalValue + " " + dimension.DimensionType.ToString();
                 }
             }
-            Bedrooms = bedrooms;
-            Bathrooms = bathrooms;
+            NumberOfBedrooms = numberOfBedrooms;
+            NumberOfBathrooms = numberOfBathrooms;
+            NumberOfKitchens = numberOfKitchens;
+            OwnerEmail = ownerEmail;
+            OwnerPhoneNumber = ownerPhoneNumber;
+            ImageList = imageList;
         }
+
+        [DataMember]
+        public string HouseId { get; private set; }
 
         [DataMember]
         public string Title { get; private set; }
@@ -45,9 +56,21 @@ namespace RentStuff.Property.Application.HouseServices.Representation
         public string Dimension { get; set; }
 
         [DataMember]
-        public int Bedrooms { get; set; }
+        public int NumberOfBedrooms { get; set; }
 
         [DataMember]
-        public int Bathrooms { get; set; }
+        public int NumberOfBathrooms { get; set; }
+
+        [DataMember]
+        public int NumberOfKitchens { get; set; }
+
+        [DataMember]
+        public string OwnerEmail { get; set; }
+
+        [DataMember]
+        public string OwnerPhoneNumber { get; set; }
+
+        [DataMember]
+        public IList<string> ImageList { get; set; }
     }
 }

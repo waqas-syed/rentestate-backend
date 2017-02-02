@@ -53,8 +53,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             var createNewHouseCommand = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
                 dimensionType, dimensionString, 0);
-            bool houseCreated = houseApplicationService.SaveNewHouseOffer(createNewHouseCommand);
-            Assert.IsTrue(houseCreated);
+            string houseCreated = houseApplicationService.SaveNewHouseOffer(createNewHouseCommand);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
         }
 
         [Test]
@@ -85,15 +85,15 @@ namespace RentStuff.Property.Application.IntegrationTests
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
                 dimensionType, dimensionString, 0);
-            bool houseCreated = houseApplicationService.SaveNewHouseOffer(house);
-            Assert.IsTrue(houseCreated);
+            string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
             IList<HouseRepresentation> houses = houseApplicationService.GetHouseByEmail(email);
             HouseRepresentation retreivedHouse = houses[0];
 
             Assert.NotNull(retreivedHouse);
-            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.Bathrooms);
-            Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.Bedrooms);
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
             Assert.AreEqual(house.Area, retreivedHouse.Area);
             Assert.AreEqual(house.MonthlyRent, retreivedHouse.Rent);
@@ -136,8 +136,8 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             HouseRepresentation retreivedHouse = retreivedHouses[0];
             Assert.NotNull(retreivedHouse);
-            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.Bathrooms);
-            Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.Bedrooms);
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
             Assert.AreEqual(house.Area, retreivedHouse.Area);
             Assert.AreEqual(house.MonthlyRent, retreivedHouse.Rent);

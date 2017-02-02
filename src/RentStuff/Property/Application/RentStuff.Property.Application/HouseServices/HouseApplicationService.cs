@@ -33,7 +33,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <summary>
         /// Saves a new house instance to the database
         /// </summary>
-        public bool SaveNewHouseOffer(CreateHouseCommand createHouseCommand)
+        public string SaveNewHouseOffer(CreateHouseCommand createHouseCommand)
         {
             // Get the coordinates for the location using the Geocoding API service
             Tuple<decimal,decimal> coordinates = _geocodingService.GetCoordinatesFromAddress(createHouseCommand.Area);
@@ -78,7 +78,7 @@ namespace RentStuff.Property.Application.HouseServices
             // Save the new house instance
             _houseRepository.SaveorUpdate(house);
 
-            return true;
+            return house.Id;
         }
 
         /// <summary>
@@ -228,8 +228,10 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 foreach (var house in houses)
                 {
-                    HouseRepresentation houseRepresentation = new HouseRepresentation(house.Title, house.Area, 
-                        house.MonthlyRent, house.PropertyType.ToString(), house.Dimension, house.NumberOfBedrooms, house.NumberOfBathrooms);
+                    HouseRepresentation houseRepresentation = new HouseRepresentation(house.Id, house.Title, house.Area, 
+                        house.MonthlyRent, house.PropertyType.ToString(), house.Dimension, house.NumberOfBedrooms, 
+                        house.NumberOfBathrooms, house.NumberOfKitchens, house.OwnerEmail, house.OwnerPhoneNumber,
+                        house.GetImageList());
                     houseRepresentations.Add(houseRepresentation);
                 }
             }

@@ -6,9 +6,6 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Mime;
-using System.Runtime.Remoting.Messaging;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Http;
@@ -36,6 +33,13 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             _houseApplicationService = houseApplicationService;
         }
 
+        /// <summary>
+        /// Save the House instance.
+        /// After saving the house, the images for that House need to be uploaded using another POSt call to 
+        /// 'HouseImageUplaod' method
+        /// </summary>
+        /// <param name="house"></param>
+        /// <returns></returns>
         [Route("house")]
         [HttpPost]
         public IHttpActionResult Post([FromBody]Object house)
@@ -46,8 +50,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 {
                     var jsonString = house.ToString();
                     CreateHouseCommand houseReborn = JsonConvert.DeserializeObject<CreateHouseCommand>(jsonString);
-                    _houseApplicationService.SaveNewHouseOffer(houseReborn);
-                    return Ok();
+                    return Ok(_houseApplicationService.SaveNewHouseOffer(houseReborn));
                 }
                 return BadRequest();
             }
@@ -57,9 +60,88 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
         }
 
+        /// <summary>
+        /// Separate method is used for uploading the images for a house. So two POST calls are involved; 
+        /// One for saving the House, and then another(this one) to save the images related to a house
+        /// </summary>
+        /// <returns></returns>
+        [Route("HouseImageUpload")]
+        [HttpPost]
+        public IHttpActionResult PostImageUpload()
+        {
+            try
+            {
+                var result = new HttpResponseMessage(HttpStatusCode.OK);
+                var httpRequest = HttpContext.Current.Request;
+                if (Request.Content.IsMimeMultipartContent())
+                {
+                    Request.Content.LoadIntoBufferAsync().Wait();
+                    Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider()).ContinueWith((task) =>
+                    {
+                        IList<string> imagesList = new List<string>();
+                        MultipartMemoryStreamProvider provider = task.Result;
+                        foreach (HttpContent content in provider.Contents)
+                        {
+                            Stream stream = content.ReadAsStreamAsync().Result;
+                            var image = Image.FromStream(stream);
+                            var testName = content.Headers.ContentDisposition.Name;
+                            String filePath = HostingEnvironment.MapPath("~/Images/");
+
+                            string imageId = Guid.NewGuid().ToString();
+                            String fileName = imageId + ".jpg";
+                            String fullPath = Path.Combine(filePath, fileName);
+                            image.Save(fullPath);
+
+                            imagesList.Add(imageId);
+                        }
+                        String[] headerValues = (String[])Request.Headers.GetValues("HouseId");
+                        _houseApplicationService.AddImagesToHouse(headerValues[0], imagesList);
+                    });
+                }
+                else
+                {
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable, "This request is not properly formatted"));
+                }
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
+        }
+
+        [Route("house")]
+        [HttpGet]
+        public IHttpActionResult GetHouse(string email = null, string area = null, string propertyType = null, string houseId = null)
+        {
+            try
+            {
+                if (area != null && propertyType != null)
+                {
+                    return Ok(_houseApplicationService.SearchHousesByAddressAndPropertyType(area, propertyType));
+                }
+                else if (email != null)
+                {
+                    return Ok(_houseApplicationService.GetHouseByEmail(email));
+                }
+                else if (!string.IsNullOrEmpty(houseId))
+                {
+                    return Ok(_houseApplicationService.GetHouseById(houseId));
+                }
+                else
+                {
+                    return Ok(_houseApplicationService.GetAllHouses());
+                }
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
+        }
+
         [Route("GetHouseImages")]
         [HttpGet]
-        public HttpResponseMessage Get(string houseId)
+        public HttpResponseMessage GetHouseImages(string houseId)
         {
             House house = _houseApplicationService.GetHouseById(houseId);
             if (house == null)
@@ -91,53 +173,13 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 //fileStream.Flush();
             }
             result.Content = multipartContent;
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");    
+            // We can also return with the type HttpResponseMessage        
             return result;
-        }
 
-        [Route("HouseImageUpload")]
-        [HttpPost]
-        public IHttpActionResult Post()
-        {
-            try
-            {
-                var result = new HttpResponseMessage(HttpStatusCode.OK);
-                var httpRequest = HttpContext.Current.Request;
-                if (Request.Content.IsMimeMultipartContent())
-                {
-                    Request.Content.LoadIntoBufferAsync().Wait();
-                    Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider()).ContinueWith((task) =>
-                    {
-                        IList<string> imagesList = new List<string>();
-                        MultipartMemoryStreamProvider provider = task.Result;
-                        foreach (HttpContent content in provider.Contents)
-                        {
-                            Stream stream = content.ReadAsStreamAsync().Result;
-                            var image = Image.FromStream(stream);
-                            var testName = content.Headers.ContentDisposition.Name;
-                            String filePath = HostingEnvironment.MapPath("~/Images/");
-                            
-                            string imageId = Guid.NewGuid().ToString();
-                            String fileName = imageId + ".jpg";
-                            String fullPath = Path.Combine(filePath, fileName);
-                            image.Save(fullPath);
-                            
-                            imagesList.Add(imageId);
-                        }
-                        String[] headerValues = (String[])Request.Headers.GetValues("HouseId");
-                        _houseApplicationService.AddImagesToHouse(headerValues[0], imagesList);
-                    });
-                }
-                else
-                {
-                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable, "This request is not properly formatted"));
-                }
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return InternalServerError();
-            }
+            // We can also return HttpResponseMessage wrapped as IHttpActionaResult
+            //IHttpActionResult response = ResponseMessage(result);
+            //return response;
         }
 
         [Route("house")]
@@ -158,7 +200,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 return InternalServerError();
             }
         }
-
+        
         [Route("house")]
         [HttpDelete]
         public IHttpActionResult Delete([FromBody]House house)
@@ -177,39 +219,10 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 return InternalServerError();
             }
         }
-
-        [Route("house")]
-        [HttpGet]
-        public IHttpActionResult Get(string email = null, string area = null, string propertyType = null, string id = null)
-        {
-            try
-            {
-                if (area != null && propertyType != null)
-                {
-                    return Ok(_houseApplicationService.SearchHousesByAddressAndPropertyType(area, propertyType));
-                }
-                else if (email != null)
-                {
-                    return Ok(_houseApplicationService.GetHouseByEmail(email));
-                }
-                else if (!string.IsNullOrEmpty(id))
-                {
-                    return Ok(_houseApplicationService.GetHouseById(id));
-                }
-                else
-                {
-                    return Ok(_houseApplicationService.GetAllHouses());
-                }
-            }
-            catch (Exception)
-            {
-                return InternalServerError();
-            }
-        }
-
+        
         [Route("property-types")]
         [HttpGet]
-        public IHttpActionResult Get()
+        public IHttpActionResult GetPropertyTypes()
         {
             try
             {
