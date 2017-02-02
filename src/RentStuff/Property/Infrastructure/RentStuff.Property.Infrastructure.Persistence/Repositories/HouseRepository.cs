@@ -14,7 +14,10 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
     /// </summary>
     public class HouseRepository : NHibernateSessionFactory, IHouseRepository
     {
-        private readonly int _radius = 30;
+        // The radius in kilometers from the location that was searched. We search within this radius for results
+        // The formula is given here: https://developers.google.com/maps/articles/phpsqlsearch_v3
+        // http://stackoverflow.com/questions/9686309/list-of-surrounding-towns-within-a-given-radius
+        private readonly int _radius = 2;
 
         /// <summary>
         /// Saves new House or updates existing house
@@ -83,9 +86,6 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         {
             IList houses = CurrentSession.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house HAVING distance < :radius ORDER BY distance LIMIT 0 , 20")//("SELECT name, latitude, longitude, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM geo_location HAVING distance < 25 ORDER BY distance LIMIT 0 , 20")
                 .AddEntity(typeof(House))
-                //.AddScalar("latitude", NHibernateUtil.Decimal)
-                //.AddScalar("longitude", NHibernateUtil.Decimal)
-                //.AddScalar("distance", NHibernateUtil.Decimal)
                 .SetParameter("inputLatitude", latitude)
                 .SetParameter("inputLongitude", longitude)
                 .SetParameter("radius", _radius)
