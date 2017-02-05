@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Globalization;
+using System.IO;
+using System.Net.Http;
+using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Results;
 using log4net;

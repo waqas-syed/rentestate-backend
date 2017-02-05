@@ -43,7 +43,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         /// <returns></returns>
         [Route("house")]
         [HttpPost]
-        public IHttpActionResult Post([FromBody]Object house)
+        public IHttpActionResult Post([FromBody] Object house)
         {
             try
             {
@@ -70,6 +70,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         [HttpPost]
         public IHttpActionResult PostImageUpload()
         {
+            bool imageUploaded = false;
             try
             {
                 //var result = new HttpResponseMessage(HttpStatusCode.OK);
@@ -77,7 +78,8 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 if (Request.Content.IsMimeMultipartContent())
                 {
                     Request.Content.LoadIntoBufferAsync().Wait();
-                    Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider()).ContinueWith((task) =>
+                    Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(
+                        new MultipartMemoryStreamProvider()).ContinueWith((task) =>
                     {
                         IList<string> imagesList = new List<string>();
                         MultipartMemoryStreamProvider provider = task.Result;
@@ -97,13 +99,14 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         }
                         String[] headerValues = (String[])Request.Headers.GetValues("HouseId");
                         _houseApplicationService.AddImagesToHouse(headerValues[0], imagesList);
+                        imageUploaded = true;
                     });
                 }
                 else
                 {
                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable, "This request is not properly formatted"));
                 }
-                return Ok();
+                return Ok(imageUploaded);
             }
             catch (Exception exception)
             {

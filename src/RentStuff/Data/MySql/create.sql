@@ -87,7 +87,7 @@ CREATE TABLE `house` (
   `smoking_allowed` tinyint(1) DEFAULT NULL,
   `property_type` varchar(50) DEFAULT NULL,
   `boys_only` tinyint(1) DEFAULT NULL,
-  `owner_phone_number` varchar(60) NOT NULL,
+  `owner_phone_number` varchar(13) NOT NULL,
   `latitude` decimal(13,9) NOT NULL,
   `longitude` decimal(13,9) NOT NULL,
   `house_no` varchar(100) DEFAULT NULL,

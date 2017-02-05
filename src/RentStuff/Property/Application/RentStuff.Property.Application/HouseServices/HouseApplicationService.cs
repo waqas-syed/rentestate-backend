@@ -219,6 +219,10 @@ namespace RentStuff.Property.Application.HouseServices
                 }
                 _houseRepository.SaveorUpdate(house);
             }
+            else
+            {
+                throw new NullReferenceException("No house found with the given ID");
+            }
         }
 
         private IList<HouseRepresentation> ConvertHouseToRepresentation(IList<House> houses)
