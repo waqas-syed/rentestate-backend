@@ -11,7 +11,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
     {
         public HouseRepresentation(string houseId, string title, string area, long rent, string propertyType, 
             Dimension dimension, int numberOfBedrooms, int numberOfBathrooms, int numberOfKitchens,
-            string ownerEmail, string ownerPhoneNumber, IList<string> imageList)
+            string ownerEmail, string ownerPhoneNumber, string imageString)
         {
             HouseId = houseId;
             Title = title;
@@ -34,7 +34,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
             NumberOfKitchens = numberOfKitchens;
             OwnerEmail = ownerEmail;
             OwnerPhoneNumber = ownerPhoneNumber;
-            ImageList = imageList;
+            ImageString = imageString;
         }
 
         [DataMember]
@@ -71,6 +71,6 @@ namespace RentStuff.Property.Application.HouseServices.Representation
         public string OwnerPhoneNumber { get; set; }
 
         [DataMember]
-        public IList<string> ImageList { get; set; }
+        public string ImageString { get; set; }
     }
 }

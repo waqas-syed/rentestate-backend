@@ -232,10 +232,24 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 foreach (var house in houses)
                 {
+                    string imageString = null;
+                    using (Image image = Image.FromFile(@"C:\Repos\rentstuff\src\RentStuff\Common\RentStuff.Common.WebHost\Images\" + house.GetImageList()[0]))
+                    {
+                        using (MemoryStream m = new MemoryStream())
+                        {
+                            image.Save(m, image.RawFormat);
+                            byte[] imageBytes = m.ToArray();
+
+                            // Convert byte[] to Base64 String
+                            string base64String = Convert.ToBase64String(imageBytes);
+                            imageString = base64String;
+                        }
+                    }
                     HouseRepresentation houseRepresentation = new HouseRepresentation(house.Id, house.Title, house.Area, 
                         house.MonthlyRent, house.PropertyType.ToString(), house.Dimension, house.NumberOfBedrooms, 
                         house.NumberOfBathrooms, house.NumberOfKitchens, house.OwnerEmail, house.OwnerPhoneNumber,
-                        house.GetImageList());
+                        imageString);
+                    
                     houseRepresentations.Add(houseRepresentation);
                 }
             }
