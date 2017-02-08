@@ -27,6 +27,7 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
     <property name="HouseNo" column="house_no"/>
     <property name="StreetNo" column="street_no"/>
     <property name="Area" column="area"/>
+    <property name="OwnerName" column="owner_name"/>
     <many-to-one name="Dimension" unique="true" column="dimension_id">
     </many-to-one>
     <bag name="HouseImages" table="HouseImages" lazy="false">

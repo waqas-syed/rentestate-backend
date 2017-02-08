@@ -68,7 +68,8 @@ namespace RentStuff.Property.Application.HouseServices
                 .Longitude(coordinates.Item2)
                 .HouseNo(createHouseCommand.HouseNo)
                 .StreetNo(createHouseCommand.StreetNo)
-                .Area(createHouseCommand.Area).Build();
+                .Area(createHouseCommand.Area)
+                .OwnerName(createHouseCommand.OwnerName).Build();
             var dimension = new Dimension((DimensionType)Enum.Parse(typeof(DimensionType), 
                 createHouseCommand.DimensionType), createHouseCommand.DimensionStringValue, 
                 createHouseCommand.DimensionIntValue, house);
@@ -232,23 +233,34 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 foreach (var house in houses)
                 {
-                    string imageString = null;
-                    using (Image image = Image.FromFile(@"C:\Repos\rentstuff\src\RentStuff\Common\RentStuff.Common.WebHost\Images\" + house.GetImageList()[0]))
+                    string base64ImageString = null;
+                    string idOfFirstImage = null;
+                    IList<string> imageList = house.GetImageList();
+                    if (imageList != null && imageList.Count > 0)
                     {
-                        using (MemoryStream m = new MemoryStream())
+                        idOfFirstImage = imageList[0];
+                        if (idOfFirstImage != null)
                         {
-                            image.Save(m, image.RawFormat);
-                            byte[] imageBytes = m.ToArray();
+                            using (
+                                Image image = Image.FromFile(HostingEnvironment.MapPath("~/Images/" + idOfFirstImage)))
+                            {
+                                using (MemoryStream m = new MemoryStream())
+                                {
+                                    image.Save(m, image.RawFormat);
+                                    byte[] imageBytes = m.ToArray();
 
-                            // Convert byte[] to Base64 String
-                            string base64String = Convert.ToBase64String(imageBytes);
-                            imageString = base64String;
+                                    // Convert byte[] to Base64 String
+                                    string base64String = Convert.ToBase64String(imageBytes);
+                                    base64ImageString = base64String;
+                                }
+                            }
                         }
                     }
+
                     HouseRepresentation houseRepresentation = new HouseRepresentation(house.Id, house.Title, house.Area, 
                         house.MonthlyRent, house.PropertyType.ToString(), house.Dimension, house.NumberOfBedrooms, 
                         house.NumberOfBathrooms, house.NumberOfKitchens, house.OwnerEmail, house.OwnerPhoneNumber,
-                        imageString);
+                        base64ImageString, house.OwnerName);
                     
                     houseRepresentations.Add(houseRepresentation);
                 }

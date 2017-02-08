@@ -33,6 +33,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         private string _streetNo;
         private string _area;
         private IList<string> _houseImages = new List<string>();
+        private string _ownerName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
@@ -48,7 +49,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension, 
             bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail, string ownerPhoneNumber,
-            decimal latitude, decimal longitude, string houseNo, string streetNo, string area)
+            decimal latitude, decimal longitude, string houseNo, string streetNo, string area, string ownerName)
         {
             Title = title;
             MonthlyRent = monthlyRent;
@@ -72,6 +73,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             HouseNo = houseNo;
             StreetNo = streetNo;
             Area = area;
+            OwnerName = ownerName;
         }
 
         /// <summary>
@@ -399,6 +401,16 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             set { _houseImages = value; }
         }
 
+        public string OwnerName
+        {
+            get { return _ownerName; }
+            set
+            {
+                Assertion.AssertStringNotNullorEmpty(value);
+                _ownerName = value;
+            }
+        }
+
         /// <summary>
         /// House Builder
         /// </summary>
@@ -427,6 +439,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private string _houseNo;
             private string _streetNo;
             private string _area;
+            private string _ownerName;
 
             public HouseBuilder Title(string title)
             {
@@ -560,6 +573,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
 
+            public HouseBuilder OwnerName(string ownerName)
+            {
+                _ownerName = ownerName;
+                return this;
+            }
+
             /// <summary>
             /// Build a new instance of House
             /// </summary>
@@ -570,7 +589,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                                  _numberOfBathrooms, _familiesOnly, _boysOnly, _girlsOnly, _internetAvailable,
                                  _landlinePhoneAvailable, _cableTvAvailable, _dimension, _garageAvailable,
                                  _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber, _latitude, _longitude,
-                                 _houseNo, _streetNo, _area);
+                                 _houseNo, _streetNo, _area, _ownerName);
             }
         }
     }

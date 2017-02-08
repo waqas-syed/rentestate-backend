@@ -137,7 +137,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     return Ok(_houseApplicationService.GetAllHouses());
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
                 return InternalServerError();
             }

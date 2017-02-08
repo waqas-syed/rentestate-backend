@@ -78,6 +78,7 @@ namespace RentStuff.Common.Console
                 string dimensionType = DimensionType.Kanal.ToString();
                 string dimensionString = i.ToString();
                 decimal dimensionDecimal = 0;
+                string ownerName = "Owner Name " + i;
                 if (i % 2 == 0)
                 {
                     dimensionType = DimensionType.Kanal.ToString();
@@ -97,7 +98,7 @@ namespace RentStuff.Common.Console
                 CreateHouseCommand house = new CreateHouseCommand(title, rent, numberOfBedrooms, numberOfKitchens,
                     numberOfBathrooms,familiesOnly, boysOnly, girlsOnly, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
-                    houseNo, streetNo, areas[i], dimensionType, dimensionString, dimensionDecimal);
+                    houseNo, streetNo, areas[i], dimensionType, dimensionString, dimensionDecimal, ownerName);
                 //JsonConvert.SerializeObject(house);
                 HttpResponseMessage response = await httpClient.PostAsJsonAsync("v1/house", house);
                 response.EnsureSuccessStatusCode();

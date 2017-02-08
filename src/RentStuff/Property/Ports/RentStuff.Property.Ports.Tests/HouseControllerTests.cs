@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Globalization;
-using System.IO;
-using System.Net.Http;
-using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Results;
 using log4net;
@@ -92,12 +86,13 @@ namespace RentStuff.Property.Ports.Tests
                 string dimensionType = DimensionType.Kanal.ToString();
                 string dimensionString = "5";
                 decimal dimensionDecimal = 0;
+                string ownerName = "Owner Name 1";
 
                 CreateHouseCommand house = new CreateHouseCommand(title, rent,numberOfBedrooms, numberOfKitchens, 
                     numberOfBathrooms,
                     familiesOnly, boysOnly, girlsOnly, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber, 
-                    houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal);
+                    houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>) houseSaveResult).Content;
                 
@@ -143,6 +138,8 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house.Area, retreivedHouse.Area);
                 Assert.AreEqual(streetNo, retreivedHouse.StreetNo);
                 Assert.AreEqual(house.StreetNo, retreivedHouse.StreetNo);
+                Assert.AreEqual(ownerName, retreivedHouse.OwnerName);
+                Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
             }
         }
 
@@ -198,12 +195,13 @@ namespace RentStuff.Property.Ports.Tests
                 string dimensionType = DimensionType.Kanal.ToString();
                 string dimensionString = "1";
                 decimal dimensionDecimal = 0;
-                
+                string ownerName = "Owner Name 1";
+
                 CreateHouseCommand house = new CreateHouseCommand(title, rent, numberOfBedrooms, numberOfKitchens,
                     numberOfBathrooms,
                     familiesOnly, boysOnly, girlsOnly, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
-                    houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal);
+                    houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>) houseSaveResult).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
@@ -231,11 +229,12 @@ namespace RentStuff.Property.Ports.Tests
                 string dimensionType2 = DimensionType.Kanal.ToString();
                 string dimensionString2 = "2";
                 decimal dimensionDecimal2 = 0;
+                string ownerName2 = "Owner Name 2";
 
                 CreateHouseCommand house2 = new CreateHouseCommand(title2, rent2, numberOfBedrooms2, numberOfKitchens2,
                     numberOfBathrooms2, familiesOnly2, boysOnly2, girlsOnly2, internetAvailable2, landlinePhoneAvailable2,
                     cableTvAvailable2, garageAvailable2, smokingAllowed2, propertyType2, ownerEmail2, ownerPhoneNumber2,
-                    houseNo2, streetNo2, area2, dimensionType2, dimensionString2, dimensionDecimal2);
+                    houseNo2, streetNo2, area2, dimensionType2, dimensionString2, dimensionDecimal2, ownerName2);
                 IHttpActionResult houseSaveResult2 = houseController.Post(JsonConvert.SerializeObject(house2));
                 string houseId2 = ((OkNegotiatedContentResult<string>)houseSaveResult2).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId2));
@@ -263,11 +262,12 @@ namespace RentStuff.Property.Ports.Tests
                 string dimensionType3 = DimensionType.Kanal.ToString();
                 string dimensionString3 = "3";
                 decimal dimensionDecimal3 = 0;
+                string ownerName3 = "Owner Name 3";
 
                 CreateHouseCommand house3 = new CreateHouseCommand(title3, rent3, numberOfBedrooms3, numberOfKitchens3,
                     numberOfBathrooms3, familiesOnly3, boysOnly3, girlsOnly3, internetAvailable3, landlinePhoneAvailable3,
                     cableTvAvailable3, garageAvailable3, smokingAllowed3, propertyType3, ownerEmail3, ownerPhoneNumber3,
-                    houseNo3, streetNo3, area3, dimensionType3, dimensionString3, dimensionDecimal3);
+                    houseNo3, streetNo3, area3, dimensionType3, dimensionString3, dimensionDecimal3, ownerName3);
                 IHttpActionResult houseSaveResult3 = houseController.Post(JsonConvert.SerializeObject(house3));
                 Assert.IsFalse(string.IsNullOrWhiteSpace(((OkNegotiatedContentResult<string>)houseSaveResult3).Content));
                 string houseId3 = ((OkNegotiatedContentResult<string>)houseSaveResult3).Content;
@@ -297,11 +297,12 @@ namespace RentStuff.Property.Ports.Tests
                 string dimensionType4 = DimensionType.Kanal.ToString();
                 string dimensionString4 = "4";
                 decimal dimensionDecimal4 = 0;
+                string ownerName4 = "Owner Name 4";
 
                 CreateHouseCommand house4 = new CreateHouseCommand(title4, rent4, numberOfBedrooms4, numberOfKitchens4,
                     numberOfBathrooms4, familiesOnly4, boysOnly4, girlsOnly4, internetAvailable4, landlinePhoneAvailable4,
                     cableTvAvailable4, garageAvailable4, smokingAllowed4, propertyType4, ownerEmail4, ownerPhoneNumber4,
-                    houseNo4, streetNo4, area4, dimensionType4, dimensionString4, dimensionDecimal4);
+                    houseNo4, streetNo4, area4, dimensionType4, dimensionString4, dimensionDecimal4, ownerName4);
                 IHttpActionResult houseSaveResult4 = houseController.Post(JsonConvert.SerializeObject(house4));
                 string houseId4 = ((OkNegotiatedContentResult<string>)houseSaveResult4).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId4));
@@ -330,11 +331,12 @@ namespace RentStuff.Property.Ports.Tests
                 string dimensionType5 = DimensionType.Kanal.ToString();
                 string dimensionString5 = "5";
                 decimal dimensionDecimal5 = 0;
+                string ownerName5 = "Owner Name 5";
 
                 CreateHouseCommand house5 = new CreateHouseCommand(title5, rent5, numberOfBedrooms5, numberOfKitchens5,
                     numberOfBathrooms5, familiesOnly5, boysOnly5, girlsOnly5, internetAvailable5, landlinePhoneAvailable5,
                     cableTvAvailable5, garageAvailable5, smokingAllowed5, propertyType5, ownerEmail5, ownerPhoneNumber5,
-                    houseNo5, streetNo5, area5, dimensionType5, dimensionString5, dimensionDecimal5);
+                    houseNo5, streetNo5, area5, dimensionType5, dimensionString5, dimensionDecimal5, ownerName5);
                 IHttpActionResult houseSaveResult5 = houseController.Post(JsonConvert.SerializeObject(house5));
                 string houseId5 = ((OkNegotiatedContentResult<string>)houseSaveResult5).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId5));
@@ -367,6 +369,8 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house.OwnerEmail, retreivedHouses[0].OwnerEmail);
                 Assert.AreEqual(ownerPhoneNumber, retreivedHouses[0].OwnerPhoneNumber);
                 Assert.AreEqual(house.OwnerPhoneNumber, retreivedHouses[0].OwnerPhoneNumber);
+                Assert.AreEqual(ownerName, retreivedHouses[0].OwnerName);
+                Assert.AreEqual(house.OwnerName, retreivedHouses[0].OwnerName);
 
 
                 // Verification of House No 2
@@ -392,6 +396,8 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house2.OwnerEmail, retreivedHouses[1].OwnerEmail);
                 Assert.AreEqual(ownerPhoneNumber2, retreivedHouses[1].OwnerPhoneNumber);
                 Assert.AreEqual(house2.OwnerPhoneNumber, retreivedHouses[1].OwnerPhoneNumber);
+                Assert.AreEqual(ownerName2, retreivedHouses[1].OwnerName);
+                Assert.AreEqual(house2.OwnerName, retreivedHouses[1].OwnerName);
             }
         }
     }

@@ -50,9 +50,10 @@ namespace RentStuff.Property.Application.IntegrationTests
             string area = "1600+Amphitheatre+Parkway,+Mountain+View,+CA";
             string dimensionType = "Kanal";
             string dimensionString = "50";
+            string ownerName = "Owner Name 1";
             var createNewHouseCommand = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0);
+                dimensionType, dimensionString, 0, ownerName);
             string houseCreated = houseApplicationService.SaveNewHouseOffer(createNewHouseCommand);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
         }
@@ -75,6 +76,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string title = "Bellagio";
             string dimensionType = "Kanal";
             string dimensionString = "50";
+            string ownerName = "Owner Name 1";
 
             IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
             Tuple<decimal, decimal> coordinates = geocodingService.GetCoordinatesFromAddress(area);
@@ -84,7 +86,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             decimal longitude = coordinates.Item2;
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0);
+                dimensionType, dimensionString, 0, ownerName);
             string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
@@ -99,6 +101,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.MonthlyRent, retreivedHouse.Rent);
             Assert.AreEqual(house.Title, retreivedHouse.Title);
             Assert.AreEqual(house.DimensionStringValue + " " + house.DimensionType, retreivedHouse.Dimension);
+            Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
         }
 
         [Test]
@@ -120,10 +123,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string title = "Bellagio";
             string dimensionType = "Kanal";
             string dimensionString = "50";
+            string ownerName = "Owner Name 1";
 
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
             false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area, 
-            dimensionType, dimensionString, 0);
+            dimensionType, dimensionString, 0, ownerName);
             houseApplicationService.SaveNewHouseOffer(house);
 
             IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
@@ -142,6 +146,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.Area, retreivedHouse.Area);
             Assert.AreEqual(house.MonthlyRent, retreivedHouse.Rent);
             Assert.AreEqual(house.Title, retreivedHouse.Title);
+            Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
         }
 
         [Test]
@@ -164,10 +169,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string title = "Bellagio";
             string dimensionType = "Kanal";
             string dimensionString = "50";
+            string ownerName = "Owner Name 1";
 
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
             false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area, 
-            dimensionType, dimensionString, 0);
+            dimensionType, dimensionString, 0, ownerName);
             houseApplicationService.SaveNewHouseOffer(house);
 
             IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];

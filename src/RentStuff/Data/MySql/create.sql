@@ -95,6 +95,7 @@ CREATE TABLE `house` (
   `area` varchar(300) DEFAULT NULL,
   `dimension_id` varchar(75) NOT NULL,
   `title` varchar(200) NOT NULL,
+  `owner_name` varchar(21) NOT NULL,
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
