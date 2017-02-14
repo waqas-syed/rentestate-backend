@@ -147,7 +147,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         [HttpGet]
         public HttpResponseMessage GetHouseImages(string houseId)
         {
-            House house = _houseApplicationService.GetHouseById(houseId);
+            House house = null;//_houseApplicationService.GetHouseById(houseId);
             if (house == null)
             {
                 throw new NullReferenceException("No house found for ID: " + houseId);

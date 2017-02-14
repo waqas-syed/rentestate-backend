@@ -41,20 +41,20 @@ namespace RentStuff.Property.Application.HouseServices
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Domain.Model.HouseAggregate.House GetHouseById(string id);
+        HouseFullRepresentation GetHouseById(string id);
 
         /// <summary>
         /// Gets the house by providing the owner's email id
         /// </summary>
         /// <returns></returns>
-        IList<HouseRepresentation> GetHouseByEmail(string email);
+        IList<HousePartialRepresentation> GetHouseByEmail(string email);
         
         /// <summary>
         /// Search nearby houses by providing the address
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        IList<HouseRepresentation> SearchHousesByAddress(string address);
+        IList<HousePartialRepresentation> SearchHousesByAddress(string address);
 
         /// <summary>
         /// Search the house by providing the address and propertyType
@@ -62,13 +62,13 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="address"></param>
         /// <param name="propertyType"></param>
         /// <returns></returns>
-        IList<HouseRepresentation> SearchHousesByAddressAndPropertyType(string address, string propertyType);
+        IList<HousePartialRepresentation> SearchHousesByAddressAndPropertyType(string address, string propertyType);
 
         /// <summary>
         /// Get all houses
         /// </summary>
         /// <returns></returns>
-        IList<HouseRepresentation> GetAllHouses();
+        IList<HousePartialRepresentation> GetAllHouses();
 
         /// <summary>
         /// Get the types of property avaialable on our partal: House, Apartment, Hostel, Room

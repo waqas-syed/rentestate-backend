@@ -90,8 +90,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
-            IList<HouseRepresentation> houses = houseApplicationService.GetHouseByEmail(email);
-            HouseRepresentation retreivedHouse = houses[0];
+            IList<HousePartialRepresentation> houses = houseApplicationService.GetHouseByEmail(email);
+            HousePartialRepresentation retreivedHouse = houses[0];
 
             Assert.NotNull(retreivedHouse);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
@@ -134,11 +134,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             Tuple<decimal, decimal> coordinates = geocodingService.GetCoordinatesFromAddress(area);
             Assert.IsNotNull(coordinates);
 
-            IList<HouseRepresentation> retreivedHouses = houseApplicationService.SearchHousesByAddress(area);
+            IList<HousePartialRepresentation> retreivedHouses = houseApplicationService.SearchHousesByAddress(area);
             Assert.NotNull(retreivedHouses);
             Assert.AreEqual(1, retreivedHouses.Count);
 
-            HouseRepresentation retreivedHouse = retreivedHouses[0];
+            HousePartialRepresentation retreivedHouse = retreivedHouses[0];
             Assert.NotNull(retreivedHouse);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
@@ -181,7 +181,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.IsNotNull(coordinates);
 
             area = "Kremlin,+Moscow,+Russia";
-            IList<HouseRepresentation> retreivedHouses = houseApplicationService.SearchHousesByAddress(area);
+            IList<HousePartialRepresentation> retreivedHouses = houseApplicationService.SearchHousesByAddress(area);
             Assert.NotNull(retreivedHouses);
             Assert.AreEqual(0, retreivedHouses.Count);
         }

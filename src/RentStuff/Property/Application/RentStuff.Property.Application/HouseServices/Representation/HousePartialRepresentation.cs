@@ -7,9 +7,9 @@ namespace RentStuff.Property.Application.HouseServices.Representation
 {
     [Serializable]
     [DataContract]
-    public class HouseRepresentation
+    public class HousePartialRepresentation
     {
-        public HouseRepresentation(string houseId, string title, string area, long rent, string propertyType, 
+        public HousePartialRepresentation(string houseId, string title, string area, long rent, string propertyType, 
             Dimension dimension, int numberOfBedrooms, int numberOfBathrooms, int numberOfKitchens,
             string ownerEmail, string ownerPhoneNumber, string imageString, string ownerName)
         {

@@ -342,7 +342,7 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId5));
 
                 IHttpActionResult response = (IHttpActionResult)houseController.GetHouse(area:area, propertyType:propertyType);
-                IList<HouseRepresentation> retreivedHouses = ((OkNegotiatedContentResult<IList<HouseRepresentation>>)response).Content;
+                IList<HousePartialRepresentation> retreivedHouses = ((OkNegotiatedContentResult<IList<HousePartialRepresentation>>)response).Content;
 
                 Assert.NotNull(retreivedHouses);
                 Assert.AreEqual(2, retreivedHouses.Count);

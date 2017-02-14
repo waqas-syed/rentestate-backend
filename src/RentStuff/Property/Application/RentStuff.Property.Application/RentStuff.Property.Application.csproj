@@ -56,7 +56,8 @@
     <Compile Include="HouseServices\Commands\CreateHouseCommand.cs" />
     <Compile Include="HouseServices\Commands\UpdateHouseCommand.cs" />
     <Compile Include="HouseServices\HouseApplicationService.cs" />
-    <Compile Include="HouseServices\Representation\HouseRepresentation.cs" />
+    <Compile Include="HouseServices\Representation\HouseFullRepresentation.cs" />
+    <Compile Include="HouseServices\Representation\HousePartialRepresentation.cs" />
     <Compile Include="HouseServices\IHouseApplicationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
