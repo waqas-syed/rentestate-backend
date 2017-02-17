@@ -23,7 +23,6 @@ namespace RentStuff.IdentityAndAccess.Adapter.Ports.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
-            Database.SetInitializer(new MySqlInitializer());
         }
 
         public static ApplicationDbContext Create()
