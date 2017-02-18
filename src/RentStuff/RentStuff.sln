@@ -56,6 +56,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentStuff.Property.Ports.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentStuff.Common.Console", "Common\RentStuff.Common.Console\RentStuff.Common.Console.csproj", "{567179C3-D2CD-4E90-983E-0932823EDFE0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityAndAccess", "IdentityAndAccess", "{86C3C009-FEEF-4D35-8E99-DCD4F9E6AA09}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ports", "Ports", "{CE44C7F9-5D1C-4608-AA8E-252B40359F74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentStuff.IdentityAndAccess.Adapter.Rest", "IdentityAndAccess\Ports\RentStuff.IdentityAndAccess.Adapter.Rest\RentStuff.IdentityAndAccess.Adapter.Rest.csproj", "{8C3ADC1E-5632-41DE-8D73-049F1669EBC4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,6 +120,10 @@ Global
 		{567179C3-D2CD-4E90-983E-0932823EDFE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{567179C3-D2CD-4E90-983E-0932823EDFE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{567179C3-D2CD-4E90-983E-0932823EDFE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C3ADC1E-5632-41DE-8D73-049F1669EBC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C3ADC1E-5632-41DE-8D73-049F1669EBC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C3ADC1E-5632-41DE-8D73-049F1669EBC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C3ADC1E-5632-41DE-8D73-049F1669EBC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,5 +147,7 @@ Global
 		{85EED18F-3C13-49EF-9C12-48FDB2661896} = {FC5C8102-EF10-4F01-BF01-DF21D83A94E8}
 		{48820D20-88B1-4641-8160-5014E9A6402E} = {855F3427-5846-4366-8705-08A24E7909C5}
 		{567179C3-D2CD-4E90-983E-0932823EDFE0} = {FC5C8102-EF10-4F01-BF01-DF21D83A94E8}
+		{CE44C7F9-5D1C-4608-AA8E-252B40359F74} = {86C3C009-FEEF-4D35-8E99-DCD4F9E6AA09}
+		{8C3ADC1E-5632-41DE-8D73-049F1669EBC4} = {CE44C7F9-5D1C-4608-AA8E-252B40359F74}
 	EndGlobalSection
 EndGlobal
