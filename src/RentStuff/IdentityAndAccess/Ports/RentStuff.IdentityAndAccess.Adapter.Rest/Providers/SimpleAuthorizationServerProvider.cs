@@ -19,7 +19,7 @@ namespace RentStuff.IdentityAndAccess.Adapter.Rest.Providers
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] {"*"});
+            //context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] {"*"});
 
             using (AuthRepository repo = new AuthRepository())
             {
