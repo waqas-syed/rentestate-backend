@@ -13,10 +13,10 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         public void GetGeocodingCoordinatesFromAddressTest_TestsIfTheCoordinatesAreReturnedGivenTheAddressAsExpected_VerifiesThroughTheReturnVariables()
         {
             IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
-            Tuple<decimal,decimal> coordinates = geocodingService.GetCoordinatesFromAddress("1600+Amphitheatre+Parkway,+Mountain+View,+CA");
+            Tuple<decimal,decimal> coordinates = geocodingService.GetCoordinatesFromAddress("Pindora, Rawalpindi, Pakistan");
             Assert.IsNotNull(coordinates);
-            Assert.AreEqual(37.4224504, coordinates.Item1);
-            Assert.AreEqual(-122.0840859, coordinates.Item2);
+            Assert.AreEqual(33.6497937, coordinates.Item1);
+            Assert.AreEqual(73.0685665, coordinates.Item2);
         }
     }
 }

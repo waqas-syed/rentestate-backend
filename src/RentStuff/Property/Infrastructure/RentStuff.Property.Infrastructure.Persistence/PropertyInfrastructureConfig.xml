@@ -5,7 +5,7 @@
 
   <!-- Database Configuration: Provider = MySql .NET Connector dlls. -->
   <db:provider id="DbProvider"
-                   provider="MySql-6.2.2"
+                   provider="MySql.Data.MySqlClient"
                    connectionString="Server=localhost;Database=rentstuff;User ID=root;Password=root;"/>
 
   <!-- NHibernate SessionFactory configuration -->

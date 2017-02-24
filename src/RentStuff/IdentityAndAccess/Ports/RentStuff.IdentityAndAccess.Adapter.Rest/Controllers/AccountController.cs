@@ -12,16 +12,16 @@ namespace RentStuff.IdentityAndAccess.Adapter.Rest.Controllers
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
-        private AuthRepository _repo = null;
+        private IAuthRepository _repo = null;
 
         public AccountController()
         {
             
+            _repo = new AuthRepository();
         }
 
-        public AccountController(AuthRepository authRepository)
+        public AccountController(IAuthRepository authRepository)
         {
-            //_repo = new AuthRepository();
             _repo = authRepository;
         }
 

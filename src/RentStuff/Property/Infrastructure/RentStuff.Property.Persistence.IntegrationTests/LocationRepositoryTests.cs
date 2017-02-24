@@ -5,7 +5,7 @@ using Spring.Context.Support;
 
 namespace RentStuff.Property.Persistence.IntegrationTests
 {
-    [TestFixture]
+    /*[TestFixture]
     class LocationRepositoryTests
     {
         [Test]
@@ -16,5 +16,5 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.NotNull(coordinatesList);
             Assert.AreEqual(20, coordinatesList.Count);
         }
-    }
+    }*/
 }

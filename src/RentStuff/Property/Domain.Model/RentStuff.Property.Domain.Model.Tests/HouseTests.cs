@@ -90,6 +90,7 @@ namespace RentStuff.Property.Domain.Model.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void SaveHouseFailTest5_VerifiesThatTheHouseInstanceCreationFailsWhenInputIsNotSuitable_VerifiesThroughDatabaseQuery()
         {
+            string title = "Title No 1";
             string email = "w@12344321.com";
 
             // Both for boys and for girls is allowed, so exception should be raised
@@ -97,7 +98,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
 
-            House house = new House.HouseBuilder().OwnerEmail(email)
+            House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).GirlsOnly(true).BoysOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
@@ -109,6 +110,7 @@ namespace RentStuff.Property.Domain.Model.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void SaveHouseFailTest6_VerifiesThatTheHouseInstanceCreationFailsWhenInputIsNotSuitable_VerifiesThroughDatabaseQuery()
         {
+            string title = "Title No 1";
             string email = "w@12344321.com";
 
             // Both for boys and for girls is allowed, so exception should be raised
@@ -116,7 +118,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
 
-            House house = new House.HouseBuilder().OwnerEmail(email)
+            House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).GirlsOnly(true).BoysOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
@@ -128,6 +130,7 @@ namespace RentStuff.Property.Domain.Model.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void SaveHouseFailTest7_VerifiesThatTheHouseInstanceCreationFailsWhenInputIsNotSuitable_VerifiesThroughDatabaseQuery()
         {
+            string title = "Title No 1";
             string email = "w@12344321.com";
 
             // Both for families and for girls is allowed, so exception should be raised
@@ -135,7 +138,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
 
-            House house = new House.HouseBuilder().OwnerEmail(email)
+            House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true).BoysOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
@@ -147,6 +150,7 @@ namespace RentStuff.Property.Domain.Model.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void SaveHouseFailTest8_VerifiesThatTheHouseInstanceCreationFailsWhenInputIsNotSuitable_VerifiesThroughDatabaseQuery()
         {
+            string title = "Title No 1";
             string email = "w@12344321.com";
 
             // Both for families and for girls is allowed, so exception should be raised
@@ -154,7 +158,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
 
-            House house = new House.HouseBuilder().OwnerEmail(email)
+            House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true).GirlsOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)

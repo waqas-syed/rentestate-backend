@@ -9,7 +9,7 @@ using RentStuff.IdentityAndAccess.Adapter.Rest.Models;
 
 namespace RentStuff.IdentityAndAccess.Adapter.Rest
 {
-    public class AuthRepository : IDisposable
+    public class AuthRepository : IAuthRepository, IDisposable
     {
         private AuthContext _ctx;
 
@@ -45,7 +45,6 @@ namespace RentStuff.IdentityAndAccess.Adapter.Rest
         {
             _ctx.Dispose();
             _userManager.Dispose();
-
         }
     }
 }

@@ -97,7 +97,7 @@ namespace RentStuff.Property.Ports.Tests
                 string houseId = ((OkNegotiatedContentResult<string>) houseSaveResult).Content;
                 
                 IHttpActionResult response = (IHttpActionResult)houseController.GetHouse(houseId:houseId);
-                House retreivedHouse = ((OkNegotiatedContentResult<House>) response).Content;
+                HouseFullRepresentation retreivedHouse = ((OkNegotiatedContentResult<HouseFullRepresentation>) response).Content;
                 Assert.NotNull(retreivedHouse);
                 Assert.AreEqual(title, retreivedHouse.Title);
                 Assert.AreEqual(house.Title, retreivedHouse.Title);
@@ -123,8 +123,8 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
                 Assert.AreEqual(internetAvailable, retreivedHouse.InternetAvailable);
                 Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);                
-                Assert.AreEqual(Enum.Parse(typeof(PropertyType), propertyType), retreivedHouse.PropertyType);
-                Assert.AreEqual(Enum.Parse(typeof(PropertyType), house.PropertyType), retreivedHouse.PropertyType);
+                Assert.AreEqual(propertyType, retreivedHouse.PropertyType);
+                Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
 
                 // Get the coordinates to verify we have stored the correct ones
                 IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
