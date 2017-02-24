@@ -16,8 +16,13 @@ namespace RentStuff.IdentityAndAccess.Adapter.Rest.Controllers
 
         public AccountController()
         {
-            _repo = new AuthRepository();
-            //_repo = authRepository;
+            
+        }
+
+        public AccountController(AuthRepository authRepository)
+        {
+            //_repo = new AuthRepository();
+            _repo = authRepository;
         }
 
         // POST api/Account/Register
