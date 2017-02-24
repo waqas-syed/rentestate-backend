@@ -116,6 +116,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 
         [Route("house")]
         [HttpGet]
+        [Authorize]
         public IHttpActionResult GetHouse(string email = null, string area = null, string propertyType = null, string houseId = null)
         {
             try
