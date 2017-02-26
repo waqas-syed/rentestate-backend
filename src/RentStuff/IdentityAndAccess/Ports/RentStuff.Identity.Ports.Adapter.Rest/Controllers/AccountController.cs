@@ -12,13 +12,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
     public class AccountController : ApiController
     {
         private IAuthRepository _repo = null;
-
-        /*public AccountController()
-        {
-            
-            _repo = new AuthRepository();
-        }*/
-
+        
         public AccountController(IAuthRepository authRepository)
         {
             _repo = authRepository;
