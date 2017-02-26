@@ -14,11 +14,11 @@ namespace RentStuff.IdentityAndAccess.Adapter.Rest.Controllers
     {
         private IAuthRepository _repo = null;
 
-        public AccountController()
+        /*public AccountController()
         {
             
             _repo = new AuthRepository();
-        }
+        }*/
 
         public AccountController(IAuthRepository authRepository)
         {
