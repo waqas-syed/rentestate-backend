@@ -22,10 +22,9 @@ namespace RentStuff.Identity.Ports.Adapter.Rest
         {
             IdentityUser user = new IdentityUser
             {
-                //UserName = userModel.Username,
+                UserName = userModel.Username,
                 Email = userModel.Email
             };
-
             var result = await _userManager.CreateAsync(user, userModel.Password);
 
             return result;
