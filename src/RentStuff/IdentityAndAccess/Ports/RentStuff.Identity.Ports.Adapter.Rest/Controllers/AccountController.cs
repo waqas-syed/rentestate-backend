@@ -4,7 +4,7 @@ using System.Web;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
-using RentStuff.Identity.Ports.Adapter.Rest.Models;
+using RentStuff.Identity.Ports.Adapter.Rest.DTOs;
 
 namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
 {

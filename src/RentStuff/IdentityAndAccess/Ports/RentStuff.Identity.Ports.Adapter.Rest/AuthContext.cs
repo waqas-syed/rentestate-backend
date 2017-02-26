@@ -1,9 +1,10 @@
 ﻿using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using RentStuff.Identity.Ports.Adapter.Rest.Models;
 
 namespace RentStuff.Identity.Ports.Adapter.Rest
 {
-    public class AuthContext : IdentityDbContext<IdentityUser>
+    public class AuthContext : IdentityDbContext<CustomIdentityUser>
     {
         public AuthContext()
             : base("AuthContext")

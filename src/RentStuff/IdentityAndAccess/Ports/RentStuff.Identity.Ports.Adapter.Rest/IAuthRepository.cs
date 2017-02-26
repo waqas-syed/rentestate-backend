@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using RentStuff.Identity.Ports.Adapter.Rest.Models;
+using RentStuff.Identity.Ports.Adapter.Rest.DTOs;
 
 namespace RentStuff.Identity.Ports.Adapter.Rest
 {

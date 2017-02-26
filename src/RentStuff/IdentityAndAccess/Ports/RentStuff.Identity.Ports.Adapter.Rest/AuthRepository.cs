@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using RentStuff.Identity.Ports.Adapter.Rest.DTOs;
 using RentStuff.Identity.Ports.Adapter.Rest.Hashers;
 using RentStuff.Identity.Ports.Adapter.Rest.Models;
 using RentStuff.Identity.Ports.Adapter.Rest.Validators;
@@ -12,23 +13,26 @@ namespace RentStuff.Identity.Ports.Adapter.Rest
     {
         private AuthContext _ctx;
 
-        private UserManager<IdentityUser> _userManager;
+        private UserManager<CustomIdentityUser> _userManager;
 
         public AuthRepository()
         {
             _ctx = new AuthContext();
-            _userManager = new UserManager<IdentityUser>(new UserStore<IdentityUser>(_ctx));
-            _userManager.UserValidator = new CustomUserValidator<IdentityUser>(_userManager);
+            _userManager = new UserManager<CustomIdentityUser>(new UserStore<CustomIdentityUser>(_ctx));
+            _userManager.UserValidator = new CustomUserValidator<CustomIdentityUser>(_userManager);
             _userManager.PasswordHasher = new CustomPasswordHasher();
         }
 
         public async Task<IdentityResult> RegisterUser(UserModel userModel)
         {
             // Assign email to the uername proeprty, as we will use email in place of username
-            IdentityUser user = new IdentityUser
+            CustomIdentityUser user = new CustomIdentityUser
             {
                 UserName = userModel.Email,
-                Email = userModel.Email
+                Email = userModel.Email,
+                FirstName = userModel.FirstName,
+                LastName =  userModel.LastName,
+                PhoneNumber = userModel.PhoneNumber
             };
             var result = await _userManager.CreateAsync(user, userModel.Password);
 

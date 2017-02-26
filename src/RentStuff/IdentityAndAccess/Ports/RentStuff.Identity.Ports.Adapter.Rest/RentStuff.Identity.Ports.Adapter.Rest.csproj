@@ -99,7 +99,8 @@
     <Compile Include="IAuthRepository.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\MySqlHistoryContext.cs" />
-    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="DTOs\UserModel.cs" />
+    <Compile Include="Models\CustomIdentityUser.cs" />
     <Compile Include="MySqlInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validators\CustomUserValidator.cs" />

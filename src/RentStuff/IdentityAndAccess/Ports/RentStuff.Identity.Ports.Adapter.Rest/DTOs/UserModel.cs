@@ -1,13 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RentStuff.Identity.Ports.Adapter.Rest.Models
+namespace RentStuff.Identity.Ports.Adapter.Rest.DTOs
 {
     public class UserModel
     {
         [Required]
-        [Display(Name = "Username")]
-        public string Username { get; set; }
+        [Display(Name = "FirstName")]
+        public string FirstName { get; set; }
 
+        [Required]
+        [Display(Name = "LastName")]
+        public string LastName { get; set; }
+        
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -22,5 +26,8 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+        
+        [Display(Name = "PhoneNumber")]
+        public string PhoneNumber { get; set; }
     }
 }
