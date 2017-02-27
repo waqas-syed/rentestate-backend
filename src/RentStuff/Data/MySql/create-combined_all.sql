@@ -108,6 +108,7 @@ DROP TABLE IF EXISTS `aspnetusers`;
 CREATE TABLE `aspnetusers` (
   `Id` varchar(128) NOT NULL,
   `Email` varchar(256) DEFAULT NULL,
+  `FullName` varchar(14) DEFAULT NULL,
   `EmailConfirmed` tinyint(1) NOT NULL,
   `PasswordHash` longtext,
   `SecurityStamp` longtext,

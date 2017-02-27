@@ -7,8 +7,8 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Hashers
     internal static class CustomCrypto
     {
         private const int IterationCount = 50000;
-        private const int SubkeyLength = 20;
-        private const int SaltSize = 20;
+        private const int SubkeyLength = 32;
+        private const int SaltSize = 16;
 
         public static string HashPassword(string password)
         {

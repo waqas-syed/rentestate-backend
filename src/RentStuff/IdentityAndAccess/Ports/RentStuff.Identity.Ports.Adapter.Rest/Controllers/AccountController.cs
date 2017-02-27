@@ -29,10 +29,11 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
                 {
                     var jsonString = userObject.ToString();
                     var userModel = JsonConvert.DeserializeObject<UserModel>(jsonString);
-                    /*if (!ModelState.IsValid)
+
+                    if (string.IsNullOrWhiteSpace(userModel.FullName))
                     {
-                        return BadRequest(ModelState);
-                    }*/
+                        throw new ArgumentException("Name cannot be empty");
+                    }
                     if (string.IsNullOrWhiteSpace(userModel.Email))
                     {
                         throw new ArgumentException("Email cannot be empty");
@@ -48,7 +49,6 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
                     if (!userModel.Password.Equals(userModel.ConfirmPassword))
                     {
                         return BadRequest("Password and confirm password are not the same");
-                        //throw new ArgumentException("Password and confirm password are not the same");
                     }
                     IdentityResult result = await _repo.RegisterUser(userModel);
 

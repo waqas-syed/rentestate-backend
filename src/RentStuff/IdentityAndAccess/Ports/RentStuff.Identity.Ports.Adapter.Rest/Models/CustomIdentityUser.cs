@@ -7,7 +7,6 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Models
     /// </summary>
    public class CustomIdentityUser : IdentityUser
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string FullName { get; set; }
     }
 }

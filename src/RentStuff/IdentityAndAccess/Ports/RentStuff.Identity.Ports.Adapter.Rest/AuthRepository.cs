@@ -25,14 +25,12 @@ namespace RentStuff.Identity.Ports.Adapter.Rest
 
         public async Task<IdentityResult> RegisterUser(UserModel userModel)
         {
-            // Assign email to the uername proeprty, as we will use email in place of username
+            // Assign email to the uername property, as we will use email in place of username
             CustomIdentityUser user = new CustomIdentityUser
             {
                 UserName = userModel.Email,
                 Email = userModel.Email,
-                FirstName = userModel.FirstName,
-                LastName =  userModel.LastName,
-                PhoneNumber = userModel.PhoneNumber
+                FullName = userModel.FullName
             };
             var result = await _userManager.CreateAsync(user, userModel.Password);
 

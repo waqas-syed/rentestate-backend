@@ -5,12 +5,9 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.DTOs
     public class UserModel
     {
         [Required]
-        [Display(Name = "FirstName")]
-        public string FirstName { get; set; }
-
-        [Required]
-        [Display(Name = "LastName")]
-        public string LastName { get; set; }
+        [StringLength(14, ErrorMessage = "The {0} must be upto {1} characters long.")]
+        [Display(Name = "FullName")]
+        public string FullName { get; set; }
         
         [Required]
         [Display(Name = "Email")]
@@ -26,8 +23,5 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.DTOs
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-        
-        [Display(Name = "PhoneNumber")]
-        public string PhoneNumber { get; set; }
     }
 }
