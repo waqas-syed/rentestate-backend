@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 
-namespace RentStuff.Identity.Ports.Adapter.Rest.Validators
+namespace RentStuff.Identity.Infrastructure.Services.Validators
 {
     // <summary>
     /// A replacement for the <see cref="UserValidator"/> which requires that an email 

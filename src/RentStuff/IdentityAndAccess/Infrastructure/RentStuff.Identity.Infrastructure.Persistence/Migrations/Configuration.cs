@@ -1,6 +1,6 @@
 using System.Data.Entity.Migrations;
 
-namespace RentStuff.Identity.Ports.Adapter.Rest.Migrations
+namespace RentStuff.Identity.Infrastructure.Persistence.Migrations
 {
     internal sealed class Configuration : DbMigrationsConfiguration<AuthContext>
     {

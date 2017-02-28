@@ -13,7 +13,6 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
         {
             return Ok(Order.CreateOrders());
         }
-
     }
 
     #region Helpers

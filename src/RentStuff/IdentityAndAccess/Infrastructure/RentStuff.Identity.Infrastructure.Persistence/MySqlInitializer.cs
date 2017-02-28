@@ -2,7 +2,7 @@
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 
-namespace RentStuff.Identity.Ports.Adapter.Rest
+namespace RentStuff.Identity.Infrastructure.Persistence
 {
     public class MySqlInitializer : IDatabaseInitializer<AuthContext>
     {

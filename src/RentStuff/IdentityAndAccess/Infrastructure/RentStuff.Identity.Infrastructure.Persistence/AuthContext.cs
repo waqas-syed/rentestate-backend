@@ -1,8 +1,8 @@
 ﻿using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using RentStuff.Identity.Ports.Adapter.Rest.Models;
+using RentStuff.Identity.Infrastructure.Persistence.Model;
 
-namespace RentStuff.Identity.Ports.Adapter.Rest
+namespace RentStuff.Identity.Infrastructure.Persistence
 {
     public class AuthContext : IdentityDbContext<CustomIdentityUser>
     {

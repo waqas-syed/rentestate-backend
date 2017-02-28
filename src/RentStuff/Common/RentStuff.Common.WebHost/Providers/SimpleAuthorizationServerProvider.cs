@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security.OAuth;
+using RentStuff.Identity.Infrastructure.Persistence.Repositories;
 using RentStuff.Identity.Ports.Adapter.Rest;
 
 namespace RentStuff.Common.WebHost.Providers

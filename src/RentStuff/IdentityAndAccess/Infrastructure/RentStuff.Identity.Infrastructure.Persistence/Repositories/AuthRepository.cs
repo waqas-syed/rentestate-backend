@@ -2,12 +2,11 @@
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using RentStuff.Identity.Ports.Adapter.Rest.DTOs;
-using RentStuff.Identity.Ports.Adapter.Rest.Hashers;
-using RentStuff.Identity.Ports.Adapter.Rest.Models;
-using RentStuff.Identity.Ports.Adapter.Rest.Validators;
+using RentStuff.Identity.Infrastructure.Persistence.Model;
+using RentStuff.Identity.Infrastructure.Services.Hashers;
+using RentStuff.Identity.Infrastructure.Services.Validators;
 
-namespace RentStuff.Identity.Ports.Adapter.Rest
+namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 {
     public class AuthRepository : IAuthRepository, IDisposable
     {
@@ -23,23 +22,23 @@ namespace RentStuff.Identity.Ports.Adapter.Rest
             _userManager.PasswordHasher = new CustomPasswordHasher();
         }
 
-        public async Task<IdentityResult> RegisterUser(UserModel userModel)
+        public async Task<IdentityResult> RegisterUser(string name, string email, string password)
         {
             // Assign email to the uername property, as we will use email in place of username
             CustomIdentityUser user = new CustomIdentityUser
             {
-                UserName = userModel.Email,
-                Email = userModel.Email,
-                FullName = userModel.FullName
+                UserName = email,
+                Email = email,
+                FullName = name
             };
-            var result = await _userManager.CreateAsync(user, userModel.Password);
+            var result = await _userManager.CreateAsync(user, password);
 
             return result;
         }
 
-        public async Task<IdentityUser> FindUser(string userName, string password)
+        public async Task<CustomIdentityUser> FindUser(string userName, string password)
         {
-            IdentityUser user = await _userManager.FindAsync(userName, password);
+            CustomIdentityUser user = await _userManager.FindAsync(userName, password);
 
             return user;
         }

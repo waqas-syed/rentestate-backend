@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
-using RentStuff.Identity.Ports.Adapter.Rest.DTOs;
+using RentStuff.Identity.Domain.Model.UserAggregate;
+using RentStuff.Identity.Infrastructure.Persistence.Repositories;
 
 namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
 {
@@ -50,7 +50,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
                     {
                         return BadRequest("Password and confirm password are not the same");
                     }
-                    IdentityResult result = await _repo.RegisterUser(userModel);
+                    IdentityResult result = await _repo.RegisterUser(userModel.FullName, userModel.Email, userModel.Password);
 
                     IHttpActionResult errorResult = GetErrorResult(result);
 

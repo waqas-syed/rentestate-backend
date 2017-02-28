@@ -2,7 +2,7 @@
 using System.Data.Entity;
 using System.Data.Entity.Migrations.History;
 
-namespace RentStuff.Identity.Ports.Adapter.Rest.Migrations
+namespace RentStuff.Identity.Infrastructure.Persistence.Migrations
 {
     public class MySqlHistoryContext : HistoryContext
     {

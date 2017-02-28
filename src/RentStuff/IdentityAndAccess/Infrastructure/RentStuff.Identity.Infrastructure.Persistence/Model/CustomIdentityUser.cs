@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace RentStuff.Identity.Ports.Adapter.Rest.Models
+namespace RentStuff.Identity.Infrastructure.Persistence.Model
 {
     /// <summary>
     /// Implements the IdentityUser class, as we need to have Username and password

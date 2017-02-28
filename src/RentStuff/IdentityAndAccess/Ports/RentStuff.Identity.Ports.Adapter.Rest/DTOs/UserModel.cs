@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RentStuff.Identity.Ports.Adapter.Rest.DTOs
+namespace RentStuff.Identity.Domain.Model.UserAggregate
 {
     public class UserModel
     {

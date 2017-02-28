@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
-namespace RentStuff.Identity.Ports.Adapter.Rest.Hashers
+namespace RentStuff.Identity.Infrastructure.Services.Hashers
 {
     internal static class CustomCrypto
     {

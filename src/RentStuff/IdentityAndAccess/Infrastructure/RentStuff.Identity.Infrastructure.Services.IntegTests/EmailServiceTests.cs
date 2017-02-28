@@ -24,7 +24,7 @@ namespace RentStuff.Identity.Infrastructure.Services.IntegTests
             };
             string email = "waqas.shah.syed@gmail.com";
             string name = "Syed Waqas Mahmood";
-            string activationLink = "https://localhost:11803/index.html#/login";
+            string activationLink = "http://localhost:11803/index.html#/login";
             emailService.SendEmail(email, "Test Flight", EmailConstants.ActivationEmailMessage(name, activationLink));
             Assert.IsTrue(wait.WaitOne(TimeSpan.FromSeconds(60)));
             Assert.IsTrue(eventRaised);
