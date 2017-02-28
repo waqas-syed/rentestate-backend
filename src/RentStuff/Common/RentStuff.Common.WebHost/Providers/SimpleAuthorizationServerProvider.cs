@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security.OAuth;
+using RentStuff.Identity.Infrastructure.Persistence.Model;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
-using RentStuff.Identity.Ports.Adapter.Rest;
 
 namespace RentStuff.Common.WebHost.Providers
 {
@@ -20,7 +20,7 @@ namespace RentStuff.Common.WebHost.Providers
 
             using (AuthRepository repo = new AuthRepository())
             {
-                IdentityUser user = await repo.FindUser(context.UserName, context.Password);
+                CustomIdentityUser user = await repo.FindUser(context.UserName, context.Password);
 
                 if (user == null)
                 {

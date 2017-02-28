@@ -24,12 +24,15 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 
         public async Task<IdentityResult> RegisterUser(string name, string email, string password)
         {
+            string activationCode = Guid.NewGuid().ToString();
             // Assign email to the uername property, as we will use email in place of username
             CustomIdentityUser user = new CustomIdentityUser
             {
                 UserName = email,
                 Email = email,
-                FullName = name
+                FullName = name,
+                ActivationCode = activationCode,
+                AccountActivated = false
             };
             var result = await _userManager.CreateAsync(user, password);
 

@@ -76,6 +76,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -93,6 +94,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\RentStuff.Common\RentStuff.Common.csproj">
+      <Project>{85eed18f-3c13-49ef-9c12-48fdb2661896}</Project>
+      <Name>RentStuff.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Domain.Model\RentStuff.Identity.Domain.Model\RentStuff.Identity.Domain.Model.csproj">
       <Project>{e9984f91-391d-4d08-99e7-84514e351cb4}</Project>
       <Name>RentStuff.Identity.Domain.Model</Name>
