@@ -26,7 +26,7 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
             string password = "Erebor123!";
 
             CustomIdentityUser customIdentityuser = await authRepository.FindUser(email, password);
-            Assert.NotNull(customIdentityuser);
+            Assert.Null(customIdentityuser);
 
             IdentityResult result = await authRepository.RegisterUser(name, email, password);            
             Assert.IsTrue(result.Succeeded);
