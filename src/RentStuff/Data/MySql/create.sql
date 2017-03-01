@@ -108,8 +108,6 @@ DROP TABLE IF EXISTS `aspnetusers`;
 CREATE TABLE `aspnetusers` (
   `Id` varchar(128) NOT NULL,
   `Email` varchar(256) DEFAULT NULL,
-  `ActivationCode` varchar(40) DEFAULT NULL,
-  `AccountActivated` tinyint(1) NOT NULL,
   `FullName` varchar(19) DEFAULT NULL,
   `EmailConfirmed` tinyint(1) NOT NULL,
   `PasswordHash` longtext,

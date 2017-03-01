@@ -7,10 +7,22 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 {
     public interface IAccountRepository : IDisposable
     {
-        Task<IdentityResult> RegisterUser(string name, string email, string password);
+        /// <summary>
+        /// Registers a user and returns a tuple with the following two items:
+        /// IdentityResult : EmailConfirmationToken
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        Task<Tuple<IdentityResult, string>> SaveUser(string name, string email, string password);
 
         Task<CustomIdentityUser> FindByEmailAsync(string email);
 
         Task<CustomIdentityUser> FindUser(string userName, string password);
+
+        Task<IdentityResult> UpdateUser(CustomIdentityUser customerIdentityUser);
+
+        UserManager<CustomIdentityUser> UserManager { get; }
     }
 }

@@ -19,9 +19,8 @@ namespace RentStuff.Identity.Application.Account
             _accountRepository = accountRepository;
             _emailService = customEmailService;
         }
-
-
-        public async Task<IdentityResult> Register(CreateUserCommand userModel)
+        
+        public async Task<bool> Register(CreateUserCommand userModel)
         {
             if (string.IsNullOrWhiteSpace(userModel.FullName))
             {
@@ -47,19 +46,24 @@ namespace RentStuff.Identity.Application.Account
             {
                 throw new ArgumentException("Password and confirm password are not the same");
             }
-            IdentityResult identityResult = await _accountRepository.RegisterUser(userModel.FullName, userModel.Email, 
+            Tuple<IdentityResult,string> emailConfirmationToken = await _accountRepository.SaveUser(userModel.FullName, userModel.Email, 
                                                                                                                    userModel.Password);
-            if (identityResult.Succeeded)
+            if (emailConfirmationToken.Item1.Succeeded && !string.IsNullOrWhiteSpace(emailConfirmationToken.Item2))
             {
-                var retreivedUser = _accountRepository.FindByEmailAsync(userModel.Email);
+                var retreivedUser = await _accountRepository.FindByEmailAsync(userModel.Email);
                 #pragma warning disable 4014
-                Task.Run(() => SendActivationEmail(userModel.Email, retreivedUser.Result.FullName, retreivedUser.Result.ActivationCode));
+                Task.Run(() => SendActivationEmail(retreivedUser.Id, retreivedUser.Email, retreivedUser.FullName, 
+                    emailConfirmationToken.Item2));
                 #pragma warning restore 4014
+                return true;
             }
-            return identityResult;
+            else
+            {
+                throw new ArgumentException("Could not register User");
+            }
         }
 
-        private void SendActivationEmail(string email, string fullName, string activationCode)
+        private void SendActivationEmail(string userId, string email, string fullName, string activationCode)
         {
             var activationLink = Constants.DOMAINURL + Constants.AccountActivationUrlLocation + "?email=" + email +
                                  "&activationcode=" + activationCode;
@@ -71,6 +75,37 @@ namespace RentStuff.Identity.Application.Account
             CustomIdentityUser user = await _accountRepository.FindUser(userName, password);
 
             return user;
+        }
+
+        public async Task<bool> Activate(ActivateAccountCommand activateAccountCommand)
+        {
+            if (string.IsNullOrWhiteSpace(activateAccountCommand.Email))
+            {
+                throw new ArgumentException("Email not provided");
+            }
+            if (string.IsNullOrWhiteSpace(activateAccountCommand.ActivationCode))
+            {
+                throw new ArgumentException("Activation Code not provided");
+            }
+            var user = await _accountRepository.FindByEmailAsync(activateAccountCommand.Email);
+            if (user == null)
+            {
+                throw new ArgumentException("User not found");
+            }
+            if (_accountRepository.UserManager.IsEmailConfirmed(user.Id))
+            {
+                throw new InvalidOperationException("User account is already activated");
+            }
+            var confirmEmailResult = await _accountRepository.UserManager.ConfirmEmailAsync(user.Id, activateAccountCommand.ActivationCode);
+
+            if (!confirmEmailResult.Succeeded)
+            {
+                throw new ArgumentException("Could not confirm email.");
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public void Dispose()

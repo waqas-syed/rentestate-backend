@@ -8,7 +8,5 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Model
    public class CustomIdentityUser : IdentityUser
     {
         public string FullName { get; set; }
-        public string ActivationCode { get; set; }
-        public bool AccountActivated { get; set; }
     }
 }

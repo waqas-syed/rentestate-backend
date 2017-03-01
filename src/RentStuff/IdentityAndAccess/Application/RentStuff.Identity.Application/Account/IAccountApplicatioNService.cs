@@ -11,8 +11,9 @@ namespace RentStuff.Identity.Application.Account
 {
     public interface IAccountApplicationService
     {
-        Task<IdentityResult> Register(CreateUserCommand createUserCommand);
+        Task<bool> Register(CreateUserCommand createUserCommand);
         Task<CustomIdentityUser> FindUser(string userName, string password);
+        Task<bool> Activate(ActivateAccountCommand activateAccountCommand);
         void Dispose();
     }
 }

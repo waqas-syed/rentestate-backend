@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
@@ -32,14 +33,56 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
 
                     if (createUserCommand != null)
                     {
-                        IdentityResult identityResult = await _accountApplicationService.Register(createUserCommand);
-                        IHttpActionResult errorResult = GetErrorResult(identityResult);
-
-                        if (errorResult != null)
+                        bool identityResult = await _accountApplicationService.Register(createUserCommand);
+                        if (identityResult)
                         {
-                            return errorResult;
+                            return Ok();
                         }
-                        return Ok();
+                        else
+                        {
+                            return BadRequest("Could not register user");
+                        }
+                    }
+                    else
+                    {
+                        return BadRequest("User data not in expected format");
+                    }
+                }
+                else
+                {
+                    return BadRequest("No user data received");
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        // POST api/Account/Register
+        [AllowAnonymous]
+        [Route("activate")]
+        public async Task<IHttpActionResult> Activate([FromBody] Object activateAccountObject)
+        {
+            try
+            {
+                if (activateAccountObject != null)
+                {
+                    var jsonString = activateAccountObject.ToString();
+                    var activateAccountCommand = JsonConvert.DeserializeObject<ActivateAccountCommand>(jsonString);
+
+                    if (activateAccountCommand != null)
+                    {
+                        bool activationResult = await _accountApplicationService.Activate(activateAccountCommand);
+                        
+                        if (activationResult)
+                        {
+                            return Ok();
+                        }
+                        else
+                        {
+                            return BadRequest("Could not activate account");
+                        }
                     }
                     else
                     {

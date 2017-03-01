@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security.OAuth;
 using RentStuff.Identity.Infrastructure.Persistence.Model;
@@ -18,13 +19,18 @@ namespace RentStuff.Common.WebHost.Providers
         {
             //context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] {"*"});
 
-            using (AccountRepository repo = new AccountRepository())
+            using (AccountRepository accountRepository = new AccountRepository())
             {
-                CustomIdentityUser user = await repo.FindUser(context.UserName, context.Password);
+                CustomIdentityUser user = await accountRepository.FindUser(context.UserName, context.Password);
 
                 if (user == null)
                 {
                     context.SetError("invalid_grant", "The user name or password is incorrect.");
+                    return;
+                }
+                if (!accountRepository.UserManager.IsEmailConfirmed(user.Id))
+                {
+                    context.SetError("Account is not activated yet.");
                     return;
                 }
             }
