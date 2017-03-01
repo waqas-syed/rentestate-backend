@@ -8,13 +8,13 @@ using RentStuff.Identity.Infrastructure.Services.Validators;
 
 namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 {
-    public class AuthRepository : IAuthRepository, IDisposable
+    public class AccountRepository : IAccountRepository, IDisposable
     {
         private AuthContext _ctx;
 
         private UserManager<CustomIdentityUser> _userManager;
 
-        public AuthRepository()
+        public AccountRepository()
         {
             _ctx = new AuthContext();
             _userManager = new UserManager<CustomIdentityUser>(new UserStore<CustomIdentityUser>(_ctx));
@@ -37,6 +37,13 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
             var result = await _userManager.CreateAsync(user, password);
 
             return result;
+        }
+
+        public async Task<CustomIdentityUser> FindByEmailAsync(string email)
+        {
+            CustomIdentityUser user = await _userManager.FindByEmailAsync(email);
+
+            return user;
         }
 
         public async Task<CustomIdentityUser> FindUser(string userName, string password)

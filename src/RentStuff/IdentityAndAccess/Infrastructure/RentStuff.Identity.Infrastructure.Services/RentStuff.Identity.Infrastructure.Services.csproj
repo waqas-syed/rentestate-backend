@@ -47,8 +47,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Email\EmailConstants.cs" />
-    <Compile Include="Email\EmailService.cs" />
-    <Compile Include="Email\IEmailService.cs" />
+    <Compile Include="Email\CustomEmailService.cs" />
+    <Compile Include="Email\ICustomEmailService.cs" />
     <Compile Include="Hashers\CustomCrypto.cs" />
     <Compile Include="Hashers\CustomPasswordHasher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RentStuff.Identity.Domain.Model.UserAggregate
+namespace RentStuff.Identity.Application.Account.Commands
 {
-    public class UserModel
+    public class CreateUserCommand
     {
         [Required]
-        [StringLength(14, ErrorMessage = "The {0} must be upto {1} characters long.")]
+        [StringLength(19, ErrorMessage = "The {0} must be upto {1} characters long.")]
         [Display(Name = "FullName")]
         public string FullName { get; set; }
         

@@ -65,5 +65,11 @@ namespace RentStuff.Common
                 _mySqlConnection.Close();
             }
         }
+
+        public string FilePath
+        {
+            get { return _filePath; }
+            set { _filePath = value; }
+        }
     }
 }

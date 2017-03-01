@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RentStuff.Identity.Infrastructure.Services.Email
 {
-    public interface IEmailService
+    public interface ICustomEmailService
     {
         event Action EmailSent;
         void SendEmail(string to, string subject, string message);

@@ -110,7 +110,7 @@ CREATE TABLE `aspnetusers` (
   `Email` varchar(256) DEFAULT NULL,
   `ActivationCode` varchar(40) DEFAULT NULL,
   `AccountActivated` tinyint(1) NOT NULL,
-  `FullName` varchar(14) DEFAULT NULL,
+  `FullName` varchar(19) DEFAULT NULL,
   `EmailConfirmed` tinyint(1) NOT NULL,
   `PasswordHash` longtext,
   `SecurityStamp` longtext,

@@ -5,9 +5,11 @@ using RentStuff.Identity.Infrastructure.Persistence.Model;
 
 namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 {
-    public interface IAuthRepository : IDisposable
+    public interface IAccountRepository : IDisposable
     {
         Task<IdentityResult> RegisterUser(string name, string email, string password);
+
+        Task<CustomIdentityUser> FindByEmailAsync(string email);
 
         Task<CustomIdentityUser> FindUser(string userName, string password);
     }

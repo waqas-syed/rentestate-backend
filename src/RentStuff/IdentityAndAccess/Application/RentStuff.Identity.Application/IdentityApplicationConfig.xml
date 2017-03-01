@@ -4,6 +4,8 @@
                 xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
 
   <!-- Services -->
-  <object id="CustomEmailService" type="RentStuff.Identity.Infrastructure.Services.Email.CustomEmailService, RentStuff.Identity.Infrastructure.Services">
+  <object id="AccountApplicationService" type="RentStuff.Identity.Application.Account.AccountApplicationService, RentStuff.Identity.Application">
+    <constructor-arg name="accountRepository" ref="AccountRepository"/>
+    <constructor-arg name="customEmailService" ref="CustomEmailService"/>
   </object>
 </objects>

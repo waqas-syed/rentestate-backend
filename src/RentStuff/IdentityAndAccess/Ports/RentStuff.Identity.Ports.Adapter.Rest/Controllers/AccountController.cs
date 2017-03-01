@@ -3,19 +3,19 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
-using RentStuff.Identity.Domain.Model.UserAggregate;
-using RentStuff.Identity.Infrastructure.Persistence.Repositories;
+using RentStuff.Identity.Application.Account;
+using RentStuff.Identity.Application.Account.Commands;
 
 namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
 {
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
-        private IAuthRepository _repo = null;
-        
-        public AccountController(IAuthRepository authRepository)
+        private IAccountApplicationService _accountApplicationService;
+
+        public AccountController(IAccountApplicationService accountApplicationService)
         {
-            _repo = authRepository;
+            _accountApplicationService = accountApplicationService;
         }
 
         // POST api/Account/Register
@@ -28,55 +28,43 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
                 if (userObject != null)
                 {
                     var jsonString = userObject.ToString();
-                    var userModel = JsonConvert.DeserializeObject<UserModel>(jsonString);
+                    var createUserCommand = JsonConvert.DeserializeObject<CreateUserCommand>(jsonString);
 
-                    if (string.IsNullOrWhiteSpace(userModel.FullName))
+                    if (createUserCommand != null)
                     {
-                        throw new ArgumentException("Name cannot be empty");
-                    }
-                    if (string.IsNullOrWhiteSpace(userModel.Email))
-                    {
-                        throw new ArgumentException("Email cannot be empty");
-                    }
-                    if (string.IsNullOrWhiteSpace(userModel.Password))
-                    {
-                        throw new ArgumentException("Password cannot be empty");
-                    }
-                    if (string.IsNullOrWhiteSpace(userModel.ConfirmPassword))
-                    {
-                        throw new ArgumentException("Confirm Password cannot be empty");
-                    }
-                    if (!userModel.Password.Equals(userModel.ConfirmPassword))
-                    {
-                        return BadRequest("Password and confirm password are not the same");
-                    }
-                    IdentityResult result = await _repo.RegisterUser(userModel.FullName, userModel.Email, userModel.Password);
+                        IdentityResult identityResult = await _accountApplicationService.Register(createUserCommand);
+                        IHttpActionResult errorResult = GetErrorResult(identityResult);
 
-                    IHttpActionResult errorResult = GetErrorResult(result);
-
-                    if (errorResult != null)
-                    {
-                        return errorResult;
+                        if (errorResult != null)
+                        {
+                            return errorResult;
+                        }
+                        return Ok();
                     }
-
-                    return Ok();
+                    else
+                    {
+                        return BadRequest("User data not in expected format");
+                    }
                 }
-                return BadRequest();
+                else
+                {
+                    return BadRequest("No user data received");
+                }
             }
             catch (Exception exception)
             {
-                return InternalServerError();
+                return BadRequest(exception.Message);
             }
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            /*if (disposing)
             {
-                _repo.Dispose();
+                _accountApplicationService.Dispose();
             }
 
-            base.Dispose(disposing);
+            base.Dispose(disposing);*/
         }
 
         private IHttpActionResult GetErrorResult(IdentityResult result)

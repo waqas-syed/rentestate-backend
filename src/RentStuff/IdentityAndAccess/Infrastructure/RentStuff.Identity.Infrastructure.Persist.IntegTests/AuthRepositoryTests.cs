@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 using Microsoft.AspNet.Identity;
 using NUnit.Framework;
 using RentStuff.Common;
@@ -36,7 +31,7 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
         [Test]
         public async void RegisterUserTest_TestsIfTheUserIsSavedAsExpectedWhenRegisterMethodIsCalled_VerifiesThroughTheRetruendValueUponRetreival()
         {
-            IAuthRepository authRepository = (IAuthRepository)ContextRegistry.GetContext()["AuthRepository"];
+            IAccountRepository authRepository = (IAccountRepository)ContextRegistry.GetContext()["AuthRepository"];
             Assert.NotNull(authRepository);
             
             string name = "Thorin";
@@ -57,6 +52,5 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
             Assert.IsFalse(string.IsNullOrWhiteSpace(customIdentityuser.ActivationCode));
             Assert.IsFalse(customIdentityuser.AccountActivated);
         }
-        
     }
 }

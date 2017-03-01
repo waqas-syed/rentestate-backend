@@ -13,7 +13,7 @@ namespace RentStuff.Identity.Infrastructure.Services.IntegTests
         [Test]
         public void SendActivationEmailTest_ChecksTheprocessOfSendingAnEmail()
         {
-            IEmailService emailService = (IEmailService) ContextRegistry.GetContext()["EmailService"];
+            ICustomEmailService emailService = (ICustomEmailService) ContextRegistry.GetContext()["EmailService"];
 
             bool eventRaised = false;
             var wait = new AutoResetEvent(false);

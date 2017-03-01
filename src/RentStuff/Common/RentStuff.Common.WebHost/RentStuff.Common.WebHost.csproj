@@ -213,9 +213,17 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\IdentityAndAccess\Application\RentStuff.Identity.Application\RentStuff.Identity.Application.csproj">
+      <Project>{7074e183-7b33-495d-bb73-b8e59d985fd0}</Project>
+      <Name>RentStuff.Identity.Application</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\IdentityAndAccess\Infrastructure\RentStuff.Identity.Infrastructure.Persistence\RentStuff.Identity.Infrastructure.Persistence.csproj">
       <Project>{cbc02c41-9b9d-43c3-ac9b-89333e061ac1}</Project>
       <Name>RentStuff.Identity.Infrastructure.Persistence</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IdentityAndAccess\Infrastructure\RentStuff.Identity.Infrastructure.Services\RentStuff.Identity.Infrastructure.Services.csproj">
+      <Project>{24153df5-36ad-4a75-be68-0d3c53e8fa28}</Project>
+      <Name>RentStuff.Identity.Infrastructure.Services</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\IdentityAndAccess\Ports\RentStuff.Identity.Ports.Adapter.Rest\RentStuff.Identity.Ports.Adapter.Rest.csproj">
       <Project>{9a986bd9-d995-4fb0-81b7-9f4ddd5f7012}</Project>

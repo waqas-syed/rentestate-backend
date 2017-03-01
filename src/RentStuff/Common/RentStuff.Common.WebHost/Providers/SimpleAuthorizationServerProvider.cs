@@ -18,7 +18,7 @@ namespace RentStuff.Common.WebHost.Providers
         {
             //context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] {"*"});
 
-            using (AuthRepository repo = new AuthRepository())
+            using (AccountRepository repo = new AccountRepository())
             {
                 CustomIdentityUser user = await repo.FindUser(context.UserName, context.Password);
 

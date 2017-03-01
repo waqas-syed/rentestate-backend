@@ -6,7 +6,7 @@ using System.Net.Mail;
 
 namespace RentStuff.Identity.Infrastructure.Services.Email
 {
-    public class EmailService : IEmailService
+    public class CustomEmailService : ICustomEmailService
     {
         // Get these settings from the appsettings from the root app.config/web.config file
         private static readonly string CompanyEmailAddress = ConfigurationManager.AppSettings.Get("CompanyEmailAddress");
@@ -22,7 +22,7 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
         private SmtpClient _smtpClient = new SmtpClient(CompanyEmailHost, CompanyEmailPort);
         public event Action EmailSent;
 
-        public EmailService()
+        public CustomEmailService()
         {
             _smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             _smtpClient.UseDefaultCredentials = false;
@@ -48,7 +48,6 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
             try
             {
                 _smtpClient.SendAsync(mail, null);
-
             }
             catch (Exception)
             {

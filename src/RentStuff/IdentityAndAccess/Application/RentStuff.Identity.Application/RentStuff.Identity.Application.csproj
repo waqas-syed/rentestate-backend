@@ -59,10 +59,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\AccountApplicationService.cs" />
+    <Compile Include="Account\Commands\CreateUserCommand.cs" />
     <Compile Include="Account\IAccountApplicationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\RentStuff.Common\RentStuff.Common.csproj">
+      <Project>{85eed18f-3c13-49ef-9c12-48fdb2661896}</Project>
+      <Name>RentStuff.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Domain.Model\RentStuff.Identity.Domain.Model\RentStuff.Identity.Domain.Model.csproj">
       <Project>{e9984f91-391d-4d08-99e7-84514e351cb4}</Project>
       <Name>RentStuff.Identity.Domain.Model</Name>
@@ -79,6 +84,11 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="IdentityApplicationConfig.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
