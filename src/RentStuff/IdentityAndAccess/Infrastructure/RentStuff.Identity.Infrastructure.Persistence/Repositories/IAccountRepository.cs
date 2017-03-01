@@ -15,7 +15,7 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        Task<Tuple<IdentityResult, string>> SaveUser(string name, string email, string password);
+        Task<Tuple<IdentityResult, string>> RegisterUser(string name, string email, string password);
 
         Task<CustomIdentityUser> FindByEmailAsync(string email);
 

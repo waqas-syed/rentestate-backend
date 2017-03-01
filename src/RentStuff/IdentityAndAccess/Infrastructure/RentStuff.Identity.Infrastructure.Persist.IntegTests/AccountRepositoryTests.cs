@@ -44,7 +44,7 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
             CustomIdentityUser customIdentityuser = await accountRepository.FindUser(email, password);
             Assert.Null(customIdentityuser);
 
-            Tuple<IdentityResult,string> result = await accountRepository.SaveUser(name, email, password);            
+            Tuple<IdentityResult,string> result = await accountRepository.RegisterUser(name, email, password);            
             Assert.IsTrue(result.Item1.Succeeded);
             Assert.IsFalse(string.IsNullOrWhiteSpace(result.Item2));
 
@@ -53,6 +53,41 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
             Assert.AreEqual(name, customIdentityuser.FullName);
             Assert.AreEqual(email, customIdentityuser.Email);
             Assert.IsFalse(accountRepository.UserManager.IsEmailConfirmed(customIdentityuser.Id));
+        }
+
+        [Test]
+        public async void ActivateuserTest_TestsIfTheUserIsActivatedAsExpected_VerifiesThroughTheReturnedValueUponRetreival()
+        {
+            IAccountRepository accountRepository = (IAccountRepository)ContextRegistry.GetContext()["AccountRepository"];
+            Assert.NotNull(accountRepository);
+
+            string name = "Thorin";
+            // Email is used as both Email and username
+            string email = "thorin@dummyemail123456.com";
+            string password = "Erebor123!";
+
+            CustomIdentityUser customIdentityuser = await accountRepository.FindByEmailAsync(email);
+            Assert.Null(customIdentityuser);
+
+            // Register the user
+            Tuple<IdentityResult, string> registerResult = await accountRepository.RegisterUser(name, email, password);
+            Assert.IsTrue(registerResult.Item1.Succeeded);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(registerResult.Item2));
+
+            // Retreive the registered user and verify that the email has not yet been confirmed
+            customIdentityuser = await accountRepository.FindByEmailAsync(email);
+            Assert.NotNull(customIdentityuser);
+            Assert.IsFalse(accountRepository.UserManager.IsEmailConfirmed(customIdentityuser.Id));
+
+            // Activate the user's account by confirming the email address
+            var activationIdentityResult = accountRepository.UserManager.ConfirmEmail(customIdentityuser.Id, registerResult.Item2);
+            Assert.IsTrue(activationIdentityResult.Succeeded);
+            // Retreive the user and verify that the email ha now been confirmed
+            customIdentityuser = await accountRepository.FindByEmailAsync(email);
+            Assert.NotNull(customIdentityuser);
+            Assert.AreEqual(name, customIdentityuser.FullName);
+            Assert.AreEqual(email, customIdentityuser.Email);
+            Assert.IsTrue(accountRepository.UserManager.IsEmailConfirmed(customIdentityuser.Id));
         }
 
         [Test]
@@ -67,7 +102,7 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
             string password = "Erebor123!";
             
             // Register the user
-            Tuple<IdentityResult, string> result = await accountRepository.SaveUser(name, email, password);
+            Tuple<IdentityResult, string> result = await accountRepository.RegisterUser(name, email, password);
             Assert.IsTrue(result.Item1.Succeeded);
             Assert.IsFalse(string.IsNullOrWhiteSpace(result.Item2));
 

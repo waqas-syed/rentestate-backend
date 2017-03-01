@@ -36,7 +36,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
                         bool identityResult = await _accountApplicationService.Register(createUserCommand);
                         if (identityResult)
                         {
-                            return Ok();
+                            return Ok(true);
                         }
                         else
                         {

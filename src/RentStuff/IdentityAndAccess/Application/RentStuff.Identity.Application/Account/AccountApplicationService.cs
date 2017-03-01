@@ -46,14 +46,14 @@ namespace RentStuff.Identity.Application.Account
             {
                 throw new ArgumentException("Password and confirm password are not the same");
             }
-            Tuple<IdentityResult,string> emailConfirmationToken = await _accountRepository.SaveUser(userModel.FullName, userModel.Email, 
+            Tuple<IdentityResult,string> emailConfirmationToken = await _accountRepository.RegisterUser(userModel.FullName, userModel.Email, 
                                                                                                                    userModel.Password);
             if (emailConfirmationToken.Item1.Succeeded && !string.IsNullOrWhiteSpace(emailConfirmationToken.Item2))
             {
                 var retreivedUser = await _accountRepository.FindByEmailAsync(userModel.Email);
+                SendActivationEmail(retreivedUser.Id, retreivedUser.Email, retreivedUser.FullName, emailConfirmationToken.Item2);
                 #pragma warning disable 4014
-                Task.Run(() => SendActivationEmail(retreivedUser.Id, retreivedUser.Email, retreivedUser.FullName, 
-                    emailConfirmationToken.Item2));
+                //Task.Run(() => SendActivationEmail(retreivedUser.Id, retreivedUser.Email, retreivedUser.FullName, emailConfirmationToken.Item2));
                 #pragma warning restore 4014
                 return true;
             }

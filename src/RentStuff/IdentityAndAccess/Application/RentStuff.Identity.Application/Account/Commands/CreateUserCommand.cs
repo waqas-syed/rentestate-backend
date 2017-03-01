@@ -4,6 +4,14 @@ namespace RentStuff.Identity.Application.Account.Commands
 {
     public class CreateUserCommand
     {
+        public CreateUserCommand(string fullName, string email, string password, string confirmPassword)
+        {
+            FullName = fullName;
+            Email = email;
+            Password = password;
+            ConfirmPassword = confirmPassword;
+        }
+        
         [Required]
         [StringLength(19, ErrorMessage = "The {0} must be upto {1} characters long.")]
         [Display(Name = "FullName")]

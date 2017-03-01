@@ -20,8 +20,7 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
         public AccountRepository()
         {
             _ctx = new AuthContext();
-            var provider = new DpapiDataProtectionProvider("Sample");
-
+            var provider = new DpapiDataProtectionProvider("RentStuff");
             
             _userManager = new UserManager<CustomIdentityUser>(new UserStore<CustomIdentityUser>(_ctx));
             _userManager.UserTokenProvider =
@@ -30,7 +29,7 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
             _userManager.PasswordHasher = new CustomPasswordHasher();
         }
 
-        public async Task<Tuple<IdentityResult, string>> SaveUser(string name, string email, string password)
+        public async Task<Tuple<IdentityResult, string>> RegisterUser(string name, string email, string password)
         {
             // Assign email to the uername property, as we will use email in place of username
             CustomIdentityUser user = new CustomIdentityUser
