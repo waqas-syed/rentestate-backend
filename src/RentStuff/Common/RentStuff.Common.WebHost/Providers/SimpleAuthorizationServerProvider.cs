@@ -28,7 +28,7 @@ namespace RentStuff.Common.WebHost.Providers
                     context.SetError("invalid_grant", "The user name or password is incorrect.");
                     return;
                 }
-                if (!accountRepository.IsEmailConfirmed(user.Id))
+                if (!user.EmailConfirmed)
                 {
                     context.SetError("Account is not activated yet.");
                     return;

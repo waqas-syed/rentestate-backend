@@ -106,6 +106,10 @@
       <Project>{cbc02c41-9b9d-43c3-ac9b-89333e061ac1}</Project>
       <Name>RentStuff.Identity.Infrastructure.Persistence</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RentStuff.Identity.Infrastructure.Services\RentStuff.Identity.Infrastructure.Services.csproj">
+      <Project>{24153df5-36ad-4a75-be68-0d3c53e8fa28}</Project>
+      <Name>RentStuff.Identity.Infrastructure.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

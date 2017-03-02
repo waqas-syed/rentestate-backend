@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using RentStuff.Identity.Application.Account.Commands;
@@ -14,14 +15,17 @@ namespace RentStuff.Identity.Application.Account
     {
         private ICustomEmailService _emailService;
         private IAccountRepository _accountRepository;
+        private IEmailTokenGenerationService _emailTokenGenerationService;
 
-        public AccountApplicationService(IAccountRepository accountRepository, ICustomEmailService customEmailService)
+        public AccountApplicationService(IAccountRepository accountRepository, ICustomEmailService customEmailService,
+            IEmailTokenGenerationService emailTokenGenerationService)
         {
             _accountRepository = accountRepository;
             _emailService = customEmailService;
+            _emailTokenGenerationService = emailTokenGenerationService;
         }
         
-        public bool Register(CreateUserCommand userModel)
+        public string Register(CreateUserCommand userModel)
         {
             if (string.IsNullOrWhiteSpace(userModel.FullName))
             {
@@ -47,24 +51,34 @@ namespace RentStuff.Identity.Application.Account
             {
                 throw new ArgumentException("Password and confirm password are not the same");
             }
-            Tuple<IdentityResult,string> emailConfirmationToken = _accountRepository.RegisterUser(userModel.FullName, userModel.Email, 
+            // Register the User
+            IdentityResult registrationResult = _accountRepository.RegisterUser(userModel.FullName, userModel.Email, 
                                                                                                                    userModel.Password);
-            if (emailConfirmationToken.Item1.Succeeded && !string.IsNullOrWhiteSpace(emailConfirmationToken.Item2))
+            if (registrationResult == null)
             {
-                var retreivedUser = _accountRepository.GetUserByEmail(userModel.Email);
-                //SendActivationEmail(retreivedUser.Id, retreivedUser.Email, retreivedUser.FullName, emailConfirmationToken.Item2);
-                #pragma warning disable 4014
-                Task.Run(() => SendActivationEmail(retreivedUser.Id, retreivedUser.Email, retreivedUser.FullName, emailConfirmationToken.Item2));
-                #pragma warning restore 4014
-                return true;
+                throw new NullReferenceException("Whoa! Execpected error happened while registering the user. Didnt expect that");
             }
-            else
+            if (!registrationResult.Succeeded)
             {
-                throw new ArgumentException("Could not register User");
+                throw new InvalidOperationException("Crap! Not able to save user. Error: " + registrationResult.Errors.First());
             }
+            // Get the User instance to have her Id
+            var retreivedUser = _accountRepository.GetUserByEmail(userModel.Email);
+            // Generate the token for this user using email and user Id
+            var emailVerificationToken = _emailTokenGenerationService.GenerateEmailToken(retreivedUser.Email,
+                retreivedUser.Id);
+            if (string.IsNullOrWhiteSpace(emailVerificationToken))
+            {
+                throw new NullReferenceException("Could not generate token for user: " + retreivedUser.Id);
+            }
+            // Send email to the user
+            #pragma warning disable 4014
+            Task.Run(() => SendActivationEmail(retreivedUser.Email, retreivedUser.FullName, emailVerificationToken));
+            #pragma warning restore 4014
+            return retreivedUser.Id;
         }
 
-        private void SendActivationEmail(string userId, string email, string fullName, string activationCode)
+        private void SendActivationEmail(string email, string fullName, string activationCode)
         {
             var activationLink = Constants.DOMAINURL + Constants.AccountActivationUrlLocation + "?email=" + email +
                                  "&activationcode=" + activationCode;
@@ -81,16 +95,29 @@ namespace RentStuff.Identity.Application.Account
             {
                 throw new ArgumentException("Activation Code not provided");
             }
+            // Get the user from the database so that we have the userId which we need to verify the token
             var user = _accountRepository.GetUserByEmail(activateAccountCommand.Email);
             if (user == null)
             {
                 throw new ArgumentException("User not found");
             }
-            if (_accountRepository.IsEmailConfirmed(user.Id))
+            if (user.EmailConfirmed)
             {
                 throw new InvalidOperationException("User account is already activated");
             }
-            return _accountRepository.ActivateUser(user.Id, activateAccountCommand.ActivationCode);
+
+            // Verify the Email Token for the user
+            if (_emailTokenGenerationService.VerifyToken(activateAccountCommand.Email, user.Id, activateAccountCommand.ActivationCode))
+            {
+                user.EmailConfirmed = true;
+                var identityResult = _accountRepository.UpdateUser(user);
+                if (!identityResult.Succeeded)
+                {
+                    throw new InvalidOperationException("Error arose while updating the user");
+                }
+                return true;
+            }
+            throw new InvalidOperationException("Invalid token");
         }
 
         public UserRepresentation GetUserByEmail(string email)

@@ -15,16 +15,12 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        Tuple<IdentityResult, string> RegisterUser(string name, string email, string password);
+        IdentityResult RegisterUser(string name, string email, string password);
 
         CustomIdentityUser GetUserByEmail(string email);
 
         CustomIdentityUser GetUserByPassword(string userName, string password);
 
-        //IdentityResult UpdateUser(CustomIdentityUser customerIdentityUser);
-
-        bool ActivateUser(string userId, string emailConfirmationToken);
-
-        bool IsEmailConfirmed(string userId);
+        IdentityResult UpdateUser(CustomIdentityUser customerIdentityUser);
     }
 }

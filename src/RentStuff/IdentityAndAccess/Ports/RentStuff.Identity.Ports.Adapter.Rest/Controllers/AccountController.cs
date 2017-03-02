@@ -33,8 +33,8 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
 
                     if (createUserCommand != null)
                     {
-                        bool identityResult = _accountApplicationService.Register(createUserCommand);
-                        if (identityResult)
+                        string identityResult = _accountApplicationService.Register(createUserCommand);
+                        if (!string.IsNullOrWhiteSpace(identityResult))
                         {
                             return Ok(true);
                         }

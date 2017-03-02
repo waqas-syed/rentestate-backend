@@ -7,5 +7,6 @@
   <object id="AccountApplicationService" type="RentStuff.Identity.Application.Account.AccountApplicationService, RentStuff.Identity.Application">
     <constructor-arg name="accountRepository" ref="AccountRepository"/>
     <constructor-arg name="customEmailService" ref="CustomEmailService"/>
+    <constructor-arg name="emailTokenGenerationService" ref="EmailTokenGenerationService"/>
   </object>
 </objects>
