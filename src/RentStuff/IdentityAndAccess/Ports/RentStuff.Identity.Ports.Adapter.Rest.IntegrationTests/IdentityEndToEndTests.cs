@@ -47,7 +47,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.IntegrationTests
             string email = "thorin@dummyemail123456.com";
             string password = "Erebor123!";
             CreateUserCommand createUserCommand = new CreateUserCommand(name, email, password, password);
-            IHttpActionResult registerHttpActionResult = await accountController.Register(JsonConvert.SerializeObject(createUserCommand));
+            IHttpActionResult registerHttpActionResult = accountController.Register(JsonConvert.SerializeObject(createUserCommand));
             Assert.NotNull(registerHttpActionResult);
             var registerResponse = ((OkNegotiatedContentResult<bool>)registerHttpActionResult).Content;
             Assert.IsTrue(registerResponse);

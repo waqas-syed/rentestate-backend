@@ -15,14 +15,16 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        Task<Tuple<IdentityResult, string>> RegisterUser(string name, string email, string password);
+        Tuple<IdentityResult, string> RegisterUser(string name, string email, string password);
 
-        Task<CustomIdentityUser> FindByEmailAsync(string email);
+        CustomIdentityUser GetUserByEmail(string email);
 
-        Task<CustomIdentityUser> FindUser(string userName, string password);
+        CustomIdentityUser GetUserByPassword(string userName, string password);
 
-        Task<IdentityResult> UpdateUser(CustomIdentityUser customerIdentityUser);
+        IdentityResult UpdateUser(CustomIdentityUser customerIdentityUser);
 
-        UserManager<CustomIdentityUser> UserManager { get; }
+        bool ActivateUser(string userId, string emailConfirmationToken);
+
+        bool IsEmailConfirmed(string userId);
     }
 }

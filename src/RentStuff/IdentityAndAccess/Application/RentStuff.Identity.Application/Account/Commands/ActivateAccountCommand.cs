@@ -11,6 +11,12 @@ namespace RentStuff.Identity.Application.Account.Commands
     [DataContract]
     public class ActivateAccountCommand
     {
+        public ActivateAccountCommand(string email, string activationCode)
+        {
+            Email = email;
+            ActivationCode = activationCode;
+        }
+        
         [DataMember]
         public string Email { get; set; }
         [DataMember]

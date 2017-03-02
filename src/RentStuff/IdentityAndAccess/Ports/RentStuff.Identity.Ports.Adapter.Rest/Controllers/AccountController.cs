@@ -22,7 +22,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register([FromBody] Object userObject)
+        public IHttpActionResult Register([FromBody] Object userObject)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
 
                     if (createUserCommand != null)
                     {
-                        bool identityResult = await _accountApplicationService.Register(createUserCommand);
+                        bool identityResult = _accountApplicationService.Register(createUserCommand);
                         if (identityResult)
                         {
                             return Ok(true);
@@ -62,7 +62,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("activate")]
-        public async Task<IHttpActionResult> Activate([FromBody] Object activateAccountObject)
+        public IHttpActionResult Activate([FromBody] Object activateAccountObject)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
 
                     if (activateAccountCommand != null)
                     {
-                        bool activationResult = await _accountApplicationService.Activate(activateAccountCommand);
+                        bool activationResult = _accountApplicationService.Activate(activateAccountCommand);
                         
                         if (activationResult)
                         {

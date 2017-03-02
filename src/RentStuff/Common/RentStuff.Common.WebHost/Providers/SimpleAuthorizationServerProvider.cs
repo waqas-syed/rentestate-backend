@@ -21,14 +21,14 @@ namespace RentStuff.Common.WebHost.Providers
 
             using (AccountRepository accountRepository = new AccountRepository())
             {
-                CustomIdentityUser user = await accountRepository.FindUser(context.UserName, context.Password);
+                CustomIdentityUser user = accountRepository.GetUserByPassword(context.UserName, context.Password);
 
                 if (user == null)
                 {
                     context.SetError("invalid_grant", "The user name or password is incorrect.");
                     return;
                 }
-                if (!accountRepository.UserManager.IsEmailConfirmed(user.Id))
+                if (!accountRepository.IsEmailConfirmed(user.Id))
                 {
                     context.SetError("Account is not activated yet.");
                     return;

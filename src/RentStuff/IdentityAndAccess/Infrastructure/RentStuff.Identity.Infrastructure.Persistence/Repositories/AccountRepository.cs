@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -29,7 +28,7 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
             _userManager.PasswordHasher = new CustomPasswordHasher();
         }
 
-        public async Task<Tuple<IdentityResult, string>> RegisterUser(string name, string email, string password)
+        public Tuple<IdentityResult, string> RegisterUser(string name, string email, string password)
         {
             // Assign email to the uername property, as we will use email in place of username
             CustomIdentityUser user = new CustomIdentityUser
@@ -38,10 +37,10 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
                 Email = email,
                 FullName = name
             };
-            var result = await _userManager.CreateAsync(user, password);
+            var result = _userManager.Create(user, password);
             if (result.Succeeded)
             {
-                var emailConfirmationResult = await _userManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                var emailConfirmationResult = _userManager.GenerateEmailConfirmationToken(user.Id);
                 if (string.IsNullOrWhiteSpace(emailConfirmationResult))
                 {
                     throw new ArgumentException("User saved but could not retreive Email Confirmation Token");
@@ -57,23 +56,40 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
             }
         }
 
-        public async Task<IdentityResult> UpdateUser(CustomIdentityUser customerIdentityUser)
+        public IdentityResult UpdateUser(CustomIdentityUser customerIdentityUser)
         {
-            return await _userManager.UpdateAsync(customerIdentityUser);
+            return _userManager.Update(customerIdentityUser);
         }
 
-        public async Task<CustomIdentityUser> FindByEmailAsync(string email)
+        public bool ActivateUser(string userId, string emailConfirmationToken)
         {
-            return await _userManager.FindByEmailAsync(email);
+            var identityResult = _userManager.ConfirmEmail(userId, emailConfirmationToken);
+            if (identityResult != null && identityResult.Succeeded)
+            {
+                return true;
+            }
+            throw new InvalidOperationException("Could not activate user with ID: " + userId);
         }
 
-        public async Task<CustomIdentityUser> FindUser(string userName, string password)
+        /// <summary>
+        /// Is Email Confirmed for the given user
+        /// </summary>
+        /// <returns></returns>
+        public bool IsEmailConfirmed(string userId)
         {
-            return await _userManager.FindAsync(userName, password);
+            return _userManager.IsEmailConfirmed(userId);
+        }           
+
+        public CustomIdentityUser GetUserByEmail(string email)
+        {
+            return _userManager.FindByEmail(email);
         }
 
-        public UserManager<CustomIdentityUser> UserManager { get { return _userManager; } }
-
+        public CustomIdentityUser GetUserByPassword(string userName, string password)
+        {
+            return _userManager.Find(userName, password);
+        }
+        
         public void Dispose()
         {
             _ctx.Dispose();

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using RentStuff.Identity.Application.Account.Commands;
+using RentStuff.Identity.Application.Account.Representations;
 using RentStuff.Identity.Infrastructure.Persistence.Model;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
 using RentStuff.Identity.Infrastructure.Services.Email;
@@ -20,7 +21,7 @@ namespace RentStuff.Identity.Application.Account
             _emailService = customEmailService;
         }
         
-        public async Task<bool> Register(CreateUserCommand userModel)
+        public bool Register(CreateUserCommand userModel)
         {
             if (string.IsNullOrWhiteSpace(userModel.FullName))
             {
@@ -46,14 +47,14 @@ namespace RentStuff.Identity.Application.Account
             {
                 throw new ArgumentException("Password and confirm password are not the same");
             }
-            Tuple<IdentityResult,string> emailConfirmationToken = await _accountRepository.RegisterUser(userModel.FullName, userModel.Email, 
+            Tuple<IdentityResult,string> emailConfirmationToken = _accountRepository.RegisterUser(userModel.FullName, userModel.Email, 
                                                                                                                    userModel.Password);
             if (emailConfirmationToken.Item1.Succeeded && !string.IsNullOrWhiteSpace(emailConfirmationToken.Item2))
             {
-                var retreivedUser = await _accountRepository.FindByEmailAsync(userModel.Email);
-                SendActivationEmail(retreivedUser.Id, retreivedUser.Email, retreivedUser.FullName, emailConfirmationToken.Item2);
+                var retreivedUser = _accountRepository.GetUserByEmail(userModel.Email);
+                //SendActivationEmail(retreivedUser.Id, retreivedUser.Email, retreivedUser.FullName, emailConfirmationToken.Item2);
                 #pragma warning disable 4014
-                //Task.Run(() => SendActivationEmail(retreivedUser.Id, retreivedUser.Email, retreivedUser.FullName, emailConfirmationToken.Item2));
+                Task.Run(() => SendActivationEmail(retreivedUser.Id, retreivedUser.Email, retreivedUser.FullName, emailConfirmationToken.Item2));
                 #pragma warning restore 4014
                 return true;
             }
@@ -70,14 +71,14 @@ namespace RentStuff.Identity.Application.Account
             _emailService.SendEmail(email, EmailConstants.ActivationEmailSubject, EmailConstants.ActivationEmailMessage(fullName, activationLink));
         }
 
-        public async Task<CustomIdentityUser> FindUser(string userName, string password)
+        public CustomIdentityUser FindUser(string userName, string password)
         {
-            CustomIdentityUser user = await _accountRepository.FindUser(userName, password);
+            CustomIdentityUser user = _accountRepository.GetUserByPassword(userName, password);
 
             return user;
         }
 
-        public async Task<bool> Activate(ActivateAccountCommand activateAccountCommand)
+        public bool Activate(ActivateAccountCommand activateAccountCommand)
         {
             if (string.IsNullOrWhiteSpace(activateAccountCommand.Email))
             {
@@ -87,25 +88,26 @@ namespace RentStuff.Identity.Application.Account
             {
                 throw new ArgumentException("Activation Code not provided");
             }
-            var user = await _accountRepository.FindByEmailAsync(activateAccountCommand.Email);
+            var user = _accountRepository.GetUserByEmail(activateAccountCommand.Email);
             if (user == null)
             {
                 throw new ArgumentException("User not found");
             }
-            if (_accountRepository.UserManager.IsEmailConfirmed(user.Id))
+            if (_accountRepository.IsEmailConfirmed(user.Id))
             {
                 throw new InvalidOperationException("User account is already activated");
             }
-            var confirmEmailResult = await _accountRepository.UserManager.ConfirmEmailAsync(user.Id, activateAccountCommand.ActivationCode);
+            return _accountRepository.ActivateUser(user.Id, activateAccountCommand.ActivationCode);
+        }
 
-            if (!confirmEmailResult.Succeeded)
+        public UserRepresentation GetUserByEmail(string email)
+        {
+            CustomIdentityUser customIdentityUser = _accountRepository.GetUserByEmail(email);
+            if (customIdentityUser != null)
             {
-                throw new ArgumentException("Could not confirm email.");
+                return new UserRepresentation(customIdentityUser.FullName, customIdentityUser.Email, customIdentityUser.EmailConfirmed);
             }
-            else
-            {
-                return true;
-            }
+            throw new NullReferenceException("Could not find the user for the given email");
         }
 
         public void Dispose()
