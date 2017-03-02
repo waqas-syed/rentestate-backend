@@ -14,7 +14,6 @@ namespace RentStuff.Identity.Application.Account
     public interface IAccountApplicationService
     {
         bool Register(CreateUserCommand createUserCommand);
-        CustomIdentityUser FindUser(string userName, string password);
         bool Activate(ActivateAccountCommand activateAccountCommand);
         UserRepresentation GetUserByEmail(string email);
         void Dispose();

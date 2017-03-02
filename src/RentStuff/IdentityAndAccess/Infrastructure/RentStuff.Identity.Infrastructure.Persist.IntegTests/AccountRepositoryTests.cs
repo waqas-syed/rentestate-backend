@@ -47,7 +47,7 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
             Tuple<IdentityResult,string> result = accountRepository.RegisterUser(name, email, password);            
             Assert.IsTrue(result.Item1.Succeeded);
             Assert.IsFalse(string.IsNullOrWhiteSpace(result.Item2));
-
+            
             customIdentityuser = accountRepository.GetUserByPassword(email, password);
             Assert.NotNull(customIdentityuser);
             Assert.AreEqual(name, customIdentityuser.FullName);

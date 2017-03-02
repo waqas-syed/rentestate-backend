@@ -70,14 +70,7 @@ namespace RentStuff.Identity.Application.Account
                                  "&activationcode=" + activationCode;
             _emailService.SendEmail(email, EmailConstants.ActivationEmailSubject, EmailConstants.ActivationEmailMessage(fullName, activationLink));
         }
-
-        public CustomIdentityUser FindUser(string userName, string password)
-        {
-            CustomIdentityUser user = _accountRepository.GetUserByPassword(userName, password);
-
-            return user;
-        }
-
+        
         public bool Activate(ActivateAccountCommand activateAccountCommand)
         {
             if (string.IsNullOrWhiteSpace(activateAccountCommand.Email))

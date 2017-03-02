@@ -56,10 +56,10 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
             }
         }
 
-        public IdentityResult UpdateUser(CustomIdentityUser customerIdentityUser)
+        /*public IdentityResult UpdateUser(CustomIdentityUser customerIdentityUser)
         {
             return _userManager.Update(customerIdentityUser);
-        }
+        }*/
 
         public bool ActivateUser(string userId, string emailConfirmationToken)
         {

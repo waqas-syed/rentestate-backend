@@ -21,7 +21,7 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 
         CustomIdentityUser GetUserByPassword(string userName, string password);
 
-        IdentityResult UpdateUser(CustomIdentityUser customerIdentityUser);
+        //IdentityResult UpdateUser(CustomIdentityUser customerIdentityUser);
 
         bool ActivateUser(string userId, string emailConfirmationToken);
 
