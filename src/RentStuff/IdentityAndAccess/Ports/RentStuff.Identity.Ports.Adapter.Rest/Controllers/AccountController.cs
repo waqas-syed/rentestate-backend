@@ -9,7 +9,8 @@ using RentStuff.Identity.Application.Account.Commands;
 
 namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
 {
-    [RoutePrefix("api/Account")]
+    [RoutePrefix("v1/Account")]
+    //[EnableCors(origins: "http://mywebclient.azurewebsites.net", headers: "*", methods: "*")]
     public class AccountController : ApiController
     {
         private IAccountApplicationService _accountApplicationService;

@@ -60,7 +60,7 @@ namespace RentStuff.Identity.Application.Account
             }
             if (!registrationResult.Succeeded)
             {
-                throw new InvalidOperationException("Crap! Not able to save user. Error: " + registrationResult.Errors.First());
+                throw new InvalidOperationException(registrationResult.Errors.First());
             }
             // Get the User instance to have her Id
             var retreivedUser = _accountRepository.GetUserByEmail(userModel.Email);
