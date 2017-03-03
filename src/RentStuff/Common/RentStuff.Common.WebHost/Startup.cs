@@ -16,6 +16,7 @@ namespace RentStuff.Common.WebHost
         public void Configuration(IAppBuilder app)
         {
             HttpConfiguration config = new HttpConfiguration();
+            
             var policy = new CorsPolicy()
             {
                 AllowAnyHeader = true,
@@ -23,8 +24,7 @@ namespace RentStuff.Common.WebHost
                 SupportsCredentials = true
             };
 
-            policy.Origins.Add(Constants.DOMAINURL);
-
+            policy.Origins.Add(Constants.FrontEndUrl);
             app.UseCors(new CorsOptions
             {
                 PolicyProvider = new CorsPolicyProvider
@@ -32,10 +32,9 @@ namespace RentStuff.Common.WebHost
                     PolicyResolver = context => Task.FromResult(policy)
                 }
             });
-            //app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
             ConfigureOAuth(app);
-
-            WebApiConfig.Register(config);
+            //app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+            WebApiConfig.Register(config);            
             app.UseWebApi(config);
         }
 

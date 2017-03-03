@@ -14,8 +14,8 @@ namespace RentStuff.Common.Console
     {
         static void Main(string[] args)
         {
-            IdentityBcAuthenticationTests.InitializeTests();
-            //CreateHouseTestData.Initialize();
+            //IdentityBcAuthenticationTests.InitializeTests();
+            CreateHouseTestData.Initialize();
         }
 
        

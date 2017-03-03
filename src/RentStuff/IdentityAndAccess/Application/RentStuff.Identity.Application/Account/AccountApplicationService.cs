@@ -80,7 +80,7 @@ namespace RentStuff.Identity.Application.Account
 
         private void SendActivationEmail(string email, string fullName, string activationCode)
         {
-            var activationLink = Constants.DOMAINURL + Constants.AccountActivationUrlLocation + "?email=" + email +
+            var activationLink = Constants.FrontEndUrl + "/" + Constants.AccountActivationUrlLocation + "?email=" + email +
                                  "&activationcode=" + activationCode;
             _emailService.SendEmail(email, EmailConstants.ActivationEmailSubject, EmailConstants.ActivationEmailMessage(fullName, activationLink));
         }

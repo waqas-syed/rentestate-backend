@@ -61,7 +61,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
 
         // POST api/Account/Register
         [AllowAnonymous]
-        [Route("activate")]
+        [Route("activate-account")]
         public IHttpActionResult Activate([FromBody] Object activateAccountObject)
         {
             try
