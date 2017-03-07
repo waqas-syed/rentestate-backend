@@ -16,7 +16,7 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, 
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber, 
             string houseNo, string streetNo, string area, string dimensionType, string dimensionStringValue, 
-            decimal dimensionIntValue, string ownerName)
+            decimal dimensionIntValue, string ownerName, string description)
         {
             Title = title;
             MonthlyRent = monthlyRent;
@@ -41,10 +41,14 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             DimensionStringValue = dimensionStringValue;
             DimensionIntValue = dimensionIntValue;
             OwnerName = ownerName;
+            Description = description;
         }
 
         [DataMember]
         public string Title { get; private set; }
+
+        [DataMember]
+        public string Description { get; private set; }
 
         [DataMember]
         public long MonthlyRent { get; private set; }

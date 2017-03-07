@@ -40,6 +40,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             
             string email = "w@12344321.com";
             string phoneNumber = "+923331234567";
+            string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent = 130000;
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
@@ -53,7 +54,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string ownerName = "Owner Name 1";
             var createNewHouseCommand = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0, ownerName);
+                dimensionType, dimensionString, 0, ownerName, description);
             string houseCreated = houseApplicationService.SaveNewHouseOffer(createNewHouseCommand);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
         }
@@ -66,6 +67,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             string email = "w@12344321.com";
             string phoneNumber = "+923331234567";
+            string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent = 130000;
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
@@ -86,7 +88,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             decimal longitude = coordinates.Item2;
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0, ownerName);
+                dimensionType, dimensionString, 0, ownerName, description);
             string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
@@ -100,6 +102,61 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.Area, retreivedHouse.Area);
             Assert.AreEqual(house.MonthlyRent, retreivedHouse.Rent);
             Assert.AreEqual(house.Title, retreivedHouse.Title);
+            Assert.AreEqual(house.Description, retreivedHouse.Description);
+            Assert.AreEqual(house.DimensionStringValue + " " + house.DimensionType, retreivedHouse.Dimension);
+            Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
+        }
+
+        [Test]
+        public void SaveHouseAndGetHouseByIdTest_TestsThatANewHouseIsSavedInTheDatabaseAsExpected_VerifiesByOutput()
+        {
+            IHouseApplicationService houseApplicationService =
+                (IHouseApplicationService)ContextRegistry.GetContext()["HouseApplicationService"];
+
+            string email = "w@12344321.com";
+            string phoneNumber = "+923331234567";
+            string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
+            long monthlyRent = 130000;
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            string houseNo = "747";
+            string streetNo = "13";
+            string area = "1600+Amphitheatre+Parkway,+Mountain+View,+CA";
+            string title = "Bellagio";
+            string dimensionType = "Kanal";
+            string dimensionString = "50";
+            string ownerName = "Owner Name 1";
+
+            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+            Tuple<decimal, decimal> coordinates = geocodingService.GetCoordinatesFromAddress(area);
+            Assert.IsNotNull(coordinates);
+
+            decimal latitude = coordinates.Item1;
+            decimal longitude = coordinates.Item2;
+            var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
+                false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
+                dimensionType, dimensionString, 0, ownerName, description);
+            string houseId = houseApplicationService.SaveNewHouseOffer(house);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
+
+            HouseFullRepresentation retreivedHouse = houseApplicationService.GetHouseById(houseId);
+
+            Assert.NotNull(retreivedHouse);
+            Assert.AreEqual(house.Title, retreivedHouse.Title);
+            Assert.AreEqual(house.Description, retreivedHouse.Description);
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
+            Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
+            Assert.AreEqual(house.FamiliesOnly, retreivedHouse.FamiliesOnly);
+            Assert.AreEqual(house.GarageAvailable, retreivedHouse.LandlinePhoneAvailable);
+            Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
+            Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
+            Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
+            Assert.AreEqual(house.HouseNo, retreivedHouse.HouseNo);
+            Assert.AreEqual(house.Area, retreivedHouse.Area);
+            Assert.AreEqual(house.StreetNo, retreivedHouse.StreetNo);
             Assert.AreEqual(house.DimensionStringValue + " " + house.DimensionType, retreivedHouse.Dimension);
             Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
         }
@@ -114,6 +171,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             string email = "w@12344321.com";
             string phoneNumber = "+923331234567";
+            string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent = 130000;
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
@@ -127,7 +185,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
             false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area, 
-            dimensionType, dimensionString, 0, ownerName);
+            dimensionType, dimensionString, 0, ownerName, description);
             houseApplicationService.SaveNewHouseOffer(house);
 
             IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
@@ -146,6 +204,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.Area, retreivedHouse.Area);
             Assert.AreEqual(house.MonthlyRent, retreivedHouse.Rent);
             Assert.AreEqual(house.Title, retreivedHouse.Title);
+            Assert.AreEqual(house.Description, retreivedHouse.Description);
             Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
         }
 
@@ -160,6 +219,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             string email = "w@12344321.com";
             string phoneNumber = "+923331234567";
+            string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent = 130000;
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
@@ -173,7 +233,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
             false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area, 
-            dimensionType, dimensionString, 0, ownerName);
+            dimensionType, dimensionString, 0, ownerName, description);
             houseApplicationService.SaveNewHouseOffer(house);
 
             IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];

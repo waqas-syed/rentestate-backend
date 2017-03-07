@@ -11,7 +11,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
     {
         public HousePartialRepresentation(string houseId, string title, string area, long rent, string propertyType, 
             Dimension dimension, int numberOfBedrooms, int numberOfBathrooms, int numberOfKitchens,
-            string ownerEmail, string ownerPhoneNumber, string imageString, string ownerName)
+            string ownerEmail, string ownerPhoneNumber, string imageString, string ownerName, string description)
         {
             HouseId = houseId;
             Title = title;
@@ -36,6 +36,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
             OwnerPhoneNumber = ownerPhoneNumber;
             ImageString = imageString;
             OwnerName = ownerName;
+            Description = description;
         }
 
         [DataMember]
@@ -43,6 +44,9 @@ namespace RentStuff.Property.Application.HouseServices.Representation
 
         [DataMember]
         public string Title { get; private set; }
+
+        [DataMember]
+        public string Description { get; private set; }
 
         [DataMember]
         public string Area { get; private set; }

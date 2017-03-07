@@ -46,6 +46,7 @@ namespace RentStuff.Common.Console
                     ownerPhoneNumber = "+9250010000" + i;
                 }
                 string houseNo = "House # " + i;
+                string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend." + i;
                 string streetNo = i.ToString();
                 int numberOfBathrooms = i;
                 int numberOfBedrooms = i;
@@ -83,7 +84,7 @@ namespace RentStuff.Common.Console
                 CreateHouseCommand house = new CreateHouseCommand(title, rent, numberOfBedrooms, numberOfKitchens,
                     numberOfBathrooms, familiesOnly, boysOnly, girlsOnly, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
-                    houseNo, streetNo, areas[i], dimensionType, dimensionString, dimensionDecimal, ownerName);
+                    houseNo, streetNo, areas[i], dimensionType, dimensionString, dimensionDecimal, ownerName, description);
                 //JsonConvert.SerializeObject(house);
                 HttpResponseMessage response = await _httpClient.PostAsJsonAsync("v1/house", house);
                 response.EnsureSuccessStatusCode();

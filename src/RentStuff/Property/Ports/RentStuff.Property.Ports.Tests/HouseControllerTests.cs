@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -64,6 +63,7 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.NotNull(houseController);
 
                 string title = "House For Rent";
+                string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
                 int rent = 105000;
                 string ownerEmail = "thorin@oakenshield123.com";
                 string ownerPhoneNumber = "+923211234567";
@@ -92,7 +92,7 @@ namespace RentStuff.Property.Ports.Tests
                     numberOfBathrooms,
                     familiesOnly, boysOnly, girlsOnly, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber, 
-                    houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName);
+                    houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>) houseSaveResult).Content;
                 
@@ -101,6 +101,8 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.NotNull(retreivedHouse);
                 Assert.AreEqual(title, retreivedHouse.Title);
                 Assert.AreEqual(house.Title, retreivedHouse.Title);
+                Assert.AreEqual(description, retreivedHouse.Description);
+                Assert.AreEqual(house.Description, retreivedHouse.Description);
                 Assert.AreEqual(rent, retreivedHouse.MonthlyRent);
                 Assert.AreEqual(house.MonthlyRent, retreivedHouse.MonthlyRent);
                 Assert.AreEqual(numberOfBathrooms, retreivedHouse.NumberOfBathrooms);
@@ -174,6 +176,7 @@ namespace RentStuff.Property.Ports.Tests
 
                 // Saving House # 1 - SET 1: Should appear in search results
                 string title = "Title # 1";
+                string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
                 int rent = 100001;
                 string ownerEmail = "house@1234567-1.com";
                 string ownerPhoneNumber = "+925000000001";
@@ -201,7 +204,7 @@ namespace RentStuff.Property.Ports.Tests
                     numberOfBathrooms,
                     familiesOnly, boysOnly, girlsOnly, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
-                    houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName);
+                    houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>) houseSaveResult).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
@@ -210,6 +213,7 @@ namespace RentStuff.Property.Ports.Tests
                 string title2 = "Title # 2";
                 int rent2 = 100002;
                 string ownerEmail2 = "house@1234567-2.com";
+                string description2 = "Erebor 2. Built deep within the mountain itself the beauty of this fortress was legend.";
                 string ownerPhoneNumber2 = "+925000000002";
                 string houseNo2 = "House # 2";
                 string streetNo2 = "2";
@@ -234,13 +238,14 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHouseCommand house2 = new CreateHouseCommand(title2, rent2, numberOfBedrooms2, numberOfKitchens2,
                     numberOfBathrooms2, familiesOnly2, boysOnly2, girlsOnly2, internetAvailable2, landlinePhoneAvailable2,
                     cableTvAvailable2, garageAvailable2, smokingAllowed2, propertyType2, ownerEmail2, ownerPhoneNumber2,
-                    houseNo2, streetNo2, area2, dimensionType2, dimensionString2, dimensionDecimal2, ownerName2);
+                    houseNo2, streetNo2, area2, dimensionType2, dimensionString2, dimensionDecimal2, ownerName2, description2);
                 IHttpActionResult houseSaveResult2 = houseController.Post(JsonConvert.SerializeObject(house2));
                 string houseId2 = ((OkNegotiatedContentResult<string>)houseSaveResult2).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId2));
 
                 // Saving House # 3 - SET 1: Should NOT appear in search results
                 string title3 = "Title # 3";
+                string description3 = "Erebor 3. Built deep within the mountain itself the beauty of this fortress was legend.";
                 int rent3 = 100003;
                 string ownerEmail3 = "house@1234567-3.com";
                 string ownerPhoneNumber3 = "+925000000003";
@@ -267,7 +272,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHouseCommand house3 = new CreateHouseCommand(title3, rent3, numberOfBedrooms3, numberOfKitchens3,
                     numberOfBathrooms3, familiesOnly3, boysOnly3, girlsOnly3, internetAvailable3, landlinePhoneAvailable3,
                     cableTvAvailable3, garageAvailable3, smokingAllowed3, propertyType3, ownerEmail3, ownerPhoneNumber3,
-                    houseNo3, streetNo3, area3, dimensionType3, dimensionString3, dimensionDecimal3, ownerName3);
+                    houseNo3, streetNo3, area3, dimensionType3, dimensionString3, dimensionDecimal3, ownerName3, description3);
                 IHttpActionResult houseSaveResult3 = houseController.Post(JsonConvert.SerializeObject(house3));
                 Assert.IsFalse(string.IsNullOrWhiteSpace(((OkNegotiatedContentResult<string>)houseSaveResult3).Content));
                 string houseId3 = ((OkNegotiatedContentResult<string>)houseSaveResult3).Content;
@@ -276,6 +281,7 @@ namespace RentStuff.Property.Ports.Tests
                 // Saving House # 4 - SET 2: Should NOT appear in search results, same property type as searched,
                 // but outside bounds of the search radius
                 string title4 = "Title # 4";
+                string description4 = "Erebor 4. Built deep within the mountain itself the beauty of this fortress was legend.";
                 int rent4 = 100004;
                 string ownerEmail4 = "house@1234567-4.com";
                 string ownerPhoneNumber4 = "+925000000004";
@@ -302,7 +308,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHouseCommand house4 = new CreateHouseCommand(title4, rent4, numberOfBedrooms4, numberOfKitchens4,
                     numberOfBathrooms4, familiesOnly4, boysOnly4, girlsOnly4, internetAvailable4, landlinePhoneAvailable4,
                     cableTvAvailable4, garageAvailable4, smokingAllowed4, propertyType4, ownerEmail4, ownerPhoneNumber4,
-                    houseNo4, streetNo4, area4, dimensionType4, dimensionString4, dimensionDecimal4, ownerName4);
+                    houseNo4, streetNo4, area4, dimensionType4, dimensionString4, dimensionDecimal4, ownerName4, description4);
                 IHttpActionResult houseSaveResult4 = houseController.Post(JsonConvert.SerializeObject(house4));
                 string houseId4 = ((OkNegotiatedContentResult<string>)houseSaveResult4).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId4));
@@ -310,6 +316,7 @@ namespace RentStuff.Property.Ports.Tests
                 // Saving House # 5 - SET 2: Should NOT appear in search results, outside bounds and different property 
                 // type
                 string title5 = "Title # 5";
+                string description5 = "Erebor 5. Built deep within the mountain itself the beauty of this fortress was legend.";
                 int rent5 = 100005;
                 string ownerEmail5 = "house@1234567-5.com";
                 string ownerPhoneNumber5 = "+925000000005";
@@ -336,7 +343,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHouseCommand house5 = new CreateHouseCommand(title5, rent5, numberOfBedrooms5, numberOfKitchens5,
                     numberOfBathrooms5, familiesOnly5, boysOnly5, girlsOnly5, internetAvailable5, landlinePhoneAvailable5,
                     cableTvAvailable5, garageAvailable5, smokingAllowed5, propertyType5, ownerEmail5, ownerPhoneNumber5,
-                    houseNo5, streetNo5, area5, dimensionType5, dimensionString5, dimensionDecimal5, ownerName5);
+                    houseNo5, streetNo5, area5, dimensionType5, dimensionString5, dimensionDecimal5, ownerName5, description5);
                 IHttpActionResult houseSaveResult5 = houseController.Post(JsonConvert.SerializeObject(house5));
                 string houseId5 = ((OkNegotiatedContentResult<string>)houseSaveResult5).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId5));
@@ -350,6 +357,8 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(houseId, retreivedHouses[0].HouseId);
                 Assert.AreEqual(title, retreivedHouses[0].Title);
                 Assert.AreEqual(house.Title, retreivedHouses[0].Title);
+                Assert.AreEqual(description, retreivedHouses[0].Description);
+                Assert.AreEqual(house.Description, retreivedHouses[0].Description);
                 Assert.AreEqual(rent, retreivedHouses[0].Rent);
                 Assert.AreEqual(house.MonthlyRent, retreivedHouses[0].Rent);
                 Assert.AreEqual(numberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
@@ -377,6 +386,8 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(houseId2, retreivedHouses[1].HouseId);
                 Assert.AreEqual(title2, retreivedHouses[1].Title);
                 Assert.AreEqual(house2.Title, retreivedHouses[1].Title);
+                Assert.AreEqual(description2, retreivedHouses[1].Description);
+                Assert.AreEqual(house2.Description, retreivedHouses[1].Description);
                 Assert.AreEqual(rent2, retreivedHouses[1].Rent);
                 Assert.AreEqual(house2.MonthlyRent, retreivedHouses[1].Rent);
                 Assert.AreEqual(numberOfBathrooms2, retreivedHouses[1].NumberOfBathrooms);

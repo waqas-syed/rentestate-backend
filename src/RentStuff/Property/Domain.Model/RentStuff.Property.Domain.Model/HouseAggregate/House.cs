@@ -11,6 +11,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
     public class House : Entity
     {
         private string _title;
+        private string _description;
         private long _monthlyRent;
         private int _numberOfBedrooms;
         private int _numberOfKitchens;
@@ -49,7 +50,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension, 
             bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail, string ownerPhoneNumber,
-            decimal latitude, decimal longitude, string houseNo, string streetNo, string area, string ownerName)
+            decimal latitude, decimal longitude, string houseNo, string streetNo, string area, string ownerName, string description)
         {
             Title = title;
             MonthlyRent = monthlyRent;
@@ -74,6 +75,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             StreetNo = streetNo;
             Area = area;
             OwnerName = ownerName;
+            Description = description;
         }
 
         /// <summary>
@@ -151,6 +153,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 Assertion.AssertStringNotNullorEmpty(value);
                 _title = value;
             }
+        }
+
+        public string Description
+        {
+            get { return _description; }
+            set { _description = value; }
         }
 
         /// <summary>
@@ -417,6 +425,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public class HouseBuilder
         {
             private string _title;
+            private string _description;
             private Location _location;
             private long _monthlyRent;
             private int _numberOfBedrooms;
@@ -444,6 +453,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             public HouseBuilder Title(string title)
             {
                 _title = title;
+                return this;
+            }
+
+            public HouseBuilder Description(string description)
+            {
+                _description = description;
                 return this;
             }
 
@@ -589,7 +604,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                                  _numberOfBathrooms, _familiesOnly, _boysOnly, _girlsOnly, _internetAvailable,
                                  _landlinePhoneAvailable, _cableTvAvailable, _dimension, _garageAvailable,
                                  _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber, _latitude, _longitude,
-                                 _houseNo, _streetNo, _area, _ownerName);
+                                 _houseNo, _streetNo, _area, _ownerName, _description);
             }
         }
     }

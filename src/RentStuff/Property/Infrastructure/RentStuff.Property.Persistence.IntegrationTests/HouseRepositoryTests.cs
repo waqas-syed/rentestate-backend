@@ -38,6 +38,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
              //Save the house in the repository and retreive it. Primitive test
             IHouseRepository houseRepository = (IHouseRepository) ContextRegistry.GetContext()["HouseRepository"];
             string email = "w@12344321.com";
+            string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
             string title = "MGM Grand";
             string phoneNumber = "123456789";
             int numberOfBedrooms = 3;
@@ -56,7 +57,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
                 .PropertyType(PropertyType.Apartment).MonthlyRent(price).Latitude(latitude).Longitude(longitude)
-                .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Build();
+                .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, null, 5, house);
             house.Dimension = dimension;
             houseRepository.SaveorUpdateDimension(dimension);
@@ -65,6 +66,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             House retreivedHouse = houseRepository.GetHouseById(house.Id);
 
             Assert.NotNull(retreivedHouse);
+            Assert.AreEqual(house.Title, retreivedHouse.Title);
+            Assert.AreEqual(house.Description, retreivedHouse.Description);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
@@ -102,6 +105,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string houseNo = "S-123";
             string streetNo = "13";
             string title = "Special House";
+            string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
             string phoneNumber = "123456789";
             string email = "special@spsp123456.com";
             int numberOfBathrooms = 1;
@@ -116,7 +120,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
             .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2)
-            .HouseNo(houseNo).Area(area).OwnerName(ownerName).StreetNo(streetNo).Build();
+            .HouseNo(houseNo).Area(area).OwnerName(ownerName).StreetNo(streetNo).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "5", 0, house);
             house.Dimension = dimension;
             houseRepository.SaveorUpdateDimension(dimension);
@@ -124,6 +128,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             // Saving House # 2
             string email2 = "special2@spsp123456.com";
+            string description2 = "Erobor. Built deep within the mountain itself the beauty of this fortress was legend.";
             string houseNo2 = "S2-123";
             string streetNo2 = "2-13";
             string phoneNumber2 = "987654321";
@@ -139,7 +144,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2)
-            .HouseNo(houseNo2).Area(area).OwnerName(ownerName2).StreetNo(streetNo2).Build();
+            .HouseNo(houseNo2).Area(area).OwnerName(ownerName2).StreetNo(streetNo2).Description(description2).Build();
             Dimension dimension2 = new Dimension(DimensionType.Marla, "20", 0, house2);
             house2.Dimension = dimension2;
             houseRepository.SaveorUpdateDimension(dimension2);
@@ -152,6 +157,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             // Verification of House # 1
             Assert.AreEqual(title, retreivedHouses[0].Title);
+            Assert.AreEqual(house.Title, retreivedHouses[0].Title);
+            Assert.AreEqual(description, retreivedHouses[0].Description);            
+            Assert.AreEqual(house.Description, retreivedHouses[0].Description);
             Assert.AreEqual(phoneNumber, retreivedHouses[0].OwnerPhoneNumber);
             Assert.AreEqual(email, retreivedHouses[0].OwnerEmail);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
@@ -193,6 +201,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Saving House # 1
             string houseNo = "S-123";
             string streetNo = "13";
+            string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
             string title = "Special House";
             string phoneNumber = "123456789";
             string email = "special@spsp123456.com";
@@ -208,7 +217,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
             .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2)
-            .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Build();
+            .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "5", 0, house);
             house.Dimension = dimension;
             houseRepository.SaveorUpdateDimension(dimension);
@@ -216,6 +225,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             // Saving House # 2
             string title2 = "Title # 2";
+            string description2 = "Erobor. Built deep within the mountain itself the beauty of this place was legend.";
             string email2 = "special2@spsp123456.com";
             string houseNo2 = "S2-123";
             string streetNo2 = "2-13";
@@ -232,7 +242,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2)
-            .HouseNo(houseNo2).Area(area).StreetNo(streetNo2).OwnerName(ownerName2).Build();
+            .HouseNo(houseNo2).Area(area).StreetNo(streetNo2).OwnerName(ownerName2).Description(description2).Build();
             Dimension dimension2 = new Dimension(DimensionType.Marla, "20", 0, house2);
             house2.Dimension = dimension2;
             houseRepository.SaveorUpdateDimension(dimension2);
@@ -245,6 +255,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             // Verification of House # 2
             Assert.AreEqual(title2, retreivedHouses[0].Title);
+            Assert.AreEqual(house2.Title, retreivedHouses[0].Title);
+            Assert.AreEqual(description2, retreivedHouses[0].Description);
+            Assert.AreEqual(house2.Description, retreivedHouses[0].Description);
             Assert.AreEqual(house2.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house2.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house2.NumberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
@@ -281,6 +294,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             // Saving House # 1: Should be in the search results
             string area = "Pindora, Rawalpindi, Pakistan";
+            string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
             var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(area);
             string houseNo = "House # 1";
             string streetNo = "1";
@@ -299,7 +313,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
             .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2)
-            .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Build();
+            .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "1", 0, house);
             house.Dimension = dimension;
             houseRepository.SaveorUpdateDimension(dimension);
@@ -308,6 +322,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Saving House # 2: Should NOT be in the search results, different property type
             string title2 = "Title # 2";
             string area2 = "Satellite Town, Rawalpindi, Pakistan";
+            string description2 = "It was a Hobbit Hole 2. Which means it had good food and a warm hearth.";
             var coordinatesFromAddress2 = geocodingService.GetCoordinatesFromAddress(area2);
             string email2 = "special2@spsp12345-2.com";
             string houseNo2 = "House # 2";
@@ -326,7 +341,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress2.Item1)
             .Longitude(coordinatesFromAddress2.Item2)
-            .HouseNo(houseNo2).Area(area2).StreetNo(streetNo2).OwnerName(ownerName2).Build();
+            .HouseNo(houseNo2).Area(area2).StreetNo(streetNo2).OwnerName(ownerName2).Description(description2).Build();
             Dimension dimension2 = new Dimension(DimensionType.Kanal, "2", 0, house2);
             house2.Dimension = dimension2;
             houseRepository.SaveorUpdateDimension(dimension2);
@@ -336,6 +351,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string area3 = "Kahuta, Pakistan";
             var coordinatesFromAddress3 = geocodingService.GetCoordinatesFromAddress(area3);
             string title3 = "Title # 3";
+            string description3 = "It was a Hobbit Hole 3. Which means it had good food and a warm hearth.";
             string email3 = "special2@spsp123456-3.com";
             string houseNo3 = "House # 3";
             string streetNo3 = "3";
@@ -353,7 +369,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType3).MonthlyRent(rent3).Latitude(coordinatesFromAddress3.Item1)
             .Longitude(coordinatesFromAddress3.Item2)
-            .HouseNo(houseNo3).Area(area3).StreetNo(streetNo3).OwnerName(ownerName3).Build();
+            .HouseNo(houseNo3).Area(area3).StreetNo(streetNo3).OwnerName(ownerName3).Description(description3).Build();
             Dimension dimension3 = new Dimension(DimensionType.Kanal, "3", 0, house3);
             house3.Dimension = dimension3;
             houseRepository.SaveorUpdateDimension(dimension3);
@@ -363,6 +379,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string area4 = "I-9, Islamabad, Pakistan";
             var coordinatesFromAddress4 = geocodingService.GetCoordinatesFromAddress(area4);
             string title4 = "Title # 4";
+            string description4 = "It was a Hobbit Hole 4. Which means it had good food and a warm hearth.";
             string email4 = "special2@spsp123456-4.com";
             string houseNo4 = "House # 4";
             string streetNo4 = "4";
@@ -380,7 +397,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType4).MonthlyRent(rent4).Latitude(coordinatesFromAddress4.Item1)
             .Longitude(coordinatesFromAddress4.Item2)
-            .HouseNo(houseNo4).Area(area4).StreetNo(streetNo4).OwnerName(ownerName4).Build();
+            .HouseNo(houseNo4).Area(area4).StreetNo(streetNo4).OwnerName(ownerName4).Description(description4).Build();
             Dimension dimension4 = new Dimension(DimensionType.Kanal, "4", 0, house4);
             house4.Dimension = dimension4;
             houseRepository.SaveorUpdateDimension(dimension4);
@@ -390,6 +407,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string area5 = "Saddar, Rawalpindi, Punjab, Pakistan";
             var coordinatesFromAddress5 = geocodingService.GetCoordinatesFromAddress(area5);
             string title5 = "Title # 5";
+            string description5 = "It was a Hobbit Hole 5. Which means it had good food and a warm hearth.";
             string email5 = "special2@spsp123456-5.com";
             string houseNo5 = "House # 5";
             string streetNo5 = "5";
@@ -407,7 +425,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType5).MonthlyRent(rent5).Latitude(coordinatesFromAddress5.Item1)
             .Longitude(coordinatesFromAddress5.Item2)
-            .HouseNo(houseNo5).Area(area5).StreetNo(streetNo5).OwnerName(ownerName5).Build();
+            .HouseNo(houseNo5).Area(area5).StreetNo(streetNo5).OwnerName(ownerName5).Description(description5).Build();
             Dimension dimension5 = new Dimension(DimensionType.Kanal, "5", 0, house5);
             house5.Dimension = dimension5;
             houseRepository.SaveorUpdateDimension(dimension5);
@@ -420,6 +438,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             // Verification of House # 1
             Assert.AreEqual(title, retreivedHouses[0].Title);
+            Assert.AreEqual(house.Title, retreivedHouses[0].Title);
+            Assert.AreEqual(description, retreivedHouses[0].Description);
+            Assert.AreEqual(house.Description, retreivedHouses[0].Description);
             Assert.AreEqual(phoneNumber, retreivedHouses[0].OwnerPhoneNumber);
             Assert.AreEqual(email, retreivedHouses[0].OwnerEmail);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
@@ -446,6 +467,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             // Verification of House # 4
             Assert.AreEqual(title4, retreivedHouses[1].Title);
+            Assert.AreEqual(house4.Title, retreivedHouses[1].Title);
+            Assert.AreEqual(description4, retreivedHouses[1].Description);
+            Assert.AreEqual(house4.Description, retreivedHouses[1].Description);
             Assert.AreEqual(house4.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
             Assert.AreEqual(house4.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
             Assert.AreEqual(house4.NumberOfBedrooms, retreivedHouses[1].NumberOfBedrooms);
@@ -506,6 +530,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 initialLatitude += _latitudeIncrementForMultipleHouseSaves;
                 initialLongitude += _longitudeIncrementForMultipleHouseSaves;
                 string title = "MGM Grand" + i;
+                string description = "It was a Hobbit Hole " + i + ". Which means it had good food and a warm hearth.";
                 string phoneNumber = "123456789" + i;
                 string email = "dummy@dumdum123456-" + i + ".com";
                 string houseNo = "123" + i;
@@ -521,6 +546,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                     initialLongitude += .0005M;
 
                     title = "MGM Grand" + (i + i);
+                    description = "It was a Hobbit Hole " + (i + i) + ". Which means it had good food and a warm hearth.";
                     phoneNumber = "123456789" + (i + i);
                     email = "dummy@dumdum123456-" + (i + i) + ".com";
                     houseNo = "123" + (i + i);
@@ -535,6 +561,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 Assert.AreEqual(initialLatitude, retreivedHouses[i].Latitude);
                 Assert.AreEqual(initialLongitude, retreivedHouses[i].Longitude);
                 Assert.AreEqual(title, retreivedHouses[i].Title);
+                Assert.AreEqual(description, retreivedHouses[i].Description);
                 Assert.AreEqual(phoneNumber, retreivedHouses[i].OwnerPhoneNumber);
                 Assert.AreEqual(email, retreivedHouses[i].OwnerEmail);
                 Assert.AreEqual(i + i, retreivedHouses[i].NumberOfBathrooms);
@@ -565,6 +592,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         {
             IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
             string email = "w@12344321.com";
+            string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
             string title = "MGM Grand";
             string phoneNumber = "123456789";
 
@@ -579,7 +607,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
                 .PropertyType(PropertyType.Apartment).MonthlyRent(price).Latitude(33.29M).Longitude(73.41M)
-                .HouseNo("123").Area("Pindora").StreetNo("13").OwnerName(ownerName).Build();
+                .HouseNo("123").Area("Pindora").StreetNo("13").OwnerName(ownerName).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "50", 0, house);
             house.Dimension = dimension;
             houseRepository.SaveorUpdateDimension(dimension);
@@ -589,6 +617,10 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             House retreivedHouse = retreivedHouses[0];
             Assert.NotNull(retreivedHouse);
+            Assert.AreEqual(title, retreivedHouse.Title);
+            Assert.AreEqual(house.Title, retreivedHouse.Title);
+            Assert.AreEqual(description, retreivedHouse.Description);
+            Assert.AreEqual(house.Description, retreivedHouse.Description);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
@@ -976,6 +1008,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.Longitude, retreivedHouses[0].Longitude);
             Assert.AreEqual(house.HouseNo, retreivedHouses[0].HouseNo);
             Assert.AreEqual(house.Area, retreivedHouses[0].Area);
+            Assert.AreEqual(house.Area, retreivedHouses[0].Area);
             Assert.AreEqual(house.StreetNo, retreivedHouses[0].StreetNo);
             Assert.AreEqual(email, house.OwnerEmail);
             Assert.AreEqual(house.OwnerEmail, retreivedHouses[0].OwnerEmail);
@@ -1043,6 +1076,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 initialLatitude += _latitudeIncrementForMultipleHouseSaves;
                 initialLongitude += _longitudeIncrementForMultipleHouseSaves;
                 string title = "MGM Grand" + i;
+                string description = "It was a Hobbit Hole " + i + ". Which means it had good food and a warm hearth.";
                 string phoneNumber = "123456789" + i;
                 string email = "dummy@dumdum123456-" + i + ".com";
                 string houseNo = "123" + i;
@@ -1055,6 +1089,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 Assert.AreEqual(initialLatitude, retreivedHouses[i].Latitude);
                 Assert.AreEqual(initialLongitude, retreivedHouses[i].Longitude);
                 Assert.AreEqual(title, retreivedHouses[i].Title);
+                Assert.AreEqual(description, retreivedHouses[i].Description);
                 Assert.AreEqual(phoneNumber, retreivedHouses[i].OwnerPhoneNumber);
                 Assert.AreEqual(email, retreivedHouses[i].OwnerEmail);
                 Assert.AreEqual(i, retreivedHouses[i].NumberOfBathrooms);
@@ -1098,6 +1133,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 initialLatitude += _latitudeIncrementForMultipleHouseSaves;
                 initialLongitude += _longitudeIncrementForMultipleHouseSaves;
                 string title = "MGM Grand" + i;
+                string description = "It was a Hobbit Hole " + i + ". Which means it had good food and a warm hearth.";
                 string phoneNumber = "123456789" + i;
                 string email = "dummy@dumdum123456-" + i + ".com";
                 string houseNo = "123" + i;
@@ -1119,7 +1155,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                     .Latitude(initialLatitude)
                     .Longitude(initialLongitude)
                     .MonthlyRent(rentPrice)
-                    .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Build();
+                    .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName)
+                    .Description(description).Build();
                 Dimension dimension = new Dimension(dimensionType, i.ToString(), 0, house);
                 house.Dimension = dimension;
                 houseRepository.SaveorUpdateDimension(dimension);

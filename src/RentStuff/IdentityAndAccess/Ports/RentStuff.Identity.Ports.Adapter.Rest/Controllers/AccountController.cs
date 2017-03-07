@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using RentStuff.Identity.Application.Account;
 using RentStuff.Identity.Application.Account.Commands;
+using RentStuff.Identity.Application.Account.Representations;
 
 namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
 {
@@ -93,6 +94,30 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
                 else
                 {
                     return BadRequest("No user data received");
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        // POST api/Account/Register
+        [AllowAnonymous]
+        [Route("get-user")]
+        [HttpGet]
+        public IHttpActionResult GetUser(string email)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(email))
+                {
+                    UserRepresentation user = _accountApplicationService.GetUserByEmail(email);
+                    return Ok(user);
+                }
+                else
+                {
+                    return BadRequest("No email provided");
                 }
             }
             catch (Exception exception)

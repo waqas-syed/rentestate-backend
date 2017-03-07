@@ -15,13 +15,51 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- DROP ALL TABLES FIRST
+DROP TABLE IF EXISTS `__migrationhistory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+DROP TABLE IF EXISTS `aspnetroles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+DROP TABLE IF EXISTS `aspnetuserclaims`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+DROP TABLE IF EXISTS `aspnetuserlogins`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+DROP TABLE IF EXISTS `aspnetuserroles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+DROP TABLE IF EXISTS `aspnetusers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+DROP TABLE IF EXISTS `dimension`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+DROP TABLE IF EXISTS `geo_location`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+DROP TABLE IF EXISTS `house`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+DROP TABLE IF EXISTS `houseimages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
 --
 -- Table structure for table `__migrationhistory`
 --
 
-DROP TABLE IF EXISTS `__migrationhistory`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `__migrationhistory` (
   `MigrationId` varchar(100) NOT NULL,
   `ContextKey` varchar(200) NOT NULL,
@@ -35,9 +73,6 @@ CREATE TABLE `__migrationhistory` (
 -- Table structure for table `aspnetroles`
 --
 
-DROP TABLE IF EXISTS `aspnetroles`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `aspnetroles` (
   `Id` varchar(128) NOT NULL,
   `Name` varchar(256) NOT NULL,
@@ -48,10 +83,6 @@ CREATE TABLE `aspnetroles` (
 --
 -- Table structure for table `aspnetuserclaims`
 --
-
-DROP TABLE IF EXISTS `aspnetuserclaims`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `aspnetuserclaims` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `UserId` varchar(128) NOT NULL,
@@ -68,9 +99,6 @@ CREATE TABLE `aspnetuserclaims` (
 -- Table structure for table `aspnetuserlogins`
 --
 
-DROP TABLE IF EXISTS `aspnetuserlogins`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `aspnetuserlogins` (
   `LoginProvider` varchar(128) NOT NULL,
   `ProviderKey` varchar(128) NOT NULL,
@@ -85,9 +113,6 @@ CREATE TABLE `aspnetuserlogins` (
 -- Table structure for table `aspnetuserroles`
 --
 
-DROP TABLE IF EXISTS `aspnetuserroles`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `aspnetuserroles` (
   `UserId` varchar(128) NOT NULL,
   `RoleId` varchar(128) NOT NULL,
@@ -102,9 +127,6 @@ CREATE TABLE `aspnetuserroles` (
 -- Table structure for table `aspnetusers`
 --
 
-DROP TABLE IF EXISTS `aspnetusers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `aspnetusers` (
   `Id` varchar(128) NOT NULL,
   `Email` varchar(256) DEFAULT NULL,
@@ -136,9 +158,6 @@ CREATE TABLE `aspnetusers` (
 -- Table structure for table `dimension`
 --
 
-DROP TABLE IF EXISTS `dimension`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dimension` (
   `id` varchar(75) NOT NULL,
   `dimension_type` varchar(30) NOT NULL,
@@ -153,9 +172,6 @@ CREATE TABLE `dimension` (
 -- Table structure for table `geo_location`
 --
 
-DROP TABLE IF EXISTS `geo_location`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `geo_location` (
   `geo_name_id` int(11) NOT NULL,
   `name` varchar(200) DEFAULT NULL,
@@ -184,12 +200,11 @@ CREATE TABLE `geo_location` (
 -- Table structure for table `house`
 --
 
-DROP TABLE IF EXISTS `house`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `house` (
   `id` varchar(120) NOT NULL,
   `db_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` varchar(200) NOT NULL,
+  `description` varchar(200) DEFAULT NULL,
   `owner_email` varchar(50) NOT NULL,
   `monthly_rent` bigint(20) NOT NULL,
   `number_of_bedrooms` int(11) NOT NULL,
@@ -210,8 +225,7 @@ CREATE TABLE `house` (
   `house_no` varchar(100) DEFAULT NULL,
   `street_no` varchar(10) DEFAULT NULL,
   `area` varchar(300) DEFAULT NULL,
-  `dimension_id` varchar(75) NOT NULL,
-  `title` varchar(200) NOT NULL,
+  `dimension_id` varchar(75) NOT NULL,  
   `owner_name` varchar(21) NOT NULL,
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
@@ -225,9 +239,6 @@ CREATE TABLE `house` (
 -- Table structure for table `houseimages`
 --
 
-DROP TABLE IF EXISTS `houseimages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `houseimages` (
   `house_id` varchar(50) NOT NULL,
   `image_id` varchar(45) NOT NULL

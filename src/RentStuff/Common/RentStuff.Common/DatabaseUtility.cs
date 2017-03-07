@@ -59,6 +59,7 @@ namespace RentStuff.Common
             }
             catch (Exception exception)
             {
+                throw;
             }
             finally
             {

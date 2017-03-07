@@ -43,6 +43,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         /// <returns></returns>
         [Route("house")]
         [HttpPost]
+        [Authorize]
         public IHttpActionResult Post([FromBody] Object house)
         {
             try
@@ -50,6 +51,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 if (house != null)
                 {
                     var jsonString = house.ToString();
+                    
                     CreateHouseCommand houseReborn = JsonConvert.DeserializeObject<CreateHouseCommand>(jsonString);
                     return Ok(_houseApplicationService.SaveNewHouseOffer(houseReborn));
                 }
@@ -142,7 +144,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 return InternalServerError();
             }
         }
-
+        
         [Route("GetHouseImages")]
         [HttpGet]
         public HttpResponseMessage GetHouseImages(string houseId)

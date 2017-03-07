@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Management.Instrumentation;
-using System.Net.Http;
 using System.Web.Hosting;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
@@ -49,7 +48,10 @@ namespace RentStuff.Property.Application.HouseServices
             }
             
             // Create the new house instance
-            House house = new House.HouseBuilder().Title(createHouseCommand.Title).BoysOnly(createHouseCommand.BoysOnly)
+            House house = new House.HouseBuilder()
+                .Title(createHouseCommand.Title)
+                .Description(createHouseCommand.Description)
+                .BoysOnly(createHouseCommand.BoysOnly)
                 .CableTvAvailable(createHouseCommand.CableTvAvailable)
                 .FamiliesOnly(createHouseCommand.FamiliesOnly)
                 .GarageAvailable(createHouseCommand.GarageAvailable)
@@ -161,7 +163,7 @@ namespace RentStuff.Property.Application.HouseServices
                 house.GirlsOnly, house.BoysOnly, house.InternetAvailable, house.LandlinePhoneAvailable, house.CableTvAvailable,
                 house.Dimension.StringValue + " " + house.Dimension.DimensionType, house.GarageAvailable, house.SmokingAllowed,
                 house.PropertyType.ToString(), house.OwnerEmail, house.OwnerPhoneNumber, house.Latitude, house.Longitude, house.HouseNo,
-                house.StreetNo, house.Area, houseImages, house.OwnerName);
+                house.StreetNo, house.Area, houseImages, house.OwnerName, house.Description);
         }
 
 
@@ -259,7 +261,7 @@ namespace RentStuff.Property.Application.HouseServices
                     HousePartialRepresentation houseRepresentation = new HousePartialRepresentation(house.Id, house.Title, house.Area, 
                         house.MonthlyRent, house.PropertyType.ToString(), house.Dimension, house.NumberOfBedrooms, 
                         house.NumberOfBathrooms, house.NumberOfKitchens, house.OwnerEmail, house.OwnerPhoneNumber,
-                        base64ImageString, house.OwnerName);
+                        base64ImageString, house.OwnerName, house.Description);
                     
                     houseRepresentations.Add(houseRepresentation);
                 }
