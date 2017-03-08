@@ -369,7 +369,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             get { return _houseNo; }
             set
             {
-                Assertion.AssertStringNotNullorEmpty(value);
+                //Assertion.AssertStringNotNullorEmpty(value);
                 _houseNo = value;
             }
         }
@@ -382,7 +382,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             get { return _streetNo; }
             set
             {
-                Assertion.AssertStringNotNullorEmpty(value);
+                //Assertion.AssertStringNotNullorEmpty(value);
                 _streetNo = value;
             }
         }
