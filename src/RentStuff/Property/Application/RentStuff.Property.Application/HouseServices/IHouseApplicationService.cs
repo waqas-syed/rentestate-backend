@@ -80,5 +80,13 @@ namespace RentStuff.Property.Application.HouseServices
         /// Add images to an existing House instance
         /// </summary>
         void AddImagesToHouse(string houseId, IList<string> imagesList);
+
+        /// <summary>
+        /// Checks that the call requester willing to update the house is the actual poster of the house by comparing emails
+        /// </summary>
+        /// <param name="houseId"></param>
+        /// <param name="requesterEmail"></param>
+        /// <returns></returns>
+        bool HouseOwnershipEmailCheck(string houseId, string requesterEmail);
     }
 }

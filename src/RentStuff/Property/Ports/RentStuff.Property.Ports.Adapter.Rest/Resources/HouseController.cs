@@ -6,7 +6,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
 using Newtonsoft.Json;
@@ -70,49 +70,65 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         /// <returns></returns>
         [Route("HouseImageUpload")]
         [HttpPost]
+        [Authorize]
         public IHttpActionResult PostImageUpload()
         {
             bool imageUploaded = false;
+            String[] headerValues = (String[])Request.Headers.GetValues("HouseId");
+            string houseId = headerValues[0];
+            var userEmail = User.Identity.Name;
+            bool allowedToEditHouse = _houseApplicationService.HouseOwnershipEmailCheck(houseId, userEmail);
+            
             try
             {
-                //var result = new HttpResponseMessage(HttpStatusCode.OK);
-                //var httpRequest = HttpContext.Current.Request;
-                if (Request.Content.IsMimeMultipartContent())
+                if (allowedToEditHouse)
                 {
-                    Request.Content.LoadIntoBufferAsync().Wait();
-                    Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(
-                        new MultipartMemoryStreamProvider()).ContinueWith((task) =>
+                    //var result = new HttpResponseMessage(HttpStatusCode.OK);
+                    //var httpRequest = HttpContext.Current.Request;
+                    if (Request.Content.IsMimeMultipartContent())
                     {
-                        IList<string> imagesList = new List<string>();
-                        MultipartMemoryStreamProvider provider = task.Result;
-                        foreach (HttpContent content in provider.Contents)
+                        Request.Content.LoadIntoBufferAsync().Wait();
+
+                        Task<MultipartMemoryStreamProvider> imageSavetask = Request.Content
+                            .ReadAsMultipartAsync<MultipartMemoryStreamProvider>(
+                                new MultipartMemoryStreamProvider());
+                        imageSavetask.ContinueWith((task) =>
                         {
-                            Stream stream = content.ReadAsStreamAsync().Result;
-                            var image = Image.FromStream(stream);
-                            var testName = content.Headers.ContentDisposition.Name;
-                            String filePath = HostingEnvironment.MapPath(Constants.HOUSEIMAGESDIRECTORY);
+                            IList<string> imagesList = new List<string>();
+                            MultipartMemoryStreamProvider provider = task.Result;
+                            foreach (HttpContent content in provider.Contents)
+                            {
+                                Stream stream = content.ReadAsStreamAsync().Result;
+                                var image = Image.FromStream(stream);
+                                var testName = content.Headers.ContentDisposition.Name;
+                                String filePath = HostingEnvironment.MapPath(Constants.HOUSEIMAGESDIRECTORY);
 
-                            string imageId = Guid.NewGuid().ToString();
-                            String fileName = imageId + ".jpg";
-                            String fullPath = Path.Combine(filePath, fileName);
-                            image.Save(fullPath);
+                                string imageId = Guid.NewGuid().ToString();
+                                String fileName = imageId + ".jpg";
+                                String fullPath = Path.Combine(filePath, fileName);
+                                image.Save(fullPath);
+                                imagesList.Add(fileName);
+                            }
 
-                            imagesList.Add(fileName);
-                        }
-                        String[] headerValues = (String[])Request.Headers.GetValues("HouseId");
-                        _houseApplicationService.AddImagesToHouse(headerValues[0], imagesList);
-                        imageUploaded = true;
-                    });
+                            _houseApplicationService.AddImagesToHouse(houseId, imagesList);
+                            imageUploaded = true;
+                        }).Wait(5000);
+                    }
+                    else
+                    {
+                        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable,
+                            "This request is not properly formatted"));
+                    }
+                    return Ok(imageUploaded);
                 }
                 else
                 {
-                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable, "This request is not properly formatted"));
+                    throw new InvalidOperationException("The logged in user is not the actual poster for the requested house. Action will be taken now against this user");
                 }
-                return Ok(imageUploaded);
             }
             catch (Exception exception)
             {
-                return InternalServerError();
+                return BadRequest(exception.Message);
             }
         }
 

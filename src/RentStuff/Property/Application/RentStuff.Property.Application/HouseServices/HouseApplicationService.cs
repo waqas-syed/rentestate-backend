@@ -239,6 +239,23 @@ namespace RentStuff.Property.Application.HouseServices
             }
         }
 
+        public bool HouseOwnershipEmailCheck(string houseId, string requesterEmail)
+        {
+            var house = _houseRepository.GetHouseById(houseId);
+            if (house == null)
+            {
+                throw new NullReferenceException("No house found for the given Id");
+            }
+            if (house.OwnerEmail.Equals(requesterEmail))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private IList<HousePartialRepresentation> ConvertHouseToRepresentation(IList<House> houses)
         {
             IList<HousePartialRepresentation> houseRepresentations = new List<HousePartialRepresentation>();
