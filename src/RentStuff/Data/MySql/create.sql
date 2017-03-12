@@ -225,7 +225,7 @@ CREATE TABLE `house` (
   `house_no` varchar(100) DEFAULT NULL,
   `street_no` varchar(10) DEFAULT NULL,
   `area` varchar(300) DEFAULT NULL,
-  `dimension_id` varchar(75) NOT NULL,  
+  `dimension_id` varchar(75) DEFAULT NULL,  
   `owner_name` varchar(21) NOT NULL,
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),

@@ -72,11 +72,18 @@ namespace RentStuff.Property.Application.HouseServices
                 .StreetNo(createHouseCommand.StreetNo)
                 .Area(createHouseCommand.Area)
                 .OwnerName(createHouseCommand.OwnerName).Build();
-            var dimension = new Dimension((DimensionType)Enum.Parse(typeof(DimensionType), 
-                createHouseCommand.DimensionType), createHouseCommand.DimensionStringValue, 
-                createHouseCommand.DimensionIntValue, house);
-            _houseRepository.SaveorUpdateDimension(dimension);
-            house.Dimension = dimension;
+            if (!string.IsNullOrWhiteSpace(createHouseCommand.DimensionType))
+            {
+                if (string.IsNullOrWhiteSpace(createHouseCommand.DimensionStringValue))
+                {
+                    throw new NullReferenceException("DimensionStringValue cannot be null if the DimensionType is not null");
+                }
+                var dimension = new Dimension((DimensionType) Enum.Parse(typeof(DimensionType),
+                        createHouseCommand.DimensionType), createHouseCommand.DimensionStringValue,
+                    createHouseCommand.DimensionIntValue, house);
+                _houseRepository.SaveorUpdateDimension(dimension);
+                house.Dimension = dimension;
+            }
 
             // Save the new house instance
             _houseRepository.SaveorUpdate(house);
@@ -158,10 +165,15 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 houseImages.Add(ConvertImageToBase64String(houseImage));
             }
+            string dimension = null;
+            if (house.Dimension != null)
+            {
+                dimension = house.Dimension.StringValue + " " + house.Dimension.DimensionType;
+            }
             return new HouseFullRepresentation(house.Title, house.MonthlyRent,
                 house.NumberOfBedrooms, house.NumberOfKitchens, house.FamiliesOnly, house.NumberOfBathrooms,
                 house.GirlsOnly, house.BoysOnly, house.InternetAvailable, house.LandlinePhoneAvailable, house.CableTvAvailable,
-                house.Dimension.StringValue + " " + house.Dimension.DimensionType, house.GarageAvailable, house.SmokingAllowed,
+                dimension, house.GarageAvailable, house.SmokingAllowed,
                 house.PropertyType.ToString(), house.OwnerEmail, house.OwnerPhoneNumber, house.Latitude, house.Longitude, house.HouseNo,
                 house.StreetNo, house.Area, houseImages, house.OwnerName, house.Description);
         }
