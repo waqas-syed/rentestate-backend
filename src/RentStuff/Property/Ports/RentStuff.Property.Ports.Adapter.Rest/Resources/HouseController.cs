@@ -53,6 +53,14 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     var jsonString = house.ToString();
                     
                     CreateHouseCommand houseReborn = JsonConvert.DeserializeObject<CreateHouseCommand>(jsonString);
+
+                    // Check if the current caller is using his own email in the CreateHouseCommand to upload a new house
+                    var currentUserEmail = User.Identity.Name;
+                    if (!currentUserEmail.Equals(houseReborn.OwnerEmail))
+                    {
+                        throw new InvalidOperationException("Current user cannot upload house using another user's email.");
+
+                    }
                     return Ok(_houseApplicationService.SaveNewHouseOffer(houseReborn));
                 }
                 return BadRequest();
