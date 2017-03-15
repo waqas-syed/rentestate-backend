@@ -148,11 +148,33 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             {
                 if (area != null && propertyType != null)
                 {
-                    return Ok(_houseApplicationService.SearchHousesByAddressAndPropertyType(area, propertyType));
+                    return Ok(_houseApplicationService.SearchHousesByAreaAndPropertyType(area, propertyType));
+                }
+                else if (area != null)
+                {
+                    return Ok(_houseApplicationService.SearchHousesByArea(area));
+                }
+                else if (propertyType != null)
+                {
+                    return Ok(_houseApplicationService.SearchHousesByPropertyType(propertyType));
                 }
                 else if (email != null)
                 {
-                    return Ok(_houseApplicationService.GetHouseByEmail(email));
+                    if (!string.IsNullOrWhiteSpace(User.Identity?.Name))
+                    {
+                        if (email.Equals(User.Identity.Name))
+                        {
+                            return Ok(_houseApplicationService.GetHouseByEmail(email));
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("Only user's own houses can be retreived by email");
+                        }
+                    }
+                    else
+                    {
+                        throw new NullReferenceException("User must be logged in for this request");
+                    }
                 }
                 else if (!string.IsNullOrEmpty(houseId))
                 {

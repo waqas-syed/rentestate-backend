@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
+using System.Security.Claims;
 using System.Web.Http;
 using System.Web.Http.Results;
 using log4net;
 using log4net.Appender;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
+using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using RentStuff.Common;
@@ -410,6 +412,421 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(ownerName2, retreivedHouses[1].OwnerName);
                 Assert.AreEqual(house2.OwnerName, retreivedHouses[1].OwnerName);
             }
+        }
+
+        [Category("Integration")]
+        [Test]
+        public void
+            SearchHousesByPropertyTypeOnly_TestsThatHouseIsSavedAndRetreivedAsExpected_VerfiesThroughInstanceValue()
+        {
+            HouseController houseController = (HouseController) ContextRegistry.GetContext()["HouseController"];
+            Assert.NotNull(houseController);
+
+            // Saving House # 1: Should appear in search results with PropertyType = Apartment
+            string title = "Title # 1";
+            string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
+            int rent = 100001;
+            string ownerEmail = "house@1234567-1.com";
+            string ownerPhoneNumber = "+925000000001";
+            string houseNo = "House # 1";
+            string streetNo = "1";
+            int numberOfBathrooms = 1;
+            int numberOfBedrooms = 1;
+            int numberOfKitchens = 1;
+            bool familiesOnly = false;
+            bool boysOnly = false;
+            bool girlsOnly = true;
+            bool internetAvailable = true;
+            bool landlinePhoneAvailable = true;
+            bool cableTvAvailable = true;
+            bool garageAvailable = true;
+            bool smokingAllowed = true;
+            string propertyType = PropertyType.Apartment.ToString();
+            string area = "Pindora, Rawalpindi, Pakistan";
+            string dimensionType = DimensionType.Kanal.ToString();
+            string dimensionString = "1";
+            decimal dimensionDecimal = 0;
+            string ownerName = "Owner Name 1";
+
+            // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
+            houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
+            {
+                new ClaimsIdentity(new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, ownerEmail)
+                })
+            });
+
+            CreateHouseCommand house = new CreateHouseCommand(title, rent, numberOfBedrooms, numberOfKitchens,
+                numberOfBathrooms,
+                familiesOnly, boysOnly, girlsOnly, internetAvailable, landlinePhoneAvailable,
+                cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
+                houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description);
+            IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
+            string houseId = ((OkNegotiatedContentResult<string>) houseSaveResult).Content;
+            Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
+
+            // Saving House # 2 - SET 1: Should NOT appear in search results with PropertyType = House
+            string title2 = "Title # 2";
+            int rent2 = 100002;
+            string ownerEmail2 = "house@1234567-2.com";
+            string description2 =
+                "Erebor 2. Built deep within the mountain itself the beauty of this fortress was legend.";
+            string ownerPhoneNumber2 = "+925000000002";
+            string houseNo2 = "House # 2";
+            string streetNo2 = "2";
+            int numberOfBathrooms2 = 2;
+            int numberOfBedrooms2 = 2;
+            int numberOfKitchens2 = 2;
+            bool familiesOnly2 = false;
+            bool boysOnly2 = false;
+            bool girlsOnly2 = true;
+            bool internetAvailable2 = true;
+            bool landlinePhoneAvailable2 = true;
+            bool cableTvAvailable2 = true;
+            bool garageAvailable2 = true;
+            bool smokingAllowed2 = true;
+            string propertyType2 = PropertyType.House.ToString();
+            string area2 = "I-9, Islamabad, Pakistan";
+            string dimensionType2 = DimensionType.Kanal.ToString();
+            string dimensionString2 = "2";
+            decimal dimensionDecimal2 = 0;
+            string ownerName2 = "Owner Name 2";
+
+            // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
+            houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
+            {
+                new ClaimsIdentity(new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, ownerEmail2)
+                })
+            });
+            CreateHouseCommand house2 = new CreateHouseCommand(title2, rent2, numberOfBedrooms2, numberOfKitchens2,
+                numberOfBathrooms2, familiesOnly2, boysOnly2, girlsOnly2, internetAvailable2, landlinePhoneAvailable2,
+                cableTvAvailable2, garageAvailable2, smokingAllowed2, propertyType2, ownerEmail2, ownerPhoneNumber2,
+                houseNo2, streetNo2, area2, dimensionType2, dimensionString2, dimensionDecimal2, ownerName2,
+                description2);
+            IHttpActionResult houseSaveResult2 = houseController.Post(JsonConvert.SerializeObject(house2));
+            string houseId2 = ((OkNegotiatedContentResult<string>) houseSaveResult2).Content;
+            Assert.IsFalse(string.IsNullOrWhiteSpace(houseId2));
+
+            // Saving House # 3: Should appear in search results with PropertyType = Apartment
+            string title3 = "Title # 3";
+            string description3 =
+                "Erebor 3. Built deep within the mountain itself the beauty of this fortress was legend.";
+            int rent3 = 100003;
+            string ownerEmail3 = "house@1234567-3.com";
+            string ownerPhoneNumber3 = "+925000000003";
+            string houseNo3 = "House # 3";
+            string streetNo3 = "3";
+            int numberOfBathrooms3 = 3;
+            int numberOfBedrooms3 = 3;
+            int numberOfKitchens3 = 3;
+            bool familiesOnly3 = false;
+            bool boysOnly3 = false;
+            bool girlsOnly3 = true;
+            bool internetAvailable3 = true;
+            bool landlinePhoneAvailable3 = true;
+            bool cableTvAvailable3 = true;
+            bool garageAvailable3 = true;
+            bool smokingAllowed3 = true;
+            string propertyType3 = PropertyType.Apartment.ToString();
+            string area3 = "Saddar, Rawalpindi, Pakistan";
+            string dimensionType3 = DimensionType.Kanal.ToString();
+            string dimensionString3 = "3";
+            decimal dimensionDecimal3 = 0;
+            string ownerName3 = "Owner Name 3";
+
+            // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
+            houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
+            {
+                new ClaimsIdentity(new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, ownerEmail3)
+                })
+            });
+            CreateHouseCommand house3 = new CreateHouseCommand(title3, rent3, numberOfBedrooms3, numberOfKitchens3,
+                numberOfBathrooms3, familiesOnly3, boysOnly3, girlsOnly3, internetAvailable3, landlinePhoneAvailable3,
+                cableTvAvailable3, garageAvailable3, smokingAllowed3, propertyType3, ownerEmail3, ownerPhoneNumber3,
+                houseNo3, streetNo3, area3, dimensionType3, dimensionString3, dimensionDecimal3, ownerName3,
+                description3);
+            IHttpActionResult houseSaveResult3 = houseController.Post(JsonConvert.SerializeObject(house3));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(((OkNegotiatedContentResult<string>) houseSaveResult3).Content));
+            string houseId3 = ((OkNegotiatedContentResult<string>) houseSaveResult3).Content;
+            Assert.IsFalse(string.IsNullOrWhiteSpace(houseId3));
+            
+            IHttpActionResult response = (IHttpActionResult)houseController.GetHouse(propertyType: propertyType);
+            IList<HousePartialRepresentation> retreivedHouses = ((OkNegotiatedContentResult<IList<HousePartialRepresentation>>)response).Content;
+
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(2, retreivedHouses.Count);
+
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(2, retreivedHouses.Count);
+            // Verification of House No 1
+            Assert.AreEqual(houseId, retreivedHouses[0].HouseId);
+            Assert.AreEqual(title, retreivedHouses[0].Title);
+            Assert.AreEqual(house.Title, retreivedHouses[0].Title);
+            Assert.AreEqual(description, retreivedHouses[0].Description);
+            Assert.AreEqual(house.Description, retreivedHouses[0].Description);
+            Assert.AreEqual(rent, retreivedHouses[0].Rent);
+            Assert.AreEqual(house.MonthlyRent, retreivedHouses[0].Rent);
+            Assert.AreEqual(numberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
+            Assert.AreEqual(numberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
+            Assert.AreEqual(house.NumberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
+            Assert.AreEqual(numberOfKitchens, retreivedHouses[0].NumberOfKitchens);
+            Assert.AreEqual(house.NumberOfKitchens, retreivedHouses[0].NumberOfKitchens);
+            Assert.AreEqual(dimensionString + " " + dimensionType, retreivedHouses[0].Dimension);
+            Assert.AreEqual(house.DimensionStringValue + " " + house.DimensionType, retreivedHouses[0].Dimension);
+
+            Assert.AreEqual(propertyType, retreivedHouses[0].PropertyType);
+            Assert.AreEqual(house.PropertyType, retreivedHouses[0].PropertyType);
+            Assert.AreEqual(area, retreivedHouses[0].Area);
+            Assert.AreEqual(house.Area, retreivedHouses[0].Area);
+            Assert.AreEqual(ownerEmail, retreivedHouses[0].OwnerEmail);
+            Assert.AreEqual(house.OwnerEmail, retreivedHouses[0].OwnerEmail);
+            Assert.AreEqual(ownerPhoneNumber, retreivedHouses[0].OwnerPhoneNumber);
+            Assert.AreEqual(house.OwnerPhoneNumber, retreivedHouses[0].OwnerPhoneNumber);
+            Assert.AreEqual(ownerName, retreivedHouses[0].OwnerName);
+            Assert.AreEqual(house.OwnerName, retreivedHouses[0].OwnerName);
+
+
+            // Verification of House No 3 (in order of saving houses above)
+            Assert.AreEqual(houseId3, retreivedHouses[1].HouseId);
+            Assert.AreEqual(title3, retreivedHouses[1].Title);
+            Assert.AreEqual(house3.Title, retreivedHouses[1].Title);
+            Assert.AreEqual(description3, retreivedHouses[1].Description);
+            Assert.AreEqual(house3.Description, retreivedHouses[1].Description);
+            Assert.AreEqual(rent3, retreivedHouses[1].Rent);
+            Assert.AreEqual(house3.MonthlyRent, retreivedHouses[1].Rent);
+            Assert.AreEqual(numberOfBathrooms3, retreivedHouses[1].NumberOfBathrooms);
+            Assert.AreEqual(house3.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
+            Assert.AreEqual(numberOfBedrooms3, retreivedHouses[1].NumberOfBedrooms);
+            Assert.AreEqual(house3.NumberOfBedrooms, retreivedHouses[1].NumberOfBedrooms);
+            Assert.AreEqual(numberOfKitchens3, retreivedHouses[1].NumberOfKitchens);
+            Assert.AreEqual(house3.NumberOfKitchens, retreivedHouses[1].NumberOfKitchens);
+            Assert.AreEqual(dimensionString3 + " " + dimensionType2, retreivedHouses[1].Dimension);
+            Assert.AreEqual(house3.DimensionStringValue + " " + house2.DimensionType, retreivedHouses[1].Dimension);
+
+            Assert.AreEqual(propertyType3, retreivedHouses[1].PropertyType);
+            Assert.AreEqual(house3.PropertyType, retreivedHouses[1].PropertyType);
+            Assert.AreEqual(area3, retreivedHouses[1].Area);
+            Assert.AreEqual(house3.Area, retreivedHouses[1].Area);
+            Assert.AreEqual(ownerEmail3, retreivedHouses[1].OwnerEmail);
+            Assert.AreEqual(house3.OwnerEmail, retreivedHouses[1].OwnerEmail);
+            Assert.AreEqual(ownerPhoneNumber3, retreivedHouses[1].OwnerPhoneNumber);
+            Assert.AreEqual(house3.OwnerPhoneNumber, retreivedHouses[1].OwnerPhoneNumber);
+            Assert.AreEqual(ownerName3, retreivedHouses[1].OwnerName);
+            Assert.AreEqual(house3.OwnerName, retreivedHouses[1].OwnerName);
+        }
+
+        [Category("Integration")]
+        [Test]
+        public void
+            SearchHousesByAreaOnly_TestsThatHouseIsSavedAndRetreivedAsExpected_VerfiesThroughInstanceValue()
+        {
+            HouseController houseController = (HouseController)ContextRegistry.GetContext()["HouseController"];
+            Assert.NotNull(houseController);
+
+            // Saving House # 1: Should appear in search results with area = Pindora (near I-9, Islamabad)
+            string title = "Title # 1";
+            string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
+            int rent = 100001;
+            string ownerEmail = "house@1234567-1.com";
+            string ownerPhoneNumber = "+925000000001";
+            string houseNo = "House # 1";
+            string streetNo = "1";
+            int numberOfBathrooms = 1;
+            int numberOfBedrooms = 1;
+            int numberOfKitchens = 1;
+            bool familiesOnly = false;
+            bool boysOnly = false;
+            bool girlsOnly = true;
+            bool internetAvailable = true;
+            bool landlinePhoneAvailable = true;
+            bool cableTvAvailable = true;
+            bool garageAvailable = true;
+            bool smokingAllowed = true;
+            string propertyType = PropertyType.Apartment.ToString();
+            string area = "Pindora, Rawalpindi, Pakistan";
+            string dimensionType = DimensionType.Kanal.ToString();
+            string dimensionString = "1";
+            decimal dimensionDecimal = 0;
+            string ownerName = "Owner Name 1";
+
+            // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
+            houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
+            {
+                new ClaimsIdentity(new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, ownerEmail)
+                })
+            });
+
+            CreateHouseCommand house = new CreateHouseCommand(title, rent, numberOfBedrooms, numberOfKitchens,
+                numberOfBathrooms,
+                familiesOnly, boysOnly, girlsOnly, internetAvailable, landlinePhoneAvailable,
+                cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
+                houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description);
+            IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
+            string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
+            Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
+
+            // Saving House # 2 - SET 1: Should appear in search results with area = I-9, Islamabad, which would be the search criteria
+            string title2 = "Title # 2";
+            int rent2 = 100002;
+            string ownerEmail2 = "house@1234567-2.com";
+            string description2 =
+                "Erebor 2. Built deep within the mountain itself the beauty of this fortress was legend.";
+            string ownerPhoneNumber2 = "+925000000002";
+            string houseNo2 = "House # 2";
+            string streetNo2 = "2";
+            int numberOfBathrooms2 = 2;
+            int numberOfBedrooms2 = 2;
+            int numberOfKitchens2 = 2;
+            bool familiesOnly2 = false;
+            bool boysOnly2 = false;
+            bool girlsOnly2 = true;
+            bool internetAvailable2 = true;
+            bool landlinePhoneAvailable2 = true;
+            bool cableTvAvailable2 = true;
+            bool garageAvailable2 = true;
+            bool smokingAllowed2 = true;
+            string propertyType2 = PropertyType.House.ToString();
+            string area2 = "I-9, Islamabad, Pakistan";
+            string dimensionType2 = DimensionType.Kanal.ToString();
+            string dimensionString2 = "2";
+            decimal dimensionDecimal2 = 0;
+            string ownerName2 = "Owner Name 2";
+
+            // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
+            houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
+            {
+                new ClaimsIdentity(new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, ownerEmail2)
+                })
+            });
+            CreateHouseCommand house2 = new CreateHouseCommand(title2, rent2, numberOfBedrooms2, numberOfKitchens2,
+                numberOfBathrooms2, familiesOnly2, boysOnly2, girlsOnly2, internetAvailable2, landlinePhoneAvailable2,
+                cableTvAvailable2, garageAvailable2, smokingAllowed2, propertyType2, ownerEmail2, ownerPhoneNumber2,
+                houseNo2, streetNo2, area2, dimensionType2, dimensionString2, dimensionDecimal2, ownerName2,
+                description2);
+            IHttpActionResult houseSaveResult2 = houseController.Post(JsonConvert.SerializeObject(house2));
+            string houseId2 = ((OkNegotiatedContentResult<string>)houseSaveResult2).Content;
+            Assert.IsFalse(string.IsNullOrWhiteSpace(houseId2));
+
+            // Saving House # 3: Should NOT appear in search results with area = Saddar, Rawalpindi, which is more than 2 kilometers 
+            // away from I-9, Islamabad. Remember the search radius is 2 Kilometer
+            string title3 = "Title # 3";
+            string description3 =
+                "Erebor 3. Built deep within the mountain itself the beauty of this fortress was legend.";
+            int rent3 = 100003;
+            string ownerEmail3 = "house@1234567-3.com";
+            string ownerPhoneNumber3 = "+925000000003";
+            string houseNo3 = "House # 3";
+            string streetNo3 = "3";
+            int numberOfBathrooms3 = 3;
+            int numberOfBedrooms3 = 3;
+            int numberOfKitchens3 = 3;
+            bool familiesOnly3 = false;
+            bool boysOnly3 = false;
+            bool girlsOnly3 = true;
+            bool internetAvailable3 = true;
+            bool landlinePhoneAvailable3 = true;
+            bool cableTvAvailable3 = true;
+            bool garageAvailable3 = true;
+            bool smokingAllowed3 = true;
+            string propertyType3 = PropertyType.Apartment.ToString();
+            string area3 = "Saddar, Rawalpindi, Pakistan";
+            string dimensionType3 = DimensionType.Kanal.ToString();
+            string dimensionString3 = "3";
+            decimal dimensionDecimal3 = 0;
+            string ownerName3 = "Owner Name 3";
+
+            // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
+            houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
+            {
+                new ClaimsIdentity(new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, ownerEmail3)
+                })
+            });
+            CreateHouseCommand house3 = new CreateHouseCommand(title3, rent3, numberOfBedrooms3, numberOfKitchens3,
+                numberOfBathrooms3, familiesOnly3, boysOnly3, girlsOnly3, internetAvailable3, landlinePhoneAvailable3,
+                cableTvAvailable3, garageAvailable3, smokingAllowed3, propertyType3, ownerEmail3, ownerPhoneNumber3,
+                houseNo3, streetNo3, area3, dimensionType3, dimensionString3, dimensionDecimal3, ownerName3,
+                description3);
+            IHttpActionResult houseSaveResult3 = houseController.Post(JsonConvert.SerializeObject(house3));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(((OkNegotiatedContentResult<string>)houseSaveResult3).Content));
+            string houseId3 = ((OkNegotiatedContentResult<string>)houseSaveResult3).Content;
+            Assert.IsFalse(string.IsNullOrWhiteSpace(houseId3));
+
+            // Search the 
+            IHttpActionResult response = (IHttpActionResult)houseController.GetHouse(area: area2);
+            IList<HousePartialRepresentation> retreivedHouses = ((OkNegotiatedContentResult<IList<HousePartialRepresentation>>)response).Content;
+
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(2, retreivedHouses.Count);
+
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(2, retreivedHouses.Count);
+            // Verification of House No 1 (in order of saving houses above)
+            Assert.AreEqual(houseId2, retreivedHouses[0].HouseId);
+            Assert.AreEqual(title2, retreivedHouses[0].Title);
+            Assert.AreEqual(house2.Title, retreivedHouses[0].Title);
+            Assert.AreEqual(description2, retreivedHouses[0].Description);
+            Assert.AreEqual(house2.Description, retreivedHouses[0].Description);
+            Assert.AreEqual(rent2, retreivedHouses[0].Rent);
+            Assert.AreEqual(house2.MonthlyRent, retreivedHouses[0].Rent);
+            Assert.AreEqual(numberOfBathrooms2, retreivedHouses[0].NumberOfBathrooms);
+            Assert.AreEqual(house2.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
+            Assert.AreEqual(numberOfBedrooms2, retreivedHouses[0].NumberOfBedrooms);
+            Assert.AreEqual(house2.NumberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
+            Assert.AreEqual(numberOfKitchens2, retreivedHouses[0].NumberOfKitchens);
+            Assert.AreEqual(house2.NumberOfKitchens, retreivedHouses[0].NumberOfKitchens);
+            Assert.AreEqual(dimensionString2 + " " + dimensionType2, retreivedHouses[0].Dimension);
+            Assert.AreEqual(house2.DimensionStringValue + " " + house2.DimensionType, retreivedHouses[0].Dimension);
+
+            Assert.AreEqual(propertyType2, retreivedHouses[0].PropertyType);
+            Assert.AreEqual(house2.PropertyType, retreivedHouses[0].PropertyType);
+            Assert.AreEqual(area2, retreivedHouses[0].Area);
+            Assert.AreEqual(house2.Area, retreivedHouses[0].Area);
+            Assert.AreEqual(ownerEmail2, retreivedHouses[0].OwnerEmail);
+            Assert.AreEqual(house2.OwnerEmail, retreivedHouses[0].OwnerEmail);
+            Assert.AreEqual(ownerPhoneNumber2, retreivedHouses[0].OwnerPhoneNumber);
+            Assert.AreEqual(house2.OwnerPhoneNumber, retreivedHouses[0].OwnerPhoneNumber);
+            Assert.AreEqual(ownerName2, retreivedHouses[0].OwnerName);
+            Assert.AreEqual(house2.OwnerName, retreivedHouses[0].OwnerName);
+            
+            // Verification of House No 2 (in order of saving houses above)
+            Assert.AreEqual(houseId, retreivedHouses[1].HouseId);
+            Assert.AreEqual(title, retreivedHouses[1].Title);
+            Assert.AreEqual(house.Title, retreivedHouses[1].Title);
+            Assert.AreEqual(description, retreivedHouses[1].Description);
+            Assert.AreEqual(house.Description, retreivedHouses[1].Description);
+            Assert.AreEqual(rent, retreivedHouses[1].Rent);
+            Assert.AreEqual(house.MonthlyRent, retreivedHouses[1].Rent);
+            Assert.AreEqual(numberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
+            Assert.AreEqual(numberOfBedrooms, retreivedHouses[1].NumberOfBedrooms);
+            Assert.AreEqual(house.NumberOfBedrooms, retreivedHouses[1].NumberOfBedrooms);
+            Assert.AreEqual(numberOfKitchens, retreivedHouses[1].NumberOfKitchens);
+            Assert.AreEqual(house.NumberOfKitchens, retreivedHouses[1].NumberOfKitchens);
+            Assert.AreEqual(dimensionString + " " + dimensionType2, retreivedHouses[1].Dimension);
+            Assert.AreEqual(house.DimensionStringValue + " " + house2.DimensionType, retreivedHouses[1].Dimension);
+
+            Assert.AreEqual(propertyType, retreivedHouses[1].PropertyType);
+            Assert.AreEqual(house.PropertyType, retreivedHouses[1].PropertyType);
+            Assert.AreEqual(area, retreivedHouses[1].Area);
+            Assert.AreEqual(house.Area, retreivedHouses[1].Area);
+            Assert.AreEqual(ownerEmail, retreivedHouses[1].OwnerEmail);
+            Assert.AreEqual(house.OwnerEmail, retreivedHouses[1].OwnerEmail);
+            Assert.AreEqual(ownerPhoneNumber, retreivedHouses[1].OwnerPhoneNumber);
+            Assert.AreEqual(house.OwnerPhoneNumber, retreivedHouses[1].OwnerPhoneNumber);
+            Assert.AreEqual(ownerName, retreivedHouses[1].OwnerName);
+            Assert.AreEqual(house.OwnerName, retreivedHouses[1].OwnerName);
         }
     }
 }

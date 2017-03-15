@@ -1,11 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using Spring.Transaction;
 using Spring.Transaction.Interceptor;
-using NHibernate.Transform;
 
 namespace RentStuff.Property.Infrastructure.Persistence.Repositories
 {
@@ -73,6 +71,17 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         public IList<House> GetHouseByCoordinates(decimal latitude, decimal longitude)
         {
             return CurrentSession.QueryOver<House>().Where(x => x.Latitude == latitude).Where(x => x.Longitude == longitude).List<House>();
+        }
+
+        /// <summary>
+        /// Gets houses with reference to their PropertyType
+        /// </summary>
+        /// <param name="propertyType"></param>
+        /// <returns></returns>
+        [Transaction]
+        public IList<House> SearchHousesByPropertyType(PropertyType propertyType)
+        {
+            return CurrentSession.QueryOver<House>().Where(x => x.PropertyType == propertyType).List<House>();
         }
 
         /// <summary>

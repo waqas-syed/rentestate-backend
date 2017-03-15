@@ -60,6 +60,13 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude);
 
         /// <summary>
+        /// Get houses with reference to their PropertyType
+        /// </summary>
+        /// <param name="propertyType"></param>
+        /// <returns></returns>
+        IList<House> SearchHousesByPropertyType(PropertyType propertyType);
+
+        /// <summary>
         /// Gets the houses by coordinates and property type
         /// </summary>
         /// <param name="latitude"></param>

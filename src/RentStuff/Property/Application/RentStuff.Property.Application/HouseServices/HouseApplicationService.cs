@@ -184,7 +184,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        public IList<HousePartialRepresentation> SearchHousesByAddress(string address)
+        public IList<HousePartialRepresentation> SearchHousesByArea(string address)
         {
             // Get the coordinates for the location using the Geocoding API service
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
@@ -194,12 +194,24 @@ namespace RentStuff.Property.Application.HouseServices
         }
 
         /// <summary>
+        /// Search houses with reference to propertyType
+        /// </summary>
+        /// <param name="propertyType"></param>
+        /// <returns></returns>
+        public IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType)
+        {
+            var convertedPropertyType = (PropertyType)Enum.Parse(typeof(PropertyType), propertyType);
+            IList<House> houses = _houseRepository.SearchHousesByPropertyType(convertedPropertyType);
+            return ConvertHouseToRepresentation(houses);
+        }
+
+        /// <summary>
         /// Search nearby houses by providing the area and property type
         /// </summary>
         /// <param name="address"></param>
         /// <param name="propertyType"></param>
         /// <returns></returns>
-        public IList<HousePartialRepresentation> SearchHousesByAddressAndPropertyType(string address, string propertyType)
+        public IList<HousePartialRepresentation> SearchHousesByAreaAndPropertyType(string address, string propertyType)
         {
             // Get the coordinates for the location using the Geocoding API service
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);

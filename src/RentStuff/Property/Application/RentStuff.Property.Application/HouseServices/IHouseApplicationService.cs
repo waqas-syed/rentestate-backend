@@ -54,15 +54,22 @@ namespace RentStuff.Property.Application.HouseServices
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        IList<HousePartialRepresentation> SearchHousesByAddress(string address);
+        IList<HousePartialRepresentation> SearchHousesByArea(string address);
+
+        /// <summary>
+        /// Searches the houses with reference to area
+        /// </summary>
+        /// <param name="propertyType"></param>
+        /// <returns></returns>
+        IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType);
 
         /// <summary>
         /// Search the house by providing the address and propertyType
         /// </summary>
-        /// <param name="address"></param>
+        /// <param name="area"></param>
         /// <param name="propertyType"></param>
         /// <returns></returns>
-        IList<HousePartialRepresentation> SearchHousesByAddressAndPropertyType(string address, string propertyType);
+        IList<HousePartialRepresentation> SearchHousesByAreaAndPropertyType(string area, string propertyType);
 
         /// <summary>
         /// Get all houses

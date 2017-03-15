@@ -192,7 +192,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Tuple<decimal, decimal> coordinates = geocodingService.GetCoordinatesFromAddress(area);
             Assert.IsNotNull(coordinates);
 
-            IList<HousePartialRepresentation> retreivedHouses = houseApplicationService.SearchHousesByAddress(area);
+            IList<HousePartialRepresentation> retreivedHouses = houseApplicationService.SearchHousesByArea(area);
             Assert.NotNull(retreivedHouses);
             Assert.AreEqual(1, retreivedHouses.Count);
 
@@ -241,7 +241,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.IsNotNull(coordinates);
 
             area = "Kremlin,+Moscow,+Russia";
-            IList<HousePartialRepresentation> retreivedHouses = houseApplicationService.SearchHousesByAddress(area);
+            IList<HousePartialRepresentation> retreivedHouses = houseApplicationService.SearchHousesByArea(area);
             Assert.NotNull(retreivedHouses);
             Assert.AreEqual(0, retreivedHouses.Count);
         }
