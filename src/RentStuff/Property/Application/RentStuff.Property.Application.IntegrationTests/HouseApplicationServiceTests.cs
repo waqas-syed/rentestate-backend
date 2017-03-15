@@ -108,6 +108,142 @@ namespace RentStuff.Property.Application.IntegrationTests
         }
 
         [Test]
+        public void SearchHousesByPropertyTypeOnlyTest_TestsThatANewHouseIsSavedInTheDatabaseAndRetreivedAsExpected_VerifiesByOutput()
+        {
+            IHouseApplicationService houseApplicationService =
+                (IHouseApplicationService)ContextRegistry.GetContext()["HouseApplicationService"];
+
+            // Saving House # 1
+            string email = "w@12344321.com";
+            string phoneNumber = "+923331234567";
+            string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
+            long monthlyRent = 130000;
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            string houseNo = "747";
+            string streetNo = "13";
+            string area = "Pindora, Rawalpindi, Pakistan";
+            string title = "Bellagio";
+            string dimensionType = "Kanal";
+            string dimensionString = "50";
+            string ownerName = "Owner Name 1";
+            string propertyType1 = "Apartment";
+
+            var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
+                false, false, true, true, true, true, true, true, propertyType1, email, phoneNumber, houseNo, streetNo, area,
+                dimensionType, dimensionString, 0, ownerName, description);
+            string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
+
+            // Saving Hosue # 2
+            string email2 = "w@12344321-2.com";
+            string phoneNumber2 = "+920030000002";
+            string description2 = "Erebor - 2. Built deep within the mountain itself the beauty of this fortress was legend.";
+            long monthlyRent2 = 1300002;
+            int numberOfBedrooms2 = 2;
+            int numberofBathrooms2 = 2;
+            int numberOfKitchens2 = 2;
+            string houseNo2 = "747-2";
+            string streetNo2 = "13-2";
+            string area2 = "Pindora, Rawalpindi, Pakistan";
+            string title2 = "Bellagio";
+            string dimensionType2 = "Kanal";
+            string dimensionString2 = "50";
+            string ownerName2 = "Owner Name 2";
+            string propertyType2 = "House";
+            
+            var house2 = new CreateHouseCommand(title2, monthlyRent2, numberOfBedrooms2, numberOfKitchens2, numberofBathrooms2,
+                false, false, true, true, true, true, true, true, propertyType2, email2, phoneNumber2, houseNo2, streetNo2, area2,
+                dimensionType2, dimensionString2, 0, ownerName2, description2);
+            string houseCreated2 = houseApplicationService.SaveNewHouseOffer(house2);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated2));
+
+            IList<HousePartialRepresentation> houses = houseApplicationService.SearchHousesByPropertyType(propertyType2);
+            Assert.AreEqual(1, houses.Count);
+            HousePartialRepresentation retreivedHouse = houses[0];
+
+            Assert.NotNull(retreivedHouse);
+            Assert.AreEqual(house2.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
+            Assert.AreEqual(house2.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
+            Assert.AreEqual(house2.PropertyType, retreivedHouse.PropertyType);
+            Assert.AreEqual(house2.Area, retreivedHouse.Area);
+            Assert.AreEqual(house2.MonthlyRent, retreivedHouse.Rent);
+            Assert.AreEqual(house2.Title, retreivedHouse.Title);
+            Assert.AreEqual(house2.Description, retreivedHouse.Description);
+            Assert.AreEqual(house2.DimensionStringValue + " " + house2.DimensionType, retreivedHouse.Dimension);
+            Assert.AreEqual(house2.OwnerName, retreivedHouse.OwnerName);
+        }
+
+        [Test]
+        public void SearchHousesByAreaOnlyTest_TestsThatANewHouseIsSavedInTheDatabaseAndRetreivedAsExpected_VerifiesByOutput()
+        {
+            IHouseApplicationService houseApplicationService =
+                (IHouseApplicationService)ContextRegistry.GetContext()["HouseApplicationService"];
+
+            // Saving House # 1
+            string email = "w@12344321.com";
+            string phoneNumber = "+923331234567";
+            string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
+            long monthlyRent = 130000;
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            string houseNo = "747";
+            string streetNo = "13";
+            string area = "Pindora, Rawalpindi, Pakistan";
+            string title = "Bellagio";
+            string dimensionType = "Kanal";
+            string dimensionString = "50";
+            string ownerName = "Owner Name 1";
+            string propertyType1 = "House";
+
+            var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
+                false, false, true, true, true, true, true, true, propertyType1, email, phoneNumber, houseNo, streetNo, area,
+                dimensionType, dimensionString, 0, ownerName, description);
+            string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
+
+            // Saving Hosue # 2
+            string email2 = "w@12344321-2.com";
+            string phoneNumber2 = "+920030000002";
+            string description2 = "Erebor - 2. Built deep within the mountain itself the beauty of this fortress was legend.";
+            long monthlyRent2 = 1300002;
+            int numberOfBedrooms2 = 2;
+            int numberofBathrooms2 = 2;
+            int numberOfKitchens2 = 2;
+            string houseNo2 = "747-2";
+            string streetNo2 = "13-2";
+            string area2 = "Saddar, Rawalpindi, Pakistan";
+            string title2 = "Bellagio";
+            string dimensionType2 = "Kanal";
+            string dimensionString2 = "50";
+            string ownerName2 = "Owner Name 2";
+            string propertyType2 = "House";
+
+            var house2 = new CreateHouseCommand(title2, monthlyRent2, numberOfBedrooms2, numberOfKitchens2, numberofBathrooms2,
+                false, false, true, true, true, true, true, true, propertyType2, email2, phoneNumber2, houseNo2, streetNo2, area2,
+                dimensionType2, dimensionString2, 0, ownerName2, description2);
+            string houseCreated2 = houseApplicationService.SaveNewHouseOffer(house2);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated2));
+
+            IList<HousePartialRepresentation> houses = houseApplicationService.SearchHousesByArea(area);
+            Assert.AreEqual(1, houses.Count);
+            HousePartialRepresentation retreivedHouse = houses[0];
+
+            Assert.NotNull(retreivedHouse);
+            Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
+            Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
+            Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
+            Assert.AreEqual(house.Area, retreivedHouse.Area);
+            Assert.AreEqual(house.MonthlyRent, retreivedHouse.Rent);
+            Assert.AreEqual(house.Title, retreivedHouse.Title);
+            Assert.AreEqual(house.Description, retreivedHouse.Description);
+            Assert.AreEqual(house.DimensionStringValue + " " + house2.DimensionType, retreivedHouse.Dimension);
+            Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
+        }
+
+        [Test]
         public void SaveHouseAndGetHouseByIdTest_TestsThatANewHouseIsSavedInTheDatabaseAsExpected_VerifiesByOutput()
         {
             IHouseApplicationService houseApplicationService =
