@@ -11,12 +11,13 @@ namespace RentStuff.Property.Application.HouseServices.Representation
     [DataContract]
     public class HouseFullRepresentation
     {
-        public HouseFullRepresentation(string title, long monthlyRent, int numberOfBedrooms, int numberOfKitchens, 
+        public HouseFullRepresentation(string id, string title, long monthlyRent, int numberOfBedrooms, int numberOfKitchens, 
             bool familiesOnly, int numberOfBathrooms, bool girlsOnly, bool boysOnly, bool internetAvailable, 
             bool landlinePhoneAvailable, bool cableTvAvailable, string dimension, bool garageAvailable, bool smokingAllowed, 
             string propertyType, string ownerEmail, string ownerPhoneNumber, decimal latitude, decimal longitude, string houseNo, 
             string streetNo, string area, IList<string> houseImages, string ownerName, string description)
         {
+            Id = id;
             Title = title;
             MonthlyRent = monthlyRent;
             NumberOfBedrooms = numberOfBedrooms;
@@ -43,6 +44,9 @@ namespace RentStuff.Property.Application.HouseServices.Representation
             OwnerName = ownerName;
             Description = description;
         }
+
+        [DataMember]
+        public string Id { get; private set; }
 
         [DataMember]
         public string Title { get; private set; }

@@ -170,7 +170,7 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 dimension = house.Dimension.StringValue + " " + house.Dimension.DimensionType;
             }
-            return new HouseFullRepresentation(house.Title, house.MonthlyRent,
+            return new HouseFullRepresentation(house.Id, house.Title, house.MonthlyRent,
                 house.NumberOfBedrooms, house.NumberOfKitchens, house.FamiliesOnly, house.NumberOfBathrooms,
                 house.GirlsOnly, house.BoysOnly, house.InternetAvailable, house.LandlinePhoneAvailable, house.CableTvAvailable,
                 dimension, house.GarageAvailable, house.SmokingAllowed,

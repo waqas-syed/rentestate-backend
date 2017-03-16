@@ -6,7 +6,6 @@ using RentStuff.Common;
 using RentStuff.Property.Application.HouseServices;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
-using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.Services;
 using Spring.Context.Support;
 
@@ -459,6 +458,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             HouseFullRepresentation retreivedHouse = houseApplicationService.GetHouseById(houseId);
 
             Assert.NotNull(retreivedHouse);
+            Assert.AreEqual(houseId, retreivedHouse.Id);
             Assert.AreEqual(house.Title, retreivedHouse.Title);
             Assert.AreEqual(house.Description, retreivedHouse.Description);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
