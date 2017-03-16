@@ -138,6 +138,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
             get; private set;
         }
         
+        [DataMember]
         public string OwnerEmail
         {
             get; private set;
