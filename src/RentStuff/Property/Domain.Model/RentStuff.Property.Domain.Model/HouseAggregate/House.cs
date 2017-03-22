@@ -81,6 +81,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <summary>
         /// House instance updates itself with the given values
         /// </summary>
+        /// <param name="title"></param>
         /// <param name="monthlyRent"></param>
         /// <param name="numberOfBedrooms"></param>
         /// <param name="numberOfKitchens"></param>
@@ -91,23 +92,24 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <param name="internetAvailable"></param>
         /// <param name="landlinePhoneAvailable"></param>
         /// <param name="cableTvAvailable"></param>
-        /// <param name="size"></param>
         /// <param name="garageAvailable"></param>
         /// <param name="smokingAllowed"></param>
         /// <param name="propertyType"></param>
         /// <param name="ownerEmail"></param>
         /// <param name="ownerPhoneNumber"></param>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
         /// <param name="houseNo"></param>
         /// <param name="streetNo"></param>
         /// <param name="area"></param>
-        public void UpdateHouse(long monthlyRent, int numberOfBedrooms,
+        /// <param name="ownerName"></param>
+        /// <param name="description"></param>
+        /// <param name="dimension"></param>
+        public void UpdateHouse(string title, long monthlyRent, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
-            bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension size,
-            bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
-            decimal latitude, decimal longitude, string houseNo, string streetNo, string area)
+            bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension,
+            bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail, string ownerPhoneNumber,
+            string houseNo, string streetNo, string area, string ownerName, string description)
         {
+            Title = title;
             MonthlyRent = monthlyRent;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
@@ -118,14 +120,17 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             InternetAvailable = internetAvailable;
             LandlinePhoneAvailable = landlinePhoneAvailable;
             CableTvAvailable = cableTvAvailable;
+            Dimension = dimension;
             GarageAvailable = garageAvailable;
             SmokingAllowed = smokingAllowed;
-            PropertyType = (PropertyType)Enum.Parse(typeof(PropertyType), propertyType);
+            PropertyType = propertyType;
             OwnerEmail = ownerEmail;
             OwnerPhoneNumber = ownerPhoneNumber;
             HouseNo = houseNo;
             StreetNo = streetNo;
             Area = area;
+            OwnerName = ownerName;
+            Description = description;
         }
 
         /// <summary>

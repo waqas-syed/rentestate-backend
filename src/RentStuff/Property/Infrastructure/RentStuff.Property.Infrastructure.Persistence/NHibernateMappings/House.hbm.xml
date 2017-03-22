@@ -29,7 +29,7 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
     <property name="StreetNo" column="street_no"/>
     <property name="Area" column="area"/>
     <property name="OwnerName" column="owner_name"/>
-    <many-to-one name="Dimension" unique="true" column="dimension_id">
+    <many-to-one name="Dimension" unique="true" column="dimension_id" cascade="all">
     </many-to-one>
     <bag name="HouseImages" table="HouseImages" lazy="false">
       <key column="house_id" />

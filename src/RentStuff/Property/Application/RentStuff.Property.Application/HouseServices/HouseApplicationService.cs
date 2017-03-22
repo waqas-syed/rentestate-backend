@@ -81,7 +81,7 @@ namespace RentStuff.Property.Application.HouseServices
                 var dimension = new Dimension((DimensionType) Enum.Parse(typeof(DimensionType),
                         createHouseCommand.DimensionType), createHouseCommand.DimensionStringValue,
                     createHouseCommand.DimensionIntValue, house);
-                _houseRepository.SaveorUpdateDimension(dimension);
+                //_houseRepository.SaveorUpdateDimension(dimension);
                 house.Dimension = dimension;
             }
 
@@ -103,15 +103,17 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 throw new InstanceNotFoundException(string.Format("House not found for id: {0}", updateHouseCommand.Id));
             }
+            PropertyType propertyType = (PropertyType)Enum.Parse(typeof(PropertyType), updateHouseCommand.PropertyType);
+            
             var dimension = new Dimension(DimensionType.Acre, updateHouseCommand.DimensionStringValue,
                 updateHouseCommand.DimensionIntValue, house);
-            house.UpdateHouse(updateHouseCommand.MonthlyRent, updateHouseCommand.NumberOfBedrooms, updateHouseCommand.NumberOfKitchens,
-                updateHouseCommand.NumberOfBathrooms, updateHouseCommand.FamiliesOnly, updateHouseCommand.BoysOnly, 
-                updateHouseCommand.GirlsOnly, updateHouseCommand.InternetAvailable, updateHouseCommand.LandlinePhoneAvailable,
-                updateHouseCommand.CableTvAvailable, dimension, 
-                    updateHouseCommand.GarageAvailable, updateHouseCommand.SmokingAllowed,updateHouseCommand.PropertyType,
-                    updateHouseCommand.OwnerEmail, updateHouseCommand.OwnerPhoneNumber, updateHouseCommand.Latitude,
-                    updateHouseCommand.Longitude, updateHouseCommand.HouseNo, updateHouseCommand.StreetNo, updateHouseCommand.Area);
+            house.UpdateHouse(updateHouseCommand.Title, updateHouseCommand.MonthlyRent, updateHouseCommand.NumberOfBedrooms,
+                updateHouseCommand.NumberOfKitchens, updateHouseCommand.NumberOfBathrooms, updateHouseCommand.FamiliesOnly,
+                updateHouseCommand.BoysOnly, updateHouseCommand.GirlsOnly, updateHouseCommand.InternetAvailable,
+                updateHouseCommand.LandlinePhoneAvailable, updateHouseCommand.CableTvAvailable, dimension, updateHouseCommand.GarageAvailable,
+                updateHouseCommand.SmokingAllowed, propertyType, updateHouseCommand.OwnerEmail, updateHouseCommand.OwnerPhoneNumber,
+                updateHouseCommand.HouseNo, updateHouseCommand.StreetNo, updateHouseCommand.Area, updateHouseCommand.OwnerName,
+                updateHouseCommand.Description);
 
             _houseRepository.SaveorUpdate(house);
             return true;

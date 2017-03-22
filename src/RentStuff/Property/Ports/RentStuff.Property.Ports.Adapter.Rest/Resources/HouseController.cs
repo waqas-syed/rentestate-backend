@@ -51,23 +51,53 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 if (house != null)
                 {
                     var jsonString = house.ToString();
-                    
-                    CreateHouseCommand houseReborn = JsonConvert.DeserializeObject<CreateHouseCommand>(jsonString);
 
-                    // Check if the current caller is using his own email in the CreateHouseCommand to upload a new house
-                    var currentUserEmail = User.Identity.Name;
-                    if (!currentUserEmail.Equals(houseReborn.OwnerEmail))
-                    {
-                        throw new InvalidOperationException("Current user cannot upload house using another user's email.");
-
-                    }
+                    CreateHouseCommand houseReborn = null;
+                    // First try to convert it to CreateHouseCommand
+                    houseReborn = JsonConvert.DeserializeObject<CreateHouseCommand>(jsonString);
+                    ConfirmHouseOwner(houseReborn.OwnerEmail);
                     return Ok(_houseApplicationService.SaveNewHouseOffer(houseReborn));
                 }
-                return BadRequest();
             }
             catch (Exception exception)
             {
-                return InternalServerError();
+                return BadRequest(exception.Message);
+            }
+            return BadRequest();
+        }
+
+        [Route("house")]
+        [HttpPut]
+        [Authorize]
+        public IHttpActionResult Put([FromBody] Object house)
+        {
+            try
+            {
+                if (house != null)
+                {
+                    var jsonString = house.ToString();
+
+                    UpdateHouseCommand refurbishedHouse = null;
+                    // If above fails, then try to convert it to UpdateHouseCommand
+                    refurbishedHouse = JsonConvert.DeserializeObject<UpdateHouseCommand>(jsonString);
+                    ConfirmHouseOwner(refurbishedHouse.OwnerEmail);
+                    return Ok(_houseApplicationService.UpdateHouse(refurbishedHouse));
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+            return BadRequest();
+        }
+
+        private void ConfirmHouseOwner(string houseOwnerEmail)
+        {
+            // Check if the current caller is using his own email in the CreateHouseCommand to upload a new house
+            var currentUserEmail = User.Identity.Name;
+            if (!currentUserEmail.Equals(houseOwnerEmail))
+            {
+                throw new InvalidOperationException("Current user cannot upload house using another user's email.");
             }
         }
 

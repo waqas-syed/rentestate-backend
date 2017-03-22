@@ -1,9 +1,14 @@
 ﻿
+using System;
+using System.Runtime.Serialization;
+
 namespace RentStuff.Property.Application.HouseServices.Commands
 {
     /// <summary>
     /// Updates en existing House instance
     /// </summary>
+    [Serializable]
+    [DataContract]
     public class UpdateHouseCommand
     {
         private string _id;
@@ -31,187 +36,113 @@ namespace RentStuff.Property.Application.HouseServices.Commands
         private decimal _latitude;
         private decimal _longitude;
 
-        public UpdateHouseCommand(string id, long monthlyRent, int numberOfBedrooms,
+        public UpdateHouseCommand(string id, string title, long monthlyRent, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
-            bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, 
+            bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable,
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
-            string houseNo, string streetNo, string area, string dimensionType, string dimensionStringValue, int dimensionIntValue,
-            decimal latitude, decimal longitude)
+            string houseNo, string streetNo, string area, string dimensionType, string dimensionStringValue,
+            decimal dimensionIntValue, string ownerName, string description)
         {
-            _id = id;
-            _monthlyRent = monthlyRent;
-            _numberOfBedrooms = numberOfBedrooms;
-            _numberOfKitchens = numberOfKitchens;
-            _numberOfBathrooms = numberOfBathrooms;
-            _familiesOnly = familiesOnly;
-            _boysOnly = boysOnly;
-            _girlsOnly = girlsOnly;
-            _internetAvailable = internetAvailable;
-            _landlinePhoneAvailable = landlinePhoneAvailable;
-            _cableTvAvailable = cableTvAvailable;
-            _garageAvailable = garageAvailable;
-            _smokingAllowed = smokingAllowed;
-            _propertyType = propertyType;
-            _ownerEmail = ownerEmail;
-            _ownerPhoneNumber = ownerPhoneNumber;
-            _houseNo = houseNo;
-            _streetNo = streetNo;
-            _area = area;
-            _dimensionType = dimensionType;
-            _dimensionStringValue = dimensionStringValue;
-            _dimensionIntValue = dimensionIntValue;
-            _latitude = latitude;
-            _longitude = longitude;
+            Id = id;
+            Title = title;
+            MonthlyRent = monthlyRent;
+            NumberOfBedrooms = numberOfBedrooms;
+            NumberOfKitchens = numberOfKitchens;
+            NumberOfBathrooms = numberOfBathrooms;
+            FamiliesOnly = familiesOnly;
+            BoysOnly = boysOnly;
+            GirlsOnly = girlsOnly;
+            InternetAvailable = internetAvailable;
+            LandlinePhoneAvailable = landlinePhoneAvailable;
+            CableTvAvailable = cableTvAvailable;
+            GarageAvailable = garageAvailable;
+            SmokingAllowed = smokingAllowed;
+            PropertyType = propertyType;
+            OwnerEmail = ownerEmail;
+            OwnerPhoneNumber = ownerPhoneNumber;
+            HouseNo = houseNo;
+            StreetNo = streetNo;
+            Area = area;
+            DimensionType = dimensionType;
+            DimensionStringValue = dimensionStringValue;
+            DimensionIntValue = dimensionIntValue;
+            OwnerName = ownerName;
+            Description = description;
         }
 
-        public string Id
-        {
-            get { return _id; }
-            private set
-            {
-                _id = value;
-            }
-        }
+        [DataMember]
+        public string Id { get; private set; }
 
-        public long MonthlyRent
-        {
-            get { return _monthlyRent; }
-            private set
-            {
-                _monthlyRent = value;
-            }
-        }
+        [DataMember]
+        public string Title { get; private set; }
 
-        public int NumberOfBedrooms
-        {
-            get { return _numberOfBedrooms; }
-            private set { _numberOfBedrooms = value; }
-        }
+        [DataMember]
+        public string Description { get; private set; }
 
-        public int NumberOfKitchens
-        {
-            get { return _numberOfKitchens; }
-            private set { _numberOfKitchens = value; }
-        }
+        [DataMember]
+        public long MonthlyRent { get; private set; }
 
-        public bool FamiliesOnly
-        {
-            get { return _familiesOnly; }
-            private set { _familiesOnly = value; }
-        }
+        [DataMember]
+        public int NumberOfBedrooms { get; private set; }
 
-        public int NumberOfBathrooms
-        {
-            get { return _numberOfBathrooms; }
-            private set { _numberOfBathrooms = value; }
-        }
+        [DataMember]
+        public int NumberOfKitchens { get; private set; }
 
-        public bool GirlsOnly
-        {
-            get { return _girlsOnly; }
-            private set { _girlsOnly = value; }
-        }
+        [DataMember]
+        public bool FamiliesOnly { get; private set; }
 
-        public bool BoysOnly
-        {
-            get { return _boysOnly; }
-            private set { _boysOnly = value; }
-        }
+        [DataMember]
+        public int NumberOfBathrooms { get; private set; }
 
-        public bool InternetAvailable
-        {
-            get { return _internetAvailable; }
-            private set { _internetAvailable = value; }
-        }
+        [DataMember]
+        public bool GirlsOnly { get; private set; }
 
-        public bool LandlinePhoneAvailable
-        {
-            get { return _landlinePhoneAvailable; }
-            private set { _landlinePhoneAvailable = value; }
-        }
+        [DataMember]
+        public bool BoysOnly { get; private set; }
 
-        public bool CableTvAvailable
-        {
-            get { return _cableTvAvailable; }
-            private set { _cableTvAvailable = value; }
-        }
+        [DataMember]
+        public bool InternetAvailable { get; private set; }
 
-        public bool GarageAvailable
-        {
-            get { return _garageAvailable; }
-            private set { _garageAvailable = value; }
-        }
+        [DataMember]
+        public bool LandlinePhoneAvailable { get; private set; }
 
-        public bool SmokingAllowed
-        {
-            get { return _smokingAllowed; }
-            private set { _smokingAllowed = value; }
-        }
+        [DataMember]
+        public bool CableTvAvailable { get; private set; }
 
-        public string PropertyType
-        {
-            get { return _propertyType; }
-            private set { _propertyType = value; }
-        }
+        [DataMember]
+        public bool GarageAvailable { get; private set; }
 
-        public string OwnerEmail
-        {
-            get { return _ownerEmail; }
-            private set { _ownerEmail = value; }
-        }
+        [DataMember]
+        public bool SmokingAllowed { get; private set; }
 
-        public string OwnerPhoneNumber
-        {
-            get { return _ownerPhoneNumber; }
-            private set { _ownerPhoneNumber = value; }
-        }
+        [DataMember]
+        public string PropertyType { get; private set; }
 
-        public string HouseNo
-        {
-            get { return _houseNo; }
-            private set { _houseNo = value; }
-        }
+        [DataMember]
+        public string OwnerEmail { get; private set; }
 
-        public string StreetNo
-        {
-            get { return _streetNo; }
-            private set { _streetNo = value; }
-        }
+        [DataMember]
+        public string OwnerPhoneNumber { get; private set; }
 
-        public string Area
-        {
-            get { return _area; }
-            private set { _area = value; }
-        }
+        [DataMember]
+        public string HouseNo { get; private set; }
 
-        public string DimensionType
-        {
-            get { return _dimensionType; }
-            private set { _dimensionType = value; }
-        }
+        [DataMember]
+        public string StreetNo { get; private set; }
 
-        public string DimensionStringValue
-        {
-            get { return _dimensionStringValue; }
-            private set { _dimensionStringValue = value; }
-        }
+        [DataMember]
+        public string Area { get; private set; }
 
-        public int DimensionIntValue
-        {
-            get { return _dimensionIntValue; }
-            private set { _dimensionIntValue = value; }
-        }
+        [DataMember]
+        public string DimensionType { get; private set; }
 
-        public decimal Latitude
-        {
-            get { return _latitude; }
-            private set { _latitude = value; }
-        }
+        [DataMember]
+        public string DimensionStringValue { get; private set; }
 
-        public decimal Longitude
-        {
-            get { return _longitude; }
-            private set { _longitude = value; }
-        }
+        [DataMember]
+        public decimal DimensionIntValue { get; private set; }
+
+        [DataMember]
+        public string OwnerName { get; private set; }
     }
 }
