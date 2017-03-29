@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Management.Instrumentation;
 using System.Web.Hosting;
@@ -162,10 +163,10 @@ namespace RentStuff.Property.Application.HouseServices
         public HouseFullRepresentation GetHouseById(string id)
         {
             House house = _houseRepository.GetHouseById(id);
-            IList<string> houseImages = new List<string>();
+            IList<ImageRepresentation> houseImages = new List<ImageRepresentation>();
             foreach (var houseImage in house.HouseImages)
             {
-                houseImages.Add(ConvertImageToBase64String(houseImage));
+                houseImages.Add(ConvertImageToBase64Representation(houseImage));
             }
             string dimension = null;
             if (house.Dimension != null)
@@ -289,7 +290,7 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 foreach (var house in houses)
                 {
-                    string base64ImageString = null;
+                    ImageRepresentation imageRepresentation = null;
                     string idOfFirstImage = null;
                     IList<string> imageList = house.GetImageList();
                     if (imageList != null && imageList.Count > 0)
@@ -297,27 +298,27 @@ namespace RentStuff.Property.Application.HouseServices
                         idOfFirstImage = imageList[0];
                         if (idOfFirstImage != null)
                         {
-                            base64ImageString = ConvertImageToBase64String(idOfFirstImage);
+                            imageRepresentation = ConvertImageToBase64Representation(idOfFirstImage);
                         }
                     }
 
                     HousePartialRepresentation houseRepresentation = new HousePartialRepresentation(house.Id, house.Title, house.Area, 
                         house.MonthlyRent, house.PropertyType.ToString(), house.Dimension, house.NumberOfBedrooms, 
                         house.NumberOfBathrooms, house.NumberOfKitchens, house.OwnerEmail, house.OwnerPhoneNumber,
-                        base64ImageString, house.OwnerName, house.Description);
+                        imageRepresentation, house.OwnerName, house.Description);
                     
                     houseRepresentations.Add(houseRepresentation);
                 }
             }
             return houseRepresentations;
         }
-
+        
         /// <summary>
         /// Converts the given ImageId to base64String
         /// </summary>
         /// <param name="imageId"></param>
         /// <returns></returns>
-        private string ConvertImageToBase64String(string imageId)
+        private ImageRepresentation ConvertImageToBase64Representation(string imageId)
         {
             using (Image image = Image.FromFile(HostingEnvironment.MapPath("~/Images/" + imageId)))
             {
@@ -327,9 +328,34 @@ namespace RentStuff.Property.Application.HouseServices
                     byte[] imageBytes = m.ToArray();
 
                     // Convert byte[] to Base64 String
-                    return Convert.ToBase64String(imageBytes);
+                    //return Convert.ToBase64String(imageBytes);
+                    return  new ImageRepresentation(imageId, GetImageFormat(image).ToString(), Convert.ToBase64String(imageBytes));
                 }
             }
+        }
+
+        private ImageFormat GetImageFormat(Image img)
+        {
+            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Jpeg))
+                return System.Drawing.Imaging.ImageFormat.Jpeg;
+            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Bmp))
+                return System.Drawing.Imaging.ImageFormat.Bmp;
+            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Png))
+                return System.Drawing.Imaging.ImageFormat.Png;
+            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Emf))
+                return System.Drawing.Imaging.ImageFormat.Emf;
+            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Exif))
+                return System.Drawing.Imaging.ImageFormat.Exif;
+            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Gif))
+                return System.Drawing.Imaging.ImageFormat.Gif;
+            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Icon))
+                return System.Drawing.Imaging.ImageFormat.Icon;
+            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.MemoryBmp))
+                return System.Drawing.Imaging.ImageFormat.MemoryBmp;
+            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Tiff))
+                return System.Drawing.Imaging.ImageFormat.Tiff;
+            else
+                return System.Drawing.Imaging.ImageFormat.Wmf;
         }
     }
 }

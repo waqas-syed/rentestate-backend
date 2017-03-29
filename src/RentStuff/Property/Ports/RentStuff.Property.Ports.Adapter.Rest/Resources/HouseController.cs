@@ -141,7 +141,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                                 var testName = content.Headers.ContentDisposition.Name;
                                 String filePath = HostingEnvironment.MapPath(Constants.HOUSEIMAGESDIRECTORY);
 
-                                string imageId = Guid.NewGuid().ToString();
+                                string imageId = "IMG_" + Guid.NewGuid().ToString();
                                 String fileName = imageId + ".jpg";
                                 String fullPath = Path.Combine(filePath, fileName);
                                 image.Save(fullPath);
