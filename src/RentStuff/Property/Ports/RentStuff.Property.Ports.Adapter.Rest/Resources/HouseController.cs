@@ -170,6 +170,32 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
         }
 
+        [Route("houseimageupload")]
+        [HttpPut]
+        [Authorize]
+        public IHttpActionResult ImageDelete([FromBody] DeleteImageCommand deleteImageCommand)
+        {
+            var userEmail = User.Identity.Name;
+            bool allowedToEditHouse = _houseApplicationService.HouseOwnershipEmailCheck(deleteImageCommand.HouseId, userEmail);
+
+            try
+            {
+                if (allowedToEditHouse)
+                {
+                    Task.Run(() => _houseApplicationService.DeleteImageFromHouse(deleteImageCommand.HouseId, deleteImageCommand.ImagesList)).Wait(2000);
+                    return Ok();
+                }
+                else
+                {
+                    throw new InvalidOperationException("The logged in user is not the actual poster for the requested house. Action will be taken now against this user");
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
         [Route("house")]
         [HttpGet]
         public IHttpActionResult GetHouse(string email = null, string area = null, string propertyType = null, string houseId = null)

@@ -266,6 +266,25 @@ namespace RentStuff.Property.Application.HouseServices
             }
         }
 
+        /// <summary>
+        /// Delete the images for the house
+        /// </summary>
+        /// <param name="houseId"></param>
+        /// <param name="imagesList"></param>
+        /// <returns></returns>
+        public void DeleteImageFromHouse(string houseId, IList<string> imagesList)
+        {
+            var house = _houseRepository.GetHouseById(houseId);
+            if (house != null)
+            {
+                foreach (var imageId in imagesList)
+                {
+                    house.HouseImages.Remove(imageId);
+                }
+                _houseRepository.SaveorUpdate(house);
+            }
+        }
+
         public bool HouseOwnershipEmailCheck(string houseId, string requesterEmail)
         {
             var house = _houseRepository.GetHouseById(houseId);

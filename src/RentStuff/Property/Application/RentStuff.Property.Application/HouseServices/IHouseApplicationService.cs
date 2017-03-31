@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
 using RentStuff.Property.Domain.Model.HouseAggregate;
@@ -87,6 +85,14 @@ namespace RentStuff.Property.Application.HouseServices
         /// Add images to an existing House instance
         /// </summary>
         void AddImagesToHouse(string houseId, IList<string> imagesList);
+
+        /// <summary>
+        /// Deletes the image from the house
+        /// </summary>
+        /// <param name="houseId"></param>
+        /// <param name="imagesList"></param>
+        /// <returns></returns>
+        void DeleteImageFromHouse(string houseId, IList<string> imagesList);
 
         /// <summary>
         /// Checks that the call requester willing to update the house is the actual poster of the house by comparing emails
