@@ -6,6 +6,7 @@ using RentStuff.Common;
 using RentStuff.Property.Application.HouseServices;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
+using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.Services;
 using Spring.Context.Support;
 
@@ -51,11 +52,41 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionType = "Kanal";
             string dimensionString = "50";
             string ownerName = "Owner Name 1";
+            string propertyType = "Apartment";
+            string genderRestriction = GenderRestriction.GirlsOnly.ToString();
+            bool smokingAllowed = false;
+            bool landline = true;
+            bool cableTv = false;
+            bool internet = true;
+            bool garage = true;
             var createNewHouseCommand = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
-                false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0, ownerName, description);
+                internet, landline, cableTv, garage, smokingAllowed, propertyType, email, phoneNumber, houseNo, streetNo, area,
+                dimensionType, dimensionString, 0, ownerName, description, genderRestriction);
             string houseCreated = houseApplicationService.SaveNewHouseOffer(createNewHouseCommand);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
+            Assert.AreEqual(email, createNewHouseCommand.OwnerEmail);
+            Assert.AreEqual(phoneNumber, createNewHouseCommand.OwnerPhoneNumber);
+            Assert.AreEqual(ownerName, createNewHouseCommand.OwnerName);
+            Assert.AreEqual(description, createNewHouseCommand.Description);
+            Assert.AreEqual(houseNo, createNewHouseCommand.HouseNo);
+            Assert.AreEqual(streetNo, createNewHouseCommand.StreetNo);
+            Assert.AreEqual(title, createNewHouseCommand.Title);
+            Assert.AreEqual(area, createNewHouseCommand.Area);
+            Assert.AreEqual(dimensionType, createNewHouseCommand.DimensionType);
+            Assert.AreEqual(dimensionString, createNewHouseCommand.DimensionStringValue);
+            Assert.AreEqual(dimensionType, createNewHouseCommand.DimensionType);
+            Assert.AreEqual(numberofBathrooms, createNewHouseCommand.NumberOfBathrooms);
+            Assert.AreEqual(numberOfBedrooms, createNewHouseCommand.NumberOfBedrooms);
+            Assert.AreEqual(numberOfKitchens, createNewHouseCommand.NumberOfKitchens);
+            Assert.AreEqual(propertyType, createNewHouseCommand.PropertyType);
+            Assert.AreEqual(monthlyRent, createNewHouseCommand.MonthlyRent);
+            Assert.AreEqual(numberofBathrooms, createNewHouseCommand.NumberOfBathrooms);
+            Assert.AreEqual(genderRestriction, createNewHouseCommand.GenderRestriction);
+            Assert.AreEqual(internet, createNewHouseCommand.InternetAvailable);
+            Assert.AreEqual(garage, createNewHouseCommand.GarageAvailable);
+            Assert.AreEqual(landline, createNewHouseCommand.LandlinePhoneAvailable);
+            Assert.AreEqual(cableTv, createNewHouseCommand.CableTvAvailable);
+            Assert.AreEqual(smokingAllowed, createNewHouseCommand.SmokingAllowed);
         }
 
         [Test]
@@ -78,6 +109,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionType = "Kanal";
             string dimensionString = "50";
             string ownerName = "Owner Name 1";
+            string propertyType = "Apartment";
+            string genderRestriction = GenderRestriction.GirlsOnly.ToString();
 
             IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
             Tuple<decimal, decimal> coordinates = geocodingService.GetCoordinatesFromAddress(area);
@@ -86,8 +119,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             decimal latitude = coordinates.Item1;
             decimal longitude = coordinates.Item2;
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
-                false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0, ownerName, description);
+                true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
+                dimensionType, dimensionString, 0, ownerName, description, genderRestriction);
             string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
@@ -129,10 +162,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionString = "50";
             string ownerName = "Owner Name 1";
             string propertyType1 = "Apartment";
+            string genderRestriction = GenderRestriction.BoysOnly.ToString();
 
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
-                false, false, true, true, true, true, true, true, propertyType1, email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0, ownerName, description);
+                true, true, true, true, true, propertyType1, email, phoneNumber, houseNo, streetNo, area,
+                dimensionType, dimensionString, 0, ownerName, description, genderRestriction);
             string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
@@ -152,10 +186,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionString2 = "50";
             string ownerName2 = "Owner Name 2";
             string propertyType2 = "House";
+            string genderRestriction2 = GenderRestriction.GirlsOnly.ToString();
 
             var house2 = new CreateHouseCommand(title2, monthlyRent2, numberOfBedrooms2, numberOfKitchens2, numberofBathrooms2,
-                false, false, true, true, true, true, true, true, propertyType2, email2, phoneNumber2, houseNo2, streetNo2, area2,
-                dimensionType2, dimensionString2, 0, ownerName2, description2);
+                true, true, true, true, true, propertyType2, email2, phoneNumber2, houseNo2, streetNo2, area2,
+                dimensionType2, dimensionString2, 0, ownerName2, description2, genderRestriction2);
             string houseCreated2 = houseApplicationService.SaveNewHouseOffer(house2);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated2));
 
@@ -175,10 +210,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionString3 = "53";
             string ownerName3 = "Owner Name 3";
             string propertyType3 = "House";
+            string genderRestriction3 = GenderRestriction.GirlsOnly.ToString();
 
             var house3 = new CreateHouseCommand(title3, monthlyRent3, numberOfBedrooms3, numberOfKitchens3, numberofBathrooms3,
-                false, false, true, true, true, true, true, true, propertyType3, email3, phoneNumber3, houseNo3, streetNo3, area3,
-                dimensionType3, dimensionString3, 0, ownerName3, description3);
+                true, true, true, true, true, propertyType3, email3, phoneNumber3, houseNo3, streetNo3, area3,
+                dimensionType3, dimensionString3, 0, ownerName3, description3, genderRestriction3);
             string houseCreated3 = houseApplicationService.SaveNewHouseOffer(house3);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated3));
 
@@ -236,10 +272,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionString = "50";
             string ownerName = "Owner Name 1";
             string propertyType1 = "Apartment";
+            string genderRestriction1 = GenderRestriction.GirlsOnly.ToString();
 
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
-                false, false, true, true, true, true, true, true, propertyType1, email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0, ownerName, description);
+                true, true, true, true, true, propertyType1, email, phoneNumber, houseNo, streetNo, area,
+                dimensionType, dimensionString, 0, ownerName, description, genderRestriction1);
             string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
@@ -259,10 +296,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionString2 = "50";
             string ownerName2 = "Owner Name 2";
             string propertyType2 = "House";
-            
+            string genderRestriction2 = GenderRestriction.NoRestriction.ToString();
+
             var house2 = new CreateHouseCommand(title2, monthlyRent2, numberOfBedrooms2, numberOfKitchens2, numberofBathrooms2,
-                false, false, true, true, true, true, true, true, propertyType2, email2, phoneNumber2, houseNo2, streetNo2, area2,
-                dimensionType2, dimensionString2, 0, ownerName2, description2);
+                true, true, true, true, true, propertyType2, email2, phoneNumber2, houseNo2, streetNo2, area2,
+                dimensionType2, dimensionString2, 0, ownerName2, description2, genderRestriction2);
             string houseCreated2 = houseApplicationService.SaveNewHouseOffer(house2);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated2));
 
@@ -282,10 +320,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionString3 = "53";
             string ownerName3 = "Owner Name 3";
             string propertyType3 = "Hostel";
+            string genderRestriction3 = GenderRestriction.GirlsOnly.ToString();
 
             var house3 = new CreateHouseCommand(title3, monthlyRent3, numberOfBedrooms3, numberOfKitchens3, numberofBathrooms3,
-                false, false, true, true, true, true, true, true, propertyType3, email3, phoneNumber3, houseNo3, streetNo3, area3,
-                dimensionType3, dimensionString3, 0, ownerName3, description3);
+                true, true, true, true, true, propertyType3, email3, phoneNumber3, houseNo3, streetNo3, area3,
+                dimensionType3, dimensionString3, 0, ownerName3, description3, genderRestriction3);
             string houseCreated3 = houseApplicationService.SaveNewHouseOffer(house3);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated3));
 
@@ -329,10 +368,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionString = "50";
             string ownerName = "Owner Name 1";
             string propertyType1 = "House";
+            string genderRestriction1 = GenderRestriction.GirlsOnly.ToString();
 
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
-                false, false, true, true, true, true, true, true, propertyType1, email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0, ownerName, description);
+                true, true, true, true, true, propertyType1, email, phoneNumber, houseNo, streetNo, area,
+                dimensionType, dimensionString, 0, ownerName, description, genderRestriction1);
             string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
@@ -352,10 +392,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionString2 = "50";
             string ownerName2 = "Owner Name 2";
             string propertyType2 = "House";
+            string genderRestriction2 = GenderRestriction.GirlsOnly.ToString();
 
             var house2 = new CreateHouseCommand(title2, monthlyRent2, numberOfBedrooms2, numberOfKitchens2, numberofBathrooms2,
-                false, false, true, true, true, true, true, true, propertyType2, email2, phoneNumber2, houseNo2, streetNo2, area2,
-                dimensionType2, dimensionString2, 0, ownerName2, description2);
+                true, true, true, true, true, propertyType2, email2, phoneNumber2, houseNo2, streetNo2, area2,
+                dimensionType2, dimensionString2, 0, ownerName2, description2, genderRestriction2);
             string houseCreated2 = houseApplicationService.SaveNewHouseOffer(house2);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated2));
 
@@ -375,10 +416,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionString3 = "53";
             string ownerName3 = "Owner Name 3";
             string propertyType3 = "House";
+            string genderRestriction3 = GenderRestriction.NoRestriction.ToString();
 
             var house3 = new CreateHouseCommand(title3, monthlyRent3, numberOfBedrooms3, numberOfKitchens3, numberofBathrooms3,
-                false, false, true, true, true, true, true, true, propertyType3, email3, phoneNumber3, houseNo3, streetNo3, area3,
-                dimensionType3, dimensionString3, 0, ownerName3, description3);
+                true, true, true, true, true, propertyType3, email3, phoneNumber3, houseNo3, streetNo3, area3,
+                dimensionType3, dimensionString3, 0, ownerName3, description3, genderRestriction3);
             string houseCreated3 = houseApplicationService.SaveNewHouseOffer(house3);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated3));
 
@@ -442,6 +484,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionType = "Kanal";
             string dimensionString = "50";
             string ownerName = "Owner Name 1";
+            string genderRestriction1 = GenderRestriction.GirlsOnly.ToString();
 
             IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
             Tuple<decimal, decimal> coordinates = geocodingService.GetCoordinatesFromAddress(area);
@@ -450,8 +493,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             decimal latitude = coordinates.Item1;
             decimal longitude = coordinates.Item2;
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
-                false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0, ownerName, description);
+                true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
+                dimensionType, dimensionString, 0, ownerName, description, genderRestriction1);
             string houseId = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
 
@@ -465,7 +508,6 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
-            Assert.AreEqual(house.FamiliesOnly, retreivedHouse.FamiliesOnly);
             Assert.AreEqual(house.GarageAvailable, retreivedHouse.LandlinePhoneAvailable);
             Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
@@ -475,6 +517,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.StreetNo, retreivedHouse.StreetNo);
             Assert.AreEqual(house.DimensionStringValue + " " + house.DimensionType, retreivedHouse.Dimension);
             Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
+            Assert.AreEqual(house.GenderRestriction, retreivedHouse.GenderRestriction);
         }
 
         [Test]
@@ -498,10 +541,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionType = "Kanal";
             string dimensionString = "50";
             string ownerName = "Owner Name 1";
+            string genderRestriction = GenderRestriction.BoysOnly.ToString();
 
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
-            false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area, 
-            dimensionType, dimensionString, 0, ownerName, description);
+            true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area, 
+            dimensionType, dimensionString, 0, ownerName, description, genderRestriction);
             var houseCreated = houseApplicationService.SaveNewHouseOffer(house);
 
             IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
@@ -547,10 +591,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionType = "Kanal";
             string dimensionString = "50";
             string ownerName = "Owner Name 1";
+            string genderRestriction = GenderRestriction.BoysOnly.ToString();
 
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
-            false, false, true, true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area, 
-            dimensionType, dimensionString, 0, ownerName, description);
+            true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area, 
+            dimensionType, dimensionString, 0, ownerName, description, genderRestriction);
             houseApplicationService.SaveNewHouseOffer(house);
 
             IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];

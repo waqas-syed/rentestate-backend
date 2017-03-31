@@ -12,20 +12,18 @@ namespace RentStuff.Property.Application.HouseServices.Representation
     public class HouseFullRepresentation
     {
         public HouseFullRepresentation(string id, string title, long monthlyRent, int numberOfBedrooms, int numberOfKitchens, 
-            bool familiesOnly, int numberOfBathrooms, bool girlsOnly, bool boysOnly, bool internetAvailable, 
+            int numberOfBathrooms, bool internetAvailable, 
             bool landlinePhoneAvailable, bool cableTvAvailable, string dimension, bool garageAvailable, bool smokingAllowed, 
             string propertyType, string ownerEmail, string ownerPhoneNumber, decimal latitude, decimal longitude, string houseNo, 
-            string streetNo, string area, IList<ImageRepresentation> houseImages, string ownerName, string description)
+            string streetNo, string area, IList<ImageRepresentation> houseImages, string ownerName, string description,
+            string genderRestriction)
         {
             Id = id;
             Title = title;
             MonthlyRent = monthlyRent;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
-            FamiliesOnly = familiesOnly;
             NumberOfBathrooms = numberOfBathrooms;
-            GirlsOnly = girlsOnly;
-            BoysOnly = boysOnly;
             InternetAvailable = internetAvailable;
             LandlinePhoneAvailable = landlinePhoneAvailable;
             CableTvAvailable = cableTvAvailable;
@@ -43,6 +41,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
             HouseImages = houseImages;
             OwnerName = ownerName;
             Description = description;
+            GenderRestriction = genderRestriction;
         }
 
         [DataMember]
@@ -71,31 +70,13 @@ namespace RentStuff.Property.Application.HouseServices.Representation
         {
             get; private set;
         }
-
-        [DataMember]
-        public bool FamiliesOnly
-        {
-            get; private set;
-        }
-
+        
         [DataMember]
         public int NumberOfBathrooms
         {
             get; private set;
         }
-
-        [DataMember]
-        public bool GirlsOnly
-        {
-            get; private set;
-        }
-
-        [DataMember]
-        public bool BoysOnly
-        {
-            get; private set;
-        }
-
+        
         [DataMember]
         public bool InternetAvailable
         {
@@ -188,6 +169,12 @@ namespace RentStuff.Property.Application.HouseServices.Representation
 
         [DataMember]
         public string OwnerName
+        {
+            get; private set;
+        }
+
+        [DataMember]
+        public string GenderRestriction
         {
             get; private set;
         }

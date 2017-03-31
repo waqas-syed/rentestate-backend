@@ -47,16 +47,18 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 Enum.TryParse(createHouseCommand.PropertyType, out propertyType);
             }
+            GenderRestriction genderRestriction = default(GenderRestriction);
+            if (!string.IsNullOrWhiteSpace(createHouseCommand.GenderRestriction))
+            {
+                Enum.TryParse(createHouseCommand.GenderRestriction, out genderRestriction);
+            }
             
             // Create the new house instance
             House house = new House.HouseBuilder()
                 .Title(createHouseCommand.Title)
                 .Description(createHouseCommand.Description)
-                .BoysOnly(createHouseCommand.BoysOnly)
                 .CableTvAvailable(createHouseCommand.CableTvAvailable)
-                .FamiliesOnly(createHouseCommand.FamiliesOnly)
                 .GarageAvailable(createHouseCommand.GarageAvailable)
-                .GirlsOnly(createHouseCommand.GirlsOnly)
                 .LandlinePhoneAvailable(createHouseCommand.LandlinePhoneAvailable)
                 .MonthlyRent(createHouseCommand.MonthlyRent)
                 .NumberOfBathrooms(createHouseCommand.NumberOfBathrooms)
@@ -72,7 +74,8 @@ namespace RentStuff.Property.Application.HouseServices
                 .HouseNo(createHouseCommand.HouseNo)
                 .StreetNo(createHouseCommand.StreetNo)
                 .Area(createHouseCommand.Area)
-                .OwnerName(createHouseCommand.OwnerName).Build();
+                .OwnerName(createHouseCommand.OwnerName)
+                .GenderRestriction(genderRestriction).Build();
             if (!string.IsNullOrWhiteSpace(createHouseCommand.DimensionType))
             {
                 if (string.IsNullOrWhiteSpace(createHouseCommand.DimensionStringValue))
@@ -104,17 +107,25 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 throw new InstanceNotFoundException(string.Format("House not found for id: {0}", updateHouseCommand.Id));
             }
+            // Get the coordinates for the location using the Geocoding API service
+            Tuple<decimal, decimal> coordinates = _geocodingService.GetCoordinatesFromAddress(updateHouseCommand.Area);
+
+            if (coordinates == null || coordinates.Item1 == decimal.Zero || coordinates.Item2 == decimal.Zero)
+            {
+                throw new InvalidDataException("Could not find coordinates from the given address");
+            }
             PropertyType propertyType = (PropertyType)Enum.Parse(typeof(PropertyType), updateHouseCommand.PropertyType);
+            GenderRestriction genderRestriction =
+                (GenderRestriction) Enum.Parse(typeof(GenderRestriction), updateHouseCommand.GenderRestriction);
             
             var dimension = new Dimension(DimensionType.Acre, updateHouseCommand.DimensionStringValue,
                 updateHouseCommand.DimensionIntValue, house);
             house.UpdateHouse(updateHouseCommand.Title, updateHouseCommand.MonthlyRent, updateHouseCommand.NumberOfBedrooms,
-                updateHouseCommand.NumberOfKitchens, updateHouseCommand.NumberOfBathrooms, updateHouseCommand.FamiliesOnly,
-                updateHouseCommand.BoysOnly, updateHouseCommand.GirlsOnly, updateHouseCommand.InternetAvailable,
+                updateHouseCommand.NumberOfKitchens, updateHouseCommand.NumberOfBathrooms, updateHouseCommand.InternetAvailable,
                 updateHouseCommand.LandlinePhoneAvailable, updateHouseCommand.CableTvAvailable, dimension, updateHouseCommand.GarageAvailable,
                 updateHouseCommand.SmokingAllowed, propertyType, updateHouseCommand.OwnerEmail, updateHouseCommand.OwnerPhoneNumber,
                 updateHouseCommand.HouseNo, updateHouseCommand.StreetNo, updateHouseCommand.Area, updateHouseCommand.OwnerName,
-                updateHouseCommand.Description);
+                updateHouseCommand.Description, genderRestriction, coordinates.Item1, coordinates.Item2);
 
             _houseRepository.SaveorUpdate(house);
             return true;
@@ -174,11 +185,10 @@ namespace RentStuff.Property.Application.HouseServices
                 dimension = house.Dimension.StringValue + " " + house.Dimension.DimensionType;
             }
             return new HouseFullRepresentation(house.Id, house.Title, house.MonthlyRent,
-                house.NumberOfBedrooms, house.NumberOfKitchens, house.FamiliesOnly, house.NumberOfBathrooms,
-                house.GirlsOnly, house.BoysOnly, house.InternetAvailable, house.LandlinePhoneAvailable, house.CableTvAvailable,
+                house.NumberOfBedrooms, house.NumberOfKitchens, house.NumberOfBathrooms, house.InternetAvailable, house.LandlinePhoneAvailable, house.CableTvAvailable,
                 dimension, house.GarageAvailable, house.SmokingAllowed,
                 house.PropertyType.ToString(), house.OwnerEmail, house.OwnerPhoneNumber, house.Latitude, house.Longitude, house.HouseNo,
-                house.StreetNo, house.Area, houseImages, house.OwnerName, house.Description);
+                house.StreetNo, house.Area, houseImages, house.OwnerName, house.Description, house.GenderRestriction.ToString());
         }
 
 

@@ -51,13 +51,15 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             decimal latitude = 33.29M;
             decimal longitude = 73.41M;
             string ownerName = "Owner Name 1";
+            GenderRestriction genderRestriction = GenderRestriction.FamiliesOnly;
 
             House house = new House.HouseBuilder().Title(title).OwnerEmail(email).OwnerPhoneNumber(phoneNumber)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
-                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
+                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
                 .PropertyType(PropertyType.Apartment).MonthlyRent(price).Latitude(latitude).Longitude(longitude)
-                .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description).Build();
+                .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description)
+                .GenderRestriction(genderRestriction).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, null, 5, house);
             house.Dimension = dimension;
             houseRepository.SaveorUpdateDimension(dimension);
@@ -72,7 +74,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
-            Assert.AreEqual(house.FamiliesOnly, retreivedHouse.FamiliesOnly);
             Assert.AreEqual(house.GarageAvailable, retreivedHouse.LandlinePhoneAvailable);
             Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
@@ -86,6 +87,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.Dimension.DecimalValue, retreivedHouse.Dimension.DecimalValue);
             Assert.AreEqual(house.Dimension.StringValue, retreivedHouse.Dimension.StringValue);
             Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
+            Assert.AreEqual(house.GenderRestriction, retreivedHouse.GenderRestriction);
         }
 
         #endregion Save and Get Houses By Id
@@ -118,12 +120,13 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int rent = 50000;
             string ownerName = "Owner Name 1";
             PropertyType propertyType = PropertyType.Apartment;
+            GenderRestriction genderRestriction = GenderRestriction.FamiliesOnly;
             House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
             .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
-            .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
+            .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
             .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
-            .Longitude(coordinatesFromAddress.Item2)
+            .Longitude(coordinatesFromAddress.Item2).GenderRestriction(genderRestriction)
             .HouseNo(houseNo).Area(area).OwnerName(ownerName).StreetNo(streetNo).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "5", 0, house);
             house.Dimension = dimension;
@@ -142,12 +145,13 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int rent2 = 100000;
             string ownerName2 = "Owner Name 2";
             PropertyType propertyType2 = PropertyType.House;
+            GenderRestriction genderRestriction2 = GenderRestriction.FamiliesOnly;
             House house2 = new House.HouseBuilder().Title(title).OwnerEmail(email2)
             .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
-            .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress.Item1)
-            .Longitude(coordinatesFromAddress.Item2)
+            .Longitude(coordinatesFromAddress.Item2).GenderRestriction(genderRestriction2)
             .HouseNo(houseNo2).Area(area).OwnerName(ownerName2).StreetNo(streetNo2).Description(description2).Build();
             Dimension dimension2 = new Dimension(DimensionType.Marla, "20", 0, house2);
             house2.Dimension = dimension2;
@@ -170,7 +174,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouses[0].NumberOfKitchens);
-            Assert.AreEqual(house.FamiliesOnly, retreivedHouses[0].FamiliesOnly);
             Assert.AreEqual(house.GarageAvailable, retreivedHouses[0].LandlinePhoneAvailable);
             Assert.AreEqual(house.SmokingAllowed, retreivedHouses[0].SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouses[0].InternetAvailable);
@@ -187,6 +190,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(dimension.DecimalValue, retreivedHouses[0].Dimension.DecimalValue);
             Assert.AreEqual(dimension.StringValue, retreivedHouses[0].Dimension.StringValue);
             Assert.AreEqual(house.OwnerName, retreivedHouses[0].OwnerName);
+            Assert.AreEqual(house.GenderRestriction, retreivedHouses[0].GenderRestriction);
         }
 
         [Test]
@@ -215,12 +219,14 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int rent = 50000;
             string ownerName = "Owner Name 1";
             PropertyType propertyType = PropertyType.Apartment;
+            GenderRestriction genderRestriction = GenderRestriction.FamiliesOnly;
+
             House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
             .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
-            .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
+            .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
             .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
-            .Longitude(coordinatesFromAddress.Item2)
+            .Longitude(coordinatesFromAddress.Item2).GenderRestriction(genderRestriction)
             .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "5", 0, house);
             house.Dimension = dimension;
@@ -240,12 +246,13 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int rent2 = 100000;
             string ownerName2 = "Owner Name 2";
             PropertyType propertyType2 = PropertyType.House;
+            GenderRestriction genderRestriction2 = GenderRestriction.FamiliesOnly;
             House house2 = new House.HouseBuilder().Title(title2).OwnerEmail(email2)
             .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
-            .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress.Item1)
-            .Longitude(coordinatesFromAddress.Item2)
+            .Longitude(coordinatesFromAddress.Item2).GenderRestriction(genderRestriction2)
             .HouseNo(houseNo2).Area(area).StreetNo(streetNo2).OwnerName(ownerName2).Description(description2).Build();
             Dimension dimension2 = new Dimension(DimensionType.Marla, "20", 0, house2);
             house2.Dimension = dimension2;
@@ -266,7 +273,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house2.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house2.NumberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
             Assert.AreEqual(house2.NumberOfKitchens, retreivedHouses[0].NumberOfKitchens);
-            Assert.AreEqual(house2.FamiliesOnly, retreivedHouses[0].FamiliesOnly);
             Assert.AreEqual(house2.GarageAvailable, retreivedHouses[0].LandlinePhoneAvailable);
             Assert.AreEqual(house2.SmokingAllowed, retreivedHouses[0].SmokingAllowed);
             Assert.AreEqual(house2.InternetAvailable, retreivedHouses[0].InternetAvailable);
@@ -283,6 +289,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(dimension2.DecimalValue, retreivedHouses[0].Dimension.DecimalValue);
             Assert.AreEqual(dimension2.StringValue, retreivedHouses[0].Dimension.StringValue);
             Assert.AreEqual(house2.OwnerName, retreivedHouses[0].OwnerName);
+            Assert.AreEqual(house2.GenderRestriction, retreivedHouses[0].GenderRestriction);
         }
 
         [Test]
@@ -311,12 +318,13 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int rent = 100;
             string ownerName = "Owner Name 1";
             PropertyType propertyType = PropertyType.House;
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
             House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
             .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
-            .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
+            .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
             .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
-            .Longitude(coordinatesFromAddress.Item2)
+            .Longitude(coordinatesFromAddress.Item2).GenderRestriction(genderRestriction)
             .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "1", 0, house);
             house.Dimension = dimension;
@@ -338,13 +346,14 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int rent2 = 200;
             string ownerName2 = "Owner Name 2";
             PropertyType propertyType2 = PropertyType.Apartment;
+            GenderRestriction genderRestriction2 = GenderRestriction.FamiliesOnly;
 
             House house2 = new House.HouseBuilder().Title(title2).OwnerEmail(email2)
             .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
-            .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress2.Item1)
-            .Longitude(coordinatesFromAddress2.Item2)
+            .Longitude(coordinatesFromAddress2.Item2).GenderRestriction(genderRestriction2)
             .HouseNo(houseNo2).Area(area2).StreetNo(streetNo2).OwnerName(ownerName2).Description(description2).Build();
             Dimension dimension2 = new Dimension(DimensionType.Kanal, "2", 0, house2);
             house2.Dimension = dimension2;
@@ -366,13 +375,14 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int rent3 = 300;
             string ownerName3 = "Owner Name 3";
             PropertyType propertyType3 = PropertyType.House;
+            GenderRestriction genderRestriction3 = GenderRestriction.BoysOnly;
 
             House house3 = new House.HouseBuilder().Title(title3).OwnerEmail(email3)
             .NumberOfBedrooms(numberOfBedrooms3).NumberOfBathrooms(numberOfBathrooms3).OwnerPhoneNumber(phoneNumber3)
-            .NumberOfKitchens(numberOfKitchens3).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens3).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType3).MonthlyRent(rent3).Latitude(coordinatesFromAddress3.Item1)
-            .Longitude(coordinatesFromAddress3.Item2)
+            .Longitude(coordinatesFromAddress3.Item2).GenderRestriction(genderRestriction3)
             .HouseNo(houseNo3).Area(area3).StreetNo(streetNo3).OwnerName(ownerName3).Description(description3).Build();
             Dimension dimension3 = new Dimension(DimensionType.Kanal, "3", 0, house3);
             house3.Dimension = dimension3;
@@ -394,13 +404,14 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int rent4 = 400;
             string ownerName4 = "Owner Name 4";
             PropertyType propertyType4 = PropertyType.House;
+            GenderRestriction genderRestriction4 = GenderRestriction.GirlsOnly;
 
             House house4 = new House.HouseBuilder().Title(title4).OwnerEmail(email4)
             .NumberOfBedrooms(numberOfBedrooms4).NumberOfBathrooms(numberOfBathrooms4).OwnerPhoneNumber(phoneNumber4)
-            .NumberOfKitchens(numberOfKitchens4).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens4).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType4).MonthlyRent(rent4).Latitude(coordinatesFromAddress4.Item1)
-            .Longitude(coordinatesFromAddress4.Item2)
+            .Longitude(coordinatesFromAddress4.Item2).GenderRestriction(genderRestriction4)
             .HouseNo(houseNo4).Area(area4).StreetNo(streetNo4).OwnerName(ownerName4).Description(description4).Build();
             Dimension dimension4 = new Dimension(DimensionType.Kanal, "4", 0, house4);
             house4.Dimension = dimension4;
@@ -422,13 +433,14 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int rent5 = 500;
             string ownerName5 = "Owner Name 5";
             PropertyType propertyType5 = PropertyType.House;
+            GenderRestriction genderRestriction5 = GenderRestriction.GirlsOnly;
 
             House house5 = new House.HouseBuilder().Title(title5).OwnerEmail(email5)
             .NumberOfBedrooms(numberOfBedrooms5).NumberOfBathrooms(numberOfBathrooms5).OwnerPhoneNumber(phoneNumber5)
-            .NumberOfKitchens(numberOfKitchens5).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens5).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType5).MonthlyRent(rent5).Latitude(coordinatesFromAddress5.Item1)
-            .Longitude(coordinatesFromAddress5.Item2)
+            .Longitude(coordinatesFromAddress5.Item2).GenderRestriction(genderRestriction5)
             .HouseNo(houseNo5).Area(area5).StreetNo(streetNo5).OwnerName(ownerName5).Description(description5).Build();
             Dimension dimension5 = new Dimension(DimensionType.Kanal, "5", 0, house5);
             house5.Dimension = dimension5;
@@ -451,7 +463,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouses[0].NumberOfKitchens);
-            Assert.AreEqual(house.FamiliesOnly, retreivedHouses[0].FamiliesOnly);
             Assert.AreEqual(house.GarageAvailable, retreivedHouses[0].LandlinePhoneAvailable);
             Assert.AreEqual(house.SmokingAllowed, retreivedHouses[0].SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouses[0].InternetAvailable);
@@ -468,6 +479,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(dimension.DecimalValue, retreivedHouses[0].Dimension.DecimalValue);
             Assert.AreEqual(dimension.StringValue, retreivedHouses[0].Dimension.StringValue);
             Assert.AreEqual(house.OwnerName, retreivedHouses[0].OwnerName);
+            Assert.AreEqual(house.GenderRestriction, retreivedHouses[0].GenderRestriction);
 
             // Verification of House # 4
             Assert.AreEqual(title4, retreivedHouses[1].Title);
@@ -478,7 +490,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house4.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
             Assert.AreEqual(house4.NumberOfBedrooms, retreivedHouses[1].NumberOfBedrooms);
             Assert.AreEqual(house4.NumberOfKitchens, retreivedHouses[1].NumberOfKitchens);
-            Assert.AreEqual(house4.FamiliesOnly, retreivedHouses[1].FamiliesOnly);
             Assert.AreEqual(house4.GarageAvailable, retreivedHouses[1].LandlinePhoneAvailable);
             Assert.AreEqual(house4.SmokingAllowed, retreivedHouses[1].SmokingAllowed);
             Assert.AreEqual(house4.InternetAvailable, retreivedHouses[1].InternetAvailable);
@@ -495,6 +506,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(dimension4.DecimalValue, retreivedHouses[1].Dimension.DecimalValue);
             Assert.AreEqual(dimension4.StringValue, retreivedHouses[1].Dimension.StringValue);
             Assert.AreEqual(house4.OwnerName, retreivedHouses[1].OwnerName);
+            Assert.AreEqual(house4.GenderRestriction, retreivedHouses[1].GenderRestriction);
         }
 
         [Test]
@@ -543,7 +555,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string ownerName = "Owner Name 1";
             House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
             .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
-            .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
+            .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
             .PropertyType(PropertyType.Apartment).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2)
@@ -565,7 +577,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string ownerName2 = "Owner Name 2";
             House house2 = new House.HouseBuilder().Title(title).OwnerEmail(email2)
             .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
-            .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(PropertyType.House).MonthlyRent(rent2).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2)
@@ -583,7 +595,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouses[0].NumberOfKitchens);
-            Assert.AreEqual(house.FamiliesOnly, retreivedHouses[0].FamiliesOnly);
             Assert.AreEqual(house.GarageAvailable, retreivedHouses[0].LandlinePhoneAvailable);
             Assert.AreEqual(house.SmokingAllowed, retreivedHouses[0].SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouses[0].InternetAvailable);
@@ -606,7 +617,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house2.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
             Assert.AreEqual(house2.NumberOfBedrooms, retreivedHouses[1].NumberOfBedrooms);
             Assert.AreEqual(house2.NumberOfKitchens, retreivedHouses[1].NumberOfKitchens);
-            Assert.AreEqual(house2.FamiliesOnly, retreivedHouses[1].FamiliesOnly);
             Assert.AreEqual(house2.GarageAvailable, retreivedHouses[1].LandlinePhoneAvailable);
             Assert.AreEqual(house2.SmokingAllowed, retreivedHouses[1].SmokingAllowed);
             Assert.AreEqual(house2.InternetAvailable, retreivedHouses[1].InternetAvailable);
@@ -678,7 +688,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             PropertyType propertyType = PropertyType.House;
             House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
             .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
-            .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
+            .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
             .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2)
@@ -705,7 +715,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             House house2 = new House.HouseBuilder().Title(title2).OwnerEmail(email2)
             .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
-            .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress2.Item1)
             .Longitude(coordinatesFromAddress2.Item2)
@@ -732,7 +742,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             House house3 = new House.HouseBuilder().Title(title3).OwnerEmail(email3)
             .NumberOfBedrooms(numberOfBedrooms3).NumberOfBathrooms(numberOfBathrooms3).OwnerPhoneNumber(phoneNumber3)
-            .NumberOfKitchens(numberOfKitchens3).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens3).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType3).MonthlyRent(rent3).Latitude(coordinatesFromAddress3.Item1)
             .Longitude(coordinatesFromAddress3.Item2)
@@ -759,7 +769,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             House house4 = new House.HouseBuilder().Title(title4).OwnerEmail(email4)
             .NumberOfBedrooms(numberOfBedrooms4).NumberOfBathrooms(numberOfBathrooms4).OwnerPhoneNumber(phoneNumber4)
-            .NumberOfKitchens(numberOfKitchens4).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens4).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType4).MonthlyRent(rent4).Latitude(coordinatesFromAddress4.Item1)
             .Longitude(coordinatesFromAddress4.Item2)
@@ -786,7 +796,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             House house5 = new House.HouseBuilder().Title(title5).OwnerEmail(email5)
             .NumberOfBedrooms(numberOfBedrooms5).NumberOfBathrooms(numberOfBathrooms5).OwnerPhoneNumber(phoneNumber5)
-            .NumberOfKitchens(numberOfKitchens5).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens5).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType5).MonthlyRent(rent5).Latitude(coordinatesFromAddress5.Item1)
             .Longitude(coordinatesFromAddress5.Item2)
@@ -807,7 +817,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouses[0].NumberOfKitchens);
-            Assert.AreEqual(house.FamiliesOnly, retreivedHouses[0].FamiliesOnly);
             Assert.AreEqual(house.GarageAvailable, retreivedHouses[0].LandlinePhoneAvailable);
             Assert.AreEqual(house.SmokingAllowed, retreivedHouses[0].SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouses[0].InternetAvailable);
@@ -832,7 +841,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house2.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
             Assert.AreEqual(house2.NumberOfBedrooms, retreivedHouses[1].NumberOfBedrooms);
             Assert.AreEqual(house2.NumberOfKitchens, retreivedHouses[1].NumberOfKitchens);
-            Assert.AreEqual(house2.FamiliesOnly, retreivedHouses[1].FamiliesOnly);
             Assert.AreEqual(house2.GarageAvailable, retreivedHouses[1].LandlinePhoneAvailable);
             Assert.AreEqual(house2.SmokingAllowed, retreivedHouses[1].SmokingAllowed);
             Assert.AreEqual(house2.InternetAvailable, retreivedHouses[1].InternetAvailable);
@@ -856,7 +864,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house4.NumberOfBathrooms, retreivedHouses[2].NumberOfBathrooms);
             Assert.AreEqual(house4.NumberOfBedrooms, retreivedHouses[2].NumberOfBedrooms);
             Assert.AreEqual(house4.NumberOfKitchens, retreivedHouses[2].NumberOfKitchens);
-            Assert.AreEqual(house4.FamiliesOnly, retreivedHouses[2].FamiliesOnly);
             Assert.AreEqual(house4.GarageAvailable, retreivedHouses[2].LandlinePhoneAvailable);
             Assert.AreEqual(house4.SmokingAllowed, retreivedHouses[2].SmokingAllowed);
             Assert.AreEqual(house4.InternetAvailable, retreivedHouses[2].InternetAvailable);
@@ -907,7 +914,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             PropertyType propertyType = PropertyType.House;
             House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
             .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
-            .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
+            .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
             .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2)
@@ -935,7 +942,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             House house2 = new House.HouseBuilder().Title(title2).OwnerEmail(email2)
             .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
-            .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress2.Item1)
             .Longitude(coordinatesFromAddress2.Item2)
@@ -963,7 +970,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             House house3 = new House.HouseBuilder().Title(title3).OwnerEmail(email3)
             .NumberOfBedrooms(numberOfBedrooms3).NumberOfBathrooms(numberOfBathrooms3).OwnerPhoneNumber(phoneNumber3)
-            .NumberOfKitchens(numberOfKitchens3).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens3).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType3).MonthlyRent(rent3).Latitude(coordinatesFromAddress3.Item1)
             .Longitude(coordinatesFromAddress3.Item2)
@@ -991,7 +998,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             House house4 = new House.HouseBuilder().Title(title4).OwnerEmail(email4)
             .NumberOfBedrooms(numberOfBedrooms4).NumberOfBathrooms(numberOfBathrooms4).OwnerPhoneNumber(phoneNumber4)
-            .NumberOfKitchens(numberOfKitchens4).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens4).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType4).MonthlyRent(rent4).Latitude(coordinatesFromAddress4.Item1)
             .Longitude(coordinatesFromAddress4.Item2)
@@ -1019,7 +1026,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             House house5 = new House.HouseBuilder().Title(title5).OwnerEmail(email5)
             .NumberOfBedrooms(numberOfBedrooms5).NumberOfBathrooms(numberOfBathrooms5).OwnerPhoneNumber(phoneNumber5)
-            .NumberOfKitchens(numberOfKitchens5).CableTvAvailable(false).FamiliesOnly(false)
+            .NumberOfKitchens(numberOfKitchens5).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType5).MonthlyRent(rent5).Latitude(coordinatesFromAddress5.Item1)
             .Longitude(coordinatesFromAddress5.Item2)
@@ -1044,7 +1051,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouses[0].NumberOfKitchens);
-            Assert.AreEqual(house.FamiliesOnly, retreivedHouses[0].FamiliesOnly);
             Assert.AreEqual(house.GarageAvailable, retreivedHouses[0].LandlinePhoneAvailable);
             Assert.AreEqual(house.SmokingAllowed, retreivedHouses[0].SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouses[0].InternetAvailable);
@@ -1071,7 +1077,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house3.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
             Assert.AreEqual(house3.NumberOfBedrooms, retreivedHouses[1].NumberOfBedrooms);
             Assert.AreEqual(house3.NumberOfKitchens, retreivedHouses[1].NumberOfKitchens);
-            Assert.AreEqual(house3.FamiliesOnly, retreivedHouses[1].FamiliesOnly);
             Assert.AreEqual(house3.GarageAvailable, retreivedHouses[1].LandlinePhoneAvailable);
             Assert.AreEqual(house3.SmokingAllowed, retreivedHouses[1].SmokingAllowed);
             Assert.AreEqual(house3.InternetAvailable, retreivedHouses[1].InternetAvailable);
@@ -1129,7 +1134,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             House house = new House.HouseBuilder().Title(title).OwnerPhoneNumber(phoneNumber).OwnerEmail(email)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
-                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
+                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
                 .PropertyType(PropertyType.Apartment).MonthlyRent(price).Latitude(33.29M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").OwnerName(ownerName).Description(description).Build();
@@ -1150,7 +1155,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
-            Assert.AreEqual(house.FamiliesOnly, retreivedHouse.FamiliesOnly);
             Assert.AreEqual(house.GarageAvailable, retreivedHouse.LandlinePhoneAvailable);
             Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
@@ -1187,7 +1191,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             House house = new House.HouseBuilder().Title(title).OwnerEmail(email).OwnerPhoneNumber(phoneNumber)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
-                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true).FamiliesOnly(true)
+                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
                 .PropertyType(PropertyType.Apartment).MonthlyRent(price).Latitude(33.29M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").OwnerName(ownerName).Build();
@@ -1217,7 +1221,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
-            Assert.AreEqual(house.FamiliesOnly, retreivedHouse.FamiliesOnly);
             Assert.AreEqual(house.GarageAvailable, retreivedHouse.LandlinePhoneAvailable);
             Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
             Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);
@@ -1275,7 +1278,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
                 House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
                     .NumberOfBedrooms(i).NumberOfBathrooms(i).OwnerPhoneNumber(phoneNumber)
-                    .NumberOfKitchens(i).CableTvAvailable(false).FamiliesOnly(true)
+                    .NumberOfKitchens(i).CableTvAvailable(false)
                     .GarageAvailable(false)
                     .LandlinePhoneAvailable(true)
                     .SmokingAllowed(false)
@@ -1350,7 +1353,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 Assert.AreEqual(i + i, retreivedHouses[i].NumberOfBathrooms);
                 Assert.AreEqual(i + i, retreivedHouses[i].NumberOfBedrooms);
                 Assert.AreEqual(i + i, retreivedHouses[i].NumberOfKitchens);
-                Assert.AreEqual(true, retreivedHouses[i].FamiliesOnly);
                 Assert.AreEqual(true, retreivedHouses[i].LandlinePhoneAvailable);
                 Assert.AreEqual(false, retreivedHouses[i].SmokingAllowed);
                 Assert.AreEqual(true, retreivedHouses[i].InternetAvailable);
@@ -1394,7 +1396,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 Assert.AreEqual(i, retreivedHouses[i].NumberOfBathrooms);
                 Assert.AreEqual(i, retreivedHouses[i].NumberOfBedrooms);
                 Assert.AreEqual(i, retreivedHouses[i].NumberOfKitchens);
-                Assert.AreEqual(true, retreivedHouses[i].FamiliesOnly);
                 Assert.AreEqual(true, retreivedHouses[i].LandlinePhoneAvailable);
                 Assert.AreEqual(false, retreivedHouses[i].SmokingAllowed);
                 Assert.AreEqual(true, retreivedHouses[i].InternetAvailable);

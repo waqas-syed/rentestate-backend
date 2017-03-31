@@ -56,7 +56,7 @@ namespace RentStuff.Property.Ports.Tests
 
         [Category("Integration")]
         [Test]
-        public void SaveAndGetHouseInstanceByIdTest_TestsThatHouseIsSavedAndRetreivedAsExpected_VerfiesThroughInstanceValue()
+        public void SaveUpdateAndGetHouseInstanceByIdTest_TestsThatHouseIsSavedThenUpdatedAndRetreivedAsExpected_VerfiesThroughInstanceValue()
         {
             if (_runTests)
             {
@@ -82,12 +82,13 @@ namespace RentStuff.Property.Ports.Tests
                 bool garageAvailable = true;
                 bool smokingAllowed = true;
                 string propertyType = PropertyType.Apartment.ToString();
-                string area = "1600 Amphitheatre Parkway, Mountain View, CA";
+                string area = "Pindora, Rawalpindi, Pakistan";
                 //string area = "Pindora, Rawalpindi, Pakistan";
                 string dimensionType = DimensionType.Kanal.ToString();
                 string dimensionString = "5";
                 decimal dimensionDecimal = 0;
                 string ownerName = "Owner Name 1";
+                string genderRestriction = GenderRestriction.FamiliesOnly.ToString();
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -98,10 +99,9 @@ namespace RentStuff.Property.Ports.Tests
                     })
                 });
                 CreateHouseCommand house = new CreateHouseCommand(title, rent,numberOfBedrooms, numberOfKitchens, 
-                    numberOfBathrooms,
-                    familiesOnly, boysOnly, girlsOnly, internetAvailable, landlinePhoneAvailable,
+                    numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber, 
-                    houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description);
+                    houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>) houseSaveResult).Content;
                 
@@ -121,12 +121,6 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
                 Assert.AreEqual(numberOfKitchens, retreivedHouse.NumberOfKitchens);
                 Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
-                Assert.AreEqual(familiesOnly, retreivedHouse.FamiliesOnly);
-                Assert.AreEqual(house.FamiliesOnly, retreivedHouse.FamiliesOnly);
-                Assert.AreEqual(boysOnly, retreivedHouse.BoysOnly);
-                Assert.AreEqual(house.BoysOnly, retreivedHouse.BoysOnly);
-                Assert.AreEqual(girlsOnly, retreivedHouse.GirlsOnly);
-                Assert.AreEqual(house.GirlsOnly, retreivedHouse.GirlsOnly);
                 Assert.AreEqual(landlinePhoneAvailable, retreivedHouse.LandlinePhoneAvailable);
                 Assert.AreEqual(house.LandlinePhoneAvailable, retreivedHouse.LandlinePhoneAvailable);
                 Assert.AreEqual(garageAvailable, retreivedHouse.GarageAvailable);
@@ -137,6 +131,10 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);                
                 Assert.AreEqual(propertyType, retreivedHouse.PropertyType);
                 Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
+                Assert.AreEqual(genderRestriction, retreivedHouse.GenderRestriction);
+                Assert.AreEqual(house.GenderRestriction, retreivedHouse.GenderRestriction);
+                Assert.AreEqual(genderRestriction, retreivedHouse.GenderRestriction);
+                Assert.AreEqual(house.GenderRestriction, retreivedHouse.GenderRestriction);
 
                 // Get the coordinates to verify we have stored the correct ones
                 IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
@@ -152,9 +150,84 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house.StreetNo, retreivedHouse.StreetNo);
                 Assert.AreEqual(ownerName, retreivedHouse.OwnerName);
                 Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
+
+                string updatedTitle = "Updated House For Rent";
+                string updatedDescription = "updated Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
+                int updatedRent = 195000;
+                string updatedOwnerEmail = "thorin@oakenshield123.com";
+                string updatedOwnerPhoneNumber = "+923211234560";
+                string updatedHouseNo = "CT-141/A";
+                string updatedStreetNo = "14";
+                int updatedNumberOfBathrooms = 9;
+                int updatedNumberOfBedrooms = 8;
+                int updatedNumberOfKitchens = 7;
+                bool updatedInternetAvailable = true;
+                bool updatedLandlinePhoneAvailable = true;
+                bool updatedCableTvAvailable = true;
+                bool updatedGarageAvailable = true;
+                bool updatedSmokingAllowed = true;
+                string updatedPropertyType = PropertyType.Apartment.ToString();
+                string updatedArea = "Saddar, Rawalpindi, Pakistan";
+                //string area = "Pindora, Rawalpindi, Pakistan";
+                string updatedDimensionType = DimensionType.Kanal.ToString();
+                string updatedDimensionString = "5";
+                decimal updatedDimensionDecimal = 0;
+                string updatedOwnerName = "Owner Name 1";
+                string updatedGenderRestriction = GenderRestriction.BoysOnly.ToString();
+
+                UpdateHouseCommand updateHouseCommand = new UpdateHouseCommand(houseId, updatedTitle, updatedRent, updatedNumberOfBedrooms,
+                    updatedNumberOfKitchens, updatedNumberOfBathrooms, updatedInternetAvailable, updatedLandlinePhoneAvailable,
+                    updatedCableTvAvailable, updatedGarageAvailable, updatedSmokingAllowed, updatedPropertyType, updatedOwnerEmail,
+                    updatedOwnerPhoneNumber, updatedHouseNo, updatedStreetNo, updatedArea, updatedDimensionType, updatedDimensionString,
+                    updatedDimensionDecimal, updatedOwnerName, updatedDescription, updatedGenderRestriction);
+
+                IHttpActionResult houseUpdateResult = houseController.Put(JsonConvert.SerializeObject(updateHouseCommand));
+                response = (IHttpActionResult)houseController.GetHouse(houseId: houseId);
+                retreivedHouse = ((OkNegotiatedContentResult<HouseFullRepresentation>)response).Content;
+                Assert.NotNull(retreivedHouse);
+                Assert.AreEqual(houseId, retreivedHouse.Id);
+                Assert.AreEqual(updatedTitle, retreivedHouse.Title);
+                Assert.AreEqual(updateHouseCommand.Title, retreivedHouse.Title);
+                Assert.AreEqual(updatedDescription, retreivedHouse.Description);
+                Assert.AreEqual(updateHouseCommand.Description, retreivedHouse.Description);
+                Assert.AreEqual(updatedRent, retreivedHouse.MonthlyRent);
+                Assert.AreEqual(updateHouseCommand.MonthlyRent, retreivedHouse.MonthlyRent);
+                Assert.AreEqual(updatedNumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
+                Assert.AreEqual(updateHouseCommand.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
+                Assert.AreEqual(updatedNumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
+                Assert.AreEqual(updateHouseCommand.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
+                Assert.AreEqual(updatedNumberOfKitchens, retreivedHouse.NumberOfKitchens);
+                Assert.AreEqual(updateHouseCommand.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
+                Assert.AreEqual(updatedLandlinePhoneAvailable, retreivedHouse.LandlinePhoneAvailable);
+                Assert.AreEqual(updateHouseCommand.LandlinePhoneAvailable, retreivedHouse.LandlinePhoneAvailable);
+                Assert.AreEqual(updatedGarageAvailable, retreivedHouse.GarageAvailable);
+                Assert.AreEqual(updateHouseCommand.GarageAvailable, retreivedHouse.GarageAvailable);
+                Assert.AreEqual(updatedSmokingAllowed, retreivedHouse.SmokingAllowed);
+                Assert.AreEqual(updateHouseCommand.SmokingAllowed, retreivedHouse.SmokingAllowed);
+                Assert.AreEqual(updatedInternetAvailable, retreivedHouse.InternetAvailable);
+                Assert.AreEqual(updateHouseCommand.InternetAvailable, retreivedHouse.InternetAvailable);
+                Assert.AreEqual(updatedPropertyType, retreivedHouse.PropertyType);
+                Assert.AreEqual(updateHouseCommand.PropertyType, retreivedHouse.PropertyType);
+                Assert.AreEqual(updatedGenderRestriction, retreivedHouse.GenderRestriction);
+                Assert.AreEqual(updateHouseCommand.GenderRestriction, retreivedHouse.GenderRestriction);
+
+                // Get the coordinates to verify we have stored the correct ones
+                geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+                coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(updatedArea);
+                Assert.AreEqual(coordinatesFromAddress.Item1, retreivedHouse.Latitude);
+                Assert.AreEqual(coordinatesFromAddress.Item2, retreivedHouse.Longitude);
+
+                Assert.AreEqual(updatedHouseNo, retreivedHouse.HouseNo);
+                Assert.AreEqual(updateHouseCommand.HouseNo, retreivedHouse.HouseNo);
+                Assert.AreEqual(updatedArea, retreivedHouse.Area);
+                Assert.AreEqual(updateHouseCommand.Area, retreivedHouse.Area);
+                Assert.AreEqual(updatedStreetNo, retreivedHouse.StreetNo);
+                Assert.AreEqual(updateHouseCommand.StreetNo, retreivedHouse.StreetNo);
+                Assert.AreEqual(updatedOwnerName, retreivedHouse.OwnerName);
+                Assert.AreEqual(updateHouseCommand.OwnerName, retreivedHouse.OwnerName);
             }
         }
-
+        
         // KNOWLEDGE POINT
         // # HttpResponseMessage's status and response can be checked like this:
         //Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -209,6 +282,7 @@ namespace RentStuff.Property.Ports.Tests
                 string dimensionString = "1";
                 decimal dimensionDecimal = 0;
                 string ownerName = "Owner Name 1";
+                string genderRestriction = GenderRestriction.GirlsOnly.ToString();
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -219,10 +293,9 @@ namespace RentStuff.Property.Ports.Tests
                     })
                 });
                 CreateHouseCommand house = new CreateHouseCommand(title, rent, numberOfBedrooms, numberOfKitchens,
-                    numberOfBathrooms,
-                    familiesOnly, boysOnly, girlsOnly, internetAvailable, landlinePhoneAvailable,
+                    numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
-                    houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description);
+                    houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>) houseSaveResult).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
@@ -252,6 +325,7 @@ namespace RentStuff.Property.Ports.Tests
                 string dimensionString2 = "2";
                 decimal dimensionDecimal2 = 0;
                 string ownerName2 = "Owner Name 2";
+                string genderRestriction2 = GenderRestriction.FamiliesOnly.ToString();
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -262,9 +336,9 @@ namespace RentStuff.Property.Ports.Tests
                     })
                 });
                 CreateHouseCommand house2 = new CreateHouseCommand(title2, rent2, numberOfBedrooms2, numberOfKitchens2,
-                    numberOfBathrooms2, familiesOnly2, boysOnly2, girlsOnly2, internetAvailable2, landlinePhoneAvailable2,
+                    numberOfBathrooms2, internetAvailable2, landlinePhoneAvailable2,
                     cableTvAvailable2, garageAvailable2, smokingAllowed2, propertyType2, ownerEmail2, ownerPhoneNumber2,
-                    houseNo2, streetNo2, area2, dimensionType2, dimensionString2, dimensionDecimal2, ownerName2, description2);
+                    houseNo2, streetNo2, area2, dimensionType2, dimensionString2, dimensionDecimal2, ownerName2, description2, genderRestriction2);
                 IHttpActionResult houseSaveResult2 = houseController.Post(JsonConvert.SerializeObject(house2));
                 string houseId2 = ((OkNegotiatedContentResult<string>)houseSaveResult2).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId2));
@@ -294,6 +368,7 @@ namespace RentStuff.Property.Ports.Tests
                 string dimensionString3 = "3";
                 decimal dimensionDecimal3 = 0;
                 string ownerName3 = "Owner Name 3";
+                string genderRestriction3 = GenderRestriction.FamiliesOnly.ToString();
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -304,9 +379,9 @@ namespace RentStuff.Property.Ports.Tests
                     })
                 });
                 CreateHouseCommand house3 = new CreateHouseCommand(title3, rent3, numberOfBedrooms3, numberOfKitchens3,
-                    numberOfBathrooms3, familiesOnly3, boysOnly3, girlsOnly3, internetAvailable3, landlinePhoneAvailable3,
+                    numberOfBathrooms3, internetAvailable3, landlinePhoneAvailable3,
                     cableTvAvailable3, garageAvailable3, smokingAllowed3, propertyType3, ownerEmail3, ownerPhoneNumber3,
-                    houseNo3, streetNo3, area3, dimensionType3, dimensionString3, dimensionDecimal3, ownerName3, description3);
+                    houseNo3, streetNo3, area3, dimensionType3, dimensionString3, dimensionDecimal3, ownerName3, description3, genderRestriction3);
                 IHttpActionResult houseSaveResult3 = houseController.Post(JsonConvert.SerializeObject(house3));
                 Assert.IsFalse(string.IsNullOrWhiteSpace(((OkNegotiatedContentResult<string>)houseSaveResult3).Content));
                 string houseId3 = ((OkNegotiatedContentResult<string>)houseSaveResult3).Content;
@@ -338,6 +413,7 @@ namespace RentStuff.Property.Ports.Tests
                 string dimensionString4 = "4";
                 decimal dimensionDecimal4 = 0;
                 string ownerName4 = "Owner Name 4";
+                string genderRestriction4 = GenderRestriction.FamiliesOnly.ToString();
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -348,9 +424,9 @@ namespace RentStuff.Property.Ports.Tests
                     })
                 });
                 CreateHouseCommand house4 = new CreateHouseCommand(title4, rent4, numberOfBedrooms4, numberOfKitchens4,
-                    numberOfBathrooms4, familiesOnly4, boysOnly4, girlsOnly4, internetAvailable4, landlinePhoneAvailable4,
+                    numberOfBathrooms4, internetAvailable4, landlinePhoneAvailable4,
                     cableTvAvailable4, garageAvailable4, smokingAllowed4, propertyType4, ownerEmail4, ownerPhoneNumber4,
-                    houseNo4, streetNo4, area4, dimensionType4, dimensionString4, dimensionDecimal4, ownerName4, description4);
+                    houseNo4, streetNo4, area4, dimensionType4, dimensionString4, dimensionDecimal4, ownerName4, description4, genderRestriction4);
                 IHttpActionResult houseSaveResult4 = houseController.Post(JsonConvert.SerializeObject(house4));
                 string houseId4 = ((OkNegotiatedContentResult<string>)houseSaveResult4).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId4));
@@ -381,6 +457,7 @@ namespace RentStuff.Property.Ports.Tests
                 string dimensionString5 = "5";
                 decimal dimensionDecimal5 = 0;
                 string ownerName5 = "Owner Name 5";
+                string genderRestriction5 = GenderRestriction.FamiliesOnly.ToString();
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -391,9 +468,9 @@ namespace RentStuff.Property.Ports.Tests
                     })
                 });
                 CreateHouseCommand house5 = new CreateHouseCommand(title5, rent5, numberOfBedrooms5, numberOfKitchens5,
-                    numberOfBathrooms5, familiesOnly5, boysOnly5, girlsOnly5, internetAvailable5, landlinePhoneAvailable5,
+                    numberOfBathrooms5, internetAvailable5, landlinePhoneAvailable5,
                     cableTvAvailable5, garageAvailable5, smokingAllowed5, propertyType5, ownerEmail5, ownerPhoneNumber5,
-                    houseNo5, streetNo5, area5, dimensionType5, dimensionString5, dimensionDecimal5, ownerName5, description5);
+                    houseNo5, streetNo5, area5, dimensionType5, dimensionString5, dimensionDecimal5, ownerName5, description5, genderRestriction5);
                 IHttpActionResult houseSaveResult5 = houseController.Post(JsonConvert.SerializeObject(house5));
                 string houseId5 = ((OkNegotiatedContentResult<string>)houseSaveResult5).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId5));
@@ -421,6 +498,7 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house.DimensionStringValue + " " + house.DimensionType, retreivedHouses[0].Dimension);
                 
                 Assert.AreEqual(propertyType, retreivedHouses[0].PropertyType);
+                Assert.AreEqual(house.PropertyType, retreivedHouses[0].PropertyType);
                 Assert.AreEqual(house.PropertyType, retreivedHouses[0].PropertyType);
                 Assert.AreEqual(area, retreivedHouses[0].Area);
                 Assert.AreEqual(house.Area, retreivedHouses[0].Area);
@@ -495,6 +573,7 @@ namespace RentStuff.Property.Ports.Tests
             string dimensionString = "1";
             decimal dimensionDecimal = 0;
             string ownerName = "Owner Name 1";
+            string genderRestriction = GenderRestriction.FamiliesOnly.ToString();
 
             // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
             houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -506,10 +585,9 @@ namespace RentStuff.Property.Ports.Tests
             });
 
             CreateHouseCommand house = new CreateHouseCommand(title, rent, numberOfBedrooms, numberOfKitchens,
-                numberOfBathrooms,
-                familiesOnly, boysOnly, girlsOnly, internetAvailable, landlinePhoneAvailable,
+                numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                 cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
-                houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description);
+                houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction);
             IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
             string houseId = ((OkNegotiatedContentResult<string>) houseSaveResult).Content;
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
@@ -540,6 +618,7 @@ namespace RentStuff.Property.Ports.Tests
             string dimensionString2 = "2";
             decimal dimensionDecimal2 = 0;
             string ownerName2 = "Owner Name 2";
+            string genderRestriction2 = GenderRestriction.FamiliesOnly.ToString();
 
             // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
             houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -550,10 +629,10 @@ namespace RentStuff.Property.Ports.Tests
                 })
             });
             CreateHouseCommand house2 = new CreateHouseCommand(title2, rent2, numberOfBedrooms2, numberOfKitchens2,
-                numberOfBathrooms2, familiesOnly2, boysOnly2, girlsOnly2, internetAvailable2, landlinePhoneAvailable2,
+                numberOfBathrooms2, internetAvailable2, landlinePhoneAvailable2,
                 cableTvAvailable2, garageAvailable2, smokingAllowed2, propertyType2, ownerEmail2, ownerPhoneNumber2,
                 houseNo2, streetNo2, area2, dimensionType2, dimensionString2, dimensionDecimal2, ownerName2,
-                description2);
+                description2, genderRestriction2);
             IHttpActionResult houseSaveResult2 = houseController.Post(JsonConvert.SerializeObject(house2));
             string houseId2 = ((OkNegotiatedContentResult<string>) houseSaveResult2).Content;
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseId2));
@@ -584,6 +663,7 @@ namespace RentStuff.Property.Ports.Tests
             string dimensionString3 = "3";
             decimal dimensionDecimal3 = 0;
             string ownerName3 = "Owner Name 3";
+            string genderRestriction3 = GenderRestriction.FamiliesOnly.ToString();
 
             // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
             houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -594,10 +674,10 @@ namespace RentStuff.Property.Ports.Tests
                 })
             });
             CreateHouseCommand house3 = new CreateHouseCommand(title3, rent3, numberOfBedrooms3, numberOfKitchens3,
-                numberOfBathrooms3, familiesOnly3, boysOnly3, girlsOnly3, internetAvailable3, landlinePhoneAvailable3,
+                numberOfBathrooms3, internetAvailable3, landlinePhoneAvailable3,
                 cableTvAvailable3, garageAvailable3, smokingAllowed3, propertyType3, ownerEmail3, ownerPhoneNumber3,
                 houseNo3, streetNo3, area3, dimensionType3, dimensionString3, dimensionDecimal3, ownerName3,
-                description3);
+                description3, genderRestriction3);
             IHttpActionResult houseSaveResult3 = houseController.Post(JsonConvert.SerializeObject(house3));
             Assert.IsFalse(string.IsNullOrWhiteSpace(((OkNegotiatedContentResult<string>) houseSaveResult3).Content));
             string houseId3 = ((OkNegotiatedContentResult<string>) houseSaveResult3).Content;
@@ -702,6 +782,7 @@ namespace RentStuff.Property.Ports.Tests
             string dimensionString = "1";
             decimal dimensionDecimal = 0;
             string ownerName = "Owner Name 1";
+            string genderRestriction = GenderRestriction.NoRestriction.ToString();
 
             // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
             houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -713,10 +794,9 @@ namespace RentStuff.Property.Ports.Tests
             });
 
             CreateHouseCommand house = new CreateHouseCommand(title, rent, numberOfBedrooms, numberOfKitchens,
-                numberOfBathrooms,
-                familiesOnly, boysOnly, girlsOnly, internetAvailable, landlinePhoneAvailable,
+                numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                 cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
-                houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description);
+                houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction);
             IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
             string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
@@ -747,6 +827,7 @@ namespace RentStuff.Property.Ports.Tests
             string dimensionString2 = "2";
             decimal dimensionDecimal2 = 0;
             string ownerName2 = "Owner Name 2";
+            string genderRestriction2 = GenderRestriction.FamiliesOnly.ToString();
 
             // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
             houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -757,10 +838,10 @@ namespace RentStuff.Property.Ports.Tests
                 })
             });
             CreateHouseCommand house2 = new CreateHouseCommand(title2, rent2, numberOfBedrooms2, numberOfKitchens2,
-                numberOfBathrooms2, familiesOnly2, boysOnly2, girlsOnly2, internetAvailable2, landlinePhoneAvailable2,
+                numberOfBathrooms2, internetAvailable2, landlinePhoneAvailable2,
                 cableTvAvailable2, garageAvailable2, smokingAllowed2, propertyType2, ownerEmail2, ownerPhoneNumber2,
                 houseNo2, streetNo2, area2, dimensionType2, dimensionString2, dimensionDecimal2, ownerName2,
-                description2);
+                description2, genderRestriction2);
             IHttpActionResult houseSaveResult2 = houseController.Post(JsonConvert.SerializeObject(house2));
             string houseId2 = ((OkNegotiatedContentResult<string>)houseSaveResult2).Content;
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseId2));
@@ -792,6 +873,7 @@ namespace RentStuff.Property.Ports.Tests
             string dimensionString3 = "3";
             decimal dimensionDecimal3 = 0;
             string ownerName3 = "Owner Name 3";
+            string genderRestriction3 = GenderRestriction.FamiliesOnly.ToString();
 
             // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
             houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -802,10 +884,10 @@ namespace RentStuff.Property.Ports.Tests
                 })
             });
             CreateHouseCommand house3 = new CreateHouseCommand(title3, rent3, numberOfBedrooms3, numberOfKitchens3,
-                numberOfBathrooms3, familiesOnly3, boysOnly3, girlsOnly3, internetAvailable3, landlinePhoneAvailable3,
+                numberOfBathrooms3, internetAvailable3, landlinePhoneAvailable3,
                 cableTvAvailable3, garageAvailable3, smokingAllowed3, propertyType3, ownerEmail3, ownerPhoneNumber3,
                 houseNo3, streetNo3, area3, dimensionType3, dimensionString3, dimensionDecimal3, ownerName3,
-                description3);
+                description3, genderRestriction3);
             IHttpActionResult houseSaveResult3 = houseController.Post(JsonConvert.SerializeObject(house3));
             Assert.IsFalse(string.IsNullOrWhiteSpace(((OkNegotiatedContentResult<string>)houseSaveResult3).Content));
             string houseId3 = ((OkNegotiatedContentResult<string>)houseSaveResult3).Content;

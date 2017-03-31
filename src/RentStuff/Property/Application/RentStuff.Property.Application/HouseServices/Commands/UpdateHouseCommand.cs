@@ -37,11 +37,11 @@ namespace RentStuff.Property.Application.HouseServices.Commands
         private decimal _longitude;
 
         public UpdateHouseCommand(string id, string title, long monthlyRent, int numberOfBedrooms,
-            int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
+            int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable,
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
             string houseNo, string streetNo, string area, string dimensionType, string dimensionStringValue,
-            decimal dimensionIntValue, string ownerName, string description)
+            decimal dimensionIntValue, string ownerName, string description, string genderRestriction)
         {
             Id = id;
             Title = title;
@@ -49,9 +49,6 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
-            FamiliesOnly = familiesOnly;
-            BoysOnly = boysOnly;
-            GirlsOnly = girlsOnly;
             InternetAvailable = internetAvailable;
             LandlinePhoneAvailable = landlinePhoneAvailable;
             CableTvAvailable = cableTvAvailable;
@@ -68,6 +65,7 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             DimensionIntValue = dimensionIntValue;
             OwnerName = ownerName;
             Description = description;
+            GenderRestriction = genderRestriction;
         }
 
         [DataMember]
@@ -144,5 +142,8 @@ namespace RentStuff.Property.Application.HouseServices.Commands
 
         [DataMember]
         public string OwnerName { get; private set; }
+
+        [DataMember]
+        public string GenderRestriction { get; private set; }
     }
 }

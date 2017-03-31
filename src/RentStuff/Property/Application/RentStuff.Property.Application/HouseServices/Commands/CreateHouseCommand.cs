@@ -11,20 +11,17 @@ namespace RentStuff.Property.Application.HouseServices.Commands
     public class CreateHouseCommand
     {
         public CreateHouseCommand(string title, long monthlyRent, int numberOfBedrooms,
-            int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
+            int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, 
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber, 
             string houseNo, string streetNo, string area, string dimensionType, string dimensionStringValue, 
-            decimal dimensionIntValue, string ownerName, string description)
+            decimal dimensionIntValue, string ownerName, string description, string genderRestriction)
         {
             Title = title;
             MonthlyRent = monthlyRent;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
-            FamiliesOnly = familiesOnly;
-            BoysOnly = boysOnly;
-            GirlsOnly = girlsOnly;
             InternetAvailable = internetAvailable;
             LandlinePhoneAvailable = landlinePhoneAvailable;
             CableTvAvailable = cableTvAvailable;
@@ -41,6 +38,7 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             DimensionIntValue = dimensionIntValue;
             OwnerName = ownerName;
             Description = description;
+            GenderRestriction = genderRestriction;
         }
 
         [DataMember]
@@ -57,19 +55,10 @@ namespace RentStuff.Property.Application.HouseServices.Commands
 
         [DataMember]
         public int NumberOfKitchens { get; private set; }
-
-        [DataMember]
-        public bool FamiliesOnly { get; private set; }
-
+        
         [DataMember]
         public int NumberOfBathrooms { get; private set; }
-
-        [DataMember]
-        public bool GirlsOnly { get; private set; }
-
-        [DataMember]
-        public bool BoysOnly { get; private set; }
-
+        
         [DataMember]
         public bool InternetAvailable { get; private set; }
 
@@ -114,5 +103,8 @@ namespace RentStuff.Property.Application.HouseServices.Commands
 
         [DataMember]
         public string OwnerName { get; private set; }
+
+        [DataMember]
+        public string GenderRestriction { get; private set; }
     }
 }

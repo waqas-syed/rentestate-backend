@@ -16,9 +16,6 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         private int _numberOfBedrooms;
         private int _numberOfKitchens;
         private int _numberOfBathrooms;
-        private bool _familiesOnly;
-        private bool _boysOnly;
-        private bool _girlsOnly;
         private bool _internetAvailable;
         private bool _landlinePhoneAvailable;
         private bool _cableTvAvailable;
@@ -47,19 +44,17 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
         public House(string title, long monthlyRent, int numberOfBedrooms,
-            int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
+            int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension, 
             bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail, string ownerPhoneNumber,
-            decimal latitude, decimal longitude, string houseNo, string streetNo, string area, string ownerName, string description)
+            decimal latitude, decimal longitude, string houseNo, string streetNo, string area, string ownerName, string description, 
+            GenderRestriction genderRestriction)
         {
             Title = title;
             MonthlyRent = monthlyRent;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
-            FamiliesOnly = familiesOnly;
-            BoysOnly = boysOnly;
-            GirlsOnly = girlsOnly;
             InternetAvailable = internetAvailable;
             LandlinePhoneAvailable = landlinePhoneAvailable;
             CableTvAvailable = cableTvAvailable;
@@ -76,6 +71,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             Area = area;
             OwnerName = ownerName;
             Description = description;
+            GenderRestriction = genderRestriction;
         }
 
         /// <summary>
@@ -86,9 +82,6 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <param name="numberOfBedrooms"></param>
         /// <param name="numberOfKitchens"></param>
         /// <param name="numberOfBathrooms"></param>
-        /// <param name="familiesOnly"></param>
-        /// <param name="boysOnly"></param>
-        /// <param name="girlsOnly"></param>
         /// <param name="internetAvailable"></param>
         /// <param name="landlinePhoneAvailable"></param>
         /// <param name="cableTvAvailable"></param>
@@ -103,20 +96,21 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <param name="ownerName"></param>
         /// <param name="description"></param>
         /// <param name="dimension"></param>
+        /// <param name="genderRestriction"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
         public void UpdateHouse(string title, long monthlyRent, int numberOfBedrooms,
-            int numberOfKitchens, int numberOfBathrooms, bool familiesOnly, bool boysOnly, bool girlsOnly,
+            int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension,
             bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail, string ownerPhoneNumber,
-            string houseNo, string streetNo, string area, string ownerName, string description)
+            string houseNo, string streetNo, string area, string ownerName, string description, GenderRestriction genderRestriction,
+            decimal latitude, decimal longitude)
         {
             Title = title;
             MonthlyRent = monthlyRent;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
-            FamiliesOnly = familiesOnly;
-            BoysOnly = boysOnly;
-            GirlsOnly = girlsOnly;
             InternetAvailable = internetAvailable;
             LandlinePhoneAvailable = landlinePhoneAvailable;
             CableTvAvailable = cableTvAvailable;
@@ -131,6 +125,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             Area = area;
             OwnerName = ownerName;
             Description = description;
+            GenderRestriction = genderRestriction;
+            Latitude = latitude;
+            Longitude = longitude;
         }
 
         /// <summary>
@@ -190,85 +187,13 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             get { return _numberOfKitchens; }
             set { _numberOfKitchens = value; }
         }
-
-        public bool FamiliesOnly
-        {
-            get { return _familiesOnly; }
-            set
-            {
-                if (value)
-                {
-                    if (!_boysOnly & !_girlsOnly)
-                    {
-                        _familiesOnly = true;
-                    }
-                    else
-                    {
-                        throw new ArgumentException(
-                            "Cannot mark FamiliesOnly when either BoysOnly or GirlsOnly is marked true already");
-                    }
-                }
-                else
-                {
-                    _familiesOnly = false;
-                }
-            }
-        }
-
+        
         public int NumberOfBathrooms
         {
             get { return _numberOfBathrooms; }
             set { _numberOfBathrooms = value; }
         }
-
-        public bool GirlsOnly
-        {
-            get { return _girlsOnly; }
-            set
-            {
-                if (value)
-                {
-                    if (!_boysOnly & !_familiesOnly)
-                    {
-                        _girlsOnly = true;
-                    }
-                    else
-                    {
-                        throw new ArgumentException(
-                            "Cannot mark GirlsOnly when either BoysOnly or FamiliesOnly is marked true already");
-                    }
-                }
-                else
-                {
-                    _girlsOnly = false;
-                }
-            }
-        }
-
-        public bool BoysOnly
-        {
-            get { return _boysOnly; }
-            set
-            {
-                if (value)
-                {
-                    if(!_girlsOnly & !_familiesOnly)
-                    {
-                        _boysOnly = true;
-                    }
-                else
-                    {
-                        throw new ArgumentException(
-                            "Cannot mark BoysOnly when either GirlsOnly or FamiliesOnly is marked true already");
-                    }
-                }
-                else
-                {
-                    _boysOnly = false;
-                }
-            }
-        }
-
+        
         public bool InternetAvailable
         {
             get { return _internetAvailable; }
@@ -424,6 +349,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             }
         }
 
+        public GenderRestriction GenderRestriction { get; set; }
+
         /// <summary>
         /// House Builder
         /// </summary>
@@ -436,9 +363,6 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private int _numberOfBedrooms;
             private int _numberOfKitchens;
             private int _numberOfBathrooms;
-            private bool _familiesOnly;
-            private bool _boysOnly;
-            private bool _girlsOnly;
             private bool _internetAvailable;
             private bool _landlinePhoneAvailable;
             private bool _cableTvAvailable;
@@ -454,6 +378,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private string _streetNo;
             private string _area;
             private string _ownerName;
+            private GenderRestriction _genderRestriction;
 
             public HouseBuilder Title(string title)
             {
@@ -490,25 +415,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 _numberOfBathrooms = numberOfBathrooms;
                 return this;
             }
-
-            public HouseBuilder FamiliesOnly(bool familiesOnly)
-            {
-                _familiesOnly = familiesOnly;
-                return this;
-            }
-
-            public HouseBuilder BoysOnly(bool boysOnly)
-            {
-                _boysOnly = boysOnly;
-                return this;
-            }
-
-            public HouseBuilder GirlsOnly(bool girlsOnly)
-            {
-                _girlsOnly = girlsOnly;
-                return this;
-            }
-
+            
             public HouseBuilder WithInternetAvailable(bool internetAvailable)
             {
                 _internetAvailable = internetAvailable;
@@ -599,6 +506,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
 
+            public HouseBuilder GenderRestriction(GenderRestriction genderRestriction)
+            {
+                _genderRestriction = genderRestriction;
+                return this;
+            }
+
             /// <summary>
             /// Build a new instance of House
             /// </summary>
@@ -606,10 +519,10 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             public House Build()
             {
                 return new House(_title, _monthlyRent, _numberOfBedrooms, _numberOfKitchens,
-                                 _numberOfBathrooms, _familiesOnly, _boysOnly, _girlsOnly, _internetAvailable,
+                                 _numberOfBathrooms, _internetAvailable,
                                  _landlinePhoneAvailable, _cableTvAvailable, _dimension, _garageAvailable,
                                  _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber, _latitude, _longitude,
-                                 _houseNo, _streetNo, _area, _ownerName, _description);
+                                 _houseNo, _streetNo, _area, _ownerName, _description, _genderRestriction);
             }
         }
     }
