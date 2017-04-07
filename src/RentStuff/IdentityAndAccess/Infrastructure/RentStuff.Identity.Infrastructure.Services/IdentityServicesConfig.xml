@@ -6,4 +6,5 @@
   <!-- Services -->
   <object id="CustomEmailService" type="RentStuff.Identity.Infrastructure.Services.Email.CustomEmailService, RentStuff.Identity.Infrastructure.Services" />
   <object id="EmailTokenGenerationService" type="RentStuff.Identity.Infrastructure.Services.Email.EmailTokenGenerationService, RentStuff.Identity.Infrastructure.Services" />
+  <object id="PasswordResetTokenService" type="RentStuff.Identity.Infrastructure.Services.PasswordReset.PasswordResetTokenService, RentStuff.Identity.Infrastructure.Services" />
 </objects>

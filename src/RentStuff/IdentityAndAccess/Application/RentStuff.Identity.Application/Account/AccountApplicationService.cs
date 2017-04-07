@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using RentStuff.Identity.Application.Account.Commands;
 using RentStuff.Identity.Application.Account.Representations;
-using RentStuff.Identity.Infrastructure.Persistence.Model;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
 using RentStuff.Identity.Infrastructure.Services.Email;
+using RentStuff.Identity.Infrastructure.Services.Identity;
 using Constants = RentStuff.Common.Constants;
 
 namespace RentStuff.Identity.Application.Account
@@ -130,6 +130,30 @@ namespace RentStuff.Identity.Application.Account
             throw new NullReferenceException("Could not find the user for the given email");
         }
 
+        /// <summary>
+        /// Sends user token to reset password
+        /// </summary>
+        /// <param name="forgotPasswordCommand"></param>
+        public void ForgotPassword(ForgotPasswordCommand forgotPasswordCommand)
+        {
+            var user = _accountRepository.GetUserByEmail(forgotPasswordCommand.Email);
+            if (user.EmailConfirmed)
+            {
+                // Generate the token
+                var resetPasswordToken = _accountRepository.GetPasswordResetToken(user.Id);
+                // Create the link that will be sent in the email
+                var passwordResetEmailBody = Constants.FrontEndUrl + "/" + Constants.AccountActivationUrlLocation + "?email=" 
+                    + forgotPasswordCommand.Email + "&resettoken=" + resetPasswordToken;
+                // Sned the email with the generated token within the generated link
+                _emailService.SendEmail(forgotPasswordCommand.Email, EmailConstants.PasswordResetSubject, 
+                    EmailConstants.PasswordResetEmail(user.FullName, passwordResetEmailBody));
+            }
+            else
+            {
+                throw new InvalidOperationException("Cannot reset password");
+            }
+        }
+        
         public void Dispose()
         {
             _accountRepository.Dispose();

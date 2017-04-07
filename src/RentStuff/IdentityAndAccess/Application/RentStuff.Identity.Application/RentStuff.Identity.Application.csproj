@@ -62,6 +62,7 @@
     <Compile Include="Account\AccountApplicationService.cs" />
     <Compile Include="Account\Commands\ActivateAccountCommand.cs" />
     <Compile Include="Account\Commands\CreateUserCommand.cs" />
+    <Compile Include="Account\Commands\ForgotPasswordCommand.cs" />
     <Compile Include="Account\IAccountApplicationService.cs" />
     <Compile Include="Account\Representations\UserRepresentation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

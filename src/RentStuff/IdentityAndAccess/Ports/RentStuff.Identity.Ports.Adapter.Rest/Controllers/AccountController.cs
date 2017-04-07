@@ -102,6 +102,29 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("forgot-password")]
+        [AllowAnonymous]
+        public IHttpActionResult ForgotPassword(ForgotPasswordCommand forgotPasswordCommand)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(forgotPasswordCommand?.Email))
+                {
+                    _accountApplicationService.ForgotPassword(forgotPasswordCommand);
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("No email provided");
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("get-user")]

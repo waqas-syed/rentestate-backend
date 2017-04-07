@@ -4,9 +4,9 @@ using System.Runtime.Remoting;
 using Microsoft.AspNet.Identity;
 using NUnit.Framework;
 using RentStuff.Common;
-using RentStuff.Identity.Infrastructure.Persistence.Model;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
 using RentStuff.Identity.Infrastructure.Services.Email;
+using RentStuff.Identity.Infrastructure.Services.Identity;
 using Spring.Context.Support;
 
 namespace RentStuff.Identity.Infrastructure.Persist.IntegTests

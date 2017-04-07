@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
-using RentStuff.Identity.Infrastructure.Persistence.Model;
+using RentStuff.Identity.Infrastructure.Services.Identity;
 
 namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 {
@@ -22,5 +22,11 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
         CustomIdentityUser GetUserByPassword(string userName, string password);
 
         IdentityResult UpdateUser(CustomIdentityUser customerIdentityUser);
+
+        bool IsEmailConfirmed(string userId);
+
+        string GetPasswordResetToken(string userId);
+
+        UserManager<CustomIdentityUser> UserManager { get; set; }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using RentStuff.Identity.Infrastructure.Persistence.Model;
-using RentStuff.Identity.Infrastructure.Services.Email;
 using RentStuff.Identity.Infrastructure.Services.Hashers;
+using RentStuff.Identity.Infrastructure.Services.Identity;
+using RentStuff.Identity.Infrastructure.Services.PasswordReset;
 using RentStuff.Identity.Infrastructure.Services.Validators;
 
 namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
@@ -15,13 +14,13 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 
         private UserManager<CustomIdentityUser> _userManager;
         
-
         public AccountRepository()
         {
             _ctx = new AuthContext();            
             _userManager = new UserManager<CustomIdentityUser>(new UserStore<CustomIdentityUser>(_ctx));
             _userManager.UserValidator = new CustomUserValidator<CustomIdentityUser>(_userManager);
             _userManager.PasswordHasher = new CustomPasswordHasher();
+            _userManager.UserTokenProvider = new PasswordResetTokenService();
         }
 
         public IdentityResult RegisterUser(string name, string email, string password)
@@ -53,10 +52,22 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
             return _userManager.Update(customerIdentityUser);
         }
 
+        public bool IsEmailConfirmed(string userId)
+        {
+            return _userManager.IsEmailConfirmed(userId);
+        }
+
+        public string GetPasswordResetToken(string userId)
+        {
+            return _userManager.GeneratePasswordResetToken(userId);
+        }
+
         public void Dispose()
         {
             _ctx.Dispose();
             _userManager.Dispose();
         }
+
+        public UserManager<CustomIdentityUser> UserManager { get { return _userManager; } set { _userManager = value; } }
     }
 }
