@@ -19,11 +19,16 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
         private static readonly int CompanyEmailPort =
             int.Parse(ConfigurationManager.AppSettings.Get("CompanyEmailPort"));
 
-        private SmtpClient _smtpClient = new SmtpClient(CompanyEmailHost, CompanyEmailPort);
+        private SmtpClient _smtpClient = null;
         public event Action EmailSent;
 
         public CustomEmailService()
         {
+        }
+
+        private void InitializeSmtpClient()
+        {
+            _smtpClient = new SmtpClient(CompanyEmailHost, CompanyEmailPort);
             _smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             _smtpClient.UseDefaultCredentials = false;
             _smtpClient.Host = CompanyEmailHost;
@@ -40,6 +45,7 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
         /// <param name="body"></param>
         public void SendEmail(string to, string subject, string body)
         {
+            InitializeSmtpClient();
             MailMessage mail = new MailMessage(CompanyEmailAddress, to);
             mail.Subject = subject;
             mail.Body = body;
@@ -52,7 +58,11 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
             catch (Exception)
             {
                 // If the email did not got sent for some reason, try to send it again
-                _smtpClient.SendAsync(mail, null);
+                //_smtpClient.SendAsync(mail, null);
+            }
+            finally
+            {
+                _smtpClient.Dispose();
             }
         }
 

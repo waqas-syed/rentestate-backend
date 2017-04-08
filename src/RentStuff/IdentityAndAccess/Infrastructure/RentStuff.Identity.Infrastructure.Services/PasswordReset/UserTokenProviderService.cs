@@ -8,7 +8,7 @@ namespace RentStuff.Identity.Infrastructure.Services.PasswordReset
     /// <summary>
     /// Generates and validates password reset token
     /// </summary>
-    public class PasswordResetTokenService : IUserTokenProvider<CustomIdentityUser, string>
+    public class UserTokenProviderService : IUserTokenProvider<CustomIdentityUser, string>
     {
         /// <summary>
         ///     Generate a token for a user with a specific purpose
@@ -26,7 +26,7 @@ namespace RentStuff.Identity.Infrastructure.Services.PasswordReset
                 string emailHash = BCrypt.Net.BCrypt.HashPassword(user.Email, mySalt);
                 string userIdHash = BCrypt.Net.BCrypt.HashPassword(user.Id, mySalt);
                 DateTime? tokenExpirationTime = DateTime.Now.AddDays(1);
-                string finalHash = emailHash + "|" + userIdHash + "___" + tokenExpirationTime.Value;
+                string finalHash = userIdHash + "|" +  emailHash;
                 return finalHash;
             });
             return task;
@@ -44,19 +44,12 @@ namespace RentStuff.Identity.Infrastructure.Services.PasswordReset
         {
             Task<bool> task = Task<bool>.Factory.StartNew(() =>
             {
-                string[] separateHashAndExpiryDate = token.Split(new string[] {"___"}, StringSplitOptions.None);
-                if (separateHashAndExpiryDate.Length.Equals(2))
+                string[] separatedHashes = token.Split('|');
+                if (separatedHashes.Length.Equals(2) && BCrypt.Net.BCrypt.Verify(user.Id, separatedHashes[0])
+                    && BCrypt.Net.BCrypt.Verify(user.Email, separatedHashes[1])
+                )
                 {
-                    DateTime tokenExpirationTime = DateTime.Parse(separateHashAndExpiryDate[1]);
-                    if (tokenExpirationTime >= DateTime.Now)
-                    {
-                        string[] separatedHashes = separateHashAndExpiryDate[0].Split('|');
-                        if (separatedHashes.Length.Equals(2) && BCrypt.Net.BCrypt.Verify(user.Email, separatedHashes[0]) &&
-                            BCrypt.Net.BCrypt.Verify(user.Id, separatedHashes[1]))
-                        {
-                            return true;
-                        }
-                    }
+                    return true;
                 }
                 throw new InvalidOperationException("Invalid token.");
             });

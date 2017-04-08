@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using System;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace RentStuff.Identity.Infrastructure.Services.Identity
 {
@@ -8,5 +9,9 @@ namespace RentStuff.Identity.Infrastructure.Services.Identity
    public class CustomIdentityUser : IdentityUser
     {
         public string FullName { get; set; }
+
+        public bool IsPasswordResetRequested { get; set; }
+
+        public DateTime? PasswordResetExpiryDate { get; set; }
     }
 }

@@ -75,7 +75,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmailServiceTests.cs" />
-    <Compile Include="EmailTokenGenerationServiceTests.cs" />
     <Compile Include="PasswordResetServiceIntegTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

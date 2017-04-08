@@ -65,14 +65,11 @@
   <ItemGroup>
     <Compile Include="Email\EmailConstants.cs" />
     <Compile Include="Email\CustomEmailService.cs" />
-    <Compile Include="Email\EmailTokenGenerationService.cs" />
     <Compile Include="Email\ICustomEmailService.cs" />
-    <Compile Include="Email\IEmailTokenGenerationService.cs" />
     <Compile Include="Hashers\CustomCrypto.cs" />
     <Compile Include="Hashers\CustomPasswordHasher.cs" />
     <Compile Include="Identity\CustomIdentityUser.cs" />
-    <Compile Include="Identity\UserManager.cs" />
-    <Compile Include="PasswordReset\PasswordResetTokenService.cs" />
+    <Compile Include="PasswordReset\UserTokenProviderService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validators\CustomUserValidator.cs" />
   </ItemGroup>

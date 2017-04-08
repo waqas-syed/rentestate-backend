@@ -15,14 +15,14 @@ namespace RentStuff.Identity.Application.Account
     {
         private ICustomEmailService _emailService;
         private IAccountRepository _accountRepository;
-        private IEmailTokenGenerationService _emailTokenGenerationService;
+        private IUserTokenProvider<CustomIdentityUser,string> _userTokenService;
 
         public AccountApplicationService(IAccountRepository accountRepository, ICustomEmailService customEmailService,
-            IEmailTokenGenerationService emailTokenGenerationService)
+            IUserTokenProvider<CustomIdentityUser, string> userTokenProviderService)
         {
             _accountRepository = accountRepository;
             _emailService = customEmailService;
-            _emailTokenGenerationService = emailTokenGenerationService;
+            _userTokenService = userTokenProviderService;
         }
         
         public string Register(CreateUserCommand userModel)
@@ -65,8 +65,8 @@ namespace RentStuff.Identity.Application.Account
             // Get the User instance to have her Id
             var retreivedUser = _accountRepository.GetUserByEmail(userModel.Email);
             // Generate the token for this user using email and user Id
-            var emailVerificationToken = _emailTokenGenerationService.GenerateEmailToken(retreivedUser.Email,
-                retreivedUser.Id);
+            //var emailVerificationToken = _emailTokenGenerationService.GenerateEmailToken(retreivedUser.Email, retreivedUser.Id);
+            var emailVerificationToken = _accountRepository.GetEmailActivationToken(retreivedUser.Id);
             if (string.IsNullOrWhiteSpace(emailVerificationToken))
             {
                 throw new NullReferenceException("Could not generate token for user: " + retreivedUser.Id);
@@ -95,29 +95,40 @@ namespace RentStuff.Identity.Application.Account
             {
                 throw new ArgumentException("Activation Code not provided");
             }
+            
             // Get the user from the database so that we have the userId which we need to verify the token
             var user = _accountRepository.GetUserByEmail(activateAccountCommand.Email);
             if (user == null)
             {
                 throw new ArgumentException("User not found");
             }
-            if (user.EmailConfirmed)
+            var confirmEmailSucceeded = _accountRepository.ConfirmEmail(user.Id, activateAccountCommand.ActivationCode);
+            if (!confirmEmailSucceeded)
+            {
+                throw new InvalidOperationException("Error arose while confirming email. Please try again later");
+            }
+            else
+            {
+                return true;
+            }
+            /*if (user.EmailConfirmed)
             {
                 throw new InvalidOperationException("User account is already activated");
             }
 
             // Verify the Email Token for the user
             if (_emailTokenGenerationService.VerifyToken(activateAccountCommand.Email, user.Id, activateAccountCommand.ActivationCode))
-            {
-                user.EmailConfirmed = true;
-                var identityResult = _accountRepository.UpdateUser(user);
-                if (!identityResult.Succeeded)
+            {*/
+                /*user.EmailConfirmed = true;
+                var identityResult = _accountRepository.UpdateUser(user);*/
+                /*var confirmEmailSucceeded = _accountRepository.ConfirmEmail(user.Id, activateAccountCommand.ActivationCode);
+                if (!confirmEmailSucceeded)
                 {
-                    throw new InvalidOperationException("Error arose while updating the user");
+                    throw new InvalidOperationException("Error arose while confirming email. Please try again later");
                 }
                 return true;
             }
-            throw new InvalidOperationException("Invalid token");
+            throw new InvalidOperationException("Invalid token");*/
         }
 
         public UserRepresentation GetUserByEmail(string email)
@@ -147,11 +158,62 @@ namespace RentStuff.Identity.Application.Account
                 // Sned the email with the generated token within the generated link
                 _emailService.SendEmail(forgotPasswordCommand.Email, EmailConstants.PasswordResetSubject, 
                     EmailConstants.PasswordResetEmail(user.FullName, passwordResetEmailBody));
+
+                // Update the password reset settings
+                user.IsPasswordResetRequested = true;
+                user.PasswordResetExpiryDate = DateTime.Now.AddHours(24);
+                _accountRepository.UpdateUser(user);
             }
             else
             {
                 throw new InvalidOperationException("Cannot reset password");
             }
+        }
+
+        /// <summary>
+        ///  Reset the password for the user when they provide a new one after clicking on the link sent to them on email
+        /// </summary>
+        /// <param name="resetPasswordCommand"></param>
+        /// <returns></returns>
+        public bool ResetPassword(ResetPasswordCommand resetPasswordCommand)
+        {
+            var user = _accountRepository.GetUserByEmail(resetPasswordCommand.Email);
+            if (user == null)
+            {
+                throw new NullReferenceException("User could not be found");
+            }
+            if (!resetPasswordCommand.Password.Equals(resetPasswordCommand.ConfirmPassword))
+            {
+                throw new NullReferenceException("Passwords do not match");
+            }
+            if (user.IsPasswordResetRequested)
+            {
+                if (user.PasswordResetExpiryDate >= DateTime.Now)
+                {
+                    //var validateTask = _userTokenService.ValidateAsync("purpose", resetPasswordCommand.Token, null, user);
+                    var resetPasswordResponse = _accountRepository.ResetPassword(user.Id, resetPasswordCommand.Token,
+                        resetPasswordCommand.Password);
+                    if (resetPasswordResponse)
+                    {
+                        user.IsPasswordResetRequested = false;
+                        user.PasswordResetExpiryDate = null;
+                        _accountRepository.UpdateUser(user);
+                        return true;
+                    }
+                }
+                else
+                {
+                    user.IsPasswordResetRequested = false;
+                    user.PasswordResetExpiryDate = null;
+                    _accountRepository.UpdateUser(user);
+                    return false;
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Reset password not requested so the password wont be reset");
+            }
+            return false;
         }
         
         public void Dispose()

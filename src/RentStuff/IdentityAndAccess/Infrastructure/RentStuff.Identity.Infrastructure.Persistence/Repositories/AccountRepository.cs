@@ -20,7 +20,7 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
             _userManager = new UserManager<CustomIdentityUser>(new UserStore<CustomIdentityUser>(_ctx));
             _userManager.UserValidator = new CustomUserValidator<CustomIdentityUser>(_userManager);
             _userManager.PasswordHasher = new CustomPasswordHasher();
-            _userManager.UserTokenProvider = new PasswordResetTokenService();
+            _userManager.UserTokenProvider = new UserTokenProviderService();
         }
 
         public IdentityResult RegisterUser(string name, string email, string password)
@@ -61,13 +61,43 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
         {
             return _userManager.GeneratePasswordResetToken(userId);
         }
+        
+        public string GetEmailActivationToken(string userId)
+        {
+            return _userManager.GenerateEmailConfirmationToken(userId);
+        }
+
+        public bool ConfirmEmail(string userId, string token)
+        {
+            var identityResult = _userManager.ConfirmEmail(userId, token);
+            if (identityResult.Succeeded)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Update password for a user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="token"></param>
+        /// <param name="newPassword"></param>
+        /// <returns></returns>
+        public bool ResetPassword(string userId, string token, string newPassword)
+        {
+            var identityResult = _userManager.ResetPassword(userId, token, newPassword);
+            if (identityResult.Succeeded)
+            {
+                return true;
+            }
+            return false;
+        }
 
         public void Dispose()
         {
             _ctx.Dispose();
             _userManager.Dispose();
         }
-
-        public UserManager<CustomIdentityUser> UserManager { get { return _userManager; } set { _userManager = value; } }
     }
 }

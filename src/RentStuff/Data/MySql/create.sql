@@ -141,6 +141,8 @@ CREATE TABLE `aspnetusers` (
   `LockoutEnabled` tinyint(1) NOT NULL,
   `AccessFailedCount` int(11) NOT NULL,
   `UserName` varchar(256) NOT NULL,
+  `IsPasswordResetRequested` tinyint(1) NOT NULL,
+  `PasswordResetExpiryDate` datetime DEFAULT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

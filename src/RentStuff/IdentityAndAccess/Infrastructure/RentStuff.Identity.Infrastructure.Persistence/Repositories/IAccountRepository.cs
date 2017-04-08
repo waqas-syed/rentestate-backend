@@ -7,6 +7,10 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 {
     public interface IAccountRepository : IDisposable
     {
+        string GetEmailActivationToken(string userId);
+
+        bool ConfirmEmail(string userId, string token);
+
         /// <summary>
         /// Registers a user and returns a tuple with the following two items:
         /// IdentityResult : EmailConfirmationToken
@@ -27,6 +31,6 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 
         string GetPasswordResetToken(string userId);
 
-        UserManager<CustomIdentityUser> UserManager { get; set; }
+        bool ResetPassword(string userId, string token, string newPassword);
     }
 }
