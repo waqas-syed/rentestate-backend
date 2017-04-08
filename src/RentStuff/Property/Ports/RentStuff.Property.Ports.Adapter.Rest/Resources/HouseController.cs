@@ -290,35 +290,25 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             //return response;
         }
 
-        [Route("house")]
+        [Route("house/{id}")]
         [HttpDelete]
-        public IHttpActionResult Delete([FromBody]string houseId)
+        public IHttpActionResult Delete(string id)
         {
             try
             {
-                if (!string.IsNullOrEmpty(houseId))
+                if (!string.IsNullOrEmpty(id))
                 {
-                    _houseApplicationService.DeleteHouseById(houseId);
-                    return Ok();
-                }
-                return BadRequest();
-            }
-            catch (Exception)
-            {
-                return InternalServerError();
-            }
-        }
-        
-        [Route("house")]
-        [HttpDelete]
-        public IHttpActionResult Delete([FromBody]House house)
-        {
-            try
-            {
-                if (house != null)
-                {
-                    _houseApplicationService.DeleteHouse(house);
-                    return Ok();
+                    var userEmail = User.Identity.Name;
+                    bool allowedToEditHouse = _houseApplicationService.HouseOwnershipEmailCheck(id, userEmail);
+                    if (allowedToEditHouse)
+                    {
+                        _houseApplicationService.DeleteHouse(id);
+                        return Ok();
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Current user is not allowed to delete this house. Security breach, taking necessary action");
+                    }
                 }
                 return BadRequest();
             }

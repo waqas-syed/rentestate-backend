@@ -134,28 +134,20 @@ namespace RentStuff.Property.Application.HouseServices
         /// <summary>
         /// Delete the given house instance
         /// </summary>
-        /// <param name="house"></param>
-        public void DeleteHouse(House house)
+        /// <param name="houseId"></param>
+        public void DeleteHouse(string houseId)
         {
-            _houseRepository.Delete(house);
-        }
-
-        /// <summary>
-        /// Delete the house by providing the id
-        /// </summary>
-        /// <param name="id"></param>
-        public void DeleteHouseById(string id)
-        {
-            House house = _houseRepository.GetHouseById(id);
+            House house = _houseRepository.GetHouseById(houseId);
             if (house != null)
             {
                 _houseRepository.Delete(house);
-            }else
+            }
+            else
             {
-                throw new InstanceNotFoundException("No house could be found for the given house id = " + id);
+                throw new InstanceNotFoundException("No house could be found for the given house id = " + houseId);
             }
         }
-
+        
         /// <summary>
         /// Gets the house by providing the owner's email id
         /// </summary>
