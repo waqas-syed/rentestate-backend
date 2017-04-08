@@ -125,6 +125,22 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("reset-password")]
+        [AllowAnonymous]
+        public IHttpActionResult ResetPassword(ResetPasswordCommand resetPasswordCommand)
+        {
+            try
+            {
+                _accountApplicationService.ResetPassword(resetPasswordCommand);
+                return Ok();
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("get-user")]

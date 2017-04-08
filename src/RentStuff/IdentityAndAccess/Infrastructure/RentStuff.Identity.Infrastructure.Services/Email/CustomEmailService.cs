@@ -34,7 +34,7 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
             _smtpClient.Host = CompanyEmailHost;
             _smtpClient.Credentials = new NetworkCredential(CompanyEmailAddress, CompanyEmailPassword);
             _smtpClient.EnableSsl = true;
-            _smtpClient.SendCompleted += new SendCompletedEventHandler(SendCompletedCallback);
+            //_smtpClient.SendCompleted += new SendCompletedEventHandler(SendCompletedCallback);
         }
 
         /// <summary>
@@ -53,22 +53,22 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
 
             try
             {
-                _smtpClient.SendAsync(mail, null);
+                _smtpClient.Send(mail);
             }
             catch (Exception)
             {
                 // If the email did not got sent for some reason, try to send it again
                 //_smtpClient.SendAsync(mail, null);
             }
-            finally
+            /*finally
             {
                 _smtpClient.Dispose();
-            }
+            }*/
         }
 
-        private void SendCompletedCallback(object sender, AsyncCompletedEventArgs e)
+        /*private void SendCompletedCallback(object sender, AsyncCompletedEventArgs e)
         {
             EmailSent?.Invoke();
-        }
+        }*/
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Hosting;
 using Microsoft.AspNet.Identity;
 using RentStuff.Identity.Application.Account.Commands;
 using RentStuff.Identity.Application.Account.Representations;
@@ -148,17 +149,16 @@ namespace RentStuff.Identity.Application.Account
         public void ForgotPassword(ForgotPasswordCommand forgotPasswordCommand)
         {
             var user = _accountRepository.GetUserByEmail(forgotPasswordCommand.Email);
+            if (user == null)
+            {
+                throw new NullReferenceException("Email not found");
+            }
             if (user.EmailConfirmed)
             {
                 // Generate the token
                 var resetPasswordToken = _accountRepository.GetPasswordResetToken(user.Id);
-                // Create the link that will be sent in the email
-                var passwordResetEmailBody = Constants.FrontEndUrl + "/" + Constants.AccountActivationUrlLocation + "?email=" 
-                    + forgotPasswordCommand.Email + "&resettoken=" + resetPasswordToken;
-                // Sned the email with the generated token within the generated link
-                _emailService.SendEmail(forgotPasswordCommand.Email, EmailConstants.PasswordResetSubject, 
-                    EmailConstants.PasswordResetEmail(user.FullName, passwordResetEmailBody));
-
+                
+                Task.Run(() => SendPasswordResetEmail(user.Email, resetPasswordToken, user.FullName));
                 // Update the password reset settings
                 user.IsPasswordResetRequested = true;
                 user.PasswordResetExpiryDate = DateTime.Now.AddHours(24);
@@ -170,6 +170,16 @@ namespace RentStuff.Identity.Application.Account
             }
         }
 
+        private void SendPasswordResetEmail(string email, string resetPasswordToken, string userFullName)
+        {
+            // Create the link that will be sent in the email
+            var passwordResetEmailBody = Constants.FrontEndUrl + "/" + Constants.PasswordResetUrlLocation + "?email="
+                + email + "&resettoken=" + resetPasswordToken;
+            // Sned the email with the generated token within the generated link
+            _emailService.SendEmail(email, EmailConstants.PasswordResetSubject,
+                EmailConstants.PasswordResetEmail(userFullName, passwordResetEmailBody));
+        }
+
         /// <summary>
         ///  Reset the password for the user when they provide a new one after clicking on the link sent to them on email
         /// </summary>
@@ -177,20 +187,36 @@ namespace RentStuff.Identity.Application.Account
         /// <returns></returns>
         public bool ResetPassword(ResetPasswordCommand resetPasswordCommand)
         {
-            var user = _accountRepository.GetUserByEmail(resetPasswordCommand.Email);
-            if (user == null)
+            if (string.IsNullOrWhiteSpace(resetPasswordCommand.Email))
             {
-                throw new NullReferenceException("User could not be found");
+                throw new NullReferenceException("No email received");
+            }
+            if (string.IsNullOrWhiteSpace(resetPasswordCommand.Password))
+            {
+                throw new NullReferenceException("No password received");
+            }
+            if (string.IsNullOrWhiteSpace(resetPasswordCommand.ConfirmPassword))
+            {
+                throw new NullReferenceException("No confirm password received");
+            }
+            if (string.IsNullOrWhiteSpace(resetPasswordCommand.Token))
+            {
+                throw new NullReferenceException("No token provided");
             }
             if (!resetPasswordCommand.Password.Equals(resetPasswordCommand.ConfirmPassword))
             {
                 throw new NullReferenceException("Passwords do not match");
             }
+            
+            var user = _accountRepository.GetUserByEmail(resetPasswordCommand.Email);
+            if (user == null)
+            {
+                throw new NullReferenceException("User could not be found");
+            }
             if (user.IsPasswordResetRequested)
             {
                 if (user.PasswordResetExpiryDate >= DateTime.Now)
                 {
-                    //var validateTask = _userTokenService.ValidateAsync("purpose", resetPasswordCommand.Token, null, user);
                     var resetPasswordResponse = _accountRepository.ResetPassword(user.Id, resetPasswordCommand.Token,
                         resetPasswordCommand.Password);
                     if (resetPasswordResponse)
