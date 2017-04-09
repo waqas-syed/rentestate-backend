@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 using RentStuff.Common.Domain.Model;
 
 namespace RentStuff.Property.Domain.Model.HouseAggregate
@@ -255,12 +257,19 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <summary>
         /// Phone number of the owner of the posted submission
         /// </summary>
+        //[RegularExpression(@"^\d{1,11}$", ErrorMessage = "Invalid Phone Number")]
         public string OwnerPhoneNumber
         {
             get { return _ownerPhoneNumber; }
             set
             {
                 Assertion.AssertStringNotNullorEmpty(value);
+                Regex regex = new Regex(@"^\d{11}$");
+                Match match = regex.Match(value);
+                if (!match.Success)
+                {
+                    throw new InvalidOperationException("Invalid phone number");
+                }
                 _ownerPhoneNumber = value;
             }
         }

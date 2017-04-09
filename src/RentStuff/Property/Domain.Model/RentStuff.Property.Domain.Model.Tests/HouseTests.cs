@@ -248,5 +248,115 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .PropertyType(PropertyType.Apartment).MonthlyRent(130000).Latitude(23.65M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").OwnerPhoneNumber(phoneNumber).OwnerName(name).Build();
         }
+
+        [Test]
+        public void
+            PhoneNumberRegexSuccessTest_ChecksThatTheFoneNumberFormatAcceptedByTheHouseIsAsExpected_VerifiesIfTheInstanceIsCreated
+            ()
+        {
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+            string phoneNumber = "03455138018";
+            
+            decimal latitude = 25.43M;
+            decimal longitude = 73.41M;
+            PropertyType propertyType = PropertyType.Apartment;
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+            
+            House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
+                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .Area(area).GenderRestriction(genderRestriction).Description(description).Build();
+            Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
+            house.Dimension = dimension;
+            Assert.IsNotNull(house);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void
+            PhoneNumberRegexFailTest_ChecksThatThePhoneNumberValidationFailsBecauseItHasMoreIntegersThanExpected_VerifiesIfTheInstanceIsCreated
+            ()
+        {
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+            // Will fail because the phone number has more than 11 characters
+            string phoneNumber = "034551380181";
+
+            decimal latitude = 25.43M;
+            decimal longitude = 73.41M;
+            PropertyType propertyType = PropertyType.Apartment;
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+
+            House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
+                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .Area(area).GenderRestriction(genderRestriction).Description(description).Build();
+            Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
+            house.Dimension = dimension;
+            Assert.IsNotNull(house);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void
+            PhoneNumberRegexFailTest_ChecksThatThePhoneNumberValidationFailsBecauseItHasLessIntegersThanExpected_VerifiesIfTheInstanceIsCreated
+            ()
+        {
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+            // Will fail because the phone number has less than 11 characters
+            string phoneNumber = "0345513801";
+
+            decimal latitude = 25.43M;
+            decimal longitude = 73.41M;
+            PropertyType propertyType = PropertyType.Apartment;
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+
+            House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
+                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .Area(area).GenderRestriction(genderRestriction).Description(description).Build();
+            Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
+            house.Dimension = dimension;
+            Assert.IsNotNull(house);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void
+            PhoneNumberRegexFailTest_ChecksThatThePhoneNumberValidationFailsBecauseItHasOneAlphabet_VerifiesIfTheInstanceIsCreated
+            ()
+        {
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+            // Will fail because it contains an alphabet
+            string phoneNumber = "0345513801d";
+
+            decimal latitude = 25.43M;
+            decimal longitude = 73.41M;
+            PropertyType propertyType = PropertyType.Apartment;
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+
+            House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
+                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .Area(area).GenderRestriction(genderRestriction).Description(description).Build();
+            Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
+            house.Dimension = dimension;
+            Assert.IsNotNull(house);
+        }
     }
 }
