@@ -20,23 +20,23 @@ DROP TABLE IF EXISTS `__migrationhistory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
-DROP TABLE IF EXISTS `aspnetroles`;
+DROP TABLE IF EXISTS `AspNetRoles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
-DROP TABLE IF EXISTS `aspnetuserclaims`;
+DROP TABLE IF EXISTS `AspNetUserClaims`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
-DROP TABLE IF EXISTS `aspnetuserlogins`;
+DROP TABLE IF EXISTS `AspNetUserLogins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
-DROP TABLE IF EXISTS `aspnetuserroles`;
+DROP TABLE IF EXISTS `AspNetUserRoles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
-DROP TABLE IF EXISTS `aspnetusers`;
+DROP TABLE IF EXISTS `AspNetUsers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
@@ -73,7 +73,7 @@ CREATE TABLE `__migrationhistory` (
 -- Table structure for table `aspnetroles`
 --
 
-CREATE TABLE `aspnetroles` (
+CREATE TABLE `AspNetRoles` (
   `Id` varchar(128) NOT NULL,
   `Name` varchar(256) NOT NULL,
   PRIMARY KEY (`Id`)
@@ -83,7 +83,7 @@ CREATE TABLE `aspnetroles` (
 --
 -- Table structure for table `aspnetuserclaims`
 --
-CREATE TABLE `aspnetuserclaims` (
+CREATE TABLE `AspNetUserClaims` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `UserId` varchar(128) NOT NULL,
   `ClaimType` longtext,
@@ -99,7 +99,7 @@ CREATE TABLE `aspnetuserclaims` (
 -- Table structure for table `aspnetuserlogins`
 --
 
-CREATE TABLE `aspnetuserlogins` (
+CREATE TABLE `AspNetUserLogins` (
   `LoginProvider` varchar(128) NOT NULL,
   `ProviderKey` varchar(128) NOT NULL,
   `UserId` varchar(128) NOT NULL,
@@ -113,7 +113,7 @@ CREATE TABLE `aspnetuserlogins` (
 -- Table structure for table `aspnetuserroles`
 --
 
-CREATE TABLE `aspnetuserroles` (
+CREATE TABLE `AspNetUserRoles` (
   `UserId` varchar(128) NOT NULL,
   `RoleId` varchar(128) NOT NULL,
   PRIMARY KEY (`UserId`,`RoleId`),
@@ -127,7 +127,7 @@ CREATE TABLE `aspnetuserroles` (
 -- Table structure for table `aspnetusers`
 --
 
-CREATE TABLE `aspnetusers` (
+CREATE TABLE `AspNetUsers` (
   `Id` varchar(128) NOT NULL,
   `Email` varchar(256) DEFAULT NULL,
   `FullName` varchar(19) DEFAULT NULL,

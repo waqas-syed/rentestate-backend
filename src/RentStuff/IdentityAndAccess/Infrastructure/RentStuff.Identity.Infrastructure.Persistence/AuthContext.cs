@@ -10,6 +10,7 @@ namespace RentStuff.Identity.Infrastructure.Persistence
             : base("AuthContext")
         {
             Database.SetInitializer(new MySqlInitializer());
+            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<BlogContext, Configuration>());
         }
 
         //public DbSet<Client> Clients { get; set; }
