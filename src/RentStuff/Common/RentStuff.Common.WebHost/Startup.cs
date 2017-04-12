@@ -43,6 +43,7 @@ namespace RentStuff.Common.WebHost
             };
 
             policy.Origins.Add(Constants.FrontEndUrl);
+            policy.Origins.Add("http://localhost:11803");
             app.UseCors(new CorsOptions
             {
                 PolicyProvider = new CorsPolicyProvider

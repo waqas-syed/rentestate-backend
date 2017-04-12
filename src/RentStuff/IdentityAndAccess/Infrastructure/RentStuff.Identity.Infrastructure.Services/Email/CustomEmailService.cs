@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Configuration;
 using System.Net;
 using System.Net.Mail;
@@ -10,33 +9,14 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
     {
         // Get these settings from the appsettings from the root app.config/web.config file
         private static readonly string CompanyEmailAddress = ConfigurationManager.AppSettings.Get("CompanyEmailAddress");
-
-        private static readonly string CompanyEmailPassword =
-            ConfigurationManager.AppSettings.Get("CompanyEmailPassword");
-
         private static readonly string CompanyEmailHost = ConfigurationManager.AppSettings.Get("CompanyEmailHost");
-
-        private static readonly int CompanyEmailPort =
-            int.Parse(ConfigurationManager.AppSettings.Get("CompanyEmailPort"));
-
-        private SmtpClient _smtpClient = null;
+        
         public event Action EmailSent;
 
         public CustomEmailService()
         {
         }
-
-        private void InitializeSmtpClient()
-        {
-            _smtpClient = new SmtpClient(CompanyEmailHost, CompanyEmailPort);
-            _smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            _smtpClient.UseDefaultCredentials = false;
-            _smtpClient.Host = CompanyEmailHost;
-            _smtpClient.Credentials = new NetworkCredential(CompanyEmailAddress, CompanyEmailPassword);
-            _smtpClient.EnableSsl = true;
-            //_smtpClient.SendCompleted += new SendCompletedEventHandler(SendCompletedCallback);
-        }
-
+        
         /// <summary>
         /// Send activation email after the user has registered
         /// </summary>
@@ -45,30 +25,38 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
         /// <param name="body"></param>
         public void SendEmail(string to, string subject, string body)
         {
-            InitializeSmtpClient();
+            //InitializeSmtpClient();
             MailMessage mail = new MailMessage(CompanyEmailAddress, to);
             mail.Subject = subject;
             mail.Body = body;
             mail.IsBodyHtml = true;
+            mail.From = new MailAddress(CompanyEmailAddress);
 
-            try
-            {
-                _smtpClient.Send(mail);
-            }
-            catch (Exception)
-            {
-                // If the email did not got sent for some reason, try to send it again
-                //_smtpClient.SendAsync(mail, null);
-            }
-            /*finally
-            {
-                _smtpClient.Dispose();
-            }*/
+            mail.To.Add(new MailAddress(to));
+            // Picks up configuration from web.config/app.config
+            SmtpClient client = new SmtpClient();
+            client.Send(mail);
         }
 
         /*private void SendCompletedCallback(object sender, AsyncCompletedEventArgs e)
         {
             EmailSent?.Invoke();
+        }*/
+
+        /*private static readonly string CompanyEmailPassword = ConfigurationManager.AppSettings.Get("CompanyEmailPassword");
+        
+        private static readonly int CompanyEmailPort = int.Parse(ConfigurationManager.AppSettings.Get("CompanyEmailPort"));
+
+        private SmtpClient _smtpClient = null;*/
+        /*private void InitializeSmtpClient()
+        {
+            _smtpClient = new SmtpClient(CompanyEmailHost, CompanyEmailPort);
+            _smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            _smtpClient.UseDefaultCredentials = false;
+            _smtpClient.Host = CompanyEmailHost;
+            _smtpClient.Credentials = new NetworkCredential(CompanyEmailAddress, CompanyEmailPassword);
+            _smtpClient.EnableSsl = false;
+            _smtpClient.SendCompleted += new SendCompletedEventHandler(SendCompletedCallback);
         }*/
     }
 }

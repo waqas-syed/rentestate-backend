@@ -11,7 +11,7 @@ namespace RentStuff.Identity.Infrastructure.Persistence
             if (!context.Database.Exists())
             {
                 // if database did not exist before - create it
-                context.Database.Create();
+                //context.Database.Create();
             }
             else
             {
@@ -24,8 +24,8 @@ namespace RentStuff.Identity.Infrastructure.Persistence
                 // if MigrationHistory table is not there (which is the case first time we run) - create it
                 if (migrationHistoryTableExists.FirstOrDefault() == 0)
                 {
-                    context.Database.Delete();
-                    context.Database.Create();
+                    //context.Database.Delete();
+                    //context.Database.Create();
                 }
             }
         }
