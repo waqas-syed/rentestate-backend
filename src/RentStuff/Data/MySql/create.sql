@@ -40,19 +40,15 @@ DROP TABLE IF EXISTS `AspNetUsers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
-DROP TABLE IF EXISTS `dimension`;
+DROP TABLE IF EXISTS `Dimension`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
-DROP TABLE IF EXISTS `geo_location`;
+DROP TABLE IF EXISTS `House`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
-DROP TABLE IF EXISTS `house`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-
-DROP TABLE IF EXISTS `houseimages`;
+DROP TABLE IF EXISTS `HouseImages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
@@ -160,7 +156,7 @@ CREATE TABLE `AspNetUsers` (
 -- Table structure for table `dimension`
 --
 
-CREATE TABLE `dimension` (
+CREATE TABLE `Dimension` (
   `id` varchar(75) NOT NULL,
   `dimension_type` varchar(30) NOT NULL,
   `string_value` varchar(30) DEFAULT NULL,
@@ -171,38 +167,10 @@ CREATE TABLE `dimension` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `geo_location`
---
-
-CREATE TABLE `geo_location` (
-  `geo_name_id` int(11) NOT NULL,
-  `name` varchar(200) DEFAULT NULL,
-  `ascii_name` varchar(200) DEFAULT NULL,
-  `alternate_names` varchar(10000) DEFAULT NULL,
-  `latitude` decimal(10,6) DEFAULT NULL,
-  `longitude` decimal(10,6) DEFAULT NULL,
-  `feature_class` char(1) DEFAULT NULL,
-  `feature_code` varchar(10) DEFAULT NULL,
-  `country_code` varchar(3) DEFAULT NULL,
-  `cc2` varchar(200) DEFAULT NULL,
-  `admin1_code` varchar(20) DEFAULT NULL,
-  `admin2_code` varchar(80) DEFAULT NULL,
-  `admin3_code` varchar(20) DEFAULT NULL,
-  `admin4_code` varchar(20) DEFAULT NULL,
-  `population` bigint(8) DEFAULT NULL,
-  `elevation` int(11) DEFAULT NULL,
-  `dem` int(11) DEFAULT NULL,
-  `timezone` varchar(40) DEFAULT NULL,
-  `modification_date` datetime DEFAULT NULL,
-  PRIMARY KEY (`geo_name_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `house`
 --
 
-CREATE TABLE `house` (
+CREATE TABLE `House` (
   `id` varchar(120) NOT NULL,
   `db_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `title` varchar(200) NOT NULL,
@@ -239,7 +207,7 @@ CREATE TABLE `house` (
 -- Table structure for table `houseimages`
 --
 
-CREATE TABLE `houseimages` (
+CREATE TABLE `HouseImages` (
   `house_id` varchar(50) NOT NULL,
   `image_id` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
