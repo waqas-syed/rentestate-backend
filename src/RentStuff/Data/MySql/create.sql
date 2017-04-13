@@ -156,7 +156,7 @@ CREATE TABLE `AspNetUsers` (
 -- Table structure for table `dimension`
 --
 
-CREATE TABLE `Dimension` (
+CREATE TABLE `dimension` (
   `id` varchar(75) NOT NULL,
   `dimension_type` varchar(30) NOT NULL,
   `string_value` varchar(30) DEFAULT NULL,
@@ -170,7 +170,7 @@ CREATE TABLE `Dimension` (
 -- Table structure for table `house`
 --
 
-CREATE TABLE `House` (
+CREATE TABLE `house` (
   `id` varchar(120) NOT NULL,
   `db_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `title` varchar(200) NOT NULL,
@@ -207,7 +207,7 @@ CREATE TABLE `House` (
 -- Table structure for table `houseimages`
 --
 
-CREATE TABLE `HouseImages` (
+CREATE TABLE `houseimages` (
   `house_id` varchar(50) NOT NULL,
   `image_id` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
