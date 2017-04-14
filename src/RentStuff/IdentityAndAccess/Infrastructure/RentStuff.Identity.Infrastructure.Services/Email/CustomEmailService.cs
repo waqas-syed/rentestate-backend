@@ -9,7 +9,6 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
     {
         // Get these settings from the appsettings from the root app.config/web.config file
         private static readonly string CompanyEmailAddress = ConfigurationManager.AppSettings.Get("CompanyEmailAddress");
-        private static readonly string CompanyEmailHost = ConfigurationManager.AppSettings.Get("CompanyEmailHost");
         
         public event Action EmailSent;
 
@@ -44,7 +43,7 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
         }*/
 
         /*private static readonly string CompanyEmailPassword = ConfigurationManager.AppSettings.Get("CompanyEmailPassword");
-        
+        private static readonly string CompanyEmailHost = ConfigurationManager.AppSettings.Get("CompanyEmailHost");
         private static readonly int CompanyEmailPort = int.Parse(ConfigurationManager.AppSettings.Get("CompanyEmailPort"));
 
         private SmtpClient _smtpClient = null;*/

@@ -61,7 +61,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
             catch (Exception exception)
             {
-                return BadRequest(exception.Message);
+                return InternalServerError(exception);
             }
             return BadRequest();
         }
@@ -86,7 +86,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
             catch (Exception exception)
             {
-                return BadRequest(exception.Message);
+                return InternalServerError(exception);
             }
             return BadRequest();
         }
@@ -130,27 +130,29 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         Task<MultipartMemoryStreamProvider> imageSavetask = Request.Content
                             .ReadAsMultipartAsync<MultipartMemoryStreamProvider>(
                                 new MultipartMemoryStreamProvider());
+                        imageSavetask.Wait(10000);
                         imageSavetask.ContinueWith((task) =>
                         {
-                            IList<string> imagesList = new List<string>();
-                            MultipartMemoryStreamProvider provider = task.Result;
-                            foreach (HttpContent content in provider.Contents)
-                            {
-                                Stream stream = content.ReadAsStreamAsync().Result;
-                                var image = Image.FromStream(stream);
-                                var testName = content.Headers.ContentDisposition.Name;
-                                String filePath = HostingEnvironment.MapPath(Constants.HOUSEIMAGESDIRECTORY);
+                            
+                        }).Wait(10000);
+                        IList<string> imagesList = new List<string>();
+                        MultipartMemoryStreamProvider provider = imageSavetask.Result;
+                        foreach (HttpContent content in provider.Contents)
+                        {
+                            Stream stream = content.ReadAsStreamAsync().Result;
+                            var image = Image.FromStream(stream);
+                            var testName = content.Headers.ContentDisposition.Name;
+                            String filePath = HostingEnvironment.MapPath(Constants.HOUSEIMAGESDIRECTORY);
 
-                                string imageId = "IMG_" + Guid.NewGuid().ToString();
-                                String fileName = imageId + ".jpg";
-                                String fullPath = Path.Combine(filePath, fileName);
-                                image.Save(fullPath);
-                                imagesList.Add(fileName);
-                            }
+                            string imageId = "IMG_" + Guid.NewGuid().ToString();
+                            String fileName = imageId + ".jpg";
+                            String fullPath = Path.Combine(filePath, fileName);
+                            image.Save(fullPath);
+                            imagesList.Add(fileName);
+                        }
 
-                            _houseApplicationService.AddImagesToHouse(houseId, imagesList);
-                            imageUploaded = true;
-                        }).Wait(5000);
+                        _houseApplicationService.AddImagesToHouse(houseId, imagesList);
+                        imageUploaded = true;
                     }
                     else
                     {
@@ -166,7 +168,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
             catch (Exception exception)
             {
-                return BadRequest(exception.Message);
+                return InternalServerError(exception);
             }
         }
 
@@ -192,7 +194,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
             catch (Exception exception)
             {
-                return BadRequest(exception.Message);
+                return InternalServerError(exception);
             }
         }
 
@@ -243,7 +245,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
             catch (Exception exception)
             {
-                return InternalServerError();
+                return BadRequest(exception.ToString());
             }
         }
         
@@ -312,9 +314,9 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 }
                 return BadRequest();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                return InternalServerError();
+                return InternalServerError(exception);
             }
         }
         
@@ -326,9 +328,9 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             {
                 return Ok(_houseApplicationService.GetPropertyTypes());
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                return InternalServerError();
+                return InternalServerError(exception);
             }
         }
     }
