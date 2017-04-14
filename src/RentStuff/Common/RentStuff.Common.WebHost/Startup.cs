@@ -43,6 +43,7 @@ namespace RentStuff.Common.WebHost
             };
 
             policy.Origins.Add(Constants.FrontEndUrl);
+            //policy.Origins.Add("http://localhost:11803/");
             app.UseCors(new CorsOptions
             {
                 PolicyProvider = new CorsPolicyProvider
@@ -50,9 +51,10 @@ namespace RentStuff.Common.WebHost
                     PolicyResolver = context => Task.FromResult(policy)
                 }
             });
-            
-            ConfigureOAuth(app);
+
             //app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+            ConfigureOAuth(app);
+            
             WebApiConfig.Register(config);            
             app.UseWebApi(config);
         }
