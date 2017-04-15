@@ -57,7 +57,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
             }
             catch (Exception exception)
             {
-                return BadRequest(exception.Message);
+                return BadRequest(exception.ToString());
             }
         }
 
@@ -98,7 +98,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
             }
             catch (Exception exception)
             {
-                return BadRequest(exception.Message);
+                return BadRequest(exception.ToString());
             }
         }
 
@@ -121,7 +121,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
             }
             catch (Exception exception)
             {
-                return BadRequest(exception.Message);
+                return BadRequest(exception.ToString());
             }
         }
 
@@ -137,7 +137,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
             }
             catch (Exception exception)
             {
-                return BadRequest(exception.Message);
+                return BadRequest(exception.ToString());
             }
         }
 
