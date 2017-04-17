@@ -69,6 +69,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         [Route("house")]
         [HttpPut]
         [Authorize]
+        [AcceptVerbs(new string[]{"OPTIONS", "PUT"})]
         public IHttpActionResult Put([FromBody] Object house)
         {
             try
