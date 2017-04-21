@@ -10,6 +10,8 @@ namespace RentStuff.Property.Infrastructure.Services.LocationServices
 {
     /// <summary>
     /// Service responsible for interacting with the Google Geocoding API to get the co-ordinates given the location
+    /// API required to be enabled on https://console.developers.google.com:
+    /// Google Maps Geocoding API
     /// </summary>
     public class GeocodingService : IGeocodingService
     {
