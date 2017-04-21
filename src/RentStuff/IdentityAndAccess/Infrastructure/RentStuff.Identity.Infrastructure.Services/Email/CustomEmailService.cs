@@ -9,7 +9,11 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
     {
         // Get these settings from the appsettings from the root app.config/web.config file
         private static readonly string CompanyEmailAddress = ConfigurationManager.AppSettings.Get("CompanyEmailAddress");
-        
+        private static readonly string CompanyEmailPassword = ConfigurationManager.AppSettings.Get("CompanyEmailPassword");
+        private static readonly string CompanyEmailHost = ConfigurationManager.AppSettings.Get("CompanyEmailHost");
+        private static readonly int CompanyEmailPort = Convert.ToInt16(ConfigurationManager.AppSettings.Get("CompanyEmailPort"));
+        private static readonly bool IsLiveEmail = Convert.ToBoolean(ConfigurationManager.AppSettings.Get("IsLiveEmail"));
+
         public event Action EmailSent;
 
         public CustomEmailService()
@@ -33,7 +37,12 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
 
             mail.To.Add(new MailAddress(to));
             // Picks up configuration from web.config/app.config
-            SmtpClient client = new SmtpClient();
+            SmtpClient client = new SmtpClient(CompanyEmailHost, CompanyEmailPort);
+            if (!IsLiveEmail)
+            {
+                client.Credentials = new NetworkCredential(CompanyEmailAddress, CompanyEmailPassword);
+            }
+            
             client.Send(mail);
         }
 

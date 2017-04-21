@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
+using System.Configuration;
 
 namespace RentStuff.Common
 {
@@ -9,7 +7,7 @@ namespace RentStuff.Common
     {
         public const string CompanyName = "Zarqoon";
         //public const string FrontEndUrl = "http://localhost:11803";
-        public const string FrontEndUrl = "http://zarqoon.com";
+        public static readonly string FrontEndUrl = ConfigurationManager.AppSettings.Get("FrontEndUrl");
         public const string AccountActivationUrlLocation = "index.html#/activate-account";
         public const string PasswordResetUrlLocation = "index.html#/reset-password";
         public const string HOUSEIMAGESDIRECTORY = "~/Images/";
