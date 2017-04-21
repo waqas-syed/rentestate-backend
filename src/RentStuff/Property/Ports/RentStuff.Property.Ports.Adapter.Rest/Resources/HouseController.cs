@@ -232,7 +232,8 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     }
                     else
                     {
-                        throw new NullReferenceException("User must be logged in for this request");
+                        //throw new NullReferenceException("User must be logged in for this request");
+                        return Unauthorized();
                     }
                 }
                 else if (!string.IsNullOrEmpty(houseId))
