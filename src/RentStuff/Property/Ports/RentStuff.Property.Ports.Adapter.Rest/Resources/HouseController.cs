@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
@@ -140,16 +141,37 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         MultipartMemoryStreamProvider provider = imageSavetask.Result;
                         foreach (HttpContent content in provider.Contents)
                         {
-                            Stream stream = content.ReadAsStreamAsync().Result;
-                            var image = Image.FromStream(stream);
-                            var testName = content.Headers.ContentDisposition.Name;
-                            String filePath = HostingEnvironment.MapPath(Constants.HOUSEIMAGESDIRECTORY);
+                            using (Stream stream = content.ReadAsStreamAsync().Result)
+                            {
+                                using (var image = Image.FromStream(stream))
+                                {
+                                    //var testName = content.Headers.ContentDisposition.Name;
 
-                            string imageId = "IMG_" + Guid.NewGuid().ToString();
-                            String fileName = imageId + ".jpg";
-                            String fullPath = Path.Combine(filePath, fileName);
-                            image.Save(fullPath);
-                            imagesList.Add(fileName);
+                                    ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
+
+                                    // Create an Encoder object based on the GUID  
+                                    // for the Quality parameter category.  
+                                    System.Drawing.Imaging.Encoder myEncoder =
+                                        System.Drawing.Imaging.Encoder.Quality;
+
+                                    // Create an EncoderParameters object.  
+                                    // An EncoderParameters object has an array of EncoderParameter  
+                                    // objects. In this case, there is only one  
+                                    // EncoderParameter object in the array.  
+                                    EncoderParameters myEncoderParameters = new EncoderParameters(1);
+
+                                    EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 90L);
+                                    myEncoderParameters.Param[0] = myEncoderParameter;
+
+                                    String filePath = HostingEnvironment.MapPath(Constants.HOUSEIMAGESDIRECTORY);
+                                    string imageId = "IMG_" + Guid.NewGuid().ToString();
+                                    String fileName = imageId + ".jpg";
+                                    String fullPath = Path.Combine(filePath, fileName);
+                                    var finalImage = ResizeImage(image, 830, 500);
+                                    finalImage.Save(fullPath, jpgEncoder, myEncoderParameters);
+                                    imagesList.Add(fileName);
+                                }
+                            }
                         }
 
                         _houseApplicationService.AddImagesToHouse(houseId, imagesList);
@@ -335,5 +357,54 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 return InternalServerError(exception);
             }
         }
+
+        #region Private Methods
+
+        /// <summary>
+        /// Resize the image to the specified width and height.
+        /// </summary>
+        /// <param name="image">The image to resize.</param>
+        /// <param name="width">The width to resize to.</param>
+        /// <param name="height">The height to resize to.</param>
+        /// <returns>The resized image.</returns>
+        public static Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
+        }
+
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
+        }
+
+        #endregion Private methods
     }
 }
