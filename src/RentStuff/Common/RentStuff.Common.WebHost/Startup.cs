@@ -8,6 +8,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security.DataProtection;
 using Microsoft.Owin.Security.OAuth;
+using NLog;
 using Owin;
 using RentStuff.Common.WebHost.Providers;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
@@ -29,6 +30,8 @@ namespace RentStuff.Common.WebHost
 
     public class Startup
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
+
         public void Configuration(IAppBuilder app)
         {
             app.CreatePerOwinContext(() => new AppBuilderProvider(app));
@@ -57,6 +60,7 @@ namespace RentStuff.Common.WebHost
             
             WebApiConfig.Register(config);            
             app.UseWebApi(config);
+            _logger.Info("ASP.NET and OWIN pipeline established");
         }
 
         private void ConfigureOAuth(IAppBuilder app)
