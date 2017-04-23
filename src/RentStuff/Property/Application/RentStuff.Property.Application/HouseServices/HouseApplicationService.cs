@@ -9,6 +9,7 @@ using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.Services;
 using System.Linq;
+using RentStuff.Common;
 using RentStuff.Property.Application.HouseServices.Representation;
 
 namespace RentStuff.Property.Application.HouseServices
@@ -345,38 +346,14 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 using (MemoryStream m = new MemoryStream())
                 {
-                    image.Save(m, image.RawFormat);
+                    image.Save(m, ImageFormatProvider.GetImageFormat());
                     byte[] imageBytes = m.ToArray();
 
                     // Convert byte[] to Base64 String
                     //return Convert.ToBase64String(imageBytes);
-                    return  new ImageRepresentation(imageId, GetImageFormat(image).ToString(), Convert.ToBase64String(imageBytes));
+                    return  new ImageRepresentation(imageId, ImageFormatProvider.GetImageFormat().ToString(), Convert.ToBase64String(imageBytes));
                 }
             }
-        }
-
-        private ImageFormat GetImageFormat(Image img)
-        {
-            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Jpeg))
-                return System.Drawing.Imaging.ImageFormat.Jpeg;
-            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Bmp))
-                return System.Drawing.Imaging.ImageFormat.Bmp;
-            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Png))
-                return System.Drawing.Imaging.ImageFormat.Png;
-            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Emf))
-                return System.Drawing.Imaging.ImageFormat.Emf;
-            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Exif))
-                return System.Drawing.Imaging.ImageFormat.Exif;
-            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Gif))
-                return System.Drawing.Imaging.ImageFormat.Gif;
-            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Icon))
-                return System.Drawing.Imaging.ImageFormat.Icon;
-            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.MemoryBmp))
-                return System.Drawing.Imaging.ImageFormat.MemoryBmp;
-            if (img.RawFormat.Equals(System.Drawing.Imaging.ImageFormat.Tiff))
-                return System.Drawing.Imaging.ImageFormat.Tiff;
-            else
-                return System.Drawing.Imaging.ImageFormat.Wmf;
         }
     }
 }

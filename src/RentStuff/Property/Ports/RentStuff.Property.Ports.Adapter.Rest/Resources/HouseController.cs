@@ -135,7 +135,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         imageSavetask.Wait(10000);
                         imageSavetask.ContinueWith((task) =>
                         {
-                            
+
                         }).Wait(10000);
                         IList<string> imagesList = new List<string>();
                         MultipartMemoryStreamProvider provider = imageSavetask.Result;
@@ -146,8 +146,8 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                                 using (var image = Image.FromStream(stream))
                                 {
                                     //var testName = content.Headers.ContentDisposition.Name;
-
-                                    ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
+                                    // We support inly JPEG file format
+                                    ImageCodecInfo encoder = GetEncoder(ImageFormatProvider.GetImageFormat());
 
                                     // Create an Encoder object based on the GUID  
                                     // for the Quality parameter category.  
@@ -165,15 +165,15 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 
                                     String filePath = HostingEnvironment.MapPath(Constants.HOUSEIMAGESDIRECTORY);
                                     string imageId = "IMG_" + Guid.NewGuid().ToString();
-                                    String fileName = imageId + ".jpg";
+
+                                    String fileName = imageId + ImageFormatProvider.GetImageExtension();
                                     String fullPath = Path.Combine(filePath, fileName);
                                     var finalImage = ResizeImage(image, 830, 500);
-                                    finalImage.Save(fullPath, jpgEncoder, myEncoderParameters);
+                                    finalImage.Save(fullPath, encoder, myEncoderParameters);
                                     imagesList.Add(fileName);
                                 }
                             }
                         }
-
                         _houseApplicationService.AddImagesToHouse(houseId, imagesList);
                         imageUploaded = true;
                     }
@@ -404,6 +404,8 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
             return null;
         }
+
+        
 
         #endregion Private methods
     }
