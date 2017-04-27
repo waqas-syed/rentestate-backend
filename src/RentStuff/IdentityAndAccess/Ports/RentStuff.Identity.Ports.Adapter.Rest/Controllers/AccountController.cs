@@ -63,7 +63,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
             }
             catch (Exception exception)
             {
-                _logger.Error(exception, "Error while registering user. Object: {0}", userObject);
+                _logger.Error("Error while registering user. {0}", exception.ToString());
                 return InternalServerError();
             }
         }
@@ -109,7 +109,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
             }
             catch (Exception exception)
             {
-                _logger.Error(exception, "Error while activating user account. Object: {0}", activateAccountObject);
+                _logger.Error("Error while activating user account. {0}", exception.ToString());
                 return InternalServerError();
             }
         }
@@ -143,7 +143,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
             }
             catch (Exception exception)
             {
-                _logger.Error(exception);
+                _logger.Error("Error while requesting to reset password. {0}", exception.ToString());
                 return InternalServerError();
             }
         }
@@ -161,7 +161,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
             }
             catch (Exception exception)
             {
-                _logger.Error(exception);
+                _logger.Error("Error while resetting the password. {0}", exception.ToString());
                 return BadRequest(exception.ToString());
             }
         }
@@ -188,7 +188,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
             }
             catch (Exception exception)
             {
-                _logger.Error(exception);
+                _logger.Error("Error while getting user. {0}", exception.ToString());
                 return InternalServerError();
             }
         }
