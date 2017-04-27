@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Hosting;
 using Microsoft.AspNet.Identity;
+using NLog;
 using RentStuff.Identity.Application.Account.Commands;
 using RentStuff.Identity.Application.Account.Representations;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
@@ -14,6 +14,7 @@ namespace RentStuff.Identity.Application.Account
 {
     public class AccountApplicationService : IAccountApplicationService
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
         private ICustomEmailService _emailService;
         private IAccountRepository _accountRepository;
         private IUserTokenProvider<CustomIdentityUser,string> _userTokenService;
@@ -57,12 +58,13 @@ namespace RentStuff.Identity.Application.Account
                                                                                                                    userModel.Password);
             if (registrationResult == null)
             {
-                throw new NullReferenceException("Whoa! Execpected error happened while registering the user. Didnt expect that");
+                throw new NullReferenceException("Whoa! Unexpected error happened while registering the user. Didnt expect that");
             }
             if (!registrationResult.Succeeded)
             {
                 throw new InvalidOperationException(registrationResult.Errors.First());
             }
+            _logger.Info("Registered User Successfuly. Email: {0}  FullName: {1}", userModel.Email, userModel.FullName);
             // Get the User instance to have her Id
             var retreivedUser = _accountRepository.GetUserByEmail(userModel.Email);
             // Generate the token for this user using email and user Id
@@ -70,6 +72,7 @@ namespace RentStuff.Identity.Application.Account
             var emailVerificationToken = _accountRepository.GetEmailActivationToken(retreivedUser.Id);
             if (string.IsNullOrWhiteSpace(emailVerificationToken))
             {
+                _logger.Error("Error while generating email confirmation token for user. Email: {0}", userModel.Email);
                 throw new NullReferenceException("Could not generate token for user: " + retreivedUser.Id);
             }
             // Send email to the user
@@ -90,10 +93,12 @@ namespace RentStuff.Identity.Application.Account
         {
             if (string.IsNullOrWhiteSpace(activateAccountCommand.Email))
             {
+                _logger.Error("No email provided for ActivateAccountCommand");
                 throw new ArgumentException("Email not provided");
             }
             if (string.IsNullOrWhiteSpace(activateAccountCommand.ActivationCode))
             {
+                _logger.Error("No activation code provided for ActivateAccountCommand. Email: {0}", activateAccountCommand.Email);
                 throw new ArgumentException("Activation Code not provided");
             }
             
@@ -101,6 +106,7 @@ namespace RentStuff.Identity.Application.Account
             var user = _accountRepository.GetUserByEmail(activateAccountCommand.Email);
             if (user == null)
             {
+                _logger.Error("User not found for the given email: {0}", activateAccountCommand.Email);
                 throw new ArgumentException("User not found");
             }
             var confirmEmailSucceeded = _accountRepository.ConfirmEmail(user.Id, activateAccountCommand.ActivationCode);
@@ -110,6 +116,7 @@ namespace RentStuff.Identity.Application.Account
             }
             else
             {
+                _logger.Info("Email Confirmation successful. Email: {0}", activateAccountCommand.Email);
                 return true;
             }
             /*if (user.EmailConfirmed)
@@ -163,6 +170,7 @@ namespace RentStuff.Identity.Application.Account
                 user.IsPasswordResetRequested = true;
                 user.PasswordResetExpiryDate = DateTime.Now.AddHours(24);
                 _accountRepository.UpdateUser(user);
+                _logger.Info("Password Reset request accepted for this user. Email: {0}", forgotPasswordCommand.Email);
             }
             else
             {
@@ -224,6 +232,7 @@ namespace RentStuff.Identity.Application.Account
                         user.IsPasswordResetRequested = false;
                         user.PasswordResetExpiryDate = null;
                         _accountRepository.UpdateUser(user);
+                        _logger.Info("Password reset successful. Email: {0}", resetPasswordCommand.Email);
                         return true;
                     }
                 }
@@ -232,11 +241,13 @@ namespace RentStuff.Identity.Application.Account
                     user.IsPasswordResetRequested = false;
                     user.PasswordResetExpiryDate = null;
                     _accountRepository.UpdateUser(user);
+                    _logger.Warn("Password reset token has expired: Email {0}", resetPasswordCommand.Email);
                     return false;
                 }
             }
             else
             {
+                _logger.Warn("Password reset is not requested for this account. Email: {0}", resetPasswordCommand.Email);
                 throw new InvalidOperationException("Reset password not requested so the password wont be reset");
             }
             return false;

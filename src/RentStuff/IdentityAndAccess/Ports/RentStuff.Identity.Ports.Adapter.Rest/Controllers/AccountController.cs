@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
+using NLog;
 using RentStuff.Identity.Application.Account;
 using RentStuff.Identity.Application.Account.Commands;
 using RentStuff.Identity.Application.Account.Representations;
@@ -14,6 +15,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
     //[EnableCors(origins: "http://mywebclient.azurewebsites.net", headers: "*", methods: "*")]
     public class AccountController : ApiController
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
         private IAccountApplicationService _accountApplicationService;
 
         public AccountController(IAccountApplicationService accountApplicationService)
@@ -35,6 +37,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
 
                     if (createUserCommand != null)
                     {
+                        _logger.Info("Starting process to create a new user. Email: {0}", createUserCommand.Email);
                         string identityResult = _accountApplicationService.Register(createUserCommand);
                         if (!string.IsNullOrWhiteSpace(identityResult))
                         {
@@ -42,22 +45,26 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
                         }
                         else
                         {
+                            _logger.Error("Could not register User. Email: {0}", createUserCommand.Email);
                             return BadRequest("Could not register user");
                         }
                     }
                     else
                     {
+                        _logger.Error("Could not cast retreived object to CreateUserCommand. Object: {0}", userObject);
                         return BadRequest("User data not in expected format");
                     }
                 }
                 else
                 {
+                    _logger.Error("Register User object is null");
                     return BadRequest("No user data received");
                 }
             }
             catch (Exception exception)
             {
-                return BadRequest(exception.ToString());
+                _logger.Error(exception, "Error while registering user. Object: {0}", userObject);
+                return InternalServerError();
             }
         }
 
@@ -75,6 +82,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
 
                     if (activateAccountCommand != null)
                     {
+                        _logger.Info("Starting process to activate user by email. Email: {0}", activateAccountCommand.Email);
                         bool activationResult = _accountApplicationService.Activate(activateAccountCommand);
                         
                         if (activationResult)
@@ -83,22 +91,26 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
                         }
                         else
                         {
+                            _logger.Error("Could not activate account. Emai: {0}", activateAccountCommand.Email);
                             return BadRequest("Could not activate account");
                         }
                     }
                     else
                     {
+                        _logger.Error("Could not parse object to ActivateAccountCommand. Object: {0}", activateAccountObject);
                         return BadRequest("User data not in expected format");
                     }
                 }
                 else
                 {
+                    _logger.Error("Received ActivateAccount object is null.");
                     return BadRequest("No user data received");
                 }
             }
             catch (Exception exception)
             {
-                return BadRequest(exception.ToString());
+                _logger.Error(exception, "Error while activating user account. Object: {0}", activateAccountObject);
+                return InternalServerError();
             }
         }
 
@@ -109,19 +121,30 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(forgotPasswordCommand?.Email))
+                if (forgotPasswordCommand != null)
                 {
-                    _accountApplicationService.ForgotPassword(forgotPasswordCommand);
-                    return Ok();
+                    if (!string.IsNullOrWhiteSpace(forgotPasswordCommand.Email))
+                    {
+                        _logger.Info("Forgot-password process started. Email: {0}", forgotPasswordCommand.Email);
+                        _accountApplicationService.ForgotPassword(forgotPasswordCommand);
+                        return Ok();
+                    }
+                    else
+                    {
+                        _logger.Error("No email provided for processing Forgot-Password request.");
+                        return BadRequest("No email provided");
+                    }
                 }
                 else
                 {
-                    return BadRequest("No email provided");
+                    _logger.Error("ForgotPasswordCommand is null");
+                    return BadRequest("No data received");
                 }
             }
             catch (Exception exception)
             {
-                return BadRequest(exception.ToString());
+                _logger.Error(exception);
+                return InternalServerError();
             }
         }
 
@@ -132,11 +155,13 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
         {
             try
             {
+                _logger.Info("Reset-password process started.");
                 _accountApplicationService.ResetPassword(resetPasswordCommand);
                 return Ok();
             }
             catch (Exception exception)
             {
+                _logger.Error(exception);
                 return BadRequest(exception.ToString());
             }
         }
@@ -151,17 +176,20 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
             {
                 if (!string.IsNullOrWhiteSpace(email))
                 {
+                    _logger.Info("Get user process started. Email: {0}", email);
                     UserRepresentation user = _accountApplicationService.GetUserByEmail(email);
                     return Ok(user);
                 }
                 else
                 {
+                    _logger.Error("No Email provided");
                     return BadRequest("No email provided");
                 }
             }
             catch (Exception exception)
             {
-                return BadRequest(exception.Message);
+                _logger.Error(exception);
+                return InternalServerError();
             }
         }
 

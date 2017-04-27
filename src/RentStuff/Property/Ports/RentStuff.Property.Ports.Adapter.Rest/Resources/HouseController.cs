@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
 using Newtonsoft.Json;
+using NLog;
 using RentStuff.Common;
 using RentStuff.Property.Application.HouseServices;
 using RentStuff.Property.Application.HouseServices.Commands;
@@ -24,6 +25,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
     [RoutePrefix("v1")]
     public class HouseController : ApiController
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
         private IHouseApplicationService _houseApplicationService;
 
         /// <summary>
@@ -62,7 +64,8 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
             catch (Exception exception)
             {
-                return InternalServerError(exception);
+                _logger.Error("Error occured while uploading house. Exception: {0} | House: {1}", exception, house);
+                return InternalServerError();
             }
             return BadRequest();
         }
@@ -88,7 +91,8 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
             catch (Exception exception)
             {
-                return InternalServerError(exception);
+                _logger.Error("Error occured while updating house. Exception: {0} | House: {1}", exception, house);
+                return InternalServerError();
             }
             return BadRequest();
         }
@@ -99,6 +103,8 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             var currentUserEmail = User.Identity.Name;
             if (!currentUserEmail.Equals(houseOwnerEmail))
             {
+                _logger.Error("Current user cannot upload house using another user's email. CurrentUser:{0} | HouseOwner:{1}", 
+                    currentUserEmail, houseOwnerEmail);
                 throw new InvalidOperationException("Current user cannot upload house using another user's email.");
             }
         }
@@ -179,19 +185,22 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     }
                     else
                     {
-                        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable,
-                            "This request is not properly formatted"));
+                        _logger.Error("Request for uploading image is not Mime Multipart content");
+                        return BadRequest("This request is not properly formatted");
                     }
                     return Ok(imageUploaded);
                 }
                 else
                 {
-                    throw new InvalidOperationException("The logged in user is not the actual poster for the requested house. Action will be taken now against this user");
+                    _logger.Error("Some tried to upload an image for another user. HouseId:{0} | UserEmail:{1}", houseId, userEmail);
+                    return BadRequest("The logged in user is not the actual poster for the requested house. Action will be taken now against this user");
                 }
             }
             catch (Exception exception)
             {
-                return InternalServerError(exception);
+                _logger.Error("Error Occured while uploading image for house. HouseId:{0} | UserEmail:{1} | Exception:{2}", 
+                    houseId, userEmail, exception.ToString());
+                return InternalServerError();
             }
         }
 
@@ -212,11 +221,13 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 }
                 else
                 {
-                    throw new InvalidOperationException("The logged in user is not the actual poster for the requested house. Action will be taken now against this user");
+                    _logger.Error("Some tried to upload an image for another user. HouseId:{0} | UserEmail:{1}", deleteImageCommand.HouseId, userEmail);
+                    return BadRequest("The logged in user is not the actual poster for the requested house. Action will be taken now against this user");
                 }
             }
             catch (Exception exception)
             {
+                _logger.Error(exception);
                 return InternalServerError(exception);
             }
         }
@@ -249,7 +260,8 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         }
                         else
                         {
-                            throw new InvalidOperationException("Only user's own houses can be retreived by email");
+                            _logger.Error("Only user's own houses can be retreived by email. CurrentUserEmail: {0}", email);
+                            return BadRequest("Only user's own houses can be retreived by email");
                         }
                     }
                     else
@@ -269,12 +281,14 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
             catch (Exception exception)
             {
+                _logger.Error(exception);
                 return BadRequest(exception.ToString());
             }
         }
         
         [Route("GetHouseImages")]
         [HttpGet]
+        [Obsolete]
         public HttpResponseMessage GetHouseImages(string houseId)
         {
             House house = null;//_houseApplicationService.GetHouseById(houseId);
@@ -333,6 +347,10 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     }
                     else
                     {
+                        _logger.Error("Current user is not allowed to delete this house. CurrentUser: {0} | HouseId: {1}", userEmail, id);
+                        return
+                            BadRequest(
+                                "Current user is not allowed to delete this house. Security breach, taking necessary action");
                         throw new InvalidOperationException("Current user is not allowed to delete this house. Security breach, taking necessary action");
                     }
                 }
@@ -346,6 +364,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         
         [Route("property-types")]
         [HttpGet]
+        [Obsolete]
         public IHttpActionResult GetPropertyTypes()
         {
             try

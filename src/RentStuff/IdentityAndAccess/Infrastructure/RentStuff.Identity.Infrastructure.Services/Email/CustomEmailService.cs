@@ -2,11 +2,13 @@
 using System.Configuration;
 using System.Net;
 using System.Net.Mail;
+using NLog;
 
 namespace RentStuff.Identity.Infrastructure.Services.Email
 {
     public class CustomEmailService : ICustomEmailService
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
         // Get these settings from the appsettings from the root app.config/web.config file
         private static readonly string CompanyEmailAddress = ConfigurationManager.AppSettings.Get("CompanyEmailAddress");
         private static readonly string CompanyEmailPassword = ConfigurationManager.AppSettings.Get("CompanyEmailPassword");
@@ -44,6 +46,7 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
             }
             
             client.Send(mail);
+            _logger.Info("Email Sent. Email: {0}, Subject: {1}", to, subject);
         }
 
         /*private void SendCompletedCallback(object sender, AsyncCompletedEventArgs e)
