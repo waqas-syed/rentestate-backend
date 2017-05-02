@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Data.Common;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using RentStuff.Common;
 using RentStuff.Identity.Infrastructure.Services.Hashers;
 using RentStuff.Identity.Infrastructure.Services.Identity;
 using RentStuff.Identity.Infrastructure.Services.PasswordReset;
@@ -16,7 +18,8 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
         
         public AccountRepository()
         {
-            _ctx = new AuthContext();            
+            DbConnection dbConnection = EfConnectionDecipherService.GetEntityFrameDecipheredString();
+            _ctx = new AuthContext(dbConnection, true);            
             _userManager = new UserManager<CustomIdentityUser>(new UserStore<CustomIdentityUser>(_ctx));
             _userManager.UserValidator = new CustomUserValidator<CustomIdentityUser>(_userManager);
             _userManager.PasswordHasher = new CustomPasswordHasher();

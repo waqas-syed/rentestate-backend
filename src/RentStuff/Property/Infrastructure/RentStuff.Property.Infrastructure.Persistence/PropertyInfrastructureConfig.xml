@@ -1,12 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<objects xmlns="http://www.springframework.net"
-         xmlns:db="http://www.springframework.net/database"
-         xmlns:tx="http://www.springframework.net/tx">
+<objects xmlns="http://www.springframework.net" xmlns:db="http://www.springframework.net/database" xmlns:tx="http://www.springframework.net/tx">
 
+  <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+    <property name="VariableSources">
+      <list>
+        <object type="Spring.Objects.Factory.Config.ConnectionStringsVariableSource, Spring.Core"/>
+      </list>
+    </property>
+  </object>
+
+  <!--<db:provider id="DbProvider" provider="MySql.Data.MySqlClient" connectionString="${MySql.connectionString}"/>-->
   <!-- Database Configuration: Provider = MySql .NET Connector dlls. -->
-  <db:provider id="DbProvider"
-                   provider="MySql.Data.MySqlClient"
-                   connectionString="Server=localhost;Database=rentstuff;User ID=root;Password=root;"/>
+  <db:provider id="DbProvider" provider="MySql.Data.MySqlClient" connectionString="Server=localhost;Database=test;User ID=test;Password=test;"/>
 
   <!-- NHibernate SessionFactory configuration -->
   <object id="NHibernateSessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate4">
@@ -32,8 +37,7 @@
   </object>
 
   <!-- Transaction Management Strategy - local database transactions -->
-  <object id="transactionManager"
-        type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate4">
+  <object id="transactionManager" type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate4">
     <property name="DbProvider" ref="DbProvider"/>
     <property name="SessionFactory" ref="NHibernateSessionFactory"/>
   </object>

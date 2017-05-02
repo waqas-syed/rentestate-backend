@@ -15,7 +15,7 @@ namespace RentStuff.Property.Infrastructure.Persistence
         public ISessionFactory SessionFactory
         {
             protected get { return _sessionFactory; }
-            set { _sessionFactory = value; }
+            set { _sessionFactory = value;}
         }
 
         /// <summary>
