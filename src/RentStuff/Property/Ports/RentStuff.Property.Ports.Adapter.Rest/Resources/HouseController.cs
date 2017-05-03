@@ -238,16 +238,20 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         {
             try
             {
+                _logger.Info("Get House request received");
                 if (area != null && propertyType != null)
                 {
+                    _logger.Info("Get House by Area {0} and Property Type {1}", area, propertyType);
                     return Ok(_houseApplicationService.SearchHousesByAreaAndPropertyType(area, propertyType));
                 }
                 else if (area != null)
                 {
+                    _logger.Info("Get House by Area {0}", area);
                     return Ok(_houseApplicationService.SearchHousesByArea(area));
                 }
                 else if (propertyType != null)
                 {
+                    _logger.Info("Get House by Property Type {0}", propertyType);
                     return Ok(_houseApplicationService.SearchHousesByPropertyType(propertyType));
                 }
                 else if (email != null)
@@ -256,6 +260,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     {
                         if (email.Equals(User.Identity.Name))
                         {
+                            _logger.Info("Get House by Email {0}", email);
                             return Ok(_houseApplicationService.GetHouseByEmail(email));
                         }
                         else
@@ -272,6 +277,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 }
                 else if (!string.IsNullOrEmpty(houseId))
                 {
+                    _logger.Info("Get House by HouseId {0}", houseId);
                     return Ok(_houseApplicationService.GetHouseById(houseId));
                 }
                 else
