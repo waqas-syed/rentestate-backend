@@ -175,24 +175,19 @@ namespace RentStuff.Property.Application.HouseServices
         public HouseFullRepresentation GetHouseById(string id)
         {
             House house = _houseRepository.GetHouseById(id);
-            IList<ImageRepresentation> houseImages = new List<ImageRepresentation>();
-            foreach (var houseImage in house.HouseImages)
-            {
-                houseImages.Add(ConvertImageToBase64Representation(houseImage));
-            }
             string dimension = null;
             if (house.Dimension != null)
             {
                 dimension = house.Dimension.StringValue + " " + house.Dimension.DimensionType;
             }
-            return new HouseFullRepresentation(house.Id, house.Title, house.MonthlyRent,
-                house.NumberOfBedrooms, house.NumberOfKitchens, house.NumberOfBathrooms, house.InternetAvailable, house.LandlinePhoneAvailable, house.CableTvAvailable,
-                dimension, house.GarageAvailable, house.SmokingAllowed,
-                house.PropertyType.ToString(), house.OwnerEmail, house.OwnerPhoneNumber, house.Latitude, house.Longitude, house.HouseNo,
-                house.StreetNo, house.Area, houseImages, house.OwnerName, house.Description, house.GenderRestriction.ToString());
+
+            return new HouseFullRepresentation(house.Id, house.Title, house.MonthlyRent, house.NumberOfBedrooms, 
+                house.NumberOfKitchens, house.NumberOfBathrooms, house.InternetAvailable, house.LandlinePhoneAvailable,
+                house.CableTvAvailable, dimension, house.GarageAvailable, house.SmokingAllowed, house.PropertyType.ToString(), 
+                house.OwnerEmail, house.OwnerPhoneNumber, house.Latitude, house.Longitude, house.HouseNo, house.StreetNo, house.Area, 
+                house.GetImageList(), house.OwnerName, house.Description, house.GenderRestriction.ToString());
         }
-
-
+        
         /// <summary>
         /// Search nearby houses by providing the address
         /// </summary>
@@ -322,22 +317,15 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 foreach (var house in houses)
                 {
-                    ImageRepresentation imageRepresentation = null;
-                    string idOfFirstImage = null;
-                    IList<string> imageList = house.GetImageList();
-                    if (imageList != null && imageList.Count > 0)
+                    string firstImage = null;
+                    if (house.GetImageList() != null && house.GetImageList().Count > 0)
                     {
-                        idOfFirstImage = imageList[0];
-                        if (idOfFirstImage != null)
-                        {
-                            imageRepresentation = ConvertImageToBase64Representation(idOfFirstImage);
-                        }
+                       firstImage =  house.GetImageList()[0];
                     }
-
                     HousePartialRepresentation houseRepresentation = new HousePartialRepresentation(house.Id, house.Title, house.Area, 
                         house.MonthlyRent, house.PropertyType.ToString(), house.Dimension, house.NumberOfBedrooms, 
                         house.NumberOfBathrooms, house.NumberOfKitchens, house.OwnerEmail, house.OwnerPhoneNumber,
-                        imageRepresentation, house.OwnerName, house.Description);
+                        firstImage, house.OwnerName, house.Description);
                     
                     houseRepresentations.Add(houseRepresentation);
                 }

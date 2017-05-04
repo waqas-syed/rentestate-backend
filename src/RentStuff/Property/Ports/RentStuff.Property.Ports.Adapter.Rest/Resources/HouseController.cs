@@ -7,15 +7,21 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Threading.Tasks;
+using System.Configuration;
+using System.Web;
 using System.Web.Hosting;
 using System.Web.Http;
+using System.Web.UI.WebControls;
+using Google.Cloud.Storage.V1;
 using Newtonsoft.Json;
 using NLog;
 using RentStuff.Common;
 using RentStuff.Property.Application.HouseServices;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
+using Image = System.Drawing.Image;
 
 namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 {
@@ -27,6 +33,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private IHouseApplicationService _houseApplicationService;
+        private readonly StorageClient _storageClient;
 
         /// <summary>
         /// Default Constructor
@@ -34,6 +41,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         /// <param name="houseApplicationService"></param>
         public HouseController(IHouseApplicationService houseApplicationService)
         {
+            _storageClient = StorageClient.Create();
             _houseApplicationService = houseApplicationService;
         }
 
@@ -119,68 +127,63 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         [Authorize]
         public IHttpActionResult PostImageUpload()
         {
-            bool imageUploaded = false;
-            String[] headerValues = (String[])Request.Headers.GetValues("HouseId");
-            string houseId = headerValues[0];
-            var userEmail = User.Identity.Name;
-            bool allowedToEditHouse = _houseApplicationService.HouseOwnershipEmailCheck(houseId, userEmail);
-            
             try
             {
+                bool imageUploaded = false;
+                String[] headerValues = (String[])Request.Headers.GetValues("HouseId");
+                string houseId = headerValues[0];
+                var userEmail = User.Identity.Name;
+                bool allowedToEditHouse = _houseApplicationService.HouseOwnershipEmailCheck(houseId, userEmail);
                 if (allowedToEditHouse)
                 {
-                    //var result = new HttpResponseMessage(HttpStatusCode.OK);
-                    //var httpRequest = HttpContext.Current.Request;
                     if (Request.Content.IsMimeMultipartContent())
                     {
+                        // Load the HTTP request content into buffer asynchronously
                         Request.Content.LoadIntoBufferAsync().Wait();
-
+                        // Read the multipart content from the HTTP request asynchronously
                         Task<MultipartMemoryStreamProvider> imageSavetask = Request.Content
-                            .ReadAsMultipartAsync<MultipartMemoryStreamProvider>(
-                                new MultipartMemoryStreamProvider());
+                            .ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider());
                         imageSavetask.Wait(10000);
-                        imageSavetask.ContinueWith((task) =>
-                        {
-
-                        }).Wait(10000);
                         IList<string> imagesList = new List<string>();
+                        // Get the result of the task that was reading the multipart content
                         MultipartMemoryStreamProvider provider = imageSavetask.Result;
+                        // For each file, do the processing
                         foreach (HttpContent content in provider.Contents)
                         {
                             using (Stream stream = content.ReadAsStreamAsync().Result)
                             {
                                 using (var image = Image.FromStream(stream))
                                 {
-                                    //var testName = content.Headers.ContentDisposition.Name;
-                                    // We support inly JPEG file format
-                                    ImageCodecInfo encoder = GetEncoder(ImageFormatProvider.GetImageFormat());
-
-                                    // Create an Encoder object based on the GUID  
-                                    // for the Quality parameter category.  
-                                    System.Drawing.Imaging.Encoder myEncoder =
-                                        System.Drawing.Imaging.Encoder.Quality;
-
-                                    // Create an EncoderParameters object.  
-                                    // An EncoderParameters object has an array of EncoderParameter  
-                                    // objects. In this case, there is only one  
-                                    // EncoderParameter object in the array.  
-                                    EncoderParameters myEncoderParameters = new EncoderParameters(1);
-
-                                    EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 90L);
-                                    myEncoderParameters.Param[0] = myEncoderParameter;
-
-                                    String filePath = HostingEnvironment.MapPath(Constants.HOUSEIMAGESDIRECTORY);
+                                    // Create a name for this image
                                     string imageId = "IMG_" + Guid.NewGuid().ToString();
-
+                                    // Add extension to the file name
                                     String fileName = imageId + ImageFormatProvider.GetImageExtension();
-                                    String fullPath = Path.Combine(filePath, fileName);
+                                    // Resize the image to the size that we will be using as default
                                     var finalImage = ResizeImage(image, 830, 500);
-                                    finalImage.Save(fullPath, encoder, myEncoderParameters);
+                                    // Get the stream of the image
+                                    var httpPostedStream = ToStream(finalImage);
+                                    // Declare this image as Public once it will be uploaded in the Cloud Bucket
+                                    var imageAcl = PredefinedObjectAcl.PublicRead;
+                                    // Upload this image to Google Cloud Storage bucket
+                                    var imageObject = _storageClient.UploadObjectAsync(
+                                        bucket: ConfigurationManager.AppSettings["GoogleCloudStoragePhotoBucketName"],
+                                        objectName: fileName,
+                                        contentType: "image/jpeg",
+                                        source: httpPostedStream,
+                                        options: new UploadObjectOptions { PredefinedAcl = imageAcl }
+                                    );
+                                    imageObject.Wait(10000);
+                                    // Get the url of the bucket and append with it the name of the file. This will be the public 
+                                    // url for this image and ready to view
+                                    fileName = ConfigurationManager.AppSettings["GoogleCloudStoragePhotoBucketUrl"] + fileName;
+                                    // Add this image to the list of images received in this HTTP request
                                     imagesList.Add(fileName);
                                 }
                             }
                         }
+                        // Add images to the house and save it
                         _houseApplicationService.AddImagesToHouse(houseId, imagesList);
+                        // Let the client know that the upload was successful
                         imageUploaded = true;
                     }
                     else
@@ -202,6 +205,32 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     houseId, userEmail, exception.ToString());
                 return InternalServerError();
             }
+        }
+
+        public Stream ToStream(Image image)
+        {
+            // We support inly JPEG file format
+            ImageCodecInfo encoder = GetEncoder(ImageFormatProvider.GetImageFormat());
+
+            // Create an Encoder object based on the GUID  
+            // for the Quality parameter category.  
+            System.Drawing.Imaging.Encoder myEncoder =
+                System.Drawing.Imaging.Encoder.Quality;
+
+            // Create an EncoderParameters object.  
+            // An EncoderParameters object has an array of EncoderParameter  
+            // objects. In this case, there is only one  
+            // EncoderParameter object in the array.  
+            EncoderParameters myEncoderParameters = new EncoderParameters(1);
+
+            EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 90L);
+            myEncoderParameters.Param[0] = myEncoderParameter;
+
+            var stream = new System.IO.MemoryStream();
+            //image.Save(stream, format);
+            image.Save(stream, encoder, myEncoderParameters);
+            stream.Position = 0;
+            return stream;
         }
 
         [Route("houseimageupload")]

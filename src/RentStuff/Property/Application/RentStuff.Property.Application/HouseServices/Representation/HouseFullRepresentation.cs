@@ -15,7 +15,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
             int numberOfBathrooms, bool internetAvailable, 
             bool landlinePhoneAvailable, bool cableTvAvailable, string dimension, bool garageAvailable, bool smokingAllowed, 
             string propertyType, string ownerEmail, string ownerPhoneNumber, decimal latitude, decimal longitude, string houseNo, 
-            string streetNo, string area, IList<ImageRepresentation> houseImages, string ownerName, string description,
+            string streetNo, string area, IList<string> houseImages, string ownerName, string description,
             string genderRestriction)
         {
             Id = id;
@@ -162,7 +162,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
         }
 
         [DataMember]
-        public IList<ImageRepresentation> HouseImages
+        public IList<string> HouseImages
         {
             get; private set;
         }
