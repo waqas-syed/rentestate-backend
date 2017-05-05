@@ -127,13 +127,13 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         [Authorize]
         public IHttpActionResult PostImageUpload()
         {
+            bool imageUploaded = false;
+            String[] headerValues = (String[])Request.Headers.GetValues("HouseId");
+            string houseId = headerValues[0];
+            var userEmail = User.Identity.Name;
+            bool allowedToEditHouse = _houseApplicationService.HouseOwnershipEmailCheck(houseId, userEmail);
             try
             {
-                bool imageUploaded = false;
-                String[] headerValues = (String[])Request.Headers.GetValues("HouseId");
-                string houseId = headerValues[0];
-                var userEmail = User.Identity.Name;
-                bool allowedToEditHouse = _houseApplicationService.HouseOwnershipEmailCheck(houseId, userEmail);
                 if (allowedToEditHouse)
                 {
                     if (Request.Content.IsMimeMultipartContent())
@@ -195,7 +195,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 }
                 else
                 {
-                    _logger.Error("Some tried to upload an image for another user. HouseId:{0} | UserEmail:{1}", houseId, userEmail);
+                    _logger.Error("Someone tried to upload an image for another user. HouseId:{0} | UserEmail:{1}", houseId, userEmail);
                     return BadRequest("The logged in user is not the actual poster for the requested house. Action will be taken now against this user");
                 }
             }
