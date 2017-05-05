@@ -245,7 +245,8 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             {
                 if (allowedToEditHouse)
                 {
-                    Task.Run(() => _houseApplicationService.DeleteImageFromHouse(deleteImageCommand.HouseId, deleteImageCommand.ImagesList)).Wait(2000);
+                    //Task.Run(() => _houseApplicationService.DeleteImageFromHouse(deleteImageCommand.HouseId, deleteImageCommand.ImagesList)).Wait(2000);
+                    _houseApplicationService.DeleteImageFromHouse(deleteImageCommand.HouseId, deleteImageCommand.ImagesList);
                     return Ok();
                 }
                 else

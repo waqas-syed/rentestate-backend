@@ -82,23 +82,32 @@ namespace RentStuff.Property.Application.HouseServices
                 .Area(createHouseCommand.Area)
                 .OwnerName(createHouseCommand.OwnerName)
                 .GenderRestriction(genderRestriction).Build();
-            if (!string.IsNullOrWhiteSpace(createHouseCommand.DimensionType))
-            {
-                if (string.IsNullOrWhiteSpace(createHouseCommand.DimensionStringValue))
-                {
-                    throw new NullReferenceException($"DimensionStringValue cannot be null if the DimensionType is not null. OwnerEmail: {createHouseCommand.OwnerEmail}");
-                }
-                var dimension = new Dimension((DimensionType) Enum.Parse(typeof(DimensionType), createHouseCommand.DimensionType), 
-                    createHouseCommand.DimensionStringValue, createHouseCommand.DimensionIntValue, house);
-                //_houseRepository.SaveorUpdateDimension(dimension);
-                house.Dimension = dimension;
-            }
 
+            house.Dimension = CreateDimensionInstance(createHouseCommand.DimensionType, createHouseCommand.DimensionStringValue,
+                createHouseCommand.DimensionIntValue, house);
             // Save the new house instance
             _houseRepository.SaveorUpdate(house);
             _logger.Info("House uploaded Successfully: {0}", house);
 
             return house.Id;
+        }
+
+        private Dimension CreateDimensionInstance(string dimensionType, string dimensionStringValue, decimal dimensionDecimalValue,
+            House house)
+        {
+            if (!string.IsNullOrWhiteSpace(dimensionType))
+            {
+                if (string.IsNullOrWhiteSpace(dimensionStringValue))
+                {
+                    throw new NullReferenceException($"DimensionStringValue cannot be null if the DimensionType is not null. OwnerEmail: {house.OwnerEmail}");
+                }
+                var dimension = new Dimension((DimensionType)Enum.Parse(typeof(DimensionType), dimensionType),
+                    dimensionStringValue, dimensionDecimalValue, house);
+                //_houseRepository.SaveorUpdateDimension(dimension);
+                house.Dimension = dimension;
+                return dimension;
+            }
+            return null;
         }
 
         /// <summary>
@@ -124,9 +133,9 @@ namespace RentStuff.Property.Application.HouseServices
             PropertyType propertyType = (PropertyType)Enum.Parse(typeof(PropertyType), updateHouseCommand.PropertyType);
             GenderRestriction genderRestriction =
                 (GenderRestriction) Enum.Parse(typeof(GenderRestriction), updateHouseCommand.GenderRestriction);
-            
-            var dimension = new Dimension(DimensionType.Acre, updateHouseCommand.DimensionStringValue,
-                updateHouseCommand.DimensionIntValue, house);
+
+            Dimension dimension = CreateDimensionInstance(updateHouseCommand.DimensionType,
+                updateHouseCommand.DimensionStringValue, updateHouseCommand.DimensionIntValue, house);
             house.UpdateHouse(updateHouseCommand.Title, updateHouseCommand.MonthlyRent, updateHouseCommand.NumberOfBedrooms,
                 updateHouseCommand.NumberOfKitchens, updateHouseCommand.NumberOfBathrooms, updateHouseCommand.InternetAvailable,
                 updateHouseCommand.LandlinePhoneAvailable, updateHouseCommand.CableTvAvailable, dimension, updateHouseCommand.GarageAvailable,
