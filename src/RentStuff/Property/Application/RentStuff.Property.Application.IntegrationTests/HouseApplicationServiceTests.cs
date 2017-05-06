@@ -8,6 +8,7 @@ using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.Services;
+using RentStuff.Property.Infrastructure.Services.DbDecipherServices;
 using Spring.Context.Support;
 
 namespace RentStuff.Property.Application.IntegrationTests
@@ -20,10 +21,11 @@ namespace RentStuff.Property.Application.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            var connection = ConfigurationManager.ConnectionStrings["MySql"].ToString();
+            var connection = StringCipher.DecipheredConnectionString;
             _databaseUtility = new DatabaseUtility(connection);
             _databaseUtility.Create();
             //_databaseUtility.Populate();
+            NhConnectionDecipherService.SetupDecipheredConnectionString();
         }
 
         [TearDown]
@@ -39,7 +41,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 (IHouseApplicationService) ContextRegistry.GetContext()["HouseApplicationService"];
             
             string email = "w@12344321.com";
-            string phoneNumber = "+923331234567";
+            string phoneNumber = "01234567890";
             string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent = 130000;
             int numberOfBedrooms = 3;
@@ -96,7 +98,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 (IHouseApplicationService)ContextRegistry.GetContext()["HouseApplicationService"];
 
             string email = "w@12344321.com";
-            string phoneNumber = "+923331234567";
+            string phoneNumber = "01234567890";
             string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent = 130000;
             int numberOfBedrooms = 3;
@@ -148,7 +150,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             // Saving House # 1 : Wont appear in search results as the PropertyType is Apartment; search criteria is House
             string email = "w@12344321.com";
-            string phoneNumber = "+923331234567";
+            string phoneNumber = "01234567890";
             string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent = 130000;
             int numberOfBedrooms = 3;
@@ -172,7 +174,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             // Saving House # 2 : Will appear in search results as the PropertyType is House; search criteria is House
             string email2 = "w@12344321-2.com";
-            string phoneNumber2 = "+920030000002";
+            string phoneNumber2 = "01234567891";
             string description2 = "Erebor - 2. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent2 = 1300002;
             int numberOfBedrooms2 = 2;
@@ -196,7 +198,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             // Saving House # 3 : Wont appear in search results as the PropertyType is Hostel; search criteria is House
             string email3 = "w@12344321-3.com";
-            string phoneNumber3 = "+920030000003";
+            string phoneNumber3 = "01234567892";
             string description3 = "Erebor - 3. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent3 = 1300003;
             int numberOfBedrooms3 = 3;
@@ -258,7 +260,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             // Saving House # 1 : Wont appear in search results as the PropertyType is Apartment; search criteria is House
             string email = "w@12344321.com";
-            string phoneNumber = "+923331234567";
+            string phoneNumber = "01234567890";
             string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent = 130000;
             int numberOfBedrooms = 3;
@@ -282,7 +284,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             // Saving House # 2 : Will appear in search results as the PropertyType is House; search criteria is House
             string email2 = "w@12344321-2.com";
-            string phoneNumber2 = "+920030000002";
+            string phoneNumber2 = "01234567891";
             string description2 = "Erebor - 2. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent2 = 1300002;
             int numberOfBedrooms2 = 2;
@@ -306,7 +308,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             // Saving House # 3 : Wont appear in search results as the PropertyType is Hostel; search criteria is House
             string email3 = "w@12344321-3.com";
-            string phoneNumber3 = "+920030000003";
+            string phoneNumber3 = "01234567892";
             string description3 = "Erebor - 3. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent3 = 1300003;
             int numberOfBedrooms3 = 3;
@@ -354,7 +356,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             // Saving House # 1
             string email = "w@12344321.com";
-            string phoneNumber = "+923331234567";
+            string phoneNumber = "01234567890";
             string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent = 130000;
             int numberOfBedrooms = 3;
@@ -378,7 +380,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             // Saving House # 2
             string email2 = "w@12344321-2.com";
-            string phoneNumber2 = "+920030000002";
+            string phoneNumber2 = "01234567891";
             string description2 = "Erebor - 2. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent2 = 1300002;
             int numberOfBedrooms2 = 2;
@@ -402,7 +404,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             // Saving House # 3
             string email3 = "w@12344321-3.com";
-            string phoneNumber3 = "+920030000003";
+            string phoneNumber3 = "01234567892";
             string description3 = "Erebor - 3. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent3 = 1300003;
             int numberOfBedrooms3 = 3;
@@ -471,7 +473,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 (IHouseApplicationService)ContextRegistry.GetContext()["HouseApplicationService"];
 
             string email = "w@12344321.com";
-            string phoneNumber = "+923331234567";
+            string phoneNumber = "01234567890";
             string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent = 130000;
             int numberOfBedrooms = 3;
@@ -529,7 +531,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 (IHouseApplicationService)ContextRegistry.GetContext()["HouseApplicationService"];
 
             string email = "w@12344321.com";
-            string phoneNumber = "+923331234567";
+            string phoneNumber = "01234567890";
             string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent = 130000;
             int numberOfBedrooms = 3;
@@ -579,7 +581,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 (IHouseApplicationService)ContextRegistry.GetContext()["HouseApplicationService"];
 
             string email = "w@12344321.com";
-            string phoneNumber = "+923331234567";
+            string phoneNumber = "01234567890";
             string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
             long monthlyRent = 130000;
             int numberOfBedrooms = 3;

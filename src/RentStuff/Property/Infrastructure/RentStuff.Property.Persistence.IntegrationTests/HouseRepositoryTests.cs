@@ -4,6 +4,7 @@ using NUnit.Framework;
 using RentStuff.Common;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.Services;
+using RentStuff.Property.Infrastructure.Services.DbDecipherServices;
 using Spring.Context.Support;
 
 namespace RentStuff.Property.Persistence.IntegrationTests
@@ -18,9 +19,10 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            var connection = ConfigurationManager.ConnectionStrings["MySql"].ToString();
+            var connection = StringCipher.DecipheredConnectionString;
             _databaseUtility = new DatabaseUtility(connection);
             _databaseUtility.Create();
+            NhConnectionDecipherService.SetupDecipheredConnectionString();
             //_databaseUtility.Populate();
         }
 
@@ -40,7 +42,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email = "w@12344321.com";
             string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
             string title = "MGM Grand";
-            string phoneNumber = "123456789";
+            string phoneNumber = "01234567890";
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
@@ -112,7 +114,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string streetNo = "13";
             string title = "Special House";
             string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
-            string phoneNumber = "123456789";
+            string phoneNumber = "01234567890";
             string email = "special@spsp123456.com";
             int numberOfBathrooms = 1;
             int numberOfBedrooms = 1;
@@ -138,7 +140,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string description2 = "Erobor. Built deep within the mountain itself the beauty of this fortress was legend.";
             string houseNo2 = "S2-123";
             string streetNo2 = "2-13";
-            string phoneNumber2 = "987654321";
+            string phoneNumber2 = "01234567891";
             int numberOfBathrooms2 = 2;
             int numberOfBedrooms2 = 2;
             int numberOfKitchens2 = 3;
@@ -211,7 +213,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string streetNo = "13";
             string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
             string title = "Special House";
-            string phoneNumber = "123456789";
+            string phoneNumber = "01234567890";
             string email = "special@spsp123456.com";
             int numberOfBathrooms = 1;
             int numberOfBedrooms = 1;
@@ -239,7 +241,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email2 = "special2@spsp123456.com";
             string houseNo2 = "S2-123";
             string streetNo2 = "2-13";
-            string phoneNumber2 = "987654321";
+            string phoneNumber2 = "01234567891";
             int numberOfBathrooms2 = 2;
             int numberOfBedrooms2 = 2;
             int numberOfKitchens2 = 3;
@@ -310,7 +312,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string houseNo = "House # 1";
             string streetNo = "1";
             string title = "Title # 1";
-            string phoneNumber = "1234567891";
+            string phoneNumber = "01234567890";
             string email = "special@spsp123456-1.com";
             int numberOfBathrooms = 1;
             int numberOfBedrooms = 1;
@@ -339,7 +341,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email2 = "special2@spsp12345-2.com";
             string houseNo2 = "House # 2";
             string streetNo2 = "2";
-            string phoneNumber2 = "1234567892";
+            string phoneNumber2 = "01234567891";
             int numberOfBathrooms2 = 2;
             int numberOfBedrooms2 = 2;
             int numberOfKitchens2 = 2;
@@ -368,7 +370,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email3 = "special2@spsp123456-3.com";
             string houseNo3 = "House # 3";
             string streetNo3 = "3";
-            string phoneNumber3 = "1234567893";
+            string phoneNumber3 = "01234567892";
             int numberOfBathrooms3 = 3;
             int numberOfBedrooms3 = 3;
             int numberOfKitchens3 = 3;
@@ -397,7 +399,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email4 = "special2@spsp123456-4.com";
             string houseNo4 = "House # 4";
             string streetNo4 = "4";
-            string phoneNumber4 = "1234567894";
+            string phoneNumber4 = "01234567893";
             int numberOfBathrooms4 = 4;
             int numberOfBedrooms4 = 4;
             int numberOfKitchens4 = 4;
@@ -426,7 +428,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email5 = "special2@spsp123456-5.com";
             string houseNo5 = "House # 5";
             string streetNo5 = "5";
-            string phoneNumber5 = "1234567895";
+            string phoneNumber5 = "01234567895";
             int numberOfBathrooms5 = 5;
             int numberOfBedrooms5 = 5;
             int numberOfKitchens5 = 5;
@@ -546,7 +548,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string houseNo = "S-123";
             string streetNo = "13";
             string title = "Special House";
-            string phoneNumber = "123456789";
+            string phoneNumber = "01234567890";
             string email = "special@spsp123456.com";
             int numberOfBathrooms = 1;
             int numberOfBedrooms = 1;
@@ -569,7 +571,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email2 = "special2@spsp123456.com";
             string houseNo2 = "S2-123";
             string streetNo2 = "2-13";
-            string phoneNumber2 = "987654321";
+            string phoneNumber2 = "01234567891";
             int numberOfBathrooms2 = 2;
             int numberOfBedrooms2 = 2;
             int numberOfKitchens2 = 3;
@@ -678,7 +680,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string houseNo = "House # 1";
             string streetNo = "1";
             string title = "Title # 1";
-            string phoneNumber = "1234567891";
+            string phoneNumber = "01234567890";
             string email = "special@spsp123456-1.com";
             int numberOfBathrooms = 1;
             int numberOfBedrooms = 1;
@@ -705,7 +707,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email2 = "special2@spsp12345-2.com";
             string houseNo2 = "House # 2";
             string streetNo2 = "2";
-            string phoneNumber2 = "1234567892";
+            string phoneNumber2 = "01234567891";
             int numberOfBathrooms2 = 2;
             int numberOfBedrooms2 = 2;
             int numberOfKitchens2 = 2;
@@ -732,7 +734,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email3 = "special2@spsp123456-3.com";
             string houseNo3 = "House # 3";
             string streetNo3 = "3";
-            string phoneNumber3 = "1234567893";
+            string phoneNumber3 = "01234567892";
             int numberOfBathrooms3 = 3;
             int numberOfBedrooms3 = 3;
             int numberOfKitchens3 = 3;
@@ -759,7 +761,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email4 = "special2@spsp123456-4.com";
             string houseNo4 = "House # 4";
             string streetNo4 = "4";
-            string phoneNumber4 = "1234567894";
+            string phoneNumber4 = "01234567893";
             int numberOfBathrooms4 = 4;
             int numberOfBedrooms4 = 4;
             int numberOfKitchens4 = 4;
@@ -786,7 +788,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email5 = "special2@spsp123456-5.com";
             string houseNo5 = "House # 5";
             string streetNo5 = "5";
-            string phoneNumber5 = "1234567895";
+            string phoneNumber5 = "01234567894";
             int numberOfBathrooms5 = 5;
             int numberOfBedrooms5 = 5;
             int numberOfKitchens5 = 5;
@@ -904,7 +906,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string houseNo = "House # 1";
             string streetNo = "1";
             string title = "Title # 1";
-            string phoneNumber = "1234567891";
+            string phoneNumber = "01234567890";
             string email = "special@spsp123456-1.com";
             int numberOfBathrooms = 1;
             int numberOfBedrooms = 1;
@@ -932,7 +934,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email2 = "special2@spsp12345-2.com";
             string houseNo2 = "House # 2";
             string streetNo2 = "2";
-            string phoneNumber2 = "1234567892";
+            string phoneNumber2 = "01234567891";
             int numberOfBathrooms2 = 2;
             int numberOfBedrooms2 = 2;
             int numberOfKitchens2 = 2;
@@ -960,7 +962,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email3 = "special2@spsp123456-3.com";
             string houseNo3 = "House # 3";
             string streetNo3 = "3";
-            string phoneNumber3 = "1234567893";
+            string phoneNumber3 = "01234567892";
             int numberOfBathrooms3 = 3;
             int numberOfBedrooms3 = 3;
             int numberOfKitchens3 = 3;
@@ -988,7 +990,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email4 = "special2@spsp123456-4.com";
             string houseNo4 = "House # 4";
             string streetNo4 = "4";
-            string phoneNumber4 = "1234567894";
+            string phoneNumber4 = "01234567893";
             int numberOfBathrooms4 = 4;
             int numberOfBedrooms4 = 4;
             int numberOfKitchens4 = 4;
@@ -1016,7 +1018,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email5 = "special2@spsp123456-5.com";
             string houseNo5 = "House # 5";
             string streetNo5 = "5";
-            string phoneNumber5 = "1234567895";
+            string phoneNumber5 = "01234567894";
             int numberOfBathrooms5 = 5;
             int numberOfBedrooms5 = 5;
             int numberOfKitchens5 = 5;
@@ -1124,7 +1126,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string email = "w@12344321.com";
             string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
             string title = "MGM Grand";
-            string phoneNumber = "123456789";
+            string phoneNumber = "01234567891";
 
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
@@ -1181,7 +1183,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
             string email = "w@12344321.com";
             string title = "MGM Grand";
-            string phoneNumber = "123456789";
+            string phoneNumber = "01234567890";
 
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
@@ -1266,7 +1268,15 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 initialLongitude += _longitudeIncrementForMultipleHouseSaves;
                 string title = "MGM Grand" + i;
                 string description = "It was a Hobbit Hole " + i + ". Which means it had good food and a warm hearth.";
-                string phoneNumber = "123456789" + i;
+                string phoneNumber = null;
+                if (i < 10)
+                {
+                    phoneNumber = "0123456789" + i;
+                }
+                else if (i >= 10)
+                {
+                    phoneNumber = "012345678" + i;
+                }
                 string email = "dummy@dumdum123456-" + i + ".com";
                 string houseNo = "123" + i;
                 string area = "Harley Street" + i;
@@ -1316,7 +1326,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 initialLongitude += _longitudeIncrementForMultipleHouseSaves;
                 string title = "MGM Grand" + i;
                 string description = "It was a Hobbit Hole " + i + ". Which means it had good food and a warm hearth.";
-                string phoneNumber = "123456789" + i;
+                string phoneNumber = "0123456789" + i;
+                
                 string email = "dummy@dumdum123456-" + i + ".com";
                 string houseNo = "123" + i;
                 string area = "Harley Street" + i;
@@ -1332,7 +1343,15 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
                     title = "MGM Grand" + (i + i);
                     description = "It was a Hobbit Hole " + (i + i) + ". Which means it had good food and a warm hearth.";
-                    phoneNumber = "123456789" + (i + i);
+                    //phoneNumber = "012345678" + (i + i);
+                    if (i < 5)
+                    {
+                        phoneNumber = "0123456789" + (i + i);
+                    }
+                    else if (i >= 5)
+                    {
+                        phoneNumber = "012345678" + (i + i);
+                    }
                     email = "dummy@dumdum123456-" + (i + i) + ".com";
                     houseNo = "123" + (i + i);
                     area = "Harley Street" + (i + i);
@@ -1377,7 +1396,15 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 initialLongitude += _longitudeIncrementForMultipleHouseSaves;
                 string title = "MGM Grand" + i;
                 string description = "It was a Hobbit Hole " + i + ". Which means it had good food and a warm hearth.";
-                string phoneNumber = "123456789" + i;
+                string phoneNumber =null;
+                if (i < 10)
+                {
+                    phoneNumber = "0123456789" + i;
+                }
+                else if (i >= 10)
+                {
+                    phoneNumber = "012345678" + i;
+                }
                 string email = "dummy@dumdum123456-" + i + ".com";
                 string houseNo = "123" + i;
                 string area = "Harley Street" + i;

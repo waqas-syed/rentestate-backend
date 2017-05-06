@@ -19,7 +19,7 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
         [SetUp]
         public void Setup()
         {
-            var connection = ConfigurationManager.ConnectionStrings["MySql"].ToString();
+            var connection = StringCipher.DecipheredConnectionString;
             _databaseUtility = new DatabaseUtility(connection);
             _databaseUtility.Create();
             //_databaseUtility.Populate();

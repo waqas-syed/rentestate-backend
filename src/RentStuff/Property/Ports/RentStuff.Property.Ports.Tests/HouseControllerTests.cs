@@ -14,6 +14,7 @@ using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.Services;
+using RentStuff.Property.Infrastructure.Services.DbDecipherServices;
 using RentStuff.Property.Ports.Adapter.Rest.Resources;
 using Spring.Context.Support;
 
@@ -30,11 +31,12 @@ namespace RentStuff.Property.Ports.Tests
         [SetUp]
         public void Setup()
         {
-            var connection = ConfigurationManager.ConnectionStrings["MySql"].ToString();
+            var connection = StringCipher.DecipheredConnectionString;
             _databaseUtility = new DatabaseUtility(connection);
             _databaseUtility.Create();            
             //_databaseUtility.Populate();
             ShowNhibernateLogging();
+            NhConnectionDecipherService.SetupDecipheredConnectionString();
         }
 
         [TearDown]
@@ -67,7 +69,7 @@ namespace RentStuff.Property.Ports.Tests
                 string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
                 int rent = 105000;
                 string ownerEmail = "thorin@oakenshield123.com";
-                string ownerPhoneNumber = "+923211234567";
+                string ownerPhoneNumber = "01234567890";
                 string houseNo = "CT-141/A";
                 string streetNo = "14";
                 int numberOfBathrooms = 1;
@@ -155,7 +157,7 @@ namespace RentStuff.Property.Ports.Tests
                 string updatedDescription = "updated Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
                 int updatedRent = 195000;
                 string updatedOwnerEmail = "thorin@oakenshield123.com";
-                string updatedOwnerPhoneNumber = "+923211234560";
+                string updatedOwnerPhoneNumber = "01234567890";
                 string updatedHouseNo = "CT-141/A";
                 string updatedStreetNo = "14";
                 int updatedNumberOfBathrooms = 9;
@@ -262,7 +264,7 @@ namespace RentStuff.Property.Ports.Tests
                 string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
                 int rent = 100001;
                 string ownerEmail = "house@1234567-1.com";
-                string ownerPhoneNumber = "+925000000001";
+                string ownerPhoneNumber = "01234567890";
                 string houseNo = "House # 1";
                 string streetNo = "1";
                 int numberOfBathrooms = 1;
@@ -305,7 +307,7 @@ namespace RentStuff.Property.Ports.Tests
                 int rent2 = 100002;
                 string ownerEmail2 = "house@1234567-2.com";
                 string description2 = "Erebor 2. Built deep within the mountain itself the beauty of this fortress was legend.";
-                string ownerPhoneNumber2 = "+925000000002";
+                string ownerPhoneNumber2 = "01234567891";
                 string houseNo2 = "House # 2";
                 string streetNo2 = "2";
                 int numberOfBathrooms2 = 2;
@@ -348,7 +350,7 @@ namespace RentStuff.Property.Ports.Tests
                 string description3 = "Erebor 3. Built deep within the mountain itself the beauty of this fortress was legend.";
                 int rent3 = 100003;
                 string ownerEmail3 = "house@1234567-3.com";
-                string ownerPhoneNumber3 = "+925000000003";
+                string ownerPhoneNumber3 = "01234567892";
                 string houseNo3 = "House # 3";
                 string streetNo3 = "3";
                 int numberOfBathrooms3 = 3;
@@ -393,7 +395,7 @@ namespace RentStuff.Property.Ports.Tests
                 string description4 = "Erebor 4. Built deep within the mountain itself the beauty of this fortress was legend.";
                 int rent4 = 100004;
                 string ownerEmail4 = "house@1234567-4.com";
-                string ownerPhoneNumber4 = "+925000000004";
+                string ownerPhoneNumber4 = "01234567893";
                 string houseNo4 = "House # 4";
                 string streetNo4 = "4";
                 int numberOfBathrooms4 = 4;
@@ -437,7 +439,7 @@ namespace RentStuff.Property.Ports.Tests
                 string description5 = "Erebor 5. Built deep within the mountain itself the beauty of this fortress was legend.";
                 int rent5 = 100005;
                 string ownerEmail5 = "house@1234567-5.com";
-                string ownerPhoneNumber5 = "+925000000005";
+                string ownerPhoneNumber5 = "01234567894";
                 string houseNo5 = "House # 5";
                 string streetNo5 = "5";
                 int numberOfBathrooms5 = 5;
@@ -553,7 +555,7 @@ namespace RentStuff.Property.Ports.Tests
             string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
             int rent = 100001;
             string ownerEmail = "house@1234567-1.com";
-            string ownerPhoneNumber = "+925000000001";
+            string ownerPhoneNumber = "01234567890";
             string houseNo = "House # 1";
             string streetNo = "1";
             int numberOfBathrooms = 1;
@@ -598,7 +600,7 @@ namespace RentStuff.Property.Ports.Tests
             string ownerEmail2 = "house@1234567-2.com";
             string description2 =
                 "Erebor 2. Built deep within the mountain itself the beauty of this fortress was legend.";
-            string ownerPhoneNumber2 = "+925000000002";
+            string ownerPhoneNumber2 = "01234567892";
             string houseNo2 = "House # 2";
             string streetNo2 = "2";
             int numberOfBathrooms2 = 2;
@@ -643,7 +645,7 @@ namespace RentStuff.Property.Ports.Tests
                 "Erebor 3. Built deep within the mountain itself the beauty of this fortress was legend.";
             int rent3 = 100003;
             string ownerEmail3 = "house@1234567-3.com";
-            string ownerPhoneNumber3 = "+925000000003";
+            string ownerPhoneNumber3 = "01234567893";
             string houseNo3 = "House # 3";
             string streetNo3 = "3";
             int numberOfBathrooms3 = 3;
@@ -762,7 +764,7 @@ namespace RentStuff.Property.Ports.Tests
             string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
             int rent = 100001;
             string ownerEmail = "house@1234567-1.com";
-            string ownerPhoneNumber = "+925000000001";
+            string ownerPhoneNumber = "01234567890";
             string houseNo = "House # 1";
             string streetNo = "1";
             int numberOfBathrooms = 1;
@@ -807,7 +809,7 @@ namespace RentStuff.Property.Ports.Tests
             string ownerEmail2 = "house@1234567-2.com";
             string description2 =
                 "Erebor 2. Built deep within the mountain itself the beauty of this fortress was legend.";
-            string ownerPhoneNumber2 = "+925000000002";
+            string ownerPhoneNumber2 = "01234567891";
             string houseNo2 = "House # 2";
             string streetNo2 = "2";
             int numberOfBathrooms2 = 2;
@@ -853,7 +855,7 @@ namespace RentStuff.Property.Ports.Tests
                 "Erebor 3. Built deep within the mountain itself the beauty of this fortress was legend.";
             int rent3 = 100003;
             string ownerEmail3 = "house@1234567-3.com";
-            string ownerPhoneNumber3 = "+925000000003";
+            string ownerPhoneNumber3 = "01234567892";
             string houseNo3 = "House # 3";
             string streetNo3 = "3";
             int numberOfBathrooms3 = 3;
