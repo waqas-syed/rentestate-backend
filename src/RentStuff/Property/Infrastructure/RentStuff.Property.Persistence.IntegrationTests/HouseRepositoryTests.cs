@@ -1038,7 +1038,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdateDimension(dimension5);
             houseRepository.SaveorUpdate(house5);
 
-            var retreivedHouses = houseRepository.SearchHousesByPropertyType(PropertyType.House);
+            var retreivedHouses = houseRepository.SearchHousesByPropertyType(PropertyType.House, 0);
             Assert.NotNull(retreivedHouses);
             Assert.AreEqual(2, retreivedHouses.Count);
 
@@ -1095,6 +1095,20 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(dimension3.DecimalValue, retreivedHouses[1].Dimension.DecimalValue);
             Assert.AreEqual(dimension3.StringValue, retreivedHouses[1].Dimension.StringValue);
             Assert.AreEqual(house3.OwnerName, retreivedHouses[1].OwnerName);
+        }
+
+        [Test]
+        public void RetreiveHousesByPropertyTypePaginationTest_ChecksThatThePaginationIsWorkingFine_VerifiesThroughReturnedOutput()
+        {
+            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            
+            // Save more than 10 houses using the same property type
+            SaveMultipleHousesUsingGivenIterations(houseRepository, 21);
+
+            // Now search by property type and check we only retreived 10 houses
+            var retreivedHouses = houseRepository.SearchHousesByPropertyType(PropertyType.House);
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(10, retreivedHouses.Count);
         }
         
         [Test]
@@ -1249,6 +1263,49 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         #endregion Save and Search House Images
 
         #region Utility methods
+
+        /// <summary>
+        /// We can use this method to create data for pagination tests. Values are simple and repetitive
+        /// </summary>
+        /// <param name="houseRepository"></param>
+        /// <param name="numberOfIterations"></param>
+        private void SaveMultipleHousesUsingGivenIterations(IHouseRepository houseRepository, int numberOfIterations)
+        {
+            for (int i = 0; i < numberOfIterations; i++)
+            {
+                string area = "Pindora, Rawalpindi, Pakistan";
+                string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
+                string houseNo = "House # 1";
+                string streetNo = "1";
+                string title = "Title # 1";
+                string phoneNumber = "01234567890";
+                string email = "special@spsp123456-1.com";
+                int numberOfBathrooms = 1;
+                int numberOfBedrooms = 1;
+                int numberOfKitchens = 1;
+                int rent = 100;
+                string ownerName = "Owner Name 1";
+                PropertyType propertyType = PropertyType.House;
+                House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
+                    .NumberOfBedrooms(numberOfBedrooms)
+                    .NumberOfBathrooms(numberOfBathrooms)
+                    .OwnerPhoneNumber(phoneNumber)
+                    .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
+                    .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
+                    .PropertyType(propertyType).MonthlyRent(rent).Latitude(i + 1)
+                    .Longitude(i + 1)
+                    .HouseNo(houseNo)
+                    .Area(area)
+                    .StreetNo(streetNo)
+                    .OwnerName(ownerName)
+                    .Description(description)
+                    .Build();
+                Dimension dimension = new Dimension(DimensionType.Kanal, "1", 0, house);
+                house.Dimension = dimension;
+                houseRepository.SaveorUpdateDimension(dimension);
+                houseRepository.SaveorUpdate(house);
+            }
+        }
 
         /// <summary>
         /// Values are saved in this method based on the loop number, so they can be verified in batches after they 

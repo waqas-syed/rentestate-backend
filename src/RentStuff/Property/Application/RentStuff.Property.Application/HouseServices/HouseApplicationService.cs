@@ -196,11 +196,12 @@ namespace RentStuff.Property.Application.HouseServices
                 house.OwnerEmail, house.OwnerPhoneNumber, house.Latitude, house.Longitude, house.HouseNo, house.StreetNo, house.Area, 
                 house.GetImageList(), house.OwnerName, house.Description, house.GenderRestriction.ToString());
         }
-        
+
         /// <summary>
         /// Search nearby houses by providing the address
         /// </summary>
         /// <param name="address"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
         public IList<HousePartialRepresentation> SearchHousesByArea(string address)
         {
@@ -215,11 +216,12 @@ namespace RentStuff.Property.Application.HouseServices
         /// Search houses with reference to propertyType
         /// </summary>
         /// <param name="propertyType"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
-        public IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType)
+        public IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType, int pageNo = 0)
         {
             var convertedPropertyType = (PropertyType)Enum.Parse(typeof(PropertyType), propertyType);
-            IList<House> houses = _houseRepository.SearchHousesByPropertyType(convertedPropertyType);
+            IList<House> houses = _houseRepository.SearchHousesByPropertyType(convertedPropertyType, pageNo - 1);
             return ConvertHouseToRepresentation(houses);
         }
 
@@ -228,6 +230,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// </summary>
         /// <param name="address"></param>
         /// <param name="propertyType"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
         public IList<HousePartialRepresentation> SearchHousesByAreaAndPropertyType(string address, string propertyType)
         {
@@ -237,6 +240,37 @@ namespace RentStuff.Property.Application.HouseServices
             IList<House> houses = _houseRepository.SearchHousesByCoordinatesAndPropertyType(coordinates.Item1, 
                 coordinates.Item2, (PropertyType)Enum.Parse(typeof(PropertyType), propertyType));
             return ConvertHouseToRepresentation(houses);
+        }
+
+        /// <summary>
+        /// Get the number of records in the database for the given criteria
+        /// </summary>
+        /// <param name="propertyType"></param>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        public int GetRecordsCount(string propertyType, string location)
+        {
+            if (!string.IsNullOrWhiteSpace(location))
+            {
+                // Get the coordinates for the location using the Geocoding API service
+                var coordinates = _geocodingService.GetCoordinatesFromAddress(location);
+                if (!string.IsNullOrWhiteSpace(propertyType))
+                {
+                    var propertyTypeEnum = (PropertyType) Enum.Parse(typeof(PropertyType), propertyType);
+                    return _houseRepository.GetRecordCountByLocationAndPropertyType(coordinates.Item1, coordinates.Item2,
+                        propertyTypeEnum);
+                }
+                else
+                {
+                    return _houseRepository.GetRecordCountByLocation(coordinates.Item1, coordinates.Item2);
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(propertyType))
+            {
+                var propertyTypeEnum = (PropertyType)Enum.Parse(typeof(PropertyType), propertyType);
+                return _houseRepository.GetRecordCountByPropertyType(propertyTypeEnum);
+            }
+            return 0;
         }
 
         /// <summary>

@@ -81,7 +81,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         [Route("house")]
         [HttpPut]
         [Authorize]
-        [AcceptVerbs(new string[]{"OPTIONS", "PUT"})]
+        [AcceptVerbs(new string[] {"OPTIONS", "PUT"})]
         public IHttpActionResult Put([FromBody] Object house)
         {
             try
@@ -111,7 +111,8 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             var currentUserEmail = User.Identity.Name;
             if (!currentUserEmail.Equals(houseOwnerEmail))
             {
-                _logger.Error("Current user cannot upload house using another user's email. CurrentUser:{0} | HouseOwner:{1}", 
+                _logger.Error(
+                    "Current user cannot upload house using another user's email. CurrentUser:{0} | HouseOwner:{1}",
                     currentUserEmail, houseOwnerEmail);
                 throw new InvalidOperationException("Current user cannot upload house using another user's email.");
             }
@@ -128,7 +129,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         public IHttpActionResult PostImageUpload()
         {
             bool imageUploaded = false;
-            String[] headerValues = (String[])Request.Headers.GetValues("HouseId");
+            String[] headerValues = (String[]) Request.Headers.GetValues("HouseId");
             string houseId = headerValues[0];
             var userEmail = User.Identity.Name;
             bool allowedToEditHouse = _houseApplicationService.HouseOwnershipEmailCheck(houseId, userEmail);
@@ -170,12 +171,13 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                                         objectName: fileName,
                                         contentType: "image/jpeg",
                                         source: httpPostedStream,
-                                        options: new UploadObjectOptions { PredefinedAcl = imageAcl }
+                                        options: new UploadObjectOptions {PredefinedAcl = imageAcl}
                                     );
                                     imageObject.Wait(10000);
                                     // Get the url of the bucket and append with it the name of the file. This will be the public 
                                     // url for this image and ready to view
-                                    fileName = ConfigurationManager.AppSettings["GoogleCloudStoragePhotoBucketUrl"] + fileName;
+                                    fileName = ConfigurationManager.AppSettings["GoogleCloudStoragePhotoBucketUrl"] +
+                                               fileName;
                                     // Add this image to the list of images received in this HTTP request
                                     imagesList.Add(fileName);
                                 }
@@ -195,13 +197,17 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 }
                 else
                 {
-                    _logger.Error("Someone tried to upload an image for another user. HouseId:{0} | UserEmail:{1}", houseId, userEmail);
-                    return BadRequest("The logged in user is not the actual poster for the requested house. Action will be taken now against this user");
+                    _logger.Error("Someone tried to upload an image for another user. HouseId:{0} | UserEmail:{1}",
+                        houseId, userEmail);
+                    return
+                        BadRequest(
+                            "The logged in user is not the actual poster for the requested house. Action will be taken now against this user");
                 }
             }
             catch (Exception exception)
             {
-                _logger.Error("Error Occured while uploading image for house. HouseId:{0} | UserEmail:{1} | Exception:{2}", 
+                _logger.Error(
+                    "Error Occured while uploading image for house. HouseId:{0} | UserEmail:{1} | Exception:{2}",
                     houseId, userEmail, exception.ToString());
                 return InternalServerError();
             }
@@ -239,20 +245,25 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         public IHttpActionResult ImageDelete([FromBody] DeleteImageCommand deleteImageCommand)
         {
             var userEmail = User.Identity.Name;
-            bool allowedToEditHouse = _houseApplicationService.HouseOwnershipEmailCheck(deleteImageCommand.HouseId, userEmail);
+            bool allowedToEditHouse = _houseApplicationService.HouseOwnershipEmailCheck(deleteImageCommand.HouseId,
+                userEmail);
 
             try
             {
                 if (allowedToEditHouse)
                 {
                     //Task.Run(() => _houseApplicationService.DeleteImageFromHouse(deleteImageCommand.HouseId, deleteImageCommand.ImagesList)).Wait(2000);
-                    _houseApplicationService.DeleteImageFromHouse(deleteImageCommand.HouseId, deleteImageCommand.ImagesList);
+                    _houseApplicationService.DeleteImageFromHouse(deleteImageCommand.HouseId,
+                        deleteImageCommand.ImagesList);
                     return Ok();
                 }
                 else
                 {
-                    _logger.Error("Some tried to upload an image for another user. HouseId:{0} | UserEmail:{1}", deleteImageCommand.HouseId, userEmail);
-                    return BadRequest("The logged in user is not the actual poster for the requested house. Action will be taken now against this user");
+                    _logger.Error("Some tried to upload an image for another user. HouseId:{0} | UserEmail:{1}",
+                        deleteImageCommand.HouseId, userEmail);
+                    return
+                        BadRequest(
+                            "The logged in user is not the actual poster for the requested house. Action will be taken now against this user");
                 }
             }
             catch (Exception exception)
@@ -262,9 +273,25 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
         }
 
+        [Route("house-count")]
+        [HttpGet]
+        public IHttpActionResult GetHouseCount(string propertyType = null, string location = null)
+        {
+            try
+            {
+                _logger.Info("Getting the house record count in the database");
+                return Ok(_houseApplicationService.GetRecordsCount(propertyType, location));
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception);
+                return InternalServerError();
+            }
+        }
+
         [Route("house")]
         [HttpGet]
-        public IHttpActionResult GetHouse(string email = null, string area = null, string propertyType = null, string houseId = null)
+        public IHttpActionResult GetHouse(string email = null, string area = null, string propertyType = null, string houseId = null, int pageNo = 0)
         {
             try
             {
@@ -282,7 +309,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 else if (propertyType != null)
                 {
                     _logger.Info("Get House by Property Type {0}", propertyType);
-                    return Ok(_houseApplicationService.SearchHousesByPropertyType(propertyType));
+                    return Ok(_houseApplicationService.SearchHousesByPropertyType(propertyType, pageNo));
                 }
                 else if (email != null)
                 {

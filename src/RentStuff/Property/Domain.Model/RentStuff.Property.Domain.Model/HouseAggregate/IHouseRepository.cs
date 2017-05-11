@@ -42,6 +42,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
         IList<House> GetHouseByCoordinates(decimal latitude, decimal longitude);
 
@@ -56,6 +57,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
         IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude);
 
@@ -63,8 +65,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// Get houses with reference to their PropertyType
         /// </summary>
         /// <param name="propertyType"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<House> SearchHousesByPropertyType(PropertyType propertyType);
+        IList<House> SearchHousesByPropertyType(PropertyType propertyType, int pageNo = 1);
 
         /// <summary>
         /// Gets the houses by coordinates and property type
@@ -72,7 +75,33 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <param name="propertyType"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<House> SearchHousesByCoordinatesAndPropertyType(decimal latitude, decimal longitude, PropertyType propertyType);
+        IList<House> SearchHousesByCoordinatesAndPropertyType(decimal latitude, decimal longitude, 
+            PropertyType propertyType);
+
+        /// <summary>
+        /// Get the total number of houses with the given property type present in the database
+        /// </summary>
+        /// <param name="propertyType"></param>
+        /// <returns></returns>
+        int GetRecordCountByPropertyType(PropertyType propertyType);
+
+        /// <summary>
+        /// Get the total number of houses with the given location present in the database
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <returns></returns>
+        int GetRecordCountByLocation(decimal latitude, decimal longitude);
+
+        /// <summary>
+        /// Get the total number of houses with the given location  and PropertyType present in the database
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="propertyType"></param>
+        /// <returns></returns>
+        int GetRecordCountByLocationAndPropertyType(decimal latitude, decimal longitude, PropertyType propertyType);
     }
 }

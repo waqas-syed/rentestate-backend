@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Criterion;
+using NHibernate.SqlCommand;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using Spring.Transaction;
 using Spring.Transaction.Interceptor;
@@ -77,11 +80,20 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// Gets houses with reference to their PropertyType
         /// </summary>
         /// <param name="propertyType"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
         [Transaction]
-        public IList<House> SearchHousesByPropertyType(PropertyType propertyType)
+        public IList<House> SearchHousesByPropertyType(PropertyType propertyType, int pageNo =0)
         {
-            return CurrentSession.QueryOver<House>().Where(x => x.PropertyType == propertyType).List<House>();
+            return CurrentSession.QueryOver<House>().Where(x => x.PropertyType == propertyType)
+                .Skip(pageNo * 10)
+                .Take(10)
+                .List<House>();
+            /*return CurrentSession.CreateCriteria(typeof(House))
+            .Add(Restrictions.Eq("PropertyType", propertyType))
+            .SetFirstResult(pageNo * 10)
+            .SetMaxResults(10)
+            .Future<House>().ToList();*/
         }
 
         /// <summary>
@@ -89,6 +101,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// </summary>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
         [Transaction]
         public IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude)
@@ -101,6 +114,12 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
                 .List();
 
             return houses.Cast<House>().ToList();
+
+            CurrentSession.CreateCriteria(typeof(House))
+            .Add(Expression.Sql(new SqlString()))
+            .SetFirstResult(0 * 10)
+            .SetMaxResults(10)
+            .Future<House>();
         }
 
         /// <summary>
@@ -109,9 +128,11 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <param name="propertyType"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
         [Transaction]
-        public IList<House> SearchHousesByCoordinatesAndPropertyType(decimal latitude, decimal longitude, PropertyType propertyType)
+        public IList<House> SearchHousesByCoordinatesAndPropertyType(decimal latitude, decimal longitude,
+            PropertyType propertyType)
         {
             IList houses = CurrentSession.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house HAVING distance < :radius AND property_type=:propertyType ORDER BY distance LIMIT 0 , 20")
                 .AddEntity(typeof(House))
@@ -125,6 +146,43 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
                 .List();
 
             return houses.Cast<House>().ToList();
+        }
+
+        /// <summary>
+        /// Gets the number of records for the given criteria in the database
+        /// </summary>
+        /// <returns></returns>
+        [Transaction]
+        public int GetRecordCountByPropertyType(PropertyType propertyType)
+        {
+            return CurrentSession.QueryOver<House>().Where(x => x.PropertyType == propertyType).RowCount();
+        }
+
+        /// <summary>
+        /// Get the total number of houses with the given location present in the database
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <returns></returns>
+        [Transaction]
+        public int GetRecordCountByLocation(decimal latitude, decimal longitude)
+        {
+            return CurrentSession.QueryOver<House>().Where(x => x.Latitude == latitude && x.Longitude == longitude)
+                .RowCount();
+        }
+
+        /// <summary>
+        /// Get the total number of houses with the given location  and PropertyType present in the database
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="propertyType"></param>
+        /// <returns></returns>
+        [Transaction]
+        public int GetRecordCountByLocationAndPropertyType(decimal latitude, decimal longitude, PropertyType propertyType)
+        {
+            return CurrentSession.QueryOver<House>().Where(x => x.Latitude == latitude && x.Longitude == longitude &&
+            x.PropertyType == propertyType).RowCount();
         }
 
         /// <summary>

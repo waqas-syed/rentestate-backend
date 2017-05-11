@@ -40,11 +40,12 @@ namespace RentStuff.Property.Application.HouseServices
         /// </summary>
         /// <returns></returns>
         IList<HousePartialRepresentation> GetHouseByEmail(string email);
-        
+
         /// <summary>
         /// Search nearby houses by providing the address
         /// </summary>
         /// <param name="address"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
         IList<HousePartialRepresentation> SearchHousesByArea(string address);
 
@@ -52,16 +53,27 @@ namespace RentStuff.Property.Application.HouseServices
         /// Searches the houses with reference to area
         /// </summary>
         /// <param name="propertyType"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType);
+        IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType, int pageNo = 1);
 
         /// <summary>
         /// Search the house by providing the address and propertyType
         /// </summary>
         /// <param name="area"></param>
         /// <param name="propertyType"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
         IList<HousePartialRepresentation> SearchHousesByAreaAndPropertyType(string area, string propertyType);
+
+
+        /// <summary>
+        /// Get the number of records in the database for the given criteria
+        /// </summary>
+        /// <param name="propertyType"></param>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        int GetRecordsCount(string propertyType, string location);
 
         /// <summary>
         /// Get all houses
