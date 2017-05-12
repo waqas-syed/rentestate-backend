@@ -61,6 +61,7 @@
     <Compile Include="HouseServices\Commands\DeleteImageCommand.cs" />
     <Compile Include="HouseServices\Commands\UpdateHouseCommand.cs" />
     <Compile Include="HouseServices\HouseApplicationService.cs" />
+    <Compile Include="HouseServices\Representation\HouseCountRepresentation.cs" />
     <Compile Include="HouseServices\Representation\HouseFullRepresentation.cs" />
     <Compile Include="HouseServices\Representation\HousePartialRepresentation.cs" />
     <Compile Include="HouseServices\IHouseApplicationService.cs" />

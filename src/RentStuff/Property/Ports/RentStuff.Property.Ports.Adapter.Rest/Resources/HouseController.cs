@@ -275,12 +275,12 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 
         [Route("house-count")]
         [HttpGet]
-        public IHttpActionResult GetHouseCount(string propertyType = null, string location = null)
+        public IHttpActionResult GetHouseCount(string propertyType = null, string area = null)
         {
             try
             {
                 _logger.Info("Getting the house record count in the database");
-                return Ok(_houseApplicationService.GetRecordsCount(propertyType, location));
+                return Ok(_houseApplicationService.GetRecordsCount(propertyType, area));
             }
             catch (Exception exception)
             {
@@ -291,20 +291,27 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 
         [Route("house")]
         [HttpGet]
-        public IHttpActionResult GetHouse(string email = null, string area = null, string propertyType = null, string houseId = null, int pageNo = 0)
+        public IHttpActionResult GetHouse(string email = null, string area = null, string propertyType = null, 
+            string houseId = null, int pageNo = 1)
         {
             try
             {
+                // The frontend starts with 1 as the first page, backend starts with 0. So we subtract 1 from whatever 
+                // the page number is given.
+                if (pageNo > 0)
+                {
+                    pageNo = pageNo - 1;
+                }
                 _logger.Info("Get House request received");
                 if (area != null && propertyType != null)
                 {
                     _logger.Info("Get House by Area {0} and Property Type {1}", area, propertyType);
-                    return Ok(_houseApplicationService.SearchHousesByAreaAndPropertyType(area, propertyType));
+                    return Ok(_houseApplicationService.SearchHousesByAreaAndPropertyType(area, propertyType, pageNo));
                 }
                 else if (area != null)
                 {
                     _logger.Info("Get House by Area {0}", area);
-                    return Ok(_houseApplicationService.SearchHousesByArea(area));
+                    return Ok(_houseApplicationService.SearchHousesByArea(area, pageNo));
                 }
                 else if (propertyType != null)
                 {
@@ -339,7 +346,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 }
                 else
                 {
-                    return Ok(_houseApplicationService.GetAllHouses());
+                    return Ok(_houseApplicationService.GetAllHouses(pageNo));
                 }
             }
             catch (Exception exception)

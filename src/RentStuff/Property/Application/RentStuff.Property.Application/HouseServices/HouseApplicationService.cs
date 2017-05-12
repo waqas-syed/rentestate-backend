@@ -203,12 +203,12 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="address"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public IList<HousePartialRepresentation> SearchHousesByArea(string address)
+        public IList<HousePartialRepresentation> SearchHousesByArea(string address, int pageNo = 0)
         {
             // Get the coordinates for the location using the Geocoding API service
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
             // Get 20 coordinates within the range of around 30 kilometers radius
-            IList<House> houses = _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2);
+            IList<House> houses = _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
             return ConvertHouseToRepresentation(houses);
         }
 
@@ -221,7 +221,7 @@ namespace RentStuff.Property.Application.HouseServices
         public IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType, int pageNo = 0)
         {
             var convertedPropertyType = (PropertyType)Enum.Parse(typeof(PropertyType), propertyType);
-            IList<House> houses = _houseRepository.SearchHousesByPropertyType(convertedPropertyType, pageNo - 1);
+            IList<House> houses = _houseRepository.SearchHousesByPropertyType(convertedPropertyType, pageNo);
             return ConvertHouseToRepresentation(houses);
         }
 
@@ -232,13 +232,14 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public IList<HousePartialRepresentation> SearchHousesByAreaAndPropertyType(string address, string propertyType)
+        public IList<HousePartialRepresentation> SearchHousesByAreaAndPropertyType(string address, string propertyType,
+            int pageNo = 0)
         {
             // Get the coordinates for the location using the Geocoding API service
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
             // Get 20 coordinates within the range of around 30 kilometers radius
             IList<House> houses = _houseRepository.SearchHousesByCoordinatesAndPropertyType(coordinates.Item1, 
-                coordinates.Item2, (PropertyType)Enum.Parse(typeof(PropertyType), propertyType));
+                coordinates.Item2, (PropertyType)Enum.Parse(typeof(PropertyType), propertyType), pageNo);
             return ConvertHouseToRepresentation(houses);
         }
 
@@ -248,38 +249,47 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="propertyType"></param>
         /// <param name="location"></param>
         /// <returns></returns>
-        public int GetRecordsCount(string propertyType, string location)
+        public HouseCountRepresentation GetRecordsCount(string propertyType, string location)
         {
+            Tuple<int,int> recordCount = null;
+            // If location is not null
             if (!string.IsNullOrWhiteSpace(location))
             {
                 // Get the coordinates for the location using the Geocoding API service
                 var coordinates = _geocodingService.GetCoordinatesFromAddress(location);
+                // And property type is also not null
                 if (!string.IsNullOrWhiteSpace(propertyType))
                 {
                     var propertyTypeEnum = (PropertyType) Enum.Parse(typeof(PropertyType), propertyType);
-                    return _houseRepository.GetRecordCountByLocationAndPropertyType(coordinates.Item1, coordinates.Item2,
+                    recordCount = _houseRepository.GetRecordCountByLocationAndPropertyType(coordinates.Item1, coordinates.Item2,
                         propertyTypeEnum);
+                    return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
                 }
+                // otherwise just get the count for houses given the coordinates
                 else
                 {
-                    return _houseRepository.GetRecordCountByLocation(coordinates.Item1, coordinates.Item2);
+                    recordCount = _houseRepository.GetRecordCountByLocation(coordinates.Item1, coordinates.Item2);
+                    return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
                 }
             }
             if (!string.IsNullOrWhiteSpace(propertyType))
             {
                 var propertyTypeEnum = (PropertyType)Enum.Parse(typeof(PropertyType), propertyType);
-                return _houseRepository.GetRecordCountByPropertyType(propertyTypeEnum);
+                recordCount = _houseRepository.GetRecordCountByPropertyType(propertyTypeEnum);
+                return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
             }
-            return 0;
+            // If no criteria is given, return the total number of houses present in the database
+            recordCount = _houseRepository.GetTotalRecordCount();
+            return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
         }
 
         /// <summary>
         /// Gets all the houses
         /// </summary>
         /// <returns></returns>
-        public IList<HousePartialRepresentation> GetAllHouses()
+        public IList<HousePartialRepresentation> GetAllHouses(int pageNo = 0)
         {
-            IList<House> houses = _houseRepository.GetAllHouses();
+            IList<House> houses = _houseRepository.GetAllHouses(pageNo);
             return ConvertHouseToRepresentation(houses);
         }
 

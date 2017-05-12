@@ -47,7 +47,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="address"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<HousePartialRepresentation> SearchHousesByArea(string address);
+        IList<HousePartialRepresentation> SearchHousesByArea(string address, int pageNo = 0);
 
         /// <summary>
         /// Searches the houses with reference to area
@@ -55,7 +55,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType, int pageNo = 1);
+        IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType, int pageNo = 0);
 
         /// <summary>
         /// Search the house by providing the address and propertyType
@@ -64,7 +64,8 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<HousePartialRepresentation> SearchHousesByAreaAndPropertyType(string area, string propertyType);
+        IList<HousePartialRepresentation> SearchHousesByAreaAndPropertyType(string area, string propertyType, 
+            int pageNo = 0);
 
 
         /// <summary>
@@ -73,13 +74,13 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="propertyType"></param>
         /// <param name="location"></param>
         /// <returns></returns>
-        int GetRecordsCount(string propertyType, string location);
+        HouseCountRepresentation GetRecordsCount(string propertyType, string location);
 
         /// <summary>
         /// Get all houses
         /// </summary>
         /// <returns></returns>
-        IList<HousePartialRepresentation> GetAllHouses();
+        IList<HousePartialRepresentation> GetAllHouses(int pageNo = 0);
 
         /// <summary>
         /// Get the types of property avaialable on our partal: House, Apartment, Hostel, Room

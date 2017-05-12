@@ -589,6 +589,30 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdateDimension(dimension2);
             houseRepository.SaveorUpdate(house2);
 
+            // Saving House # 3
+            string area2 = "Saddar, Rawalpindi, Pakistan";
+            var coordinatesFromAddress2 = geocodingService.GetCoordinatesFromAddress(area2);
+            string email3 = "special2@spsp123456.com";
+            string houseNo3 = "S2-123";
+            string streetNo3 = "2-13";
+            string phoneNumber3 = "01234567891";
+            int numberOfBathrooms3 = 2;
+            int numberOfBedrooms3 = 2;
+            int numberOfKitchens3 = 3;
+            int rent3 = 100000;
+            string ownerName3 = "Owner Name 3";
+            House house3 = new House.HouseBuilder().Title(title).OwnerEmail(email3)
+            .NumberOfBedrooms(numberOfBedrooms3).NumberOfBathrooms(numberOfBathrooms3).OwnerPhoneNumber(phoneNumber3)
+            .NumberOfKitchens(numberOfKitchens3).CableTvAvailable(false)
+            .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
+            .PropertyType(PropertyType.House).MonthlyRent(rent3).Latitude(coordinatesFromAddress2.Item1)
+            .Longitude(coordinatesFromAddress2.Item2)
+            .HouseNo(houseNo3).Area(area).StreetNo(streetNo3).OwnerName(ownerName3).Build();
+            Dimension dimension3 = new Dimension(DimensionType.Acre, "2", 0, house3);
+            house3.Dimension = dimension3;
+            houseRepository.SaveorUpdateDimension(dimension3);
+            houseRepository.SaveorUpdate(house3);
+
             var retreivedHouses = houseRepository.SearchHousesByCoordinates(coordinatesFromAddress.Item1, coordinatesFromAddress.Item2);
             Assert.NotNull(retreivedHouses);
 
@@ -647,7 +671,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
             IList<House> retreivedHouses = houseRepository.SearchHousesByCoordinates(initialLatitude, initialLongitude);
             Assert.NotNull(retreivedHouses);
-            Assert.AreEqual(20, retreivedHouses.Count);
+            // Only 10 houses are retreived because of the result size limit
+            Assert.AreEqual(10, retreivedHouses.Count);
             VerifyRetereivedHouses(retreivedHouses, initialLatitude, initialLongitude);
         }
 
@@ -1038,7 +1063,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdateDimension(dimension5);
             houseRepository.SaveorUpdate(house5);
 
-            var retreivedHouses = houseRepository.SearchHousesByPropertyType(PropertyType.House, 0);
+            var retreivedHouses = houseRepository.SearchHousesByPropertyType(PropertyType.House);
             Assert.NotNull(retreivedHouses);
             Assert.AreEqual(2, retreivedHouses.Count);
 
