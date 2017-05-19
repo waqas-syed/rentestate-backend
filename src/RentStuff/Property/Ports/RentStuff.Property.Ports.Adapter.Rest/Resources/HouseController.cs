@@ -325,7 +325,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         if (email.Equals(User.Identity.Name))
                         {
                             _logger.Info("Get House by Email {0}", email);
-                            return Ok(_houseApplicationService.GetHouseByEmail(email));
+                            return Ok(_houseApplicationService.GetHouseByEmail(email, pageNo));
                         }
                         else
                         {

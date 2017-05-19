@@ -170,9 +170,9 @@ namespace RentStuff.Property.Application.HouseServices
         /// Gets the house by providing the owner's email id
         /// </summary>
         /// <returns></returns>
-        public IList<HousePartialRepresentation> GetHouseByEmail(string email)
+        public IList<HousePartialRepresentation> GetHouseByEmail(string email, int pageNo = 0)
         {
-            IList<House> houses = _houseRepository.GetHouseByOwnerEmail(email);
+            IList<House> houses = _houseRepository.GetHouseByOwnerEmail(email, pageNo);
             return ConvertHouseToRepresentation(houses);
         }
 

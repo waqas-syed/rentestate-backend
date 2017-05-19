@@ -56,11 +56,16 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// Get the owner house by email
         /// </summary>
         /// <param name="email"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
         [Transaction]
-        public IList<House> GetHouseByOwnerEmail(string email)
+        public IList<House> GetHouseByOwnerEmail(string email, int pageNo = 0)
         {
-            return CurrentSession.QueryOver<House>().Where(x => x.OwnerEmail == email).List<House>();
+            return CurrentSession.QueryOver<House>()
+                    .Where(x => x.OwnerEmail == email)
+                    .Skip(pageNo * _resultsPerPage)
+                    .Take(_resultsPerPage)
+                    .List<House>();
         }
 
         /// <summary>
