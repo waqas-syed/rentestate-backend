@@ -7,5 +7,6 @@
   <object id="HouseApplicationService" type="RentStuff.Property.Application.HouseServices.HouseApplicationService, RentStuff.Property.Application">
     <constructor-arg name="houseRepository" ref="HouseRepository"/>
     <constructor-arg name="geocodingService" ref="GeocodingService"/>
+    <constructor-arg name="photoStorageService" ref="PhotoStorageService"/>
   </object>
 </objects>

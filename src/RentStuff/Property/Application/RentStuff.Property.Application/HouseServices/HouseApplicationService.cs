@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Management.Instrumentation;
@@ -12,6 +13,7 @@ using System.Linq;
 using NLog;
 using RentStuff.Common;
 using RentStuff.Property.Application.HouseServices.Representation;
+using ConfigurationManager = System.Configuration.ConfigurationManager;
 
 namespace RentStuff.Property.Application.HouseServices
 {
@@ -23,14 +25,17 @@ namespace RentStuff.Property.Application.HouseServices
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private IHouseRepository _houseRepository;
         private IGeocodingService _geocodingService;
+        private IPhotoStorageService _photoStorageService;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public HouseApplicationService(IHouseRepository houseRepository, IGeocodingService geocodingService)
+        public HouseApplicationService(IHouseRepository houseRepository, IGeocodingService geocodingService,
+            IPhotoStorageService photoStorageService)
         {
             _houseRepository = houseRepository;
             _geocodingService = geocodingService;
+            _photoStorageService = photoStorageService;
         }
 
         /// <summary>
@@ -157,6 +162,11 @@ namespace RentStuff.Property.Application.HouseServices
             House house = _houseRepository.GetHouseById(houseId);
             if (house != null)
             {
+                // Delete all the images from the Google cloud storage photo bucket
+                foreach (var image in house.HouseImages)
+                {
+                    _photoStorageService.DeletePhoto(image);
+                }
                 _houseRepository.Delete(house);
                 _logger.Info("Deleted House successfully: {0}", house);
             }
@@ -304,35 +314,53 @@ namespace RentStuff.Property.Application.HouseServices
         }
 
         /// <summary>
-        /// Add images to an existing house instance
+        /// Adds a single image to a house
         /// </summary>
         /// <param name="houseId"></param>
-        /// <param name="imagesList"></param>
-        public void AddImagesToHouse(string houseId, IList<string> imagesList)
+        /// <param name="photoStream"></param>
+        public void AddSingleImageToHouse(string houseId, Stream photoStream)
         {
-            House house = _houseRepository.GetHouseById(houseId);
-            if (house != null)
+            using (var image = Image.FromStream(photoStream))
             {
-                foreach (var imageId in imagesList)
+                // Get the house from the repository
+                House house = _houseRepository.GetHouseById(houseId);
+                // If we find a hosue with the given ID
+                if (house != null)
                 {
-                    house.AddImage(imageId);
+                    // Create a name for this image
+                    string imageId = "IMG_" + Guid.NewGuid().ToString();
+                    // Add extension to the file name
+                    String fileName = imageId + ImageFormatProvider.GetImageExtension();
+                    // Resize the image to the size that we will be using as default
+                    var finalImage = ResizeImage(image, 830, 500);
+                    // Get the stream of the image
+                    var httpPostedStream = ToStream(finalImage);
+                    _photoStorageService.UploadPhoto(fileName, httpPostedStream);
+                    // Get the url of the bucket and append with it the name of the file. This will be the public 
+                    // url for this image and ready to view
+                    fileName = ConfigurationManager.AppSettings["GoogleCloudStoragePhotoBucketUrl"] + fileName;
+                    // Add the image link to the list of images this house owns
+                    house.AddImage(fileName);
+                    // Save the updated house in the repository
+                    _houseRepository.SaveorUpdate(house);
+                    // Log the info
+                    _logger.Info("Added images to house successfully. HouseId: {0}", house.Id);
                 }
-                _houseRepository.SaveorUpdate(house);
-                _logger.Info("Added images to house successfully. HouseId: {0}", house.Id);
-            }
-            else
-            {
-                throw new NullReferenceException("No house found with the given ID");
+                // Otherwise throw an exception
+                else
+                {
+                    throw new NullReferenceException("No house found with the given ID");
+                }
             }
         }
-
+        
         /// <summary>
         /// Delete the images for the house
         /// </summary>
         /// <param name="houseId"></param>
         /// <param name="imagesList"></param>
         /// <returns></returns>
-        public void DeleteImageFromHouse(string houseId, IList<string> imagesList)
+        public void DeleteImagesFromHouse(string houseId, IList<string> imagesList)
         {
             var house = _houseRepository.GetHouseById(houseId);
             if (house != null)
@@ -340,6 +368,7 @@ namespace RentStuff.Property.Application.HouseServices
                 foreach (var imageId in imagesList)
                 {
                     house.HouseImages.Remove(imageId);
+                    _photoStorageService.DeletePhoto(imageId);
                 }
                 _houseRepository.SaveorUpdate(house);
                 _logger.Info("Deleted images from house successfully. HouseId: {0}", house.Id);
@@ -405,6 +434,77 @@ namespace RentStuff.Property.Application.HouseServices
                     return new ImageRepresentation(imageId, ImageFormatProvider.GetImageFormat().ToString(), Convert.ToBase64String(imageBytes));
                 }
             }
+        }
+
+        /// <summary>
+        /// Resize the image to the specified width and height.
+        /// </summary>
+        /// <param name="image">The image to resize.</param>
+        /// <param name="width">The width to resize to.</param>
+        /// <param name="height">The height to resize to.</param>
+        /// <returns>The resized image.</returns>
+        public static Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
+        }
+
+        public Stream ToStream(Image image)
+        {
+            // We support inly JPEG file format
+            ImageCodecInfo encoder = GetEncoder(ImageFormatProvider.GetImageFormat());
+
+            // Create an Encoder object based on the GUID  
+            // for the Quality parameter category.  
+            System.Drawing.Imaging.Encoder myEncoder =
+                System.Drawing.Imaging.Encoder.Quality;
+
+            // Create an EncoderParameters object.  
+            // An EncoderParameters object has an array of EncoderParameter  
+            // objects. In this case, there is only one  
+            // EncoderParameter object in the array.  
+            EncoderParameters myEncoderParameters = new EncoderParameters(1);
+
+            EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 90L);
+            myEncoderParameters.Param[0] = myEncoderParameter;
+
+            var stream = new System.IO.MemoryStream();
+            //image.Save(stream, format);
+            image.Save(stream, encoder, myEncoderParameters);
+            stream.Position = 0;
+            return stream;
+        }
+
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
         }
     }
 }

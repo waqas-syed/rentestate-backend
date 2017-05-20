@@ -6,4 +6,6 @@
   <!-- Services -->
   <object id="GeocodingService" type="RentStuff.Property.Infrastructure.Services.LocationServices.GeocodingService, RentStuff.Property.Infrastructure.Services">
   </object>
+  <object id="PhotoStorageService" type="RentStuff.Property.Infrastructure.Services.GoogleStorageServices.PhotoStorageService, RentStuff.Property.Infrastructure.Services">
+  </object>
 </objects>

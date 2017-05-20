@@ -145,7 +145,6 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         Task<MultipartMemoryStreamProvider> imageSavetask = Request.Content
                             .ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider());
                         imageSavetask.Wait(10000);
-                        IList<string> imagesList = new List<string>();
                         // Get the result of the task that was reading the multipart content
                         MultipartMemoryStreamProvider provider = imageSavetask.Result;
                         // For each file, do the processing
@@ -153,40 +152,11 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         {
                             using (Stream stream = content.ReadAsStreamAsync().Result)
                             {
-                                using (var image = Image.FromStream(stream))
-                                {
-                                    // Create a name for this image
-                                    string imageId = "IMG_" + Guid.NewGuid().ToString();
-                                    // Add extension to the file name
-                                    String fileName = imageId + ImageFormatProvider.GetImageExtension();
-                                    // Resize the image to the size that we will be using as default
-                                    var finalImage = ResizeImage(image, 830, 500);
-                                    // Get the stream of the image
-                                    var httpPostedStream = ToStream(finalImage);
-                                    // Declare this image as Public once it will be uploaded in the Cloud Bucket
-                                    var imageAcl = PredefinedObjectAcl.PublicRead;
-                                    // Upload this image to Google Cloud Storage bucket
-                                    var imageObject = _storageClient.UploadObjectAsync(
-                                        bucket: ConfigurationManager.AppSettings["GoogleCloudStoragePhotoBucketName"],
-                                        objectName: fileName,
-                                        contentType: "image/jpeg",
-                                        source: httpPostedStream,
-                                        options: new UploadObjectOptions {PredefinedAcl = imageAcl}
-                                    );
-                                    imageObject.Wait(10000);
-                                    // Get the url of the bucket and append with it the name of the file. This will be the public 
-                                    // url for this image and ready to view
-                                    fileName = ConfigurationManager.AppSettings["GoogleCloudStoragePhotoBucketUrl"] +
-                                               fileName;
-                                    // Add this image to the list of images received in this HTTP request
-                                    imagesList.Add(fileName);
-                                }
+                                _houseApplicationService.AddSingleImageToHouse(houseId, stream);
+                                // Let the client know that the upload was successful
+                                imageUploaded = true;
                             }
                         }
-                        // Add images to the house and save it
-                        _houseApplicationService.AddImagesToHouse(houseId, imagesList);
-                        // Let the client know that the upload was successful
-                        imageUploaded = true;
                     }
                     else
                     {
@@ -212,33 +182,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 return InternalServerError();
             }
         }
-
-        public Stream ToStream(Image image)
-        {
-            // We support inly JPEG file format
-            ImageCodecInfo encoder = GetEncoder(ImageFormatProvider.GetImageFormat());
-
-            // Create an Encoder object based on the GUID  
-            // for the Quality parameter category.  
-            System.Drawing.Imaging.Encoder myEncoder =
-                System.Drawing.Imaging.Encoder.Quality;
-
-            // Create an EncoderParameters object.  
-            // An EncoderParameters object has an array of EncoderParameter  
-            // objects. In this case, there is only one  
-            // EncoderParameter object in the array.  
-            EncoderParameters myEncoderParameters = new EncoderParameters(1);
-
-            EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 90L);
-            myEncoderParameters.Param[0] = myEncoderParameter;
-
-            var stream = new System.IO.MemoryStream();
-            //image.Save(stream, format);
-            image.Save(stream, encoder, myEncoderParameters);
-            stream.Position = 0;
-            return stream;
-        }
-
+        
         [Route("houseimageupload")]
         [HttpPut]
         [Authorize]
@@ -253,13 +197,13 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 if (allowedToEditHouse)
                 {
                     //Task.Run(() => _houseApplicationService.DeleteImageFromHouse(deleteImageCommand.HouseId, deleteImageCommand.ImagesList)).Wait(2000);
-                    _houseApplicationService.DeleteImageFromHouse(deleteImageCommand.HouseId,
+                    _houseApplicationService.DeleteImagesFromHouse(deleteImageCommand.HouseId,
                         deleteImageCommand.ImagesList);
                     return Ok();
                 }
                 else
                 {
-                    _logger.Error("Some tried to upload an image for another user. HouseId:{0} | UserEmail:{1}",
+                    _logger.Error("Someone tried to upload an image for another user. HouseId:{0} | UserEmail:{1}",
                         deleteImageCommand.HouseId, userEmail);
                     return
                         BadRequest(
@@ -356,50 +300,6 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
         }
         
-        [Route("GetHouseImages")]
-        [HttpGet]
-        [Obsolete]
-        public HttpResponseMessage GetHouseImages(string houseId)
-        {
-            House house = null;//_houseApplicationService.GetHouseById(houseId);
-            if (house == null)
-            {
-                throw new NullReferenceException("No house found for ID: " + houseId);
-            }
-            var result = new HttpResponseMessage(HttpStatusCode.OK);
-            var multipartContent = new MultipartContent();
-                        
-            foreach (var imageId in house.HouseImages)
-            {
-                String filePath = HostingEnvironment.MapPath(Constants.HOUSEIMAGESDIRECTORY + imageId);
-                FileStream fileStream = new FileStream(filePath, FileMode.Open);
-                Image image = Image.FromStream(fileStream);
-                MemoryStream memoryStream = new MemoryStream();
-                image.Save(memoryStream, ImageFormat.Jpeg);
-                
-                var byteArrayContent = new ByteArrayContent(memoryStream.ToArray());
-                byteArrayContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
-                byteArrayContent.Headers.ContentLength = memoryStream.ToArray().Length;
-                
-                //var fileStream = new FileStream(HostingEnvironment.MapPath("~/Images/" + imageId + ".jpg"),
-                  //  FileMode.Open);
-                //var file1Content = new StreamContent(fileStream);
-
-                //file1Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("image/jpeg");
-                //multipartContent.Add(byteArrayContent);
-                //fileStream.Close();
-                //fileStream.Flush();
-            }
-            result.Content = multipartContent;
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");    
-            // We can also return with the type HttpResponseMessage        
-            return result;
-
-            // We can also return HttpResponseMessage wrapped as IHttpActionaResult
-            //IHttpActionResult response = ResponseMessage(result);
-            //return response;
-        }
-
         [Route("house/{id}")]
         [HttpDelete]
         public IHttpActionResult Delete(string id)
@@ -446,56 +346,5 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 return InternalServerError(exception);
             }
         }
-
-        #region Private Methods
-
-        /// <summary>
-        /// Resize the image to the specified width and height.
-        /// </summary>
-        /// <param name="image">The image to resize.</param>
-        /// <param name="width">The width to resize to.</param>
-        /// <param name="height">The height to resize to.</param>
-        /// <returns>The resized image.</returns>
-        public static Bitmap ResizeImage(Image image, int width, int height)
-        {
-            var destRect = new Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height);
-
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            using (var graphics = Graphics.FromImage(destImage))
-            {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
-            }
-
-            return destImage;
-        }
-
-        private ImageCodecInfo GetEncoder(ImageFormat format)
-        {
-            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
-            foreach (ImageCodecInfo codec in codecs)
-            {
-                if (codec.FormatID == format.Guid)
-                {
-                    return codec;
-                }
-            }
-            return null;
-        }
-
-        
-
-        #endregion Private methods
     }
 }

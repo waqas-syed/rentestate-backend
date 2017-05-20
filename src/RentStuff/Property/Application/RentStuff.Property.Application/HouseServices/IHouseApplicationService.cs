@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
 using RentStuff.Property.Domain.Model.HouseAggregate;
@@ -89,17 +90,19 @@ namespace RentStuff.Property.Application.HouseServices
         IList<string> GetPropertyTypes();
 
         /// <summary>
-        /// Add images to an existing House instance
+        /// Adds a single image to a house
         /// </summary>
-        void AddImagesToHouse(string houseId, IList<string> imagesList);
-
+        /// <param name="houseId"></param>
+        /// <param name="photoStream"></param>
+        void AddSingleImageToHouse(string houseId, Stream photoStream);
+        
         /// <summary>
         /// Deletes the image from the house
         /// </summary>
         /// <param name="houseId"></param>
         /// <param name="imagesList"></param>
         /// <returns></returns>
-        void DeleteImageFromHouse(string houseId, IList<string> imagesList);
+        void DeleteImagesFromHouse(string houseId, IList<string> imagesList);
 
         /// <summary>
         /// Checks that the call requester willing to update the house is the actual poster of the house by comparing emails
