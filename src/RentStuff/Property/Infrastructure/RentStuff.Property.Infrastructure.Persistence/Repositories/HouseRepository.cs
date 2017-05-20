@@ -188,7 +188,20 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         [Transaction]
         public Tuple<int, int> GetRecordCountByLocation(decimal latitude, decimal longitude)
         {
-            return new Tuple<int, int>(CurrentSession.QueryOver<House>().Where(x => x.Latitude == latitude && x.Longitude == longitude)
+            return new Tuple<int, int>(CurrentSession.QueryOver<House>()
+                .Where(x => x.Latitude == latitude && x.Longitude == longitude)
+                .RowCount(), _resultsPerPage);
+        }
+
+        /// <summary>
+        /// Get the total number of houses with the given email present in the database
+        /// </summary>
+        /// /// <param name="email"></param>
+        /// <returns></returns>
+        [Transaction]
+        public Tuple<int, int> GetRecordCountByEmail(string email)
+        {
+            return new Tuple<int, int>(CurrentSession.QueryOver<House>().Where(x => x.OwnerEmail == email)
                 .RowCount(), _resultsPerPage);
         }
 

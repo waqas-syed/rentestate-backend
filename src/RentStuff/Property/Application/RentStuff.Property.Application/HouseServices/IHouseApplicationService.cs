@@ -74,8 +74,9 @@ namespace RentStuff.Property.Application.HouseServices
         /// </summary>
         /// <param name="propertyType"></param>
         /// <param name="location"></param>
+        /// <param name="email"></param>
         /// <returns></returns>
-        HouseCountRepresentation GetRecordsCount(string propertyType, string location);
+        HouseCountRepresentation GetRecordsCount(string propertyType, string location, string email);
 
         /// <summary>
         /// Get all houses

@@ -98,6 +98,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         Tuple<int, int> GetRecordCountByLocation(decimal latitude, decimal longitude);
 
         /// <summary>
+        /// Get the total number of houses with the given email present in the database
+        /// </summary>
+        /// <returns></returns>
+        Tuple<int, int> GetRecordCountByEmail(string email);
+
+        /// <summary>
         /// Get the total number of houses with the given location  and PropertyType present in the database
         /// </summary>
         /// <param name="latitude"></param>

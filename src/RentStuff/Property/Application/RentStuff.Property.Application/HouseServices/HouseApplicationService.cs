@@ -258,8 +258,9 @@ namespace RentStuff.Property.Application.HouseServices
         /// </summary>
         /// <param name="propertyType"></param>
         /// <param name="location"></param>
+        /// <param name="email"></param>
         /// <returns></returns>
-        public HouseCountRepresentation GetRecordsCount(string propertyType, string location)
+        public HouseCountRepresentation GetRecordsCount(string propertyType, string location, string email)
         {
             Tuple<int,int> recordCount = null;
             // If location is not null
@@ -286,6 +287,11 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 var propertyTypeEnum = (PropertyType)Enum.Parse(typeof(PropertyType), propertyType);
                 recordCount = _houseRepository.GetRecordCountByPropertyType(propertyTypeEnum);
+                return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
+            }
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                recordCount = _houseRepository.GetRecordCountByEmail(email);
                 return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
             }
             // If no criteria is given, return the total number of houses present in the database

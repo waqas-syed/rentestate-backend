@@ -219,12 +219,12 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 
         [Route("house-count")]
         [HttpGet]
-        public IHttpActionResult GetHouseCount(string propertyType = null, string area = null)
+        public IHttpActionResult GetHouseCount(string propertyType = null, string area = null, string email = null)
         {
             try
             {
                 _logger.Info("Getting the house record count in the database");
-                return Ok(_houseApplicationService.GetRecordsCount(propertyType, area));
+                return Ok(_houseApplicationService.GetRecordsCount(propertyType, area, email));
             }
             catch (Exception exception)
             {
