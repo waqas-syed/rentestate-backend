@@ -157,9 +157,9 @@ CREATE TABLE `AspNetUsers` (
 --
 
 CREATE TABLE `dimension` (
-  `id` varchar(75) NOT NULL,
-  `dimension_type` varchar(30) NOT NULL,
-  `string_value` varchar(30) DEFAULT NULL,
+  `id` varchar(45) NOT NULL,
+  `dimension_type` varchar(10) NOT NULL,
+  `string_value` varchar(10) DEFAULT NULL,
   `decimal_value` decimal(6,4) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -171,9 +171,9 @@ CREATE TABLE `dimension` (
 --
 
 CREATE TABLE `house` (
-  `id` varchar(120) NOT NULL,
+  `id` varchar(45) NOT NULL,
   `db_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `title` varchar(200) NOT NULL,
+  `title` varchar(42) NOT NULL,
   `description` varchar(200) DEFAULT NULL,
   `owner_email` varchar(50) NOT NULL,
   `monthly_rent` bigint(20) NOT NULL,
@@ -190,11 +190,11 @@ CREATE TABLE `house` (
   `owner_phone_number` varchar(13) NOT NULL,
   `latitude` decimal(13,9) NOT NULL,
   `longitude` decimal(13,9) NOT NULL,
-  `house_no` varchar(100) DEFAULT NULL,
+  `house_no` varchar(40) DEFAULT NULL,
   `street_no` varchar(10) DEFAULT NULL,
-  `area` varchar(300) DEFAULT NULL,
-  `dimension_id` varchar(75) DEFAULT NULL,  
-  `owner_name` varchar(21) NOT NULL,
+  `area` varchar(72) DEFAULT NULL,
+  `dimension_id` varchar(45) DEFAULT NULL,  
+  `owner_name` varchar(22) NOT NULL,
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
@@ -208,8 +208,8 @@ CREATE TABLE `house` (
 --
 
 CREATE TABLE `houseimages` (
-  `house_id` varchar(50) NOT NULL,
-  `image_id` varchar(150) NOT NULL
+  `house_id` varchar(45) NOT NULL,
+  `image_id` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
