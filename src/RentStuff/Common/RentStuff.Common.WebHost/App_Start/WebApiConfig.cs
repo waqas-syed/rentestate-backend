@@ -13,7 +13,6 @@ namespace RentStuff.Common.WebHost
         public static void Register(HttpConfiguration config)
         {
             //config.EnableCors(new EnableCorsAttribute(Constants.DOMAINURL, "*", "*") { SupportsCredentials = true });
-
             // Web API routes
             config.MapHttpAttributeRoutes();
 
