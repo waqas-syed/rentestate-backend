@@ -27,7 +27,7 @@ namespace RentStuff.Common.WebHost
             config.Formatters.Remove(config.Formatters.XmlFormatter);
 
             config.DependencyResolver = new SpringDependencyResolver(ContextRegistry.GetContext());
-            // Decipher password for the connection string and update it for using NHibernate
+            // Decipher password for the connection string and update it for using NHibernate.
             NhConnectionDecipherService.SetupDecipheredConnectionString();
         }
     }
