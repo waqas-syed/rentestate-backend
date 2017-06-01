@@ -29,10 +29,13 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
     <property name="OwnerName" column="owner_name"/>
     <many-to-one name="Dimension" unique="true" column="dimension_id" cascade="all">
     </many-to-one>
-    <bag name="HouseImages" table="houseimages" lazy="false">
+    <idbag name="HouseImages" table="houseimages" lazy="false">
+      <collection-id column="ID" type="Int64">
+        <generator class="native"/>
+      </collection-id>
       <key column="house_id" />
       <element column="image_id" type="string" />
-    </bag>
+    </idbag>
     <!--<many-to-one name="Location" unique="true" column="location_id"/>-->
   </class>
 </hibernate-mapping>

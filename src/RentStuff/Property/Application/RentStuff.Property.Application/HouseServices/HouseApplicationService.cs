@@ -26,7 +26,7 @@ namespace RentStuff.Property.Application.HouseServices
         private IHouseRepository _houseRepository;
         private IGeocodingService _geocodingService;
         private IPhotoStorageService _photoStorageService;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
@@ -44,12 +44,12 @@ namespace RentStuff.Property.Application.HouseServices
         public string SaveNewHouseOffer(CreateHouseCommand createHouseCommand)
         {
             // Get the coordinates for the location using the Geocoding API service
-            Tuple<decimal,decimal> coordinates = _geocodingService.GetCoordinatesFromAddress(createHouseCommand.Area);
+            Tuple<decimal, decimal> coordinates = _geocodingService.GetCoordinatesFromAddress(createHouseCommand.Area);
 
             if (coordinates == null || coordinates.Item1 == decimal.Zero || coordinates.Item2 == decimal.Zero)
             {
                 _logger.Error("Error while getting coordinates for the given address. Address: {0} | OwnerEmail: {1}",
-                                                                        createHouseCommand.Area, createHouseCommand.OwnerEmail);
+                    createHouseCommand.Area, createHouseCommand.OwnerEmail);
                 throw new InvalidDataException($"Could not find coordinates from the given address." +
                                                $" Address: {createHouseCommand.Area} | OwnerEmail: {createHouseCommand.OwnerEmail}");
             }
@@ -63,7 +63,7 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 Enum.TryParse(createHouseCommand.GenderRestriction, out genderRestriction);
             }
-            
+
             // Create the new house instance
             House house = new House.HouseBuilder()
                 .Title(createHouseCommand.Title)
@@ -88,7 +88,8 @@ namespace RentStuff.Property.Application.HouseServices
                 .OwnerName(createHouseCommand.OwnerName)
                 .GenderRestriction(genderRestriction).Build();
 
-            house.Dimension = CreateDimensionInstance(createHouseCommand.DimensionType, createHouseCommand.DimensionStringValue,
+            house.Dimension = CreateDimensionInstance(createHouseCommand.DimensionType,
+                createHouseCommand.DimensionStringValue,
                 createHouseCommand.DimensionIntValue, house);
             // Save the new house instance
             _houseRepository.SaveorUpdate(house);
@@ -97,16 +98,18 @@ namespace RentStuff.Property.Application.HouseServices
             return house.Id;
         }
 
-        private Dimension CreateDimensionInstance(string dimensionType, string dimensionStringValue, decimal dimensionDecimalValue,
+        private Dimension CreateDimensionInstance(string dimensionType, string dimensionStringValue,
+            decimal dimensionDecimalValue,
             House house)
         {
             if (!string.IsNullOrWhiteSpace(dimensionType))
             {
                 if (string.IsNullOrWhiteSpace(dimensionStringValue))
                 {
-                    throw new NullReferenceException($"DimensionStringValue cannot be null if the DimensionType is not null. OwnerEmail: {house.OwnerEmail}");
+                    throw new NullReferenceException(
+                        $"DimensionStringValue cannot be null if the DimensionType is not null. OwnerEmail: {house.OwnerEmail}");
                 }
-                var dimension = new Dimension((DimensionType)Enum.Parse(typeof(DimensionType), dimensionType),
+                var dimension = new Dimension((DimensionType) Enum.Parse(typeof(DimensionType), dimensionType),
                     dimensionStringValue, dimensionDecimalValue, house);
                 //_houseRepository.SaveorUpdateDimension(dimension);
                 house.Dimension = dimension;
@@ -135,17 +138,22 @@ namespace RentStuff.Property.Application.HouseServices
                 throw new InvalidDataException(
                     $"Could not find coordinates from the given address: {updateHouseCommand.Area}");
             }
-            PropertyType propertyType = (PropertyType)Enum.Parse(typeof(PropertyType), updateHouseCommand.PropertyType);
+            PropertyType propertyType = (PropertyType) Enum.Parse(typeof(PropertyType), updateHouseCommand.PropertyType);
             GenderRestriction genderRestriction =
                 (GenderRestriction) Enum.Parse(typeof(GenderRestriction), updateHouseCommand.GenderRestriction);
 
             Dimension dimension = CreateDimensionInstance(updateHouseCommand.DimensionType,
                 updateHouseCommand.DimensionStringValue, updateHouseCommand.DimensionIntValue, house);
-            house.UpdateHouse(updateHouseCommand.Title, updateHouseCommand.MonthlyRent, updateHouseCommand.NumberOfBedrooms,
-                updateHouseCommand.NumberOfKitchens, updateHouseCommand.NumberOfBathrooms, updateHouseCommand.InternetAvailable,
-                updateHouseCommand.LandlinePhoneAvailable, updateHouseCommand.CableTvAvailable, dimension, updateHouseCommand.GarageAvailable,
-                updateHouseCommand.SmokingAllowed, propertyType, updateHouseCommand.OwnerEmail, updateHouseCommand.OwnerPhoneNumber,
-                updateHouseCommand.HouseNo, updateHouseCommand.StreetNo, updateHouseCommand.Area, updateHouseCommand.OwnerName,
+            house.UpdateHouse(updateHouseCommand.Title, updateHouseCommand.MonthlyRent,
+                updateHouseCommand.NumberOfBedrooms,
+                updateHouseCommand.NumberOfKitchens, updateHouseCommand.NumberOfBathrooms,
+                updateHouseCommand.InternetAvailable,
+                updateHouseCommand.LandlinePhoneAvailable, updateHouseCommand.CableTvAvailable, dimension,
+                updateHouseCommand.GarageAvailable,
+                updateHouseCommand.SmokingAllowed, propertyType, updateHouseCommand.OwnerEmail,
+                updateHouseCommand.OwnerPhoneNumber,
+                updateHouseCommand.HouseNo, updateHouseCommand.StreetNo, updateHouseCommand.Area,
+                updateHouseCommand.OwnerName,
                 updateHouseCommand.Description, genderRestriction, coordinates.Item1, coordinates.Item2);
 
             _houseRepository.SaveorUpdate(house);
@@ -175,7 +183,7 @@ namespace RentStuff.Property.Application.HouseServices
                 throw new InstanceNotFoundException($"No house could be found for the given id. HouseId: {houseId}");
             }
         }
-        
+
         /// <summary>
         /// Gets the house by providing the owner's email id
         /// </summary>
@@ -200,10 +208,12 @@ namespace RentStuff.Property.Application.HouseServices
                 dimension = house.Dimension.StringValue + " " + house.Dimension.DimensionType;
             }
 
-            return new HouseFullRepresentation(house.Id, house.Title, house.MonthlyRent, house.NumberOfBedrooms, 
+            return new HouseFullRepresentation(house.Id, house.Title, house.MonthlyRent, house.NumberOfBedrooms,
                 house.NumberOfKitchens, house.NumberOfBathrooms, house.InternetAvailable, house.LandlinePhoneAvailable,
-                house.CableTvAvailable, dimension, house.GarageAvailable, house.SmokingAllowed, house.PropertyType.ToString(), 
-                house.OwnerEmail, house.OwnerPhoneNumber, house.Latitude, house.Longitude, house.HouseNo, house.StreetNo, house.Area, 
+                house.CableTvAvailable, dimension, house.GarageAvailable, house.SmokingAllowed,
+                house.PropertyType.ToString(),
+                house.OwnerEmail, house.OwnerPhoneNumber, house.Latitude, house.Longitude, house.HouseNo, house.StreetNo,
+                house.Area,
                 house.GetImageList(), house.OwnerName, house.Description, house.GenderRestriction.ToString());
         }
 
@@ -218,7 +228,8 @@ namespace RentStuff.Property.Application.HouseServices
             // Get the coordinates for the location using the Geocoding API service
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
             // Get 20 coordinates within the range of around 30 kilometers radius
-            IList<House> houses = _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+            IList<House> houses = _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2,
+                pageNo);
             return ConvertHouseToRepresentation(houses);
         }
 
@@ -230,7 +241,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         public IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType, int pageNo = 0)
         {
-            var convertedPropertyType = (PropertyType)Enum.Parse(typeof(PropertyType), propertyType);
+            var convertedPropertyType = (PropertyType) Enum.Parse(typeof(PropertyType), propertyType);
             IList<House> houses = _houseRepository.SearchHousesByPropertyType(convertedPropertyType, pageNo);
             return ConvertHouseToRepresentation(houses);
         }
@@ -248,8 +259,8 @@ namespace RentStuff.Property.Application.HouseServices
             // Get the coordinates for the location using the Geocoding API service
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
             // Get 20 coordinates within the range of around 30 kilometers radius
-            IList<House> houses = _houseRepository.SearchHousesByCoordinatesAndPropertyType(coordinates.Item1, 
-                coordinates.Item2, (PropertyType)Enum.Parse(typeof(PropertyType), propertyType), pageNo);
+            IList<House> houses = _houseRepository.SearchHousesByCoordinatesAndPropertyType(coordinates.Item1,
+                coordinates.Item2, (PropertyType) Enum.Parse(typeof(PropertyType), propertyType), pageNo);
             return ConvertHouseToRepresentation(houses);
         }
 
@@ -262,7 +273,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         public HouseCountRepresentation GetRecordsCount(string propertyType, string location, string email)
         {
-            Tuple<int,int> recordCount = null;
+            Tuple<int, int> recordCount = null;
             // If location is not null
             if (!string.IsNullOrWhiteSpace(location))
             {
@@ -272,7 +283,8 @@ namespace RentStuff.Property.Application.HouseServices
                 if (!string.IsNullOrWhiteSpace(propertyType))
                 {
                     var propertyTypeEnum = (PropertyType) Enum.Parse(typeof(PropertyType), propertyType);
-                    recordCount = _houseRepository.GetRecordCountByLocationAndPropertyType(coordinates.Item1, coordinates.Item2,
+                    recordCount = _houseRepository.GetRecordCountByLocationAndPropertyType(coordinates.Item1,
+                        coordinates.Item2,
                         propertyTypeEnum);
                     return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
                 }
@@ -285,7 +297,7 @@ namespace RentStuff.Property.Application.HouseServices
             }
             if (!string.IsNullOrWhiteSpace(propertyType))
             {
-                var propertyTypeEnum = (PropertyType)Enum.Parse(typeof(PropertyType), propertyType);
+                var propertyTypeEnum = (PropertyType) Enum.Parse(typeof(PropertyType), propertyType);
                 recordCount = _houseRepository.GetRecordCountByPropertyType(propertyTypeEnum);
                 return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
             }
@@ -359,7 +371,7 @@ namespace RentStuff.Property.Application.HouseServices
                 }
             }
         }
-        
+
         /// <summary>
         /// Delete the images for the house
         /// </summary>
@@ -374,7 +386,15 @@ namespace RentStuff.Property.Application.HouseServices
                 foreach (var imageId in imagesList)
                 {
                     house.HouseImages.Remove(imageId);
-                    _photoStorageService.DeletePhoto(imageId);
+                    try
+                    {
+                        _photoStorageService.DeletePhoto(imageId);
+                    }
+                    catch (Exception)
+                    {
+                        // Do nothing. Even if it is not deleted from Google Cloud, just delete it from our 
+                        // database
+                    }
                 }
                 _houseRepository.SaveorUpdate(house);
                 _logger.Info("Deleted images from house successfully. HouseId: {0}", house.Id);

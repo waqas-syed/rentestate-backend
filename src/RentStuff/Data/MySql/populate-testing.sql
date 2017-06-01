@@ -96,7 +96,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `houseimages` WRITE;
 /*!40000 ALTER TABLE `houseimages` DISABLE KEYS */;
-INSERT INTO `houseimages` VALUES ('63726f25-a7a3-4111-9098-2183ffcba544','https://storage.googleapis.com/rentstuff-1022-photo-storage-bucket/IMG_90bffa65-9f88-4259-8034-a814f8a7a3f6.jpg'),('63726f25-a7a3-4111-9098-2183ffcba544','https://storage.googleapis.com/rentstuff-1022-photo-storage-bucket/IMG_be909862-4fc7-4d37-a859-45dbf9937d9e.jpg');
 /*!40000 ALTER TABLE `houseimages` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -109,4 +108,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-20 15:52:49
+-- Dump completed on 2017-06-02  0:50:49
