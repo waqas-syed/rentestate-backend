@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 
 namespace RentStuff.Common.Domain.Model
 {
@@ -52,6 +54,36 @@ namespace RentStuff.Common.Domain.Model
             if (currentNumber == Decimal.Zero)
             {
                 throw new NullReferenceException("Given nuumber is 0");
+            }
+        }
+
+        /// <summary>
+        /// Checks if the given email is in a valid format. Throws exception if it is not.
+        /// </summary>
+        /// <param name="emailAddress"></param>
+        public static void IsEmailValid(string emailAddress)
+        {
+            try
+            {
+                MailAddress m = new MailAddress(emailAddress);
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException("Email is not in a valid format");
+            }
+        }
+
+        /// <summary>
+        /// Check if the given phone number is in a valid format. Throws exception if it is not
+        /// </summary>
+        /// <param name="phoneNumber"></param>
+        public static void IsPhoneNumberValid(string phoneNumber)
+        {
+            Regex regex = new Regex(@"^\d{11}$");
+            Match match = regex.Match(phoneNumber);
+            if (!match.Success)
+            {
+                throw new InvalidOperationException("Invalid phone number");
             }
         }
     }

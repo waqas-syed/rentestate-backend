@@ -84,6 +84,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentStuff.Identity.Ports.Ad
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentStuff.Identity.Application.IntegrationTests", "IdentityAndAccess\Application\RentStuff.Identity.Application.IntegrationTests\RentStuff.Identity.Application.IntegrationTests.csproj", "{DDCD4227-D0FC-4702-8A05-BD5C5B60F79C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{AB5FAD01-A68C-4228-B958-1D4CEA65FC68}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain.Model", "Domain.Model", "{786D1F52-37E9-4B56-93C9-5C6F8D3D128F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentStuff.Services.Domain.Model", "Services\Domain.Model\RentStuff.Services.Domain.Model\RentStuff.Services.Domain.Model.csproj", "{8FD494E6-AC07-47F4-A868-59163E4F4477}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentStuff.Services.Domain.Model.UnitTests", "Services\Domain.Model\RentStuff.Services.Domain.Model.UnitTests\RentStuff.Services.Domain.Model.UnitTests.csproj", "{2ABC48C3-1C71-4D95-BA87-117C1C6D42B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -178,6 +186,14 @@ Global
 		{DDCD4227-D0FC-4702-8A05-BD5C5B60F79C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDCD4227-D0FC-4702-8A05-BD5C5B60F79C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDCD4227-D0FC-4702-8A05-BD5C5B60F79C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FD494E6-AC07-47F4-A868-59163E4F4477}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FD494E6-AC07-47F4-A868-59163E4F4477}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FD494E6-AC07-47F4-A868-59163E4F4477}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FD494E6-AC07-47F4-A868-59163E4F4477}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ABC48C3-1C71-4D95-BA87-117C1C6D42B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ABC48C3-1C71-4D95-BA87-117C1C6D42B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ABC48C3-1C71-4D95-BA87-117C1C6D42B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ABC48C3-1C71-4D95-BA87-117C1C6D42B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -214,5 +230,8 @@ Global
 		{173514CF-4CB5-4FC5-8931-E78D963C85B9} = {006C4527-5731-4B65-AE75-6328231EDAB0}
 		{4DA59693-D36F-49B7-BF3B-512B4FF5B147} = {CE44C7F9-5D1C-4608-AA8E-252B40359F74}
 		{DDCD4227-D0FC-4702-8A05-BD5C5B60F79C} = {6C7AB180-01E4-43AF-AAED-369EFBC572E5}
+		{786D1F52-37E9-4B56-93C9-5C6F8D3D128F} = {AB5FAD01-A68C-4228-B958-1D4CEA65FC68}
+		{8FD494E6-AC07-47F4-A868-59163E4F4477} = {786D1F52-37E9-4B56-93C9-5C6F8D3D128F}
+		{2ABC48C3-1C71-4D95-BA87-117C1C6D42B6} = {786D1F52-37E9-4B56-93C9-5C6F8D3D128F}
 	EndGlobalSection
 EndGlobal

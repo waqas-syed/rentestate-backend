@@ -250,6 +250,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             set
             {
                 Assertion.AssertStringNotNullorEmpty(value);
+                Assertion.IsEmailValid(value);
                 _ownerEmail = value;
             }
         }
@@ -264,12 +265,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             set
             {
                 Assertion.AssertStringNotNullorEmpty(value);
-                Regex regex = new Regex(@"^\d{11}$");
-                Match match = regex.Match(value);
-                if (!match.Success)
-                {
-                    throw new InvalidOperationException("Invalid phone number");
-                }
+                Assertion.IsPhoneNumberValid(value);
                 _ownerPhoneNumber = value;
             }
         }
