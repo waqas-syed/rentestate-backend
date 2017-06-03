@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using RentStuff.Common.Domain.Model;
 
 namespace RentStuff.Services.Domain.Model.ServicesAggregate
@@ -38,6 +39,29 @@ namespace RentStuff.Services.Domain.Model.ServicesAggregate
             SetServiceProviderType(serviceProviderType);
             SetServiceEntityType(serviceEntityType);
             DateEstablished = dateEstablished;
+            Ratings = new Rating();
+            Ratings.Service = this;
+            Reviews = new List<Review>();
+        }
+
+        /// <summary>
+        /// Add a new rating for this service
+        /// </summary>
+        /// <param name="ratingStars"></param>
+        public void AddNewRating(int ratingStars)
+        {
+            this.Ratings.UpdateRatings(ratingStars);
+        }
+
+        /// <summary>
+        /// Add a review to this service
+        /// </summary>
+        /// <param name="authorName"></param>
+        /// <param name="authorEmail"></param>
+        /// <param name="reviewDescription"></param>
+        public void AddReview(string authorName, string authorEmail, string reviewDescription)
+        {
+            Reviews.Add(new Review(authorName, authorEmail, reviewDescription));
         }
 
         public string Id
@@ -145,6 +169,16 @@ namespace RentStuff.Services.Domain.Model.ServicesAggregate
         public DateTime DateEstablished { get; set; }
 
         /// <summary>
+        /// Rating of this service by users
+        /// </summary>
+        public Rating Ratings { get; set; }
+
+        /// <summary>
+        /// Reviews of this service by users
+        /// </summary>
+        public IList<Review> Reviews { get; set; }
+
+        /// <summary>
         /// Instance builder for the Service class
         /// </summary>
         public class ServiceBuilder
@@ -157,6 +191,8 @@ namespace RentStuff.Services.Domain.Model.ServicesAggregate
             private string _serviceProviderType;
             private string _serviceEntityType;
             private DateTime _dateEstablished;
+            private Rating _rating;
+            private IList<Review> _reviews;
 
             /// <summary>
             /// Name
@@ -243,6 +279,28 @@ namespace RentStuff.Services.Domain.Model.ServicesAggregate
             public ServiceBuilder DateEstablished(DateTime dateEstablished)
             {
                 _dateEstablished = dateEstablished;
+                return this;
+            }
+
+            /// <summary>
+            /// user Ratings
+            /// </summary>
+            /// <param name="rating"></param>
+            /// <returns></returns>
+            public ServiceBuilder Rating(Rating rating)
+            {
+                _rating = rating;
+                return this;
+            }
+
+            /// <summary>
+            /// User Reviews
+            /// </summary>
+            /// <param name="reviews"></param>
+            /// <returns></returns>
+            public ServiceBuilder Reviews(IList<Review> reviews)
+            {
+                _reviews = reviews;
                 return this;
             }
 

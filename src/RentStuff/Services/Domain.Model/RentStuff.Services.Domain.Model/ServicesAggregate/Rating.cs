@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RentStuff.Services.Domain.Model.ServicesAggregate
 {
@@ -28,7 +24,7 @@ namespace RentStuff.Services.Domain.Model.ServicesAggregate
         /// <summary>
         /// Update the rating by processing the current given value
         /// </summary>
-        public void UpdateRatings(int ratingStars)
+        internal void UpdateRatings(int ratingStars)
         {
             if (ratingStars.Equals(1))
             {
@@ -60,6 +56,8 @@ namespace RentStuff.Services.Domain.Model.ServicesAggregate
         }
 
         public decimal RatingStars { get { return _rating; } }
+
+        public Service Service { get; set; }
 
         public decimal FiveStarVotes { get { return _fiveStarVotes; } }
 
