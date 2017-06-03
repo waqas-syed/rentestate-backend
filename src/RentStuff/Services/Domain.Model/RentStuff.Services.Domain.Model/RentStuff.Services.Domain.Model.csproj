@@ -41,11 +41,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServicesAggregate\Rating.cs" />
-    <Compile Include="ServicesAggregate\Review.cs" />
-    <Compile Include="ServicesAggregate\Service.cs" />
-    <Compile Include="ServicesAggregate\ServiceProviderType.cs" />
-    <Compile Include="ServicesAggregate\ServiceEntityType.cs" />
+    <Compile Include="ServiceAggregate\Ratings.cs" />
+    <Compile Include="ServiceAggregate\Review.cs" />
+    <Compile Include="ServiceAggregate\Service.cs" />
+    <Compile Include="ServiceAggregate\ServiceProfessionType.cs" />
+    <Compile Include="ServiceAggregate\ServiceEntityType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\RentStuff.Common.Domain.Model\RentStuff.Common.Domain.Model.csproj">

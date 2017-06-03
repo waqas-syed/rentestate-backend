@@ -1,5 +1,5 @@
 ﻿
-namespace RentStuff.Services.Domain.Model.ServicesAggregate
+namespace RentStuff.Services.Domain.Model.ServiceAggregate
 {
     /// <summary>
     /// User review about a particular service

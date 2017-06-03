@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RentStuff.Services.Domain.Model.ServicesAggregate
+﻿namespace RentStuff.Services.Domain.Model.ServiceAggregate
 {
     /// <summary>
     ///  To which profession this service belongs to
     /// </summary>
-    public enum ServiceProviderType
+    public enum ServiceProfessionType
     {
         Plumber,
         Electrician,

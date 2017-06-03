@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using RentStuff.Services.Domain.Model.ServicesAggregate;
+using RentStuff.Services.Domain.Model.ServiceAggregate;
 
 namespace RentStuff.Services.Domain.Model.UnitTests
 {
@@ -17,7 +17,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
             string email = "smithy@smithereene1234567.com";
-            string serviceProviderType = ServiceProviderType.Welder.ToString();
+            string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
@@ -30,7 +30,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             Assert.AreEqual(location, service.Location);
             Assert.AreEqual(phoneNumber, service.PhoneNumber);
             Assert.AreEqual(email, service.Email);
-            Assert.AreEqual((ServiceProviderType)Enum.Parse(typeof(ServiceProviderType), serviceProviderType),
+            Assert.AreEqual((ServiceProfessionType)Enum.Parse(typeof(ServiceProfessionType), serviceProviderType),
                             service.GetServiceProviderType());
             Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType),
                             service.GetServiceEntityType());
@@ -46,7 +46,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
             string email = "smithy@smithereene1234567.com";
-            string serviceProviderType = ServiceProviderType.Welder.ToString();
+            string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Description(description).Location(location)
@@ -63,7 +63,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string description = "We create the worlds best swords, spears and hammers!";
             string phoneNumber = "03455138018";
             string email = "smithy@smithereene1234567.com";
-            string serviceProviderType = ServiceProviderType.Welder.ToString();
+            string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
@@ -80,7 +80,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string description = "We create the worlds best swords, spears and hammers!";
             string location = "Pindora, Rawalpindi, Pakistan";
             string email = "smithy@smithereene1234567.com";
-            string serviceProviderType = ServiceProviderType.Welder.ToString();
+            string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
@@ -98,7 +98,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string description = "We create the worlds best swords, spears and hammers!";
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
-            string serviceProviderType = ServiceProviderType.Welder.ToString();
+            string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
@@ -135,7 +135,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
             string email = "smithy@smithereene1234567.com";
-            string serviceProviderType = ServiceProviderType.Welder.ToString();
+            string serviceProviderType = ServiceProfessionType.Welder.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).Email(email)
@@ -156,7 +156,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
             string email = "smithy@smithereene1234567.com";
-            string serviceProviderType = ServiceProviderType.Welder.ToString();
+            string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service(name, description, location, phoneNumber, email, 
@@ -238,7 +238,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
             string email = "smithy@smithereene1234567.com";
-            string serviceProviderType = ServiceProviderType.Welder.ToString();
+            string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service(name, description, location, phoneNumber, email,
@@ -299,7 +299,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
             string email = "smithy@smithereene1234567.com";
-            string serviceProviderType = ServiceProviderType.Welder.ToString();
+            string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service(name, description, location, phoneNumber, email,

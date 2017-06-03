@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace RentStuff.Services.Domain.Model.ServicesAggregate
+namespace RentStuff.Services.Domain.Model.ServiceAggregate
 {
     /// <summary>
     /// The Rating for a service
     /// </summary>
-    public class Rating
+    public class Ratings
     {
         private decimal _rating = 0;
         private decimal _oneStarVotes;
@@ -17,7 +17,7 @@ namespace RentStuff.Services.Domain.Model.ServicesAggregate
         /// <summary>
         /// Default Constructor
         /// </summary>
-        public Rating()
+        public Ratings()
         {
         }
 

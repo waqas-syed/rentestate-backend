@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using RentStuff.Common.Domain.Model;
 
-namespace RentStuff.Services.Domain.Model.ServicesAggregate
+namespace RentStuff.Services.Domain.Model.ServiceAggregate
 {
     /// <summary>
     /// Represents an individual or business in a profression, who can provide it's services to people
@@ -15,7 +15,7 @@ namespace RentStuff.Services.Domain.Model.ServicesAggregate
         private string _location;
         private string _phoneNumber;
         private string _email;
-        private ServiceProviderType _serviceProviderType;
+        private ServiceProfessionType _serviceProviderType;
         private ServiceEntityType _serviceEntityType;
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace RentStuff.Services.Domain.Model.ServicesAggregate
             SetServiceProviderType(serviceProviderType);
             SetServiceEntityType(serviceEntityType);
             DateEstablished = dateEstablished;
-            Ratings = new Rating();
+            Ratings = new Ratings();
             Ratings.Service = this;
             Reviews = new List<Review>();
         }
@@ -134,14 +134,14 @@ namespace RentStuff.Services.Domain.Model.ServicesAggregate
         /// <param name="serviceProviderType"></param>
         public void SetServiceProviderType(string serviceProviderType)
         {
-            _serviceProviderType = (ServiceProviderType)Enum.Parse(typeof(ServiceProviderType), serviceProviderType);
+            _serviceProviderType = (ServiceProfessionType)Enum.Parse(typeof(ServiceProfessionType), serviceProviderType);
         }
 
         /// <summary>
         /// Returns the ServiceProviderType
         /// </summary>
         /// <returns></returns>
-        public ServiceProviderType GetServiceProviderType()
+        public ServiceProfessionType GetServiceProviderType()
         {
             return _serviceProviderType;
         }
@@ -171,7 +171,7 @@ namespace RentStuff.Services.Domain.Model.ServicesAggregate
         /// <summary>
         /// Rating of this service by users
         /// </summary>
-        public Rating Ratings { get; set; }
+        public Ratings Ratings { get; set; }
 
         /// <summary>
         /// Reviews of this service by users
@@ -191,7 +191,7 @@ namespace RentStuff.Services.Domain.Model.ServicesAggregate
             private string _serviceProviderType;
             private string _serviceEntityType;
             private DateTime _dateEstablished;
-            private Rating _rating;
+            private Ratings _rating;
             private IList<Review> _reviews;
 
             /// <summary>
@@ -287,7 +287,7 @@ namespace RentStuff.Services.Domain.Model.ServicesAggregate
             /// </summary>
             /// <param name="rating"></param>
             /// <returns></returns>
-            public ServiceBuilder Rating(Rating rating)
+            public ServiceBuilder Rating(Ratings rating)
             {
                 _rating = rating;
                 return this;
