@@ -143,12 +143,13 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         }
 
         /// <summary>
-        /// Returns the ServiceProviderType
+        /// Gets the ServiceProfessionalType. If you want to set this value, provide a string to the
+        /// SetServiceProfessionType method in this class. The reason for a separate method is to accept a 
+        /// string and convert it into ServiceProfessionType enum
         /// </summary>
-        /// <returns></returns>
-        public virtual ServiceProfessionType GetServiceProfessionType()
+        public virtual ServiceProfessionType ServiceProfessionType
         {
-            return _serviceProfessionType;
+            get { return _serviceProfessionType; }
         }
 
         /// <summary>
@@ -160,14 +161,15 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         }
 
         /// <summary>
-        /// Returns the ServiceEntityType
+        /// Gets the ServiceEntityType. If you want to set this value, provide a string to the
+        /// SetServiceEntityType method in this class. The reason for a separate method is to accept a 
+        /// string and convert it into ServiceEntityType enum
         /// </summary>
-        /// <returns></returns>
-        public virtual ServiceEntityType GetServiceEntityType()
+        public virtual ServiceEntityType ServiceEntityType
         {
-            return _serviceEntityType;
+            get { return _serviceEntityType; }
         }
-        
+
         /// <summary>
         /// When was this service established by the provider
         /// </summary>

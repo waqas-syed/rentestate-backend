@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Configuration;
-using System.Reflection;
-using System.Reflection.Emit;
-using NHibernate;
-using NHibernate.Mapping;
 using Ninject;
 using NUnit.Framework;
 using RentStuff.Common;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
-using RentStuff.Services.Infrastructure.Persistence.NHibernateSession;
 using RentStuff.Services.Infrastructure.Persistence.NinjectModules;
-using RentStuff.Services.Infrastructure.Persistence.Repositories;
 
 namespace RentStuff.Services.Infrastructure.Persistence.Tests
 {
@@ -49,16 +43,11 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             DateTime dateEstablished = DateTime.Now;
             Service service = new Service(name, description, location, phoneNumber,
                         email, profession, entity, dateEstablished);
-            /*NHibernateSessionCompound nHibernateSessionCompound = new NHibernateSessionCompound();
-            ServicesRepository servicesRepository = new ServicesRepository(nHibernateSessionCompound.SessionFactory);
-            servicesRepository.SaveOrUpdate(service);
-
-            var assemblies = new Assembly[] {Assembly.GetAssembly(typeof(ServicesRepository))};*/
             var kernel = new StandardKernel();
             kernel.Load<NHibernateModule>();
             var servicesRepository = kernel.Get<IServicesRepository>();
             servicesRepository.SaveOrUpdate(service);
-            var serviceByName = servicesRepository.GetServiceByName("name");
+            var serviceByName = servicesRepository.GetServiceByName(name);
             Assert.AreEqual(1, serviceByName.Count);
             Assert.AreEqual(name, serviceByName[0].Name);
             Assert.AreEqual(description, serviceByName[0].Description);
@@ -66,9 +55,9 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(phoneNumber, serviceByName[0].PhoneNumber);
             Assert.AreEqual(email, serviceByName[0].Email);
             Assert.AreEqual((ServiceProfessionType)Enum.Parse(typeof(ServiceProfessionType), profession),
-                serviceByName[0].GetServiceProfessionType());
+                serviceByName[0].ServiceProfessionType);
             Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), entity),
-                serviceByName[0].GetServiceEntityType());
+                serviceByName[0].ServiceEntityType);
         }
     }
 }

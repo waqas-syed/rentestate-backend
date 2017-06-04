@@ -52,6 +52,10 @@ DROP TABLE IF EXISTS `HouseImages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
+DROP TABLE IF EXISTS `service`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
 --
 -- Table structure for table `__migrationhistory`
 --
@@ -223,5 +227,22 @@ CREATE TABLE `houseimages` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+--
+-- Table structure for table `service`
+--
+
+CREATE TABLE `service` (
+  `id` varchar(40) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  `location` varchar(70) NOT NULL,
+  `phone_number` varchar(13) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `service_entity_type` varchar(32) NOT NULL,
+  `service_profession_type` varchar(32) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 -- Dump completed on 2017-02-24 10:32:53
