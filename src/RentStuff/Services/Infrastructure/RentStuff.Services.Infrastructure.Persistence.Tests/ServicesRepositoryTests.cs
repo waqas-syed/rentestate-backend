@@ -2,6 +2,7 @@
 using System.Configuration;
 using Ninject;
 using NUnit.Framework;
+using Remotion.Linq.Parsing.ExpressionTreeVisitors;
 using RentStuff.Common;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
 using RentStuff.Services.Infrastructure.Persistence.NinjectModules;
@@ -43,10 +44,19 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             DateTime dateEstablished = DateTime.Now;
             Service service = new Service(name, description, location, phoneNumber,
                         email, profession, entity, dateEstablished);
+
+            // Provide a review to save
+            string authorName = "King Arthur";
+            string authorEmail = "kingofthelingbling@kingdomcup12345678.com";
+            string reviewDescription = "Off goes your head";
+            service.AddReview(authorName, authorEmail, reviewDescription);
+
             var kernel = new StandardKernel();
             kernel.Load<NHibernateModule>();
             var servicesRepository = kernel.Get<IServicesRepository>();
             servicesRepository.SaveOrUpdate(service);
+
+            // Retrieve the result
             var retrievedService = servicesRepository.GetServiceByName(name);
             Assert.AreEqual(1, retrievedService.Count);
             Assert.AreEqual(name, retrievedService[0].Name);
@@ -58,8 +68,18 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
                 retrievedService[0].ServiceProfessionType);
             Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), entity),
                 retrievedService[0].ServiceEntityType);
+
+            // Check the Ratings
             Assert.IsNotNull(retrievedService[0].Ratings.Service);
             Assert.AreEqual(service, retrievedService[0].Ratings.Service);
+
+            // Check the Reviews
+            Assert.IsNotNull(retrievedService[0].Reviews);
+            Assert.AreEqual(1, retrievedService[0].Reviews.Count);
+            Assert.AreEqual(authorName, retrievedService[0].Reviews[0].Authorname);
+            Assert.AreEqual(authorEmail, retrievedService[0].Reviews[0].AuthorEmail);
+            Assert.AreEqual(reviewDescription, retrievedService[0].Reviews[0].ReviewDescription);
+            Assert.AreEqual(service, retrievedService[0].Reviews[0].Service);
         }
     }
 }

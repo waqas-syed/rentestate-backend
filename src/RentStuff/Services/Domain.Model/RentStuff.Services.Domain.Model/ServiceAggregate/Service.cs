@@ -66,7 +66,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <param name="reviewDescription"></param>
         public virtual void AddReview(string authorName, string authorEmail, string reviewDescription)
         {
-            Reviews.Add(new Review(authorName, authorEmail, reviewDescription));
+            Reviews.Add(new Review(authorName, authorEmail, reviewDescription, this));
         }
 
         public virtual string Id

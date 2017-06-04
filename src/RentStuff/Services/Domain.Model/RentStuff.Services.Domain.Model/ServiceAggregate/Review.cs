@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace RentStuff.Services.Domain.Model.ServiceAggregate
 {
     /// <summary>
@@ -6,20 +8,28 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
     /// </summary>
     public class Review
     {
+        private string _id = Guid.NewGuid().ToString();
+
+        public Review()
+        {
+            
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object" /> class.
         /// </summary>
-        public Review(string authorname, string authorEmail, string reviewDescription)
+        public Review(string authorname, string authorEmail, string reviewDescription, Service service)
         {
             Authorname = authorname;
             AuthorEmail = authorEmail;
             ReviewDescription = reviewDescription;
+            Service = service;
         }
 
-        public string Id { get; set; }
-        public string Authorname { get; set; }
-        public string AuthorEmail { get; set; }
-        public string ReviewDescription { get; set; }
+        public virtual string Id { get { return _id; } }
+        public virtual string Authorname { get; set; }
+        public virtual string AuthorEmail { get; set; }
+        public virtual string ReviewDescription { get; set; }
+        public virtual Service Service { get; set; }
     }
 }

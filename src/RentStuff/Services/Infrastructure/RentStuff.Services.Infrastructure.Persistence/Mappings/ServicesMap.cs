@@ -19,6 +19,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Mappings
             Map(x => x.ServiceProfessionType).Column("service_profession_type").CustomType(typeof(ServiceProfessionType));
             Map(x => x.ServiceEntityType).Column("service_entity_type").CustomType(typeof(ServiceEntityType));
             HasOne(x => x.Ratings).Cascade.All();
+            HasMany(x => x.Reviews).KeyColumn("service_id").Inverse().Cascade.AllDeleteOrphan();
         }
     }
 }

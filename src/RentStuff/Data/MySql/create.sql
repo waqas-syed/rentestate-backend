@@ -52,11 +52,15 @@ DROP TABLE IF EXISTS `HouseImages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
-DROP TABLE IF EXISTS `service`;
+DROP TABLE IF EXISTS `ratings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
-DROP TABLE IF EXISTS `ratings`;
+DROP TABLE IF EXISTS `review`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+DROP TABLE IF EXISTS `service`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
@@ -247,6 +251,20 @@ CREATE TABLE `ratings` (
   `service_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Service_id` (`Service_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `review`
+--
+
+CREATE TABLE `review` (
+  `id` varchar(255) NOT NULL,
+  `author_name` varchar(255) DEFAULT NULL,
+  `author_email` varchar(255) DEFAULT NULL,
+  `review_description` varchar(255) DEFAULT NULL,
+  `service_id` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
