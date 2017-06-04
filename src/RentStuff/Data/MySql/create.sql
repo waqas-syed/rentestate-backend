@@ -56,6 +56,10 @@ DROP TABLE IF EXISTS `service`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
+DROP TABLE IF EXISTS `ratings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
 --
 -- Table structure for table `__migrationhistory`
 --
@@ -227,6 +231,24 @@ CREATE TABLE `houseimages` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+--
+-- Table structure for table `ratings`
+--
+
+CREATE TABLE `ratings` (
+  `Id` varchar(255) NOT NULL,
+  `rating_stars` decimal(19,5) DEFAULT NULL,
+  `five_star_votes` decimal(19,5) DEFAULT NULL,
+  `four_star_votes` decimal(19,5) DEFAULT NULL,
+  `three_star_votes` decimal(19,5) DEFAULT NULL,
+  `two_star_votes` decimal(19,5) DEFAULT NULL,
+  `one_star_votes` decimal(19,5) DEFAULT NULL,
+  `Service_id` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `Service_id` (`Service_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `service`

@@ -47,17 +47,19 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             kernel.Load<NHibernateModule>();
             var servicesRepository = kernel.Get<IServicesRepository>();
             servicesRepository.SaveOrUpdate(service);
-            var serviceByName = servicesRepository.GetServiceByName(name);
-            Assert.AreEqual(1, serviceByName.Count);
-            Assert.AreEqual(name, serviceByName[0].Name);
-            Assert.AreEqual(description, serviceByName[0].Description);
-            Assert.AreEqual(location, serviceByName[0].Location);
-            Assert.AreEqual(phoneNumber, serviceByName[0].PhoneNumber);
-            Assert.AreEqual(email, serviceByName[0].Email);
+            var retrievedService = servicesRepository.GetServiceByName(name);
+            Assert.AreEqual(1, retrievedService.Count);
+            Assert.AreEqual(name, retrievedService[0].Name);
+            Assert.AreEqual(description, retrievedService[0].Description);
+            Assert.AreEqual(location, retrievedService[0].Location);
+            Assert.AreEqual(phoneNumber, retrievedService[0].PhoneNumber);
+            Assert.AreEqual(email, retrievedService[0].Email);
             Assert.AreEqual((ServiceProfessionType)Enum.Parse(typeof(ServiceProfessionType), profession),
-                serviceByName[0].ServiceProfessionType);
+                retrievedService[0].ServiceProfessionType);
             Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), entity),
-                serviceByName[0].ServiceEntityType);
+                retrievedService[0].ServiceEntityType);
+            Assert.IsNotNull(retrievedService[0].Ratings.Service);
+            Assert.AreEqual(service, retrievedService[0].Ratings.Service);
         }
     }
 }

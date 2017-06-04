@@ -7,6 +7,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
     /// </summary>
     public class Ratings
     {
+        private string _id = Guid.NewGuid().ToString();
         private decimal _rating = 0;
         private decimal _oneStarVotes;
         private decimal _twoStarVotes;
@@ -24,7 +25,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Update the rating by processing the current given value
         /// </summary>
-        internal void UpdateRatings(int ratingStars)
+        protected internal virtual void UpdateRatings(int ratingStars)
         {
             if (ratingStars.Equals(1))
             {
@@ -55,18 +56,20 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
                                                 + _oneStarVotes),1);
         }
 
-        public decimal RatingStars { get { return _rating; } }
+        public virtual string Id { get {return _id;} }
 
-        public Service Service { get; set; }
+        public virtual decimal RatingStars { get { return _rating; } protected internal set { _rating = value; } }
 
-        public decimal FiveStarVotes { get { return _fiveStarVotes; } }
+        public virtual Service Service { get; set; }
 
-        public decimal FourStarVotes { get { return _fourStarVotes; } }
+        public virtual decimal FiveStarVotes { get { return _fiveStarVotes; } protected internal set { _fiveStarVotes = value; } }
 
-        public decimal ThreeStarVotes { get { return _threeStarVotes; } }
+        public virtual decimal FourStarVotes { get { return _fourStarVotes; } protected internal set { _fourStarVotes = value; } }
 
-        public decimal TwoStarVotes { get { return _twoStarVotes; } }
+        public virtual decimal ThreeStarVotes { get { return _threeStarVotes; } protected internal set { _threeStarVotes = value; } }
 
-        public decimal OneStarVotes { get { return _oneStarVotes; } }
+        public virtual decimal TwoStarVotes { get { return _twoStarVotes; } protected internal set { _twoStarVotes = value; } }
+
+        public virtual decimal OneStarVotes { get { return _oneStarVotes; } protected internal set { _oneStarVotes = value; } }
     }
 }

@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mappings\RatingsMap.cs" />
     <Compile Include="Mappings\ServicesMap.cs" />
     <Compile Include="NinjectModules\NHibernateModule.cs" />
     <Compile Include="NHibernateSession\NHibernateSessionCompound.cs" />
