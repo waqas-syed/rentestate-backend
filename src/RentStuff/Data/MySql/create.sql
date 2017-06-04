@@ -237,14 +237,14 @@ CREATE TABLE `houseimages` (
 --
 
 CREATE TABLE `ratings` (
-  `Id` varchar(255) NOT NULL,
+  `id` varchar(255) NOT NULL,
   `rating_stars` decimal(19,5) DEFAULT NULL,
   `five_star_votes` decimal(19,5) DEFAULT NULL,
   `four_star_votes` decimal(19,5) DEFAULT NULL,
   `three_star_votes` decimal(19,5) DEFAULT NULL,
   `two_star_votes` decimal(19,5) DEFAULT NULL,
   `one_star_votes` decimal(19,5) DEFAULT NULL,
-  `Service_id` varchar(255) DEFAULT NULL,
+  `service_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Service_id` (`Service_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

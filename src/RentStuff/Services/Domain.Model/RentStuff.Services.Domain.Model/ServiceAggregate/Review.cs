@@ -6,6 +6,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
     /// </summary>
     public class Review
     {
+
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object" /> class.
         /// </summary>
@@ -16,6 +17,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             ReviewDescription = reviewDescription;
         }
 
+        public string Id { get; set; }
         public string Authorname { get; set; }
         public string AuthorEmail { get; set; }
         public string ReviewDescription { get; set; }

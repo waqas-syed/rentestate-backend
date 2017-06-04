@@ -10,14 +10,14 @@ namespace RentStuff.Services.Infrastructure.Persistence.Mappings
     {
         public RatingsMap()
         {
-            Id(x => x.Id);
+            Id(x => x.Id).Column("id");
             Map(x => x.RatingStars).Column("rating_stars");
             Map(x => x.FiveStarVotes).Column("five_star_votes");
             Map(x => x.FourStarVotes).Column("four_star_votes");
             Map(x => x.ThreeStarVotes).Column("three_star_votes");
             Map(x => x.TwoStarVotes).Column("two_star_votes");
             Map(x => x.OneStarVotes).Column("one_star_votes");
-            References(x => x.Service).Unique();
+            References(x => x.Service).Column("service_id").Unique();
         }
     }
 }

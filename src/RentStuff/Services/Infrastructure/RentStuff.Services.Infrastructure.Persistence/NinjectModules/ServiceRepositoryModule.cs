@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ninject.Modules;
-using RentStuff.Services.Domain.Model.ServiceAggregate;
-using RentStuff.Services.Infrastructure.Persistence.Repositories;
+﻿using Ninject.Modules;
 
 namespace RentStuff.Services.Infrastructure.Persistence.NinjectModules
 {
