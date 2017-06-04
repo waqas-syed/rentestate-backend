@@ -22,7 +22,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).Email(email)
-                .ServiceProviderType(serviceProviderType).ServiceEntityType(serviceEntityType)
+                .ServiceProfessionType(serviceProviderType).ServiceEntityType(serviceEntityType)
                 .DateEstablished(dateEstablished).Build();
             Assert.IsNotNull(service);
             Assert.AreEqual(name, service.Name);
@@ -31,7 +31,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             Assert.AreEqual(phoneNumber, service.PhoneNumber);
             Assert.AreEqual(email, service.Email);
             Assert.AreEqual((ServiceProfessionType)Enum.Parse(typeof(ServiceProfessionType), serviceProviderType),
-                            service.GetServiceProviderType());
+                            service.GetServiceProfessionType());
             Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType),
                             service.GetServiceEntityType());
             Assert.AreEqual(dateEstablished, service.DateEstablished);
@@ -50,7 +50,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Description(description).Location(location)
-                .PhoneNumber(phoneNumber).Email(email).ServiceProviderType(serviceProviderType)
+                .PhoneNumber(phoneNumber).Email(email).ServiceProfessionType(serviceProviderType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
         }
 
@@ -67,7 +67,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
-                .PhoneNumber(phoneNumber).Email(email).ServiceProviderType(serviceProviderType)
+                .PhoneNumber(phoneNumber).Email(email).ServiceProfessionType(serviceProviderType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
         }
 
@@ -85,7 +85,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).Email(email)
-                .ServiceProviderType(serviceProviderType).ServiceEntityType(serviceEntityType)
+                .ServiceProfessionType(serviceProviderType).ServiceEntityType(serviceEntityType)
                 .DateEstablished(dateEstablished).Build();
         }
 
@@ -103,7 +103,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber)
-                .ServiceProviderType(serviceProviderType).ServiceEntityType(serviceEntityType)
+                .ServiceProfessionType(serviceProviderType).ServiceEntityType(serviceEntityType)
                 .DateEstablished(dateEstablished).Build();
         }
 
@@ -139,7 +139,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).Email(email)
-                .ServiceProviderType(serviceProviderType)
+                .ServiceProfessionType(serviceProviderType)
                 .DateEstablished(dateEstablished).Build();
         }
 

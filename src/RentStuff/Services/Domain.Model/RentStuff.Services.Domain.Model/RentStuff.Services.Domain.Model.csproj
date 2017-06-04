@@ -46,6 +46,7 @@
     <Compile Include="ServiceAggregate\Service.cs" />
     <Compile Include="ServiceAggregate\ServiceProfessionType.cs" />
     <Compile Include="ServiceAggregate\ServiceEntityType.cs" />
+    <Compile Include="ServiceAggregate\ServicesRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\RentStuff.Common.Domain.Model\RentStuff.Common.Domain.Model.csproj">

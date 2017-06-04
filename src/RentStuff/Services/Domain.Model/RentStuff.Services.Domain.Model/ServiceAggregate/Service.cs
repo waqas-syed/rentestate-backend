@@ -15,8 +15,13 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         private string _location;
         private string _phoneNumber;
         private string _email;
-        private ServiceProfessionType _serviceProviderType;
+        private ServiceProfessionType _serviceProfessionType;
         private ServiceEntityType _serviceEntityType;
+
+        public Service()
+        {
+            
+        }
 
         /// <summary>
         /// Initializes a new instance of the Service class
@@ -36,7 +41,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             Location = location;
             PhoneNumber = phoneNumber;
             Email = email;
-            SetServiceProviderType(serviceProviderType);
+            SetServiceProfessionType(serviceProviderType);
             SetServiceEntityType(serviceEntityType);
             DateEstablished = dateEstablished;
             Ratings = new Ratings();
@@ -48,7 +53,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// Add a new rating for this service
         /// </summary>
         /// <param name="ratingStars"></param>
-        public void AddNewRating(int ratingStars)
+        public virtual void AddNewRating(int ratingStars)
         {
             this.Ratings.UpdateRatings(ratingStars);
         }
@@ -59,12 +64,12 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <param name="authorName"></param>
         /// <param name="authorEmail"></param>
         /// <param name="reviewDescription"></param>
-        public void AddReview(string authorName, string authorEmail, string reviewDescription)
+        public virtual void AddReview(string authorName, string authorEmail, string reviewDescription)
         {
             Reviews.Add(new Review(authorName, authorEmail, reviewDescription));
         }
 
-        public string Id
+        public virtual string Id
         {
             get { return _id; }
         }
@@ -72,7 +77,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Name of the business
         /// </summary>
-        public string Name
+        public virtual string Name
         {
             get { return _name; }
             set
@@ -84,7 +89,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Description of the business
         /// </summary>
-        public string Description
+        public virtual string Description
         {
             get { return _description; }
             set { _description = value; }
@@ -93,7 +98,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Location of the service, either an office or where a service provider spends it's professional time
         /// </summary>
-        public string Location
+        public virtual string Location
         {
             get { return _location; }
             set
@@ -105,7 +110,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// The phone number of the service provider
         /// </summary>
-        public string PhoneNumber
+        public virtual string PhoneNumber
         {
             get { return _phoneNumber; }
             set
@@ -118,7 +123,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Email of the service provider
         /// </summary>
-        public string Email
+        public virtual string Email
         {
             get { return _email; }
             set
@@ -131,25 +136,25 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Sets the ServiceProviderType by parsing the string and converting it to the expected Enum
         /// </summary>
-        /// <param name="serviceProviderType"></param>
-        public void SetServiceProviderType(string serviceProviderType)
+        /// <param name="serviceProfessionType"></param>
+        public virtual void SetServiceProfessionType(string serviceProfessionType)
         {
-            _serviceProviderType = (ServiceProfessionType)Enum.Parse(typeof(ServiceProfessionType), serviceProviderType);
+            _serviceProfessionType = (ServiceProfessionType)Enum.Parse(typeof(ServiceProfessionType), serviceProfessionType);
         }
 
         /// <summary>
         /// Returns the ServiceProviderType
         /// </summary>
         /// <returns></returns>
-        public ServiceProfessionType GetServiceProviderType()
+        public virtual ServiceProfessionType GetServiceProfessionType()
         {
-            return _serviceProviderType;
+            return _serviceProfessionType;
         }
 
         /// <summary>
         /// Sets the ServiceEntityType by parsing the string and converting it to the expected Enum
         /// </summary>
-        public void SetServiceEntityType(string serviceEntityType)
+        public virtual void SetServiceEntityType(string serviceEntityType)
         {
             _serviceEntityType = (ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType);
         }
@@ -158,7 +163,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// Returns the ServiceEntityType
         /// </summary>
         /// <returns></returns>
-        public ServiceEntityType GetServiceEntityType()
+        public virtual ServiceEntityType GetServiceEntityType()
         {
             return _serviceEntityType;
         }
@@ -166,17 +171,17 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// When was this service established by the provider
         /// </summary>
-        public DateTime DateEstablished { get; set; }
+        public virtual DateTime DateEstablished { get; set; }
 
         /// <summary>
         /// Rating of this service by users
         /// </summary>
-        public Ratings Ratings { get; set; }
+        public virtual Ratings Ratings { get; set; }
 
         /// <summary>
         /// Reviews of this service by users
         /// </summary>
-        public IList<Review> Reviews { get; set; }
+        public virtual IList<Review> Reviews { get; set; }
 
         /// <summary>
         /// Instance builder for the Service class
@@ -188,7 +193,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             private string _location;
             private string _phoneNumber;
             private string _email;
-            private string _serviceProviderType;
+            private string _serviceProfessionType;
             private string _serviceEntityType;
             private DateTime _dateEstablished;
             private Ratings _rating;
@@ -250,13 +255,13 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             }
 
             /// <summary>
-            /// ServiceProviderType
+            /// ServiceProfessionType
             /// </summary>
-            /// <param name="serviceProviderType"></param>
+            /// <param name="serviceProfessionType"></param>
             /// <returns></returns>
-            public ServiceBuilder ServiceProviderType(string serviceProviderType)
+            public ServiceBuilder ServiceProfessionType(string serviceProfessionType)
             {
-                _serviceProviderType = serviceProviderType;
+                _serviceProfessionType = serviceProfessionType;
                 return this;
             }
 
@@ -306,7 +311,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
 
             public Service Build()
             {
-                return new Service(_name, _description, _location, _phoneNumber, _email, _serviceProviderType,
+                return new Service(_name, _description, _location, _phoneNumber, _email, _serviceProfessionType,
                     _serviceEntityType, _dateEstablished);
             }
         }
