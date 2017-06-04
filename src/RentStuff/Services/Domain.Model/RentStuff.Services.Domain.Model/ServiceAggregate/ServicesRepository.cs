@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace RentStuff.Services.Domain.Model.ServiceAggregate
 {
     /// <summary>
@@ -18,6 +20,13 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <param name="id"></param>
         /// <returns></returns>
         Service GetServiceById(string id);
+
+        /// <summary>
+        /// Get the Services by their Name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        IList<Service> GetServiceByName(string name);
 
         /// <summary>
         /// Delete the service

@@ -1,6 +1,9 @@
 ﻿using NHibernate;
+using Ninject;
 using Ninject.Modules;
+using RentStuff.Services.Domain.Model.ServiceAggregate;
 using RentStuff.Services.Infrastructure.Persistence.NHibernateSession;
+using RentStuff.Services.Infrastructure.Persistence.Repositories;
 
 namespace RentStuff.Services.Infrastructure.Persistence.NinjectModules
 {
@@ -8,8 +11,10 @@ namespace RentStuff.Services.Infrastructure.Persistence.NinjectModules
     {
         public override void Load()
         {
-            //Bind<ISessionFactory>().ToProvider<NhibernateSessionFactoryProvider>().InSingletonScope();
-            //Bind<ISession>().ToMethod(context => context.Kernel.Get<ISessionFactory>().OpenSession()).InRequestScope();
+            NHibernateSessionCompound nHibernateSessionCompound = new NHibernateSessionCompound();
+            Bind<ISessionFactory>().ToConstant(nHibernateSessionCompound.SessionFactory).InSingletonScope();
+            Bind<ISession>().ToMethod(context => context.Kernel.Get<ISessionFactory>().OpenSession());
+            Bind<IServicesRepository>().To<ServicesRepository>();
         }
     }
 }

@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Configuration;
 using System.Reflection;
 using System.Reflection.Emit;
 using NHibernate;
 using NHibernate.Mapping;
 using Ninject;
 using NUnit.Framework;
+using RentStuff.Common;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
 using RentStuff.Services.Infrastructure.Persistence.NHibernateSession;
+using RentStuff.Services.Infrastructure.Persistence.NinjectModules;
 using RentStuff.Services.Infrastructure.Persistence.Repositories;
 
 namespace RentStuff.Services.Infrastructure.Persistence.Tests
@@ -14,22 +17,58 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
     [TestFixture]
     public class ServicesRepositoryTests
     {
-        private readonly ISession session;
+        private DatabaseUtility _databaseUtility;
+
+        [SetUp]
+        public void Setup()
+        {
+            //var connection = StringCipher.DecipheredConnectionString;
+            var connection = ConfigurationManager.ConnectionStrings["MySql"].ConnectionString;
+            _databaseUtility = new DatabaseUtility(connection);
+            _databaseUtility.Create();
+            //NhConnectionDecipherService.SetupDecipheredConnectionString();
+            //_databaseUtility.Populate();
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+            _databaseUtility.Create();
+        }
+
         [Test]
         public void ServiceSaveTest_ChecksIfTheServiceInstanceIsSavedAsExpected_VerifiesByTheReturnedValue()
         {
-            Service service = new Service("name", "description", "location", "03325329974",
-                        "dummy@dumdum123456.com", "Plumber", "Individual", DateTime.Now);
-            NHibernateSessionCompound nHibernateSessionCompound = new NHibernateSessionCompound();
+            string name = "The Stone Chopper";
+            string description = "We make swrods so sharp and strong, they can chop stones";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string phoneNumber = "03325329974";
+            string email = "stone@chopper1234567.com";
+            string profession = "Welder";
+            string entity = "Organization";
+            DateTime dateEstablished = DateTime.Now;
+            Service service = new Service(name, description, location, phoneNumber,
+                        email, profession, entity, dateEstablished);
+            /*NHibernateSessionCompound nHibernateSessionCompound = new NHibernateSessionCompound();
             ServicesRepository servicesRepository = new ServicesRepository(nHibernateSessionCompound.SessionFactory);
             servicesRepository.SaveOrUpdate(service);
 
-            var assemblies = new Assembly[] {Assembly.GetAssembly(typeof(ServicesRepository))};
+            var assemblies = new Assembly[] {Assembly.GetAssembly(typeof(ServicesRepository))};*/
             var kernel = new StandardKernel();
-            kernel.Load(assemblies);
-            var sessionFactory = kernel.Get<IServicesRepository>();
-            
-            session.Save(service);
+            kernel.Load<NHibernateModule>();
+            var servicesRepository = kernel.Get<IServicesRepository>();
+            servicesRepository.SaveOrUpdate(service);
+            var serviceByName = servicesRepository.GetServiceByName("name");
+            Assert.AreEqual(1, serviceByName.Count);
+            Assert.AreEqual(name, serviceByName[0].Name);
+            Assert.AreEqual(description, serviceByName[0].Description);
+            Assert.AreEqual(location, serviceByName[0].Location);
+            Assert.AreEqual(phoneNumber, serviceByName[0].PhoneNumber);
+            Assert.AreEqual(email, serviceByName[0].Email);
+            Assert.AreEqual((ServiceProfessionType)Enum.Parse(typeof(ServiceProfessionType), profession),
+                serviceByName[0].GetServiceProfessionType());
+            Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), entity),
+                serviceByName[0].GetServiceEntityType());
         }
     }
 }

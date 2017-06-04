@@ -1,4 +1,5 @@
-﻿using FluentNHibernate.Cfg;
+﻿using System.Configuration;
+using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
@@ -12,10 +13,16 @@ namespace RentStuff.Services.Infrastructure.Persistence.NHibernateSession
     public class NHibernateSessionCompound
     {
         private ISessionFactory _sessionFactory;
+        private string _connectionString;
 
         public ISessionFactory SessionFactory
         {
             get { return _sessionFactory ?? (_sessionFactory = GetSessionFactory()); }
+        }
+
+        public NHibernateSessionCompound()
+        {
+            _connectionString = ConfigurationManager.ConnectionStrings["MySql"].ConnectionString;
         }
 
         public ISessionFactory GetSessionFactory()
@@ -23,11 +30,9 @@ namespace RentStuff.Services.Infrastructure.Persistence.NHibernateSession
             return
                 Fluently.Configure()
                 .Database(MySQLConfiguration.Standard
-                  .ConnectionString(
-                  @"Server=localhost;Port=3306;Database=rentstuff;Uid=rentstuffuser;Password=LosSantosCrib786!;")
-                  .ShowSql())
+                .ConnectionString(_connectionString).ShowSql())
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ServicesRepository>())
-                .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true))//.Create(true, true)
+                .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true))
                 .BuildSessionFactory();
         }
     }

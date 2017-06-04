@@ -55,6 +55,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -68,6 +69,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\RentStuff.Common\RentStuff.Common.csproj">
+      <Project>{85eed18f-3c13-49ef-9c12-48fdb2661896}</Project>
+      <Name>RentStuff.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Domain.Model\RentStuff.Services.Domain.Model\RentStuff.Services.Domain.Model.csproj">
       <Project>{8fd494e6-ac07-47f4-a868-59163e4f4477}</Project>
       <Name>RentStuff.Services.Domain.Model</Name>
