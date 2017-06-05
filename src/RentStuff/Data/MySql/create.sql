@@ -278,7 +278,8 @@ CREATE TABLE `service` (
   `description` varchar(500) DEFAULT NULL,
   `location` varchar(70) NOT NULL,
   `phone_number` varchar(13) NOT NULL,
-  `email` varchar(50) NOT NULL,
+  `service_email` varchar(50) NOT NULL,
+  `uploader_email` varchar(50) NOT NULL,
   `service_entity_type` varchar(32) NOT NULL,
   `service_profession_type` varchar(32) NOT NULL,
   PRIMARY KEY (`id`)

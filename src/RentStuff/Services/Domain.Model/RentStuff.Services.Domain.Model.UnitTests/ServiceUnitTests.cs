@@ -16,24 +16,25 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string description = "We create the worlds best swords, spears and hammers!";
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
-            string email = "smithy@smithereene1234567.com";
+            string serviceEmail = "smithy@smithereene1234567.com";
+            string uploaderEmail = "provider@smithereene1234567.com";
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
-                .Location(location).PhoneNumber(phoneNumber).Email(email)
-                .ServiceProfessionType(serviceProviderType).ServiceEntityType(serviceEntityType)
-                .DateEstablished(dateEstablished).Build();
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
             Assert.IsNotNull(service);
             Assert.AreEqual(name, service.Name);
             Assert.AreEqual(description, service.Description);
             Assert.AreEqual(location, service.Location);
             Assert.AreEqual(phoneNumber, service.PhoneNumber);
-            Assert.AreEqual(email, service.Email);
+            Assert.AreEqual(serviceEmail, service.ServiceEmail);
             Assert.AreEqual((ServiceProfessionType)Enum.Parse(typeof(ServiceProfessionType), serviceProviderType),
-                            service.GetServiceProfessionType());
+                            service.ServiceProfessionType);
             Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType),
-                            service.GetServiceEntityType());
+                            service.ServiceEntityType);
             Assert.AreEqual(dateEstablished, service.DateEstablished);
         }
 
@@ -45,12 +46,14 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string description = "We create the worlds best swords, spears and hammers!";
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
-            string email = "smithy@smithereene1234567.com";
+            string serviceEmail = "smithy@smithereene1234567.com";
+            string uploaderEmail = "provider@smithereene1234567.com";
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
-            Service service = new Service.ServiceBuilder().Description(description).Location(location)
-                .PhoneNumber(phoneNumber).Email(email).ServiceProfessionType(serviceProviderType)
+            Service service = new Service.ServiceBuilder().Description(description)
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
         }
 
@@ -62,12 +65,14 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string name = "Black Smith Inc";
             string description = "We create the worlds best swords, spears and hammers!";
             string phoneNumber = "03455138018";
-            string email = "smithy@smithereene1234567.com";
+            string serviceEmail = "smithy@smithereene1234567.com";
+            string uploaderEmail = "provider@smithereene1234567.com";
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
-                .PhoneNumber(phoneNumber).Email(email).ServiceProfessionType(serviceProviderType)
+                .PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
         }
 
@@ -79,17 +84,18 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string name = "Black Smith Inc";
             string description = "We create the worlds best swords, spears and hammers!";
             string location = "Pindora, Rawalpindi, Pakistan";
-            string email = "smithy@smithereene1234567.com";
+            string serviceEmail = "smithy@smithereene1234567.com";
+            string uploaderEmail = "provider@smithereene1234567.com";
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
-                .Location(location).Email(email)
-                .ServiceProfessionType(serviceProviderType).ServiceEntityType(serviceEntityType)
-                .DateEstablished(dateEstablished).Build();
+                .Location(location).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
         }
 
-        // No Email Provided
+        // No UploaderEmail Provided
         [Test]
         [ExpectedException(typeof(NullReferenceException))]
         public void ServiceInstanceCreationNoEmailFailTest_ChecksThatAnInstanceIsNotCreatedSuccessfully_VerifiesThroughReturnedValue()
@@ -98,16 +104,17 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string description = "We create the worlds best swords, spears and hammers!";
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
+            string serviceEmail = "smithy@smithereene1234567.com";
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
-                .Location(location).PhoneNumber(phoneNumber)
-                .ServiceProfessionType(serviceProviderType).ServiceEntityType(serviceEntityType)
-                .DateEstablished(dateEstablished).Build();
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .ServiceProfessionType(serviceProviderType)
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
         }
 
-        // No ServiceProviderType provided
+        // No ServiceProfessionType provided
         [Test]
         [ExpectedException(typeof(NullReferenceException))]
         public void ServiceInstanceCreationNoServiceProviderTypeFailTest_ChecksThatAnInstanceIsNotCreatedSuccessfully_VerifiesThroughReturnedValue()
@@ -116,13 +123,14 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string description = "We create the worlds best swords, spears and hammers!";
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
-            string email = "smithy@smithereene1234567.com";
+            string serviceEmail = "smithy@smithereene1234567.com";
+            string uploaderEmail = "provider@smithereene1234567.com";
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
-                .Location(location).PhoneNumber(phoneNumber).Email(email)
-                .ServiceEntityType(serviceEntityType)
-                .DateEstablished(dateEstablished).Build();
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail)
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
         }
 
         // No ServiceEntityType provided
@@ -134,12 +142,13 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string description = "We create the worlds best swords, spears and hammers!";
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
-            string email = "smithy@smithereene1234567.com";
+            string serviceEmail = "smithy@smithereene1234567.com";
+            string uploaderEmail = "provider@smithereene1234567.com";
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
-                .Location(location).PhoneNumber(phoneNumber).Email(email)
-                .ServiceProfessionType(serviceProviderType)
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
                 .DateEstablished(dateEstablished).Build();
         }
 
@@ -155,12 +164,15 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string description = "We create the worlds best swords, spears and hammers!";
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
-            string email = "smithy@smithereene1234567.com";
+            string serviceEmail = "smithy@smithereene1234567.com";
+            string uploaderEmail = "provider@smithereene1234567.com";
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
-            Service service = new Service(name, description, location, phoneNumber, email, 
-                serviceProviderType, serviceEntityType, dateEstablished);
+            Service service = new Service.ServiceBuilder().Name(name).Description(description)
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
 
             // Initial Rating is 0
             Assert.AreEqual(0, service.Ratings.RatingStars);
@@ -237,13 +249,16 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string description = "We create the worlds best swords, spears and hammers!";
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
-            string email = "smithy@smithereene1234567.com";
+            string serviceEmail = "smithy@smithereene1234567.com";
+            string uploaderEmail = "provider@smithereene1234567.com";
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
-            Service service = new Service(name, description, location, phoneNumber, email,
-                serviceProviderType, serviceEntityType, dateEstablished);
-            
+            Service service = new Service.ServiceBuilder().Name(name).Description(description)
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
+
             // Initial Rating is 0
             Assert.AreEqual(0, service.Ratings.RatingStars);
 
@@ -298,12 +313,15 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string description = "We create the worlds best swords, spears and hammers!";
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
-            string email = "smithy@smithereene1234567.com";
+            string serviceEmail = "smithy@smithereene1234567.com";
+            string uploaderEmail = "provider@smithereene1234567.com";
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
-            Service service = new Service(name, description, location, phoneNumber, email,
-                serviceProviderType, serviceEntityType, dateEstablished);
+            Service service = new Service.ServiceBuilder().Name(name).Description(description)
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
 
             // Initial Rating is 0
             Assert.AreEqual(0, service.Ratings.RatingStars);

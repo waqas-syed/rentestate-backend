@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RentStuff.Common.Domain.Model;
+// ReSharper disable VirtualMemberCallInConstructor
 
 namespace RentStuff.Services.Domain.Model.ServiceAggregate
 {
@@ -14,7 +15,8 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         private string _description;
         private string _location;
         private string _phoneNumber;
-        private string _email;
+        private string _serviceEmail;
+        private string _uploaderEmail;
         private ServiceProfessionType _serviceProfessionType;
         private ServiceEntityType _serviceEntityType;
 
@@ -26,22 +28,17 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Initializes a new instance of the Service class
         /// </summary>
-        public Service(string name, string description, string location, string phoneNumber, string email,
-            string serviceProviderType, string serviceEntityType, DateTime dateEstablished)
+        private Service(string name, string description, string location, string phoneNumber, 
+            string serviceEmail, string uploaderEmail, string serviceProfessionType, string serviceEntityType,
+            DateTime dateEstablished)
         {
-            // Check that the required fields are all provided
-            Assertion.AssertStringNotNullorEmpty(name);
-            Assertion.AssertStringNotNullorEmpty(location);
-            Assertion.AssertStringNotNullorEmpty(phoneNumber);
-            Assertion.AssertStringNotNullorEmpty(email);
-            Assertion.AssertStringNotNullorEmpty(serviceProviderType);
-            Assertion.AssertStringNotNullorEmpty(serviceEntityType);
             Name = name;
             Description = description;
             Location = location;
             PhoneNumber = phoneNumber;
-            Email = email;
-            SetServiceProfessionType(serviceProviderType);
+            ServiceEmail = serviceEmail;
+            UploaderEmail = uploaderEmail;
+            SetServiceProfessionType(serviceProfessionType);
             SetServiceEntityType(serviceEntityType);
             DateEstablished = dateEstablished;
             Ratings = new Ratings();
@@ -50,6 +47,33 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         }
 
         /// <summary>
+        /// Update the details about the service
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="description"></param>
+        /// <param name="location"></param>
+        /// <param name="phoneNumber"></param>
+        /// <param name="serviceEmail"></param>
+        /// <param name="uploaderEmail"></param>
+        /// <param name="serviceProfessionType"></param>
+        /// <param name="serviceEntityType"></param>
+        /// <param name="dateEstablished"></param>
+        public virtual void UpdateService(string name, string description, string location, string phoneNumber, 
+            string serviceEmail, string uploaderEmail, string serviceProfessionType, string serviceEntityType,
+            DateTime dateEstablished)
+        {
+            Name = name;
+            Description = description;
+            Location = location;
+            PhoneNumber = phoneNumber;
+            ServiceEmail = serviceEmail;
+            UploaderEmail = uploaderEmail;
+            SetServiceProfessionType(serviceProfessionType);
+            SetServiceEntityType(serviceEntityType);
+            DateEstablished = dateEstablished;
+        }
+        
+        /// <summary>
         /// Add a new rating for this service
         /// </summary>
         /// <param name="ratingStars"></param>
@@ -57,7 +81,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         {
             this.Ratings.UpdateRatings(ratingStars);
         }
-
+        
         /// <summary>
         /// Add a review to this service
         /// </summary>
@@ -82,6 +106,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             get { return _name; }
             set
             {
+                Assertion.AssertStringNotNullorEmpty(value);
                 _name = value;
             }
         }
@@ -103,6 +128,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             get { return _location; }
             set
             {
+                Assertion.AssertStringNotNullorEmpty(value);
                 _location = value;
             }
         }
@@ -115,6 +141,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             get { return _phoneNumber; }
             set
             {
+                Assertion.AssertStringNotNullorEmpty(value);
                 Assertion.IsPhoneNumberValid(value);
                 _phoneNumber = value;
             }
@@ -123,22 +150,38 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Email of the service provider
         /// </summary>
-        public virtual string Email
+        public virtual string ServiceEmail
         {
-            get { return _email; }
+            get { return _serviceEmail; }
             set
             {
                 Assertion.IsEmailValid(value);
-                _email = value;
+                _serviceEmail = value;
             }
         }
-        
+
+        /// <summary>
+        /// Email of the person who uplaoded this service on our platform. This email will be the user's 
+        /// account email
+        /// </summary>
+        public virtual string UploaderEmail
+        {
+            get { return _uploaderEmail; }
+            set
+            {
+                Assertion.AssertStringNotNullorEmpty(value);
+                Assertion.IsEmailValid(value);
+                _uploaderEmail = value;
+            }
+        }
+
         /// <summary>
         /// Sets the ServiceProviderType by parsing the string and converting it to the expected Enum
         /// </summary>
         /// <param name="serviceProfessionType"></param>
         public virtual void SetServiceProfessionType(string serviceProfessionType)
         {
+            Assertion.AssertStringNotNullorEmpty(serviceProfessionType);
             _serviceProfessionType = (ServiceProfessionType)Enum.Parse(typeof(ServiceProfessionType), serviceProfessionType);
         }
 
@@ -157,6 +200,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// </summary>
         public virtual void SetServiceEntityType(string serviceEntityType)
         {
+            Assertion.AssertStringNotNullorEmpty(serviceEntityType);
             _serviceEntityType = (ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType);
         }
 
@@ -178,12 +222,12 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Rating of this service by users
         /// </summary>
-        public virtual Ratings Ratings { get; set; }
+        public virtual Ratings Ratings { get; }
 
         /// <summary>
         /// Reviews of this service by users
         /// </summary>
-        public virtual IList<Review> Reviews { get; set; }
+        public virtual IList<Review> Reviews { get; }
 
         /// <summary>
         /// Instance builder for the Service class
@@ -194,12 +238,11 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             private string _description;
             private string _location;
             private string _phoneNumber;
-            private string _email;
+            private string _serviceEmail;
+            private string _uploaderEmail;
             private string _serviceProfessionType;
             private string _serviceEntityType;
             private DateTime _dateEstablished;
-            private Ratings _rating;
-            private IList<Review> _reviews;
 
             /// <summary>
             /// Name
@@ -246,13 +289,24 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             }
 
             /// <summary>
-            /// Email
+            /// Contact Email of the service
             /// </summary>
-            /// <param name="email"></param>
+            /// <param name="serviceEmail"></param>
             /// <returns></returns>
-            public ServiceBuilder Email(string email)
+            public ServiceBuilder ServiceEmail(string serviceEmail)
             {
-                _email = email;
+                _serviceEmail = serviceEmail;
+                return this;
+            }
+
+            /// <summary>
+            /// Email of the uploader who uploaded this service to our platform
+            /// </summary>
+            /// <param name="uploaderEmail"></param>
+            /// <returns></returns>
+            public ServiceBuilder UploaderEmail(string uploaderEmail)
+            {
+                _uploaderEmail = uploaderEmail;
                 return this;
             }
 
@@ -288,33 +342,11 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
                 _dateEstablished = dateEstablished;
                 return this;
             }
-
-            /// <summary>
-            /// user Ratings
-            /// </summary>
-            /// <param name="rating"></param>
-            /// <returns></returns>
-            public ServiceBuilder Rating(Ratings rating)
-            {
-                _rating = rating;
-                return this;
-            }
-
-            /// <summary>
-            /// User Reviews
-            /// </summary>
-            /// <param name="reviews"></param>
-            /// <returns></returns>
-            public ServiceBuilder Reviews(IList<Review> reviews)
-            {
-                _reviews = reviews;
-                return this;
-            }
-
+            
             public Service Build()
             {
-                return new Service(_name, _description, _location, _phoneNumber, _email, _serviceProfessionType,
-                    _serviceEntityType, _dateEstablished);
+                return new Service(_name, _description, _location, _phoneNumber, _serviceEmail, 
+                    _uploaderEmail, _serviceProfessionType, _serviceEntityType, _dateEstablished);
             }
         }
     }
