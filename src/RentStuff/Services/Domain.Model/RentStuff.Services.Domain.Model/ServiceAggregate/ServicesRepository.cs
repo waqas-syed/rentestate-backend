@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace RentStuff.Services.Domain.Model.ServiceAggregate
 {
@@ -22,16 +21,39 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         Service GetServiceById(string id);
 
         /// <summary>
-        /// Get the Services by their Name
+        /// Get Services by providing latitude and longitude
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<Service> GetServiceByName(string name);
+        IList<Service> GetServicesByLocation(decimal latitude, decimal longitude, int pageNo = 0);
+
+        /// <summary>
+        /// Get Services by providing latitude and longitude and the ServiceProfessionType
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="serviceProfessionType"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        IList<Service> GetServicesByLocationAndProfession(decimal latitude, decimal longitude, 
+            ServiceProfessionType serviceProfessionType, int pageNo = 0);
+
+        /// <summary>
+        /// Get Services by providing ServiceProfessionType
+        /// </summary>
+        /// <param name="serviceProfessionType"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        IList<Service> GetServicesByProfession(ServiceProfessionType serviceProfessionType, int pageNo = 0);
 
         /// <summary>
         /// Delete the service
         /// </summary>
         /// <param name="id"></param>
         void DeleteService(string id);
+
+        void Commit();
     }
 }

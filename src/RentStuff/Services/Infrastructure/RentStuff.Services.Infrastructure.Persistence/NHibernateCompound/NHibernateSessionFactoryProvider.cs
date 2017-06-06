@@ -5,14 +5,15 @@ using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using RentStuff.Services.Infrastructure.Persistence.Repositories;
 
-namespace RentStuff.Services.Infrastructure.Persistence.NHibernateSession
+namespace RentStuff.Services.Infrastructure.Persistence.NHibernateCompound
 {
     /// <summary>
     /// NHibernate Session Factory for the Services Bounded Context
     /// </summary>
-    public class NHibernateSessionCompound
+    public class NHibernateSessionFactoryProvider
     {
         private ISessionFactory _sessionFactory;
+        //private ISession _session;
         private string _connectionString;
 
         public ISessionFactory SessionFactory
@@ -20,7 +21,12 @@ namespace RentStuff.Services.Infrastructure.Persistence.NHibernateSession
             get { return _sessionFactory ?? (_sessionFactory = GetSessionFactory()); }
         }
 
-        public NHibernateSessionCompound()
+        /*public ISession Session
+        {
+            get { return _session ?? (_session = _sessionFactory.OpenSession()); }
+        }*/
+
+        public NHibernateSessionFactoryProvider()
         {
             _connectionString = ConfigurationManager.ConnectionStrings["MySql"].ConnectionString;
         }

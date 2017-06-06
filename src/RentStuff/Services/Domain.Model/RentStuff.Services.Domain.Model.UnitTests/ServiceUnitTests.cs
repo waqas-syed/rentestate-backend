@@ -21,10 +21,14 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
                 .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
-                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
+                .Latitude(latitude).Longitude(longitude).Build();
+
             Assert.IsNotNull(service);
             Assert.AreEqual(name, service.Name);
             Assert.AreEqual(description, service.Description);
@@ -36,6 +40,8 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType),
                             service.ServiceEntityType);
             Assert.AreEqual(dateEstablished, service.DateEstablished);
+            Assert.AreEqual(latitude, service.Latitude);
+            Assert.AreEqual(longitude, service.Longitude);
         }
 
         // No name provided
@@ -51,10 +57,13 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
                 .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
-                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
+                .Latitude(latitude).Longitude(longitude).Build();
         }
 
         // No Location Provided
@@ -70,10 +79,13 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
                 .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
-                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
+                .Latitude(latitude).Longitude(longitude).Build();
         }
 
         // No Phone Number Provided
@@ -89,10 +101,13 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).ServiceEmail(serviceEmail)
                 .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
-                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
+                .Latitude(latitude).Longitude(longitude).Build();
         }
 
         // No UploaderEmail Provided
@@ -108,10 +123,13 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
                 .ServiceProfessionType(serviceProviderType)
-                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
+                .Latitude(latitude).Longitude(longitude).Build();
         }
 
         // No ServiceProfessionType provided
@@ -127,10 +145,13 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string uploaderEmail = "provider@smithereene1234567.com";
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
                 .UploaderEmail(uploaderEmail)
-                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
+                .Latitude(latitude).Longitude(longitude).Build();
         }
 
         // No ServiceEntityType provided
@@ -146,10 +167,57 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string uploaderEmail = "provider@smithereene1234567.com";
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
                 .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
-                .DateEstablished(dateEstablished).Build();
+                .DateEstablished(dateEstablished)
+                .Latitude(latitude).Longitude(longitude).Build();
+        }
+
+        // No Latitude provided
+        [Test]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void ServiceInstanceCreationNoLatitudeFailTest_ChecksThatAnInstanceIsNotCreatedSuccessfully_VerifiesThroughReturnedValue()
+        {
+            string name = "Black Smith Inc";
+            string description = "We create the worlds best swords, spears and hammers!";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string phoneNumber = "03455138018";
+            string serviceEmail = "smithy@smithereene1234567.com";
+            string uploaderEmail = "provider@smithereene1234567.com";
+            string serviceProviderType = ServiceProfessionType.Welder.ToString();
+            string serviceEntityType = ServiceEntityType.Organization.ToString();
+            DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            decimal longitude = 73.1M;
+            Service service = new Service.ServiceBuilder().Name(name).Description(description)
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
+                .Longitude(longitude).Build();
+        }
+
+        // No Longitude provided
+        [Test]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void ServiceInstanceCreationNoLongitudeFailTest_ChecksThatAnInstanceIsNotCreatedSuccessfully_VerifiesThroughReturnedValue()
+        {
+            string name = "Black Smith Inc";
+            string description = "We create the worlds best swords, spears and hammers!";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string phoneNumber = "03455138018";
+            string serviceEmail = "smithy@smithereene1234567.com";
+            string uploaderEmail = "provider@smithereene1234567.com";
+            string serviceProviderType = ServiceProfessionType.Welder.ToString();
+            string serviceEntityType = ServiceEntityType.Organization.ToString();
+            DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            decimal latitude = 33.7M;
+            Service service = new Service.ServiceBuilder().Name(name).Description(description)
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
+                .Latitude(latitude).Build();
         }
 
         #endregion Service Tests
@@ -169,10 +237,13 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
                 .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
-                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
+                .Latitude(latitude).Longitude(longitude).Build();
 
             // Initial Rating is 0
             Assert.AreEqual(0, service.Ratings.RatingStars);
@@ -254,10 +325,13 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
                 .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
-                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
+                .Latitude(latitude).Longitude(longitude).Build();
 
             // Initial Rating is 0
             Assert.AreEqual(0, service.Ratings.RatingStars);
@@ -318,10 +392,13 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string serviceProviderType = ServiceProfessionType.Welder.ToString();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
                 .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
-                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished).Build();
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
+                .Latitude(latitude).Longitude(longitude).Build();
 
             // Initial Rating is 0
             Assert.AreEqual(0, service.Ratings.RatingStars);

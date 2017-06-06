@@ -64,10 +64,10 @@
     <Compile Include="Mappings\RatingsMap.cs" />
     <Compile Include="Mappings\ReviewsMap.cs" />
     <Compile Include="Mappings\ServicesMap.cs" />
-    <Compile Include="NinjectModules\NHibernateModule.cs" />
-    <Compile Include="NHibernateSession\NHibernateSessionCompound.cs" />
-    <Compile Include="NHibernateSession\NHibernateSessionFactoryProvider.cs" />
-    <Compile Include="NinjectModules\ServiceRepositoryModule.cs" />
+    <Compile Include="NHibernateCompound\IUnitOfWork.cs" />
+    <Compile Include="NHibernateCompound\UnitOfWork.cs" />
+    <Compile Include="NinjectModules\ServicesPersistenceNinjectModule.cs" />
+    <Compile Include="NHibernateCompound\NHibernateSessionFactoryProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ServicesRepository.cs" />
   </ItemGroup>

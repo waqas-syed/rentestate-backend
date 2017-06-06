@@ -19,7 +19,13 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         private string _uploaderEmail;
         private ServiceProfessionType _serviceProfessionType;
         private ServiceEntityType _serviceEntityType;
+        private decimal _latitude;
+        private decimal _longitude;
 
+        /// <summary>
+        /// Default Constructor. To Initialize the Service, use the ServiceBuilder type that uses the Builder
+        /// pattern
+        /// </summary>
         public Service()
         {
             
@@ -30,7 +36,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// </summary>
         private Service(string name, string description, string location, string phoneNumber, 
             string serviceEmail, string uploaderEmail, string serviceProfessionType, string serviceEntityType,
-            DateTime dateEstablished)
+            DateTime dateEstablished, decimal latitude, decimal longitude)
         {
             Name = name;
             Description = description;
@@ -41,6 +47,8 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             SetServiceProfessionType(serviceProfessionType);
             SetServiceEntityType(serviceEntityType);
             DateEstablished = dateEstablished;
+            Latitude = latitude;
+            Longitude = longitude;
             Ratings = new Ratings();
             Ratings.Service = this;
             Reviews = new List<Review>();
@@ -58,9 +66,11 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <param name="serviceProfessionType"></param>
         /// <param name="serviceEntityType"></param>
         /// <param name="dateEstablished"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
         public virtual void UpdateService(string name, string description, string location, string phoneNumber, 
             string serviceEmail, string uploaderEmail, string serviceProfessionType, string serviceEntityType,
-            DateTime dateEstablished)
+            DateTime dateEstablished, decimal latitude, decimal longitude)
         {
             Name = name;
             Description = description;
@@ -71,6 +81,8 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             SetServiceProfessionType(serviceProfessionType);
             SetServiceEntityType(serviceEntityType);
             DateEstablished = dateEstablished;
+            Latitude = latitude;
+            Longitude = longitude;
         }
         
         /// <summary>
@@ -220,6 +232,38 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual DateTime DateEstablished { get; set; }
 
         /// <summary>
+        /// Latitude
+        /// </summary>
+        public virtual decimal Latitude
+        {
+            get
+            {
+                return _latitude;
+            }
+            set
+            {
+                Assertion.AssertDecimalNotZero(value);
+                _latitude = value;
+            }
+        }
+
+        /// <summary>
+        /// Longitude
+        /// </summary>
+        public virtual decimal Longitude
+        {
+            get
+            {
+                return _longitude;
+            }
+            set
+            {
+                Assertion.AssertDecimalNotZero(value);
+                _longitude = value;
+            }
+        }
+
+        /// <summary>
         /// Rating of this service by users
         /// </summary>
         public virtual Ratings Ratings { get; }
@@ -243,6 +287,8 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             private string _serviceProfessionType;
             private string _serviceEntityType;
             private DateTime _dateEstablished;
+            private decimal _latitude;
+            private decimal _longitude;
 
             /// <summary>
             /// Name
@@ -342,11 +388,34 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
                 _dateEstablished = dateEstablished;
                 return this;
             }
-            
+
+            /// <summary>
+            /// Latitude
+            /// </summary>
+            /// <param name="latitude"></param>
+            /// <returns></returns>
+            public ServiceBuilder Latitude(decimal latitude)
+            {
+                _latitude = latitude;
+                return this;
+            }
+
+            /// <summary>
+            /// Longitude
+            /// </summary>
+            /// <param name="longitude"></param>
+            /// <returns></returns>
+            public ServiceBuilder Longitude(decimal longitude)
+            {
+                _longitude = longitude;
+                return this;
+            }
+
             public Service Build()
             {
                 return new Service(_name, _description, _location, _phoneNumber, _serviceEmail, 
-                    _uploaderEmail, _serviceProfessionType, _serviceEntityType, _dateEstablished);
+                    _uploaderEmail, _serviceProfessionType, _serviceEntityType, _dateEstablished,
+                    _latitude, _longitude);
             }
         }
     }

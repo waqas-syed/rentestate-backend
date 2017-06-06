@@ -282,6 +282,9 @@ CREATE TABLE `service` (
   `uploader_email` varchar(50) NOT NULL,
   `service_entity_type` varchar(32) NOT NULL,
   `service_profession_type` varchar(32) NOT NULL,
+  `latitude` decimal(13,9) NOT NULL,
+  `longitude` decimal(13,9) NOT NULL,
+  `date_established` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
