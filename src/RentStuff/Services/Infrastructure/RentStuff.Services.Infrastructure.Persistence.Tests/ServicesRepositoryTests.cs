@@ -283,7 +283,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string description4 = "Meat, carbs and sauces. All combined in perfect proportions.";
             string location4 = "Bahria Town, Rawalpindi, Punjab, Pakistan";
             string phoneNumber4 = "03455138018";
-            string serviceEmail4 = "food@chopper1234567.com";
+            string serviceEmail4 = "onion@chopper1234567.com";
             string uploaderEmail4 = "uploader@onion1234567.com";
             string serviceProfessionType4 = "FoodCaterer";
             string serviceEntityType4 = "Organization";
@@ -299,14 +299,14 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             servicesRepository.SaveOrUpdate(service4);
 
             // House # 5
-            string name5 = "The Onion Chopper";
-            string description5 = "Meat, carbs and sauces. All combined in perfect proportions.";
+            string name5 = "The Lone Artist";
+            string description5 = "Whatever colors you need will be painted. But by my imagination.";
             string location5 = "Rawalpindi, Pakistan";
             string phoneNumber5 = "03455138018";
-            string serviceEmail5 = "food@chopper1234567.com";
-            string uploaderEmail5 = "uploader@onion1234567.com";
-            string serviceProfessionType5 = "FoodCaterer";
-            string serviceEntityType5 = "Organization";
+            string serviceEmail5 = "lone@cartist1234567.com";
+            string uploaderEmail5 = "uploader@lone1234567.com";
+            string serviceProfessionType5 = "Painter";
+            string serviceEntityType5 = "Individual";
             var coordinatesFromAddress5 = geocodingService.GetCoordinatesFromAddress(location4);
             decimal latitude5 = coordinatesFromAddress5.Item1;
             decimal longitude5 = coordinatesFromAddress5.Item2;
@@ -319,12 +319,12 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             servicesRepository.SaveOrUpdate(service5);
 
             // House # 6
-            string name6 = "The Onion Chopper";
-            string description6 = "Meat, carbs and sauces. All combined in perfect proportions.";
+            string name6 = "Salsalo";
+            string description6 = "You have never tasted such delights before!";
             string location6 = "Talhar, Talhaar, Islamabad Capital Territory, Pakistan";
             string phoneNumber6 = "03455138018";
-            string serviceEmail6 = "food@chopper1234567.com";
-            string uploaderEmail6 = "uploader@onion1234567.com";
+            string serviceEmail6 = "food@salsalo1234567.com";
+            string uploaderEmail6 = "uploader@osalsalo1234567.com";
             string serviceProfessionType6 = "FoodCaterer";
             string serviceEntityType6 = "Organization";
             var coordinatesFromAddress6 = geocodingService.GetCoordinatesFromAddress(location4);
