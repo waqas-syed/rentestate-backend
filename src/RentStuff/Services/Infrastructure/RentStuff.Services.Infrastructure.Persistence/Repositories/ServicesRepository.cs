@@ -21,29 +21,12 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         // The radius that we need to search in. Starting point is the location entered by the user
         private readonly int _radius = 38;
         private readonly int _resultsPerPage = 10;
-
-        private ISessionFactory _sessionFactory;
+        
         private ISession _session;
-        private ITransaction _transaction;
-        private IUnitOfWork _unitOfWork;
 
-        public ServicesRepository(ISessionFactory sessionFactory, IUnitOfWork unitOfWork)
+        public ServicesRepository(ISession session)
         {
-            _sessionFactory = sessionFactory;
-            _unitOfWork = unitOfWork;
-            //InitializeSession();
-        }
-
-        private void InitializeSession()
-        {
-            _session = _sessionFactory.OpenSession();
-            _transaction = _session.BeginTransaction(IsolationLevel.ReadCommitted);
-        }
-
-        private void Commit()
-        {
-            _transaction.Commit();
-            //_session.Close();
+            _session = session;
         }
 
         /// <summary>
@@ -52,20 +35,13 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <param name="service"></param>
         public void SaveOrUpdate(Service service)
         {
-            //_unitOfWork.Session.SaveOrUpdate(service);
-            //_unitOfWork.Commit();
-            /*using (IUnitOfWork unitOfWork = new UnitOfWork(_sessionFactory))
+            using (var transaction = _session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                unitOfWork.Session.SaveOrUpdate(service);
-                unitOfWork.Commit();
-            }*/
-            //InitializeSession();
-            _unitOfWork.Session.SaveOrUpdate(service);
-            //Commit();
+                _session.SaveOrUpdate(service);
+                transaction.Commit();
+            }
         }
-
-
-
+        
         /// <summary>
         /// Get the Service by it's ID
         /// </summary>
@@ -73,12 +49,10 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         public Service GetServiceById(string id)
         {
-            /*using (IUnitOfWork unitOfWork = new UnitOfWork(_sessionFactory))
+            using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                return unitOfWork.Session.QueryOver<Service>().Where(x => x.Id == id).SingleOrDefault();
-            }*/
-            //InitializeSession();
-            return _unitOfWork.Session.QueryOver<Service>().Where(x => x.Id == id).SingleOrDefault();
+                return _session.QueryOver<Service>().Where(x => x.Id == id).SingleOrDefault();
+            }
         }
 
         /// <summary>
@@ -90,11 +64,12 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         public IList<Service> GetServicesByLocation(decimal latitude, decimal longitude, int pageNo = 0)
         {
-            //using (IUnitOfWork unitOfWork = new UnitOfWork(_sessionFactory))
-            //{
+            using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
                 IList houses =
-                    _unitOfWork.Session.CreateSQLQuery(
-                        "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius ORDER BY distance") // LIMIT 0 , 20")//("SELECT name, latitude, longitude, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM geo_location HAVING distance < 25 ORDER BY distance LIMIT 0 , 20")
+                    _session.CreateSQLQuery(
+                            "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius ORDER BY distance")
+                        // LIMIT 0 , 20")//("SELECT name, latitude, longitude, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM geo_location HAVING distance < 25 ORDER BY distance LIMIT 0 , 20")
                         .AddEntity(typeof(Service))
                         .SetParameter("inputLatitude", latitude)
                         .SetParameter("inputLongitude", longitude)
@@ -104,7 +79,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
                         .List();
 
                 return houses.Cast<Service>().ToList();
-            //}
+            }
         }
 
         /// <summary>
@@ -139,11 +114,6 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <param name="id"></param>
         public void DeleteService(string id)
         {
-        }
-
-        void IServicesRepository.Commit()
-        {
-            _unitOfWork.Session.Transaction.Commit();
         }
     }
 }

@@ -6,7 +6,6 @@ using RentStuff.Common;
 using RentStuff.Common.NinjectModules;
 using RentStuff.Common.Services.LocationServices;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
-using RentStuff.Services.Infrastructure.Persistence.NHibernateCompound;
 using RentStuff.Services.Infrastructure.Persistence.NinjectModules;
 
 namespace RentStuff.Services.Infrastructure.Persistence.Tests
@@ -67,7 +66,6 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             service.AddReview(authorName, authorEmail, reviewDescription);
             
             servicesRepository.SaveOrUpdate(service);
-            servicesRepository.Commit();
 
             // Retrieve the result
             var retrievedService = servicesRepository.GetServiceById(service.Id);
@@ -124,7 +122,6 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             
             // Save the Service
             servicesRepository.SaveOrUpdate(service);
-            servicesRepository.Commit();
 
             // Retrieve the result
             var retrievedService = servicesRepository.GetServiceById(service.Id);         
@@ -196,7 +193,6 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             
             // Save the Service
             servicesRepository.SaveOrUpdate(service);
-            servicesRepository.Commit();
 
             // Retrieve the result and just check that we got one
             var retrievedService = servicesRepository.GetServiceById(service.Id);
@@ -337,7 +333,6 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
                 .Latitude(latitude6).Longitude(longitude6).Build();
             // Save the Service
             servicesRepository.SaveOrUpdate(service6);
-            servicesRepository.Commit();
 
             // Search by giving Bahroa Town as the location. It should include all of the above saved houses
             // except House#6, because it is more than 38 kilometers away from Bahria Town

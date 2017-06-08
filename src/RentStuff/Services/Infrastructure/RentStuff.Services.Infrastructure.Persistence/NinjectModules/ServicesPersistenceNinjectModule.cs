@@ -14,11 +14,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.NinjectModules
         {
             NHibernateSessionFactoryProvider nHibernateSessionCompound = new NHibernateSessionFactoryProvider();
             Bind<ISessionFactory>().ToConstant(nHibernateSessionCompound.SessionFactory).InSingletonScope();
-            //Bind<ISession>().ToConstant(nHibernateSessionCompound.Session);
-            Bind<IUnitOfWork>().To<UnitOfWork>();
-            //Bind<ISession>().ToMethod(context => context.Kernel.Get<IUnitOfWork>().Session);
-            //Bind<ISession>().ToMethod(context => context.Kernel.Get<IUnitOfWork>().Session)
-            //Bind<ISession>().ToMethod(context => context.Kernel.Get<ISessionFactory>().OpenSession())
+            Bind<ISession>().ToMethod(context => context.Kernel.Get<ISessionFactory>().OpenSession());
             /*.OnActivation(session =>
             {
                 session.BeginTransaction();
