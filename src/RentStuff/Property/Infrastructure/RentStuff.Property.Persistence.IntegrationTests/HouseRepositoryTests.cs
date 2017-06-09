@@ -6,7 +6,8 @@ using RentStuff.Common;
 using RentStuff.Common.NinjectModules;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.Services;
-using RentStuff.Property.Infrastructure.Persistence.NinjectCompound;
+using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
+
 //using Spring.Context.Support;
 
 namespace RentStuff.Property.Persistence.IntegrationTests
@@ -22,8 +23,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            var connection =
-                "Server=localhost;Port=3306;Database=rentstuff;Uid=rentstuffuser;Password=LosSantosCrib786!;";//StringCipher.DecipheredConnectionString;
+            var connection = StringCipher.DecipheredConnectionString;
             _databaseUtility = new DatabaseUtility(connection);
             _databaseUtility.Create();
             _kernel = new StandardKernel();
@@ -71,7 +71,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .GenderRestriction(genderRestriction).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, null, 5, house);
             house.Dimension = dimension;
-            //houseRepository.SaveorUpdateDimension(dimension);
+            houseRepository.SaveorUpdateDimension(dimension);
             houseRepository.SaveorUpdate(house);
             
             House retreivedHouse = houseRepository.GetHouseById(house.Id);

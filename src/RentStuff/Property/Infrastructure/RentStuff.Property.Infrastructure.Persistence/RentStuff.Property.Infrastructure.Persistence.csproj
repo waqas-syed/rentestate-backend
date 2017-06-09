@@ -62,8 +62,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NHibernateCompound\Providers\NHibernateSessionFactoryProvider.cs" />
-    <Compile Include="NinjectCompound\PropertyPersistenceNinjectModule.cs" />
+    <Compile Include="NHibernate\Providers\NHibernateSessionFactoryProvider.cs" />
+    <Compile Include="Ninject\Modules\PropertyPersistenceNinjectModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\HouseRepository.cs" />
     <Compile Include="Repositories\LocationRepository.cs" />
@@ -83,7 +83,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="NHibernateCompound\Mappings\House.hbm.xml">
+    <EmbeddedResource Include="NHibernate\Mappings\House.hbm.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -96,7 +96,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="NHibernateCompound\Mappings\Dimension.hbm.xml">
+    <EmbeddedResource Include="NHibernate\Mappings\Dimension.hbm.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
