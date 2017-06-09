@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using Ninject;
 using NUnit.Framework;
 using RentStuff.Common;
+using RentStuff.Common.NinjectModules;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.Services;
-using RentStuff.Property.Infrastructure.Services.DbDecipherServices;
-using Spring.Context.Support;
+using RentStuff.Property.Infrastructure.Persistence.NinjectCompound;
+//using Spring.Context.Support;
 
 namespace RentStuff.Property.Persistence.IntegrationTests
 {
@@ -16,14 +17,19 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         private readonly decimal _latitudeIncrementForMultipleHouseSaves = 0.0005M;
         private readonly decimal _longitudeIncrementForMultipleHouseSaves = 0.0005M;
         private DatabaseUtility _databaseUtility;
+        private IKernel _kernel;
 
         [SetUp]
         public void Setup()
         {
-            var connection = StringCipher.DecipheredConnectionString;
+            var connection =
+                "Server=localhost;Port=3306;Database=rentstuff;Uid=rentstuffuser;Password=LosSantosCrib786!;";//StringCipher.DecipheredConnectionString;
             _databaseUtility = new DatabaseUtility(connection);
             _databaseUtility.Create();
-            NhConnectionDecipherService.SetupDecipheredConnectionString();
+            _kernel = new StandardKernel();
+            _kernel.Load<PropertyPersistenceNinjectModule>();
+            _kernel.Load<CommonNinjectModule>();
+            //NhConnectionDecipherService.SetupDecipheredConnectionString();
             //_databaseUtility.Populate();
         }
 
@@ -39,7 +45,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         public void SaveHouseTest_TestsThatHouseUInstancesAreSavedToTheDatabaseAsExpected_VerifiesThroughDatabaseQuery()
         {
              //Save the house in the repository and retreive it. Primitive test
-            IHouseRepository houseRepository = (IHouseRepository) ContextRegistry.GetContext()["HouseRepository"];
+            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
             string email = "w@12344321.com";
             string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
             string title = "MGM Grand";
@@ -65,7 +71,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .GenderRestriction(genderRestriction).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, null, 5, house);
             house.Dimension = dimension;
-            houseRepository.SaveorUpdateDimension(dimension);
+            //houseRepository.SaveorUpdateDimension(dimension);
             houseRepository.SaveorUpdate(house);
             
             House retreivedHouse = houseRepository.GetHouseById(house.Id);
@@ -106,8 +112,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             string area = "Pindora, Rawalpindi, Pakistan";
 
-            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
-            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = 
+                _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
             var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(area);
 
             // Saving House # 1
@@ -205,8 +212,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             string area = "Pindora, Rawalpindi, Pakistan";
 
-            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
-            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = 
+                _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
             var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(area);
 
             // Saving House # 1
@@ -303,8 +311,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Save 2 houses that are in other places. 
             // Search should get the 2 houses located near the serched location and also the exact PropertyType
 
-            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
-            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = 
+                _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
 
             // Saving House # 1: Should be in the search results
             string area = "Pindora, Rawalpindi, Pakistan";
@@ -519,7 +528,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             decimal initialLatitude = 33.29M;
             decimal initialLongitude = 73.41M;
             PropertyType propertyType = PropertyType.House;
-            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
             SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
             IList<House> retreivedHouses = houseRepository.SearchHousesByCoordinatesAndPropertyType(initialLatitude,
                 initialLongitude, propertyType);
@@ -541,8 +550,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Save two houses with the same coordinates and get both of them 
             string area = "Pindora, Rawalpindi, Pakistan";
 
-            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
-            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
             var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(area);
 
             // Saving House # 1
@@ -668,7 +677,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Save multiple houses, retreive them by specifying coordinates and verify all of them
             decimal initialLatitude = 33.29M;
             decimal initialLongitude = 73.41M;
-            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
             SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
             IList<House> retreivedHouses = houseRepository.SearchHousesByCoordinates(initialLatitude, initialLongitude);
             Assert.NotNull(retreivedHouses);
@@ -683,7 +692,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Save multiple houses and 
             decimal initialLatitude = 33.29M;
             decimal initialLongitude = 73.41M;
-            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
             SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
             IList<House> retreivedHouses = houseRepository.SearchHousesByCoordinates(29.00M, 69.00M);
             Assert.NotNull(retreivedHouses);
@@ -700,8 +709,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Save 3 houses in locations nearby and 2 houses that are in other places. 
             // Search should get the 3 houses located near theserched location
 
-            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
-            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = 
+                _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
 
             // Saving House # 1: Near the search location, should be in the search results
             string area = "Pindora, Rawalpindi, Pakistan";
@@ -927,8 +937,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Search should get the 2 houses with the same propertyType, and ignore the 3 who have a different propertyType, even
             // though they are located within the search radius (2 kilometers)
 
-            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
-            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = 
+                _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
 
             // Saving House # 1: Should be in the search results
             string area = "Pindora, Rawalpindi, Pakistan";
@@ -1131,8 +1142,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         [Test]
         public void RetreiveHousesByPropertyTypePaginationTest_ChecksThatThePaginationIsWorkingFine_VerifiesThroughReturnedOutput()
         {
-            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
-            
+            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+
             // Save more than 10 houses using the same property type
             SaveMultipleHousesUsingGivenIterations(houseRepository, 21);
 
@@ -1149,7 +1160,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             decimal initialLatitude = 33.29M;
             decimal initialLongitude = 73.41M;
             PropertyType propertyType = PropertyType.House;
-            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
             SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
             IList<House> retreivedHouses = houseRepository.SearchHousesByPropertyType(propertyType);
             Assert.NotNull(retreivedHouses);
@@ -1167,7 +1178,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         [Test]
         public void SaveHouseAndRetreiveByEmailTest_TestsThatHouseUInstancesAreSavedToTheDatabaseAsExpected_VerifiesThroughDatabaseQuery()
         {
-            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
             string email = "w@12344321.com";
             string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
             string title = "MGM Grand";
@@ -1225,7 +1236,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         [Test]
         public void SaveImagesToHouse_ChecksThatAfterAddingImagesHouseIsSavedAsExpected_VerifiesByRetrievingAfterSaving()
         {
-            IHouseRepository houseRepository = (IHouseRepository)ContextRegistry.GetContext()["HouseRepository"];
+            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
             string email = "w@12344321.com";
             string title = "MGM Grand";
             string phoneNumber = "01234567890";

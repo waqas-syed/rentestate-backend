@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using NUnit.Framework;
 using RentStuff.Property.Domain.Model.HouseAggregate;
-using Spring.Context.Support;
+//using Spring.Context.Support;
 
 namespace RentStuff.Property.Persistence.IntegrationTests
 {
