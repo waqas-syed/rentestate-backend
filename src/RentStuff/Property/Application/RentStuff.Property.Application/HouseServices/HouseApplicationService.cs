@@ -24,14 +24,15 @@ namespace RentStuff.Property.Application.HouseServices
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private IHouseRepository _houseRepository;
-        private IGeocodingService _geocodingService;
-        private IPhotoStorageService _photoStorageService;
+        private RentStuff.Common.Services.LocationServices.IGeocodingService _geocodingService;
+        private RentStuff.Common.Services.GoogleStorageServices.IPhotoStorageService _photoStorageService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public HouseApplicationService(IHouseRepository houseRepository, IGeocodingService geocodingService,
-            IPhotoStorageService photoStorageService)
+        public HouseApplicationService(IHouseRepository houseRepository,
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService,
+            RentStuff.Common.Services.GoogleStorageServices.IPhotoStorageService photoStorageService)
         {
             _houseRepository = houseRepository;
             _geocodingService = geocodingService;

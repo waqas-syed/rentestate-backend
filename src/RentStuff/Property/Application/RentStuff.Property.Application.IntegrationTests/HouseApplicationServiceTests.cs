@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using Ninject;
 using NUnit.Framework;
 using RentStuff.Common;
+using RentStuff.Common.NinjectModules;
 using RentStuff.Property.Application.HouseServices;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
+using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.Services;
-using RentStuff.Property.Infrastructure.Services.DbDecipherServices;
-using Spring.Context.Support;
+using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 
 namespace RentStuff.Property.Application.IntegrationTests
 {
@@ -17,6 +19,7 @@ namespace RentStuff.Property.Application.IntegrationTests
     public class HouseApplicationServiceTests
     {
         private DatabaseUtility _databaseUtility;
+        private IKernel _kernel;
 
         [SetUp]
         public void Setup()
@@ -25,7 +28,12 @@ namespace RentStuff.Property.Application.IntegrationTests
             _databaseUtility = new DatabaseUtility(connection);
             _databaseUtility.Create();
             //_databaseUtility.Populate();
-            NhConnectionDecipherService.SetupDecipheredConnectionString();
+            //NhConnectionDecipherService.SetupDecipheredConnectionString();
+            _kernel = new StandardKernel();
+            
+            _kernel.Load<PropertyPersistenceNinjectModule>();
+            _kernel.Load<CommonNinjectModule>();
+            _kernel.Load<PropertyApplicationNinjectModule>();
         }
 
         [TearDown]
@@ -37,8 +45,7 @@ namespace RentStuff.Property.Application.IntegrationTests
         [Test]
         public void SaveHouseTest_TestsThatANewHouseIsSavedInTheDatabaseAsExpected_VerifiesByOutput()
         {
-            IHouseApplicationService houseApplicationService =
-                (IHouseApplicationService) ContextRegistry.GetContext()["HouseApplicationService"];
+            IHouseApplicationService houseApplicationService = _kernel.Get<IHouseApplicationService>();
             
             string email = "w@12344321.com";
             string phoneNumber = "01234567890";
@@ -94,8 +101,7 @@ namespace RentStuff.Property.Application.IntegrationTests
         [Test]
         public void SaveHouseAndRetrieveTest_TestsThatANewHouseIsSavedInTheDatabaseAsExpected_VerifiesByOutput()
         {
-            IHouseApplicationService houseApplicationService =
-                (IHouseApplicationService)ContextRegistry.GetContext()["HouseApplicationService"];
+            IHouseApplicationService houseApplicationService = _kernel.Get<IHouseApplicationService>();
 
             string email = "w@12344321.com";
             string phoneNumber = "01234567890";
@@ -114,7 +120,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string propertyType = "Apartment";
             string genderRestriction = GenderRestriction.GirlsOnly.ToString();
 
-            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
             Tuple<decimal, decimal> coordinates = geocodingService.GetCoordinatesFromAddress(area);
             Assert.IsNotNull(coordinates);
 
@@ -145,8 +151,7 @@ namespace RentStuff.Property.Application.IntegrationTests
         [Test]
         public void SearchHousesByAddressAndPropertyTypeTest_TestsThatANewHouseIsSavedInTheDatabaseAndRetreivedAsExpected_VerifiesByOutput()
         {
-            IHouseApplicationService houseApplicationService =
-                (IHouseApplicationService)ContextRegistry.GetContext()["HouseApplicationService"];
+            IHouseApplicationService houseApplicationService = _kernel.Get<IHouseApplicationService>();
 
             // Saving House # 1 : Wont appear in search results as the PropertyType is Apartment; search criteria is House
             string email = "w@12344321.com";
@@ -255,8 +260,7 @@ namespace RentStuff.Property.Application.IntegrationTests
         [Test]
         public void SearchHousesByPropertyTypeOnlyTest_TestsThatANewHouseIsSavedInTheDatabaseAndRetreivedAsExpected_VerifiesByOutput()
         {
-            IHouseApplicationService houseApplicationService =
-                (IHouseApplicationService)ContextRegistry.GetContext()["HouseApplicationService"];
+            IHouseApplicationService houseApplicationService = _kernel.Get<IHouseApplicationService>();
 
             // Saving House # 1 : Wont appear in search results as the PropertyType is Apartment; search criteria is House
             string email = "w@12344321.com";
@@ -351,8 +355,7 @@ namespace RentStuff.Property.Application.IntegrationTests
         [Test]
         public void SearchHousesByAreaOnlyTest_TestsThatANewHouseIsSavedInTheDatabaseAndRetreivedAsExpected_VerifiesByOutput()
         {
-            IHouseApplicationService houseApplicationService =
-                (IHouseApplicationService)ContextRegistry.GetContext()["HouseApplicationService"];
+            IHouseApplicationService houseApplicationService = _kernel.Get<IHouseApplicationService>();
 
             // Saving House # 1
             string email = "w@12344321.com";
@@ -469,8 +472,7 @@ namespace RentStuff.Property.Application.IntegrationTests
         [Test]
         public void SaveHouseAndGetHouseByIdTest_TestsThatANewHouseIsSavedInTheDatabaseAsExpected_VerifiesByOutput()
         {
-            IHouseApplicationService houseApplicationService =
-                (IHouseApplicationService)ContextRegistry.GetContext()["HouseApplicationService"];
+            IHouseApplicationService houseApplicationService = _kernel.Get<IHouseApplicationService>();
 
             string email = "w@12344321.com";
             string phoneNumber = "01234567890";
@@ -488,7 +490,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string ownerName = "Owner Name 1";
             string genderRestriction1 = GenderRestriction.GirlsOnly.ToString();
 
-            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
             Tuple<decimal, decimal> coordinates = geocodingService.GetCoordinatesFromAddress(area);
             Assert.IsNotNull(coordinates);
 
@@ -527,8 +529,7 @@ namespace RentStuff.Property.Application.IntegrationTests
         {
             string area = "1600+Amphitheatre+Parkway,+Mountain+View,+CA";
 
-            IHouseApplicationService houseApplicationService =
-                (IHouseApplicationService)ContextRegistry.GetContext()["HouseApplicationService"];
+            IHouseApplicationService houseApplicationService = _kernel.Get<IHouseApplicationService>();
 
             string email = "w@12344321.com";
             string phoneNumber = "01234567890";
@@ -550,7 +551,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             dimensionType, dimensionString, 0, ownerName, description, genderRestriction);
             var houseCreated = houseApplicationService.SaveNewHouseOffer(house);
 
-            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
             Tuple<decimal, decimal> coordinates = geocodingService.GetCoordinatesFromAddress(area);
             Assert.IsNotNull(coordinates);
 
@@ -575,10 +576,9 @@ namespace RentStuff.Property.Application.IntegrationTests
         public void SearchHousesByAddressFailTest_GetsHousesGivenTheAddress_VerifiesThroughDatabaseRetreival()
         {
             // Test fails because we search for a different address than the one we saved
-            string area = "1600+Amphitheatre+Parkway,+Mountain+View,+CA";
+            string area = "Pindora, Rawalpindi, Pakistan";
 
-            IHouseApplicationService houseApplicationService =
-                (IHouseApplicationService)ContextRegistry.GetContext()["HouseApplicationService"];
+            IHouseApplicationService houseApplicationService = _kernel.Get<IHouseApplicationService>();
 
             string email = "w@12344321.com";
             string phoneNumber = "01234567890";
@@ -600,11 +600,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             dimensionType, dimensionString, 0, ownerName, description, genderRestriction);
             houseApplicationService.SaveNewHouseOffer(house);
 
-            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
             Tuple<decimal, decimal> coordinates = geocodingService.GetCoordinatesFromAddress(area);
             Assert.IsNotNull(coordinates);
 
-            area = "Kremlin,+Moscow,+Russia";
+            area = "E-11, Islamabad, Pakistan";
             IList<HousePartialRepresentation> retreivedHouses = houseApplicationService.SearchHousesByArea(area);
             Assert.NotNull(retreivedHouses);
             Assert.AreEqual(0, retreivedHouses.Count);

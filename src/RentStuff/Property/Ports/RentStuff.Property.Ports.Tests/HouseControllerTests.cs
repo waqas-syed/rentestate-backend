@@ -14,7 +14,7 @@ using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.Services;
-using RentStuff.Property.Infrastructure.Services.DbDecipherServices;
+//using RentStuff.Property.Infrastructure.Services.DbDecipherServices;
 using RentStuff.Property.Ports.Adapter.Rest.Resources;
 using Spring.Context.Support;
 
@@ -36,7 +36,7 @@ namespace RentStuff.Property.Ports.Tests
             _databaseUtility.Create();            
             //_databaseUtility.Populate();
             ShowNhibernateLogging();
-            NhConnectionDecipherService.SetupDecipheredConnectionString();
+            //NhConnectionDecipherService.SetupDecipheredConnectionString();
         }
 
         [TearDown]
