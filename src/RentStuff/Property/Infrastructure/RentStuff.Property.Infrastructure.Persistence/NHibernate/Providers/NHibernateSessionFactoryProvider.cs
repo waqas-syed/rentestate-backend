@@ -28,6 +28,20 @@ namespace RentStuff.Property.Infrastructure.Persistence.NHibernate.Providers
             cfg.Configure();
             // Build the Session Factory using the Configuration
             return cfg.BuildSessionFactory();
+
+            // Properties that can be used in NHibernate Configuration:
+            // http://nhibernate.info/doc/nhibernate-reference/session-configuration.html
+            // GenerateStatistics
+            // BatchSize
+            // Listeners
+            // SetCacheConcurrencyStrategy
+            // SetCollectionCacheConcurrencyStrategy
+            // bytecode-provider
+            // reflection-optimizer
+            // proxyfactory.factory_class
+            // DatabaseIntegration.IsolationLevel 
+            // DatabaseIntegration.LogFormattedSql 
+            // DatabaseIntegration.AutoCommentSql 
         }
     }
 }
