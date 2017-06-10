@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 using RentStuff.Common.Domain.Model;
 
 namespace RentStuff.Property.Domain.Model.HouseAggregate

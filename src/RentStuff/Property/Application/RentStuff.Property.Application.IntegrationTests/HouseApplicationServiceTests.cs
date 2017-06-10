@@ -10,7 +10,6 @@ using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
 using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Domain.Model.HouseAggregate;
-using RentStuff.Property.Domain.Model.Services;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 
 namespace RentStuff.Property.Application.IntegrationTests

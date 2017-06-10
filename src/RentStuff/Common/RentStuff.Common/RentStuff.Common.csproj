@@ -112,6 +112,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain.Model\Assertion.cs" />
+    <Compile Include="Domain.Model\Entity.cs" />
     <Compile Include="Services\LocationServices\IGeocodingService.cs" />
     <Compile Include="Services\GoogleStorageServices\IPhotoStorageService.cs" />
     <Compile Include="Services\GoogleStorageServices\PhotoStorageService.cs" />

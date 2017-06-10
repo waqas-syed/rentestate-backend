@@ -103,15 +103,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GoogleStorageServices\PhotoStorageService.cs" />
-    <Compile Include="LocationServices\GeocodingService.cs" />
-    <Compile Include="Ninject\Modules\PropertyServicesNinjectModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="PropertyInfrastructureServicesConfig.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

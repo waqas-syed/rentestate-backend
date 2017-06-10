@@ -8,7 +8,6 @@ using System.Management.Instrumentation;
 using System.Web.Hosting;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
-using RentStuff.Property.Domain.Model.Services;
 using System.Linq;
 using NLog;
 using RentStuff.Common;

@@ -52,9 +52,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Common\RentStuff.Common.Domain.Model\RentStuff.Common.Domain.Model.csproj">
-      <Project>{199a41d2-a685-4e0c-98fe-c5524099b5f2}</Project>
-      <Name>RentStuff.Common.Domain.Model</Name>
+    <ProjectReference Include="..\..\..\Common\RentStuff.Common\RentStuff.Common.csproj">
+      <Project>{85eed18f-3c13-49ef-9c12-48fdb2661896}</Project>
+      <Name>RentStuff.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\RentStuff.Property.Domain.Model\RentStuff.Property.Domain.Model.csproj">
       <Project>{c6c90b57-616b-4d09-ba23-1c9c42ac93ad}</Project>

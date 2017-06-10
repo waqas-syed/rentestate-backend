@@ -5,7 +5,6 @@ using NUnit.Framework;
 using RentStuff.Common;
 using RentStuff.Common.NinjectModules;
 using RentStuff.Property.Domain.Model.HouseAggregate;
-using RentStuff.Property.Domain.Model.Services;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 
 //using Spring.Context.Support;

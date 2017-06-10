@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Threading;
 using Ninject;
 using NUnit.Framework;
 using RentStuff.Common.NinjectModules;
-using RentStuff.Common.Services.LocationServices;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
-using IGeocodingService = RentStuff.Property.Domain.Model.Services.IGeocodingService;
-
-//using Spring.Context.Support;
 
 namespace RentStuff.Property.Persistence.IntegrationTests
 {
