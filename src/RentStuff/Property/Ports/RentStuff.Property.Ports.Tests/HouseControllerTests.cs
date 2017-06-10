@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Security.Claims;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -8,15 +7,17 @@ using log4net.Appender;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using Newtonsoft.Json;
+using Ninject;
 using NUnit.Framework;
 using RentStuff.Common;
+using RentStuff.Common.NinjectModules;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
+using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Domain.Model.HouseAggregate;
-using RentStuff.Property.Domain.Model.Services;
-//using RentStuff.Property.Infrastructure.Services.DbDecipherServices;
+using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
+using RentStuff.Property.Ports.Adapter.Rest.Ninject.Modules;
 using RentStuff.Property.Ports.Adapter.Rest.Resources;
-using Spring.Context.Support;
 
 namespace RentStuff.Property.Ports.Tests
 {
@@ -27,15 +28,22 @@ namespace RentStuff.Property.Ports.Tests
         // that we are not exhausting resources by unknowingly running such tests
         private bool _runTests = true;
         private DatabaseUtility _databaseUtility;
+        private StandardKernel _kernel;
 
         [SetUp]
         public void Setup()
         {
             var connection = StringCipher.DecipheredConnectionString;
             _databaseUtility = new DatabaseUtility(connection);
-            _databaseUtility.Create();            
+            _databaseUtility.Create();
+
+            _kernel = new StandardKernel();
+            _kernel.Load<PropertyPersistenceNinjectModule>();
+            _kernel.Load<CommonNinjectModule>();
+            _kernel.Load<PropertyApplicationNinjectModule>();
+            _kernel.Load<PropertyPortsNinjectModule>();
             //_databaseUtility.Populate();
-            ShowNhibernateLogging();
+            //ShowNhibernateLogging();
             //NhConnectionDecipherService.SetupDecipheredConnectionString();
         }
 
@@ -62,7 +70,7 @@ namespace RentStuff.Property.Ports.Tests
         {
             if (_runTests)
             {
-                HouseController houseController = (HouseController) ContextRegistry.GetContext()["HouseController"];
+                HouseController houseController = _kernel.Get<HouseController>();
                 Assert.NotNull(houseController);
 
                 string title = "House For Rent";
@@ -139,7 +147,7 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house.GenderRestriction, retreivedHouse.GenderRestriction);
 
                 // Get the coordinates to verify we have stored the correct ones
-                IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+                RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
                 var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(area);
                 Assert.AreEqual(coordinatesFromAddress.Item1, retreivedHouse.Latitude);
                 Assert.AreEqual(coordinatesFromAddress.Item2, retreivedHouse.Longitude);
@@ -214,7 +222,7 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(updateHouseCommand.GenderRestriction, retreivedHouse.GenderRestriction);
 
                 // Get the coordinates to verify we have stored the correct ones
-                geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+                geocodingService = _kernel.Get< RentStuff.Common.Services.LocationServices.IGeocodingService> ();
                 coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(updatedArea);
                 Assert.AreEqual(coordinatesFromAddress.Item1, retreivedHouse.Latitude);
                 Assert.AreEqual(coordinatesFromAddress.Item2, retreivedHouse.Longitude);
@@ -256,7 +264,7 @@ namespace RentStuff.Property.Ports.Tests
             // searched while the other has a different property type
             if (_runTests)
             {
-                HouseController houseController = (HouseController)ContextRegistry.GetContext()["HouseController"];
+                HouseController houseController = _kernel.Get<HouseController>();
                 Assert.NotNull(houseController);
 
                 // Saving House # 1 - SET 1: Should appear in search results
@@ -547,7 +555,7 @@ namespace RentStuff.Property.Ports.Tests
         public void
             SearchHousesByPropertyTypeOnly_TestsThatHouseIsSavedAndRetreivedAsExpected_VerfiesThroughInstanceValue()
         {
-            HouseController houseController = (HouseController) ContextRegistry.GetContext()["HouseController"];
+            HouseController houseController = _kernel.Get<HouseController>();
             Assert.NotNull(houseController);
 
             // Saving House # 1: Should appear in search results with PropertyType = Apartment
@@ -756,7 +764,7 @@ namespace RentStuff.Property.Ports.Tests
         public void
             SearchHousesByAreaOnly_TestsThatHouseIsSavedAndRetreivedAsExpected_VerfiesThroughInstanceValue()
         {
-            HouseController houseController = (HouseController)ContextRegistry.GetContext()["HouseController"];
+            HouseController houseController = _kernel.Get<HouseController>();
             Assert.NotNull(houseController);
 
             // Saving House # 1: Should appear in search results with area = Pindora (near I-9, Islamabad)

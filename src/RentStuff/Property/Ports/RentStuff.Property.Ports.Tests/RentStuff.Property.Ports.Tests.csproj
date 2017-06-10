@@ -32,18 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Common.Logging.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -64,8 +52,8 @@
       <HintPath>..\..\..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
@@ -74,22 +62,6 @@
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Spring.Aop, Version=2.0.1.45000, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Spring.Aop.2.0.1\lib\net45\Spring.Aop.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Spring.Core, Version=2.0.1.45000, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Spring.Core.2.0.1\lib\net45\Spring.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Spring.Data, Version=2.0.1.45000, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Spring.Data.2.0.1\lib\net45\Spring.Data.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Spring.Data.NHibernate4, Version=2.0.1.45000, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Spring.Data.NHibernate4.2.0.1\lib\net45\Spring.Data.NHibernate4.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -144,10 +116,6 @@
     <ProjectReference Include="..\..\Infrastructure\RentStuff.Property.Infrastructure.Persistence\RentStuff.Property.Infrastructure.Persistence.csproj">
       <Project>{8cc19802-c300-4e6b-9137-83db9d94a481}</Project>
       <Name>RentStuff.Property.Infrastructure.Persistence</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\RentStuff.Property.Infrastructure.Services\RentStuff.Property.Infrastructure.Services.csproj">
-      <Project>{fcdbf9a2-1338-43e8-9b43-1b7798277f05}</Project>
-      <Name>RentStuff.Property.Infrastructure.Services</Name>
     </ProjectReference>
     <ProjectReference Include="..\RentStuff.Property.Ports.Adapter.Rest\RentStuff.Property.Ports.Adapter.Rest.csproj">
       <Project>{f5927692-6840-4b54-a8aa-ec37152112df}</Project>

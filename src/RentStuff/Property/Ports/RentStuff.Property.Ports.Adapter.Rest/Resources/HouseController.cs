@@ -1,27 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Mime;
 using System.Threading.Tasks;
-using System.Configuration;
-using System.Web;
-using System.Web.Hosting;
 using System.Web.Http;
-using System.Web.UI.WebControls;
-using Google.Cloud.Storage.V1;
 using Newtonsoft.Json;
 using NLog;
-using RentStuff.Common;
 using RentStuff.Property.Application.HouseServices;
 using RentStuff.Property.Application.HouseServices.Commands;
-using RentStuff.Property.Domain.Model.HouseAggregate;
-using Image = System.Drawing.Image;
 
 namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 {
@@ -33,15 +18,13 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private IHouseApplicationService _houseApplicationService;
-        private readonly StorageClient _storageClient;
-
+        
         /// <summary>
         /// Default Constructor
         /// </summary>
         /// <param name="houseApplicationService"></param>
         public HouseController(IHouseApplicationService houseApplicationService)
         {
-            _storageClient = StorageClient.Create();
             _houseApplicationService = houseApplicationService;
         }
 
