@@ -117,7 +117,5 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         /// <returns></returns>
         Tuple<int, int> GetTotalRecordCount();
-
-        string Id { get; }
     }
 }
