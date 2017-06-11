@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using NHibernate;
 using RentStuff.Property.Domain.Model.HouseAggregate;
+using RentStuff.Property.Infrastructure.Persistence.NHibernate.Wrappers;
+
 //using Spring.Transaction;
 //using Spring.Transaction.Interceptor;
 
@@ -20,11 +22,11 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         // http://stackoverflow.com/questions/9686309/list-of-surrounding-towns-within-a-given-radius
         private readonly int _radius = 2;
         private readonly int _resultsPerPage = 10;
-        private ISession _session;
+        private INhibernateSessionWrapper _session;
 
-        public HouseRepository(ISession session)
+        public HouseRepository(INhibernateSessionWrapper nhibernateSessionWrapper)
         {
-            _session = session;
+            _session = nhibernateSessionWrapper;
         }
 
         /// <summary>
@@ -34,9 +36,9 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         //[Transaction(TransactionPropagation.Required, ReadOnly = false)]
         public void SaveorUpdate(House house)
         {
-            using (var transaction = _session.BeginTransaction(IsolationLevel.ReadCommitted))
+            using (var transaction = _session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                _session.SaveOrUpdate(house);
+                _session.Session.SaveOrUpdate(house);
                 transaction.Commit();
             }
         }
@@ -44,9 +46,9 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         //[Transaction(TransactionPropagation.Required, ReadOnly = false)]
         public void SaveorUpdateDimension(Dimension dimension)
         {
-            using (var transaction = _session.BeginTransaction(IsolationLevel.ReadCommitted))
+            using (var transaction = _session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                _session.SaveOrUpdate(dimension);
+                _session.Session.SaveOrUpdate(dimension);
                 transaction.Commit();
             }
             
@@ -55,7 +57,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
        // [Transaction(TransactionPropagation.Required, ReadOnly = false)]
         public void Delete(House house)
         {
-            _session.Delete(house);
+            _session.Session.Delete(house);
         }
 
         /// <summary>
@@ -66,9 +68,9 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         //[Transaction]
         public House GetHouseById(string houseId)
         {
-            using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
+            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                return _session.QueryOver<House>().Where(x => x.Id == houseId).SingleOrDefault();
+                return _session.Session.QueryOver<House>().Where(x => x.Id == houseId).SingleOrDefault();
             }
         }
 
@@ -81,7 +83,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         //[Transaction]
         public IList<House> GetHouseByOwnerEmail(string email, int pageNo = 0)
         {
-            return _session.QueryOver<House>()
+            return _session.Session.QueryOver<House>()
                     .Where(x => x.OwnerEmail == email)
                     .Skip(pageNo * _resultsPerPage)
                     .Take(_resultsPerPage)
@@ -97,7 +99,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         //[Transaction]
         public IList<House> GetHouseByCoordinates(decimal latitude, decimal longitude)
         {
-            return _session.QueryOver<House>().Where(x => x.Latitude == latitude).Where(x => x.Longitude == longitude).List<House>();
+            return _session.Session.QueryOver<House>().Where(x => x.Latitude == latitude).Where(x => x.Longitude == longitude).List<House>();
         }
 
         /// <summary>
@@ -109,7 +111,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         //[Transaction]
         public IList<House> SearchHousesByPropertyType(PropertyType propertyType, int pageNo = 0)
         {
-            return _session.QueryOver<House>().Where(x => x.PropertyType == propertyType)
+            return _session.Session.QueryOver<House>().Where(x => x.PropertyType == propertyType)
                 .Skip(pageNo * _resultsPerPage)
                 .Take(_resultsPerPage)
                 .List<House>();
@@ -130,7 +132,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
        // [Transaction]
         public IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude, int pageNo = 0)
         {
-            IList houses = _session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house HAVING distance < :radius ORDER BY distance")// LIMIT 0 , 20")//("SELECT name, latitude, longitude, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM geo_location HAVING distance < 25 ORDER BY distance LIMIT 0 , 20")
+            IList houses = _session.Session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house HAVING distance < :radius ORDER BY distance")// LIMIT 0 , 20")//("SELECT name, latitude, longitude, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM geo_location HAVING distance < 25 ORDER BY distance LIMIT 0 , 20")
                 .AddEntity(typeof(House))
                 .SetParameter("inputLatitude", latitude)
                 .SetParameter("inputLongitude", longitude)
@@ -154,7 +156,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         public IList<House> SearchHousesByCoordinatesAndPropertyType(decimal latitude, decimal longitude,
             PropertyType propertyType, int pageNo = 0)
         {
-            IList houses = _session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house HAVING distance < :radius AND property_type=:propertyType ORDER BY distance")
+            IList houses = _session.Session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house HAVING distance < :radius AND property_type=:propertyType ORDER BY distance")
                 .AddEntity(typeof(House))
                 //.AddScalar("latitude", NHibernateUtil.Decimal)
                 //.AddScalar("longitude", NHibernateUtil.Decimal)
@@ -178,7 +180,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         public IList<House> GetAllHouses(int pageNo = 0)
         {
             return _session
-                    .QueryOver<House>()
+                    .Session.QueryOver<House>()
                     .Skip(pageNo * _resultsPerPage)
                     .Take(_resultsPerPage)
                     .List<House>();
@@ -194,7 +196,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         public Tuple<int, int> GetRecordCountByPropertyType(PropertyType propertyType)
         {
             return new Tuple<int, int>(
-                _session.QueryOver<House>().Where(x => x.PropertyType == propertyType).RowCount(), _resultsPerPage);
+                _session.Session.QueryOver<House>().Where(x => x.PropertyType == propertyType).RowCount(), _resultsPerPage);
         }
 
         /// <summary>
@@ -208,7 +210,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         //[Transaction]
         public Tuple<int, int> GetRecordCountByLocation(decimal latitude, decimal longitude)
         {
-            return new Tuple<int, int>(_session.QueryOver<House>()
+            return new Tuple<int, int>(_session.Session.QueryOver<House>()
                 .Where(x => x.Latitude == latitude && x.Longitude == longitude)
                 .RowCount(), _resultsPerPage);
         }
@@ -221,7 +223,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         //[Transaction]
         public Tuple<int, int> GetRecordCountByEmail(string email)
         {
-            return new Tuple<int, int>(_session.QueryOver<House>().Where(x => x.OwnerEmail == email)
+            return new Tuple<int, int>(_session.Session.QueryOver<House>().Where(x => x.OwnerEmail == email)
                 .RowCount(), _resultsPerPage);
         }
 
@@ -237,7 +239,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         //[Transaction]
         public Tuple<int, int> GetRecordCountByLocationAndPropertyType(decimal latitude, decimal longitude, PropertyType propertyType)
         {
-            return new Tuple<int, int>(_session.QueryOver<House>().Where(x => x.Latitude == latitude && x.Longitude == longitude &&
+            return new Tuple<int, int>(_session.Session.QueryOver<House>().Where(x => x.Latitude == latitude && x.Longitude == longitude &&
             x.PropertyType == propertyType).RowCount(), _resultsPerPage);
         }
 
@@ -250,7 +252,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         //[Transaction]
         public Tuple<int, int> GetTotalRecordCount()
         {
-            return new Tuple<int, int>(_session.QueryOver<House>().RowCount(), _resultsPerPage);
+            return new Tuple<int, int>(_session.Session.QueryOver<House>().RowCount(), _resultsPerPage);
         }
     }
 }

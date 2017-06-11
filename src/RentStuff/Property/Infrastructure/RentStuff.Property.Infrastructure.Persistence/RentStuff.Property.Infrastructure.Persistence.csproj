@@ -67,6 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NHibernate\Providers\NHibernateSessionFactoryProvider.cs" />
+    <Compile Include="NHibernate\Wrappers\INhibernateSessionWrapper.cs" />
+    <Compile Include="NHibernate\Wrappers\NHibernateSessionWrapper.cs" />
     <Compile Include="Ninject\Modules\PropertyPersistenceNinjectModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\HouseRepository.cs" />

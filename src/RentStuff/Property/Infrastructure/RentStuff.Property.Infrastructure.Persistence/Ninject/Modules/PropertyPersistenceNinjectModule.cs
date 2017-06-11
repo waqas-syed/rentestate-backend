@@ -4,6 +4,7 @@ using Ninject.Modules;
 using Ninject.Web.Common;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Infrastructure.Persistence.NHibernate.Providers;
+using RentStuff.Property.Infrastructure.Persistence.NHibernate.Wrappers;
 using RentStuff.Property.Infrastructure.Persistence.Repositories;
 
 namespace RentStuff.Property.Infrastructure.Persistence.Ninject.Modules
@@ -14,7 +15,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Ninject.Modules
         public override void Load()
         {
             Bind<ISessionFactory>().ToConstant(NHibernateSessionFactoryProvider.SessionFactory).InSingletonScope();
-            Bind<ISession>().ToMethod(context => context.Kernel.Get<ISessionFactory>().OpenSession()).InRequestScope();
+            Bind<INhibernateSessionWrapper>().To<NHibernateSessionWrapper>().InRequestScope();
             Bind<IHouseRepository>().To<HouseRepository>().InRequestScope();
         }
     }
