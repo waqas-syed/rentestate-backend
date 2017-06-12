@@ -220,6 +220,30 @@ namespace RentStuff.Services.Domain.Model.UnitTests
                 .Latitude(latitude).Build();
         }
 
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void WrongServiceProfessionTypeFailTest_ChecksThatTheSystemThrowsErrorIfAnNonRecognizableProfessionisSupplied_VerifiesThroughRasedException()
+        {
+            //We provide a false profession to the service builder and the service will raise exception a result
+            string name = "Black Smith Inc";
+            string description = "We create the worlds best swords, spears and hammers!";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string phoneNumber = "03455138018";
+            string serviceEmail = "smithy@smithereene1234567.com";
+            string uploaderEmail = "provider@smithereene1234567.com";
+            // Provide a false profession here by adding just a digit to an existing profession
+            string serviceProviderType = Service.GetProfessionsList().First() + "1";
+            string serviceEntityType = ServiceEntityType.Organization.ToString();
+            DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
+            Service service = new Service.ServiceBuilder().Name(name).Description(description)
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
+                .Latitude(latitude).Longitude(longitude).Build();
+        }
+
         #endregion Service Tests
 
         #region Reviews Tests
@@ -274,9 +298,8 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             Assert.AreEqual(authorName2, service.Reviews[1].Authorname);
             Assert.AreEqual(authorName2, service.Reviews[1].Authorname);
             Assert.AreEqual(reviewDescription2, service.Reviews[1].ReviewDescription);
-
         }
-
+        
         #endregion Reviews Tests
 
         // Ratings code: commented out but let it stay for possible future reference
