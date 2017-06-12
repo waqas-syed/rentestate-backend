@@ -203,9 +203,6 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
         [Test]
         public void SearchServiceUsingLocationCoordinatesTest_ChecksIfTheServiceInstanceIsSavedWithoutThemandatoryFieldsAsExpected_VerifiesByTheReturnedValue()
         {
-            Console.WriteLine("Start");
-            DateTime startTime = DateTime.Now;
-
             // This test saves 6 services at distant locations in Rawalpindi and Islamabad and then queries 
             // one location(Bahria Town). Services within the defined radius( approx 38 kilometers) are
             // retreived. Services outside of this radius(Sangada, KPK) are ignored
@@ -474,12 +471,6 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Check the Reviews of House no 2
             Assert.IsNotNull(retrievedService.Reviews);
             Assert.AreEqual(0, retrievedService.Reviews.Count);
-            
-
-            
-
-            int timeTaken = (DateTime.Now - startTime).Milliseconds;
-            Console.WriteLine("Total Time Taken: " + timeTaken);
         }
 
         // Searches through both coordinates and Service profession type
