@@ -346,9 +346,9 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Save the Service
             servicesRepository.SaveOrUpdate(service6);
 
-            // Search by giving Bahroa Town as the location. It should include all of the above saved houses
-            // except House # 5, because it is more than 40 kilometers away from the location 
-            // 'Rawalpindi, Pakistan'
+            // Search by giving 'Rawalpindi, Pakistan' as the location. It should include all of the above 
+            // saved houses except House # 5(Khajut, Pakistan), because it is more than 35 kilometers away 
+            // from the location 'Rawalpindi, Pakistan'(who's zero point is near GPO Saddar)
             var retrievedServices = servicesRepository.GetServicesByLocation(latitude6, longitude6);
             Assert.IsNotNull(retrievedServices);
             
