@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
@@ -20,7 +21,12 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProfessionType = Service.GetProfessionsList().First();
+
+            // Get a profession somewhere from the middle of the dictionary
+            IReadOnlyList<string> vehicleProfession;
+            Service.GetProfessionsList().TryGetValue("Vehicle Services", out vehicleProfession);
+            Assert.IsNotNull(vehicleProfession);
+            string serviceProfessionType = vehicleProfession[3];
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             string facebookLink = "https://dummyfacebooklink-123456789-1.com";
@@ -64,7 +70,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProfessionType = Service.GetProfessionsList().First();
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
@@ -96,14 +102,14 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = Service.GetProfessionsList().First();
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
-                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
                 .Latitude(latitude).Longitude(longitude).Build();
         }
@@ -118,14 +124,14 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = Service.GetProfessionsList().First();
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
-                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
                 .Latitude(latitude).Longitude(longitude).Build();
         }
@@ -140,14 +146,14 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string location = "Pindora, Rawalpindi, Pakistan";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = Service.GetProfessionsList().First();
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).ServiceEmail(serviceEmail)
-                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
                 .Latitude(latitude).Longitude(longitude).Build();
         }
@@ -162,14 +168,14 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
-            string serviceProviderType = Service.GetProfessionsList().First();
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
-                .ServiceProfessionType(serviceProviderType)
+                .ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
                 .Latitude(latitude).Longitude(longitude).Build();
         }
@@ -207,13 +213,13 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = Service.GetProfessionsList().First();
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
-                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .DateEstablished(dateEstablished)
                 .Latitude(latitude).Longitude(longitude).Build();
         }
@@ -229,13 +235,13 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = Service.GetProfessionsList().First();
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
-                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
                 .Longitude(longitude).Build();
         }
@@ -251,13 +257,13 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = Service.GetProfessionsList().First();
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
-                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
                 .Latitude(latitude).Build();
         }
@@ -274,14 +280,14 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
             // Provide a false profession here by adding just a digit to an existing profession
-            string serviceProviderType = Service.GetProfessionsList().First() + "1";
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First() + "1";
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
-                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
                 .Latitude(latitude).Longitude(longitude).Build();
         }
@@ -299,14 +305,14 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = Service.GetProfessionsList().First();
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
-                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
                 .Latitude(latitude).Longitude(longitude).Build();
             

@@ -7,7 +7,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
     /// </summary>
     internal static class ServiceProfessions
     {
-        private static readonly List<string> _serviceProfessionList = new List<string>()
+        private static readonly List<string> HouseMaintenanceServices = new List<string>()
         {
             // Individual Services
             "Plumber",
@@ -15,35 +15,97 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             "Carpenter",
             "Mason/Mistry",
             "Maid",
-            "Car Tow/Recovery",
-            "Butcher/Qassai",
-            "Makeup Artist/Beautician",
-            "Car Mechanic",
-            "Car Electrician",
+            "Welder",
+            "Fire Safety Engineering"
+        };
+
+        private static readonly List<string> HouseDecorationServices = new List<string>()
+        {
             "Wall Painter",
+            "Wall Grace Painter",
+            "Wall Panel Installer",
+            "Interior Designing",
+            "Furnishing(Furniture)"
+        };
+
+        private static readonly List<string> ApplianceTechnicians = new List<string>()
+        {
             "Tv Technician",
             "Fridge Technician",
             "Electric Motor Technician",
             "Geyser Technician",
-            "Ac Technician",
-            "Welder",
-            "Wall Grace Painter",
-            "Wall Panel Installer",
+            "Ac Technician"
+        };
 
-            // Organization(or possibly individual)
-            "Tutor Service",
-            "Light Decoration",
-            "Food Catering",
-            "Interior Designing",
-            "Cargo Service",
-            "Furnishing(Furniture)",
-            "Fire Safety Engineering",
+        private static readonly List<string> FestivityServices = new List<string>()
+        {
+            "Butcher/Qassai",
+            "Light Decoration"
+        };
+
+        private static readonly List<string> AcademicServices = new List<string>()
+        {
+            "Home Tution",
+            "Tution Classes"
+        };
+
+        private static readonly List<string> VehicleServices = new List<string>()
+        {
+            "Rent A Car",
+            "Car Mechanic",
+            "Car Electrician",
             "Car Denting/Painting",
             "Vehicle Body Parts",
+            "Car Tow/Recovery"
+        };
+
+        private static readonly List<string> EventsAndCateringServices = new List<string>()
+        {
+            "Food Catering",
+            "Events Management"
+        };
+
+        private static readonly List<string> GoodsAndTransportServices = new List<string>()
+        {
+            "Cargo Service"
+        };
+
+        private static readonly List<string> MediaServices = new List<string>()
+        {
             "Cable Tv Service",
             "Dish Antenna Service"
         };
+        private static readonly List<string> BeauticianServices = new List<string>()
+        {
+            "Makeup Artist/Beautician"
+        };
 
-        internal static IReadOnlyList<string> List { get { return _serviceProfessionList.AsReadOnly(); } }
+        private static IReadOnlyDictionary<string, IReadOnlyList<string>> _allServices;
+
+        /// <summary>
+        /// Populate the dictionary
+        /// </summary>
+        private static IReadOnlyDictionary<string, IReadOnlyList<string>> PopulateDictionary()
+        {
+            return new Dictionary
+            <string, IReadOnlyList<string>>()
+            {
+                { "House Maintenance Services", HouseMaintenanceServices.AsReadOnly() },
+                { "House Decoration Services", HouseDecorationServices.AsReadOnly() },
+                { "Appliance Technicians", ApplianceTechnicians.AsReadOnly() },
+                { "Festivity Services", FestivityServices.AsReadOnly() },
+                { "Academic Services", AcademicServices.AsReadOnly() },
+                { "Vehicle Services", VehicleServices.AsReadOnly() },
+                { "Events and Catering Services", EventsAndCateringServices.AsReadOnly() },
+                { "Goods and Transport Services", GoodsAndTransportServices.AsReadOnly() },
+                { "Media Services", MediaServices.AsReadOnly() },
+                { "Beautician Services", BeauticianServices.AsReadOnly() }
+            };
+        }
+
+        internal static IReadOnlyDictionary<string, IReadOnlyList<string>> AllProfessions
+        {
+            get { return _allServices ?? (_allServices = PopulateDictionary()); }
+        }
     }
 }

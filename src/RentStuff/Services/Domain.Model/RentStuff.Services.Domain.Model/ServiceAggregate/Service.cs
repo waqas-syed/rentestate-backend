@@ -211,8 +211,33 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
                 // Check that it is not null or empty
                 Assertion.AssertStringNotNullorEmpty(value);
 
-                //Check that the value is present within the defined set of Service Profession types
-                if (!ServiceProfessions.List.Contains(value))
+                // Traverse through all the lists contained within the dictionary to check if the provided 
+                // value is acually legit and recognizable
+                bool legitValue = false;
+                // Go through each key value pair
+                foreach (var keyValue in ServiceProfessions.AllProfessions)
+                {
+                    // Go through each list
+                    foreach (var profession in keyValue.Value)
+                    {
+                        // If the given value is found
+                        if (profession.Equals(value))
+                        {
+                            // Mark the LegitValue as true
+                            legitValue = true;
+                            // Break the loop
+                            break;
+                        }
+                    }
+                    // If the value is recognizable, break this loop as well
+                    if (legitValue)
+                    {
+                        break;
+                    }
+                }
+                
+                // Through exception if we couldn't recognize the given value
+                if (!legitValue)
                 {
                     throw new InvalidOperationException("The provided profession type is not a recognizable profession type.");
                 }
@@ -223,9 +248,9 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Get all the professions that our app supports
         /// </summary>
-        public static IReadOnlyList<string> GetProfessionsList()
+        public static IReadOnlyDictionary<string,IReadOnlyList<string>> GetProfessionsList()
         {
-            return ServiceProfessions.List;
+            return ServiceProfessions.AllProfessions;
         }
 
         /// <summary>
@@ -287,22 +312,22 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Link to the Service provider's Facebook page
         /// </summary>
-        public string FacebookLink { get; private set; }
+        public virtual string FacebookLink { get; protected internal set; }
 
         /// <summary>
         /// Link to the Service provider's Instagram account
         /// </summary>
-        public string InstagramLink { get; private set; }
+        public virtual string InstagramLink { get; protected internal set; }
 
         /// <summary>
         /// Link to the Service provider's Twitter account
         /// </summary>
-        public string TwitterLink { get; private set; }
+        public virtual string TwitterLink { get; protected internal set; }
 
         /// <summary>
         /// Link to the Service provider's website
         /// </summary>
-        public string WebsiteLink { get; private set; }
+        public virtual string WebsiteLink { get; protected internal set; }
 
         /// <summary>
         /// Rating of this service by users

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using Ninject;
@@ -49,14 +50,19 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string phoneNumber = "03168948486";
             string serviceEmail = "stone@chopper1234567.com";
             string uploaderEmail = "uploader@chopper1234567.com";
-            string profession = Service.GetProfessionsList().First();
+
+            // Get a profession somewhere from the middle of the dictionary
+            IReadOnlyList<string> vehicleProfession;
+            Service.GetProfessionsList().TryGetValue("Vehicle Services", out vehicleProfession);
+            Assert.IsNotNull(vehicleProfession);
+            string serviceProfessionType = vehicleProfession[3];
             string entity = "Organization";
             DateTime dateEstablished = DateTime.Now;
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
-                .UploaderEmail(uploaderEmail).ServiceProfessionType(profession)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(entity).DateEstablished(dateEstablished)
                 .Latitude(latitude).Longitude(longitude).Build();
 
@@ -77,7 +83,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(phoneNumber, retrievedService.PhoneNumber);
             Assert.AreEqual(serviceEmail, retrievedService.ServiceEmail);
             Assert.AreEqual(uploaderEmail, retrievedService.UploaderEmail);
-            Assert.AreEqual(profession, retrievedService.ServiceProfessionType);
+            Assert.AreEqual(serviceProfessionType, retrievedService.ServiceProfessionType);
             Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), entity),
                 retrievedService.ServiceEntityType);
             AssertDateTime(dateEstablished, retrievedService.DateEstablished);
@@ -105,14 +111,14 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string phoneNumber = "03455138018";
             string serviceEmail = "stone@chopper1234567.com";
             string uploaderEmail = "uploader@chopper1234567.com";
-            string profession = Service.GetProfessionsList()[3];
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
             string entity = "Organization";
             DateTime dateEstablished = DateTime.Now;
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
-                .UploaderEmail(uploaderEmail).ServiceProfessionType(profession)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(entity).DateEstablished(dateEstablished)
                 .Latitude(latitude).Longitude(longitude).Build();
             
@@ -128,7 +134,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(phoneNumber, retrievedService.PhoneNumber);
             Assert.AreEqual(serviceEmail, retrievedService.ServiceEmail);
             Assert.AreEqual(uploaderEmail, retrievedService.UploaderEmail);
-            Assert.AreEqual(profession, retrievedService.ServiceProfessionType);
+            Assert.AreEqual(serviceProfessionType, retrievedService.ServiceProfessionType);
             Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), entity),
                 retrievedService.ServiceEntityType);
             AssertDateTime(dateEstablished, retrievedService.DateEstablished);
@@ -142,7 +148,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string phoneNumber2 = "03168948486";
             string serviceEmail2 = "grass@hopper1234567.com";
             string uploaderEmail2 = "uplaoder@hopper1234567.com";
-            string profession2 = Service.GetProfessionsList().First();
+            string profession2 = Service.GetProfessionsList().Last().Value.First();
             string entity2 = "Individual";
             decimal latitude2 = 34.7M;
             decimal longitude2 = 74.1M;
@@ -176,7 +182,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string phoneNumber = "03455138018";
             string serviceEmail = "stone@chopper1234567.com";
             string uploaderEmail = "uploader@chopper1234567.com";
-            string profession = Service.GetProfessionsList().First();
+            string profession = Service.GetProfessionsList().First().Value.First();
             string entity = "Organization";
             decimal latitude = 34.7M;
             decimal longitude = 74.1M;
@@ -218,7 +224,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string phoneNumber = "03455138018";
             string serviceEmail = "stone@chopper1234567.com";
             string uploaderEmail = "uploader@chopper1234567.com";
-            string serviceProfessionType = Service.GetProfessionsList().First();
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
             string serviceEntityType = "Organization";
             var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(location);
             decimal latitude = coordinatesFromAddress.Item1;
@@ -244,7 +250,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string phoneNumber2 = "03168948486";
             string serviceEmail2 = "bolt@chopper1234567.com";
             string uploaderEmail2 = "uploader@bolt1234567.com";
-            string serviceProfessionType2 = Service.GetProfessionsList()[1];
+            string serviceProfessionType2 = Service.GetProfessionsList().First().Value.Last();
             string serviceEntityType2 = "Organization";
             var coordinatesFromAddress2 = geocodingService.GetCoordinatesFromAddress(location2);
             decimal latitude2 = coordinatesFromAddress2.Item1;
@@ -264,7 +270,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string phoneNumber3 = "03168948486";
             string serviceEmail3 = "grass@hopper1234567.com";
             string uploaderEmail3 = "uploader@hopper1234567.com";
-            string serviceProfessionType3 = Service.GetProfessionsList()[2];
+            string serviceProfessionType3 = Service.GetProfessionsList().Last().Value.First();
             string serviceEntityType3 = "Individual";
             var coordinatesFromAddress3 = geocodingService.GetCoordinatesFromAddress(location3);
             decimal latitude3 = coordinatesFromAddress3.Item1;
@@ -290,7 +296,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string phoneNumber4 = "03455138018";
             string serviceEmail4 = "onion@chopper1234567.com";
             string uploaderEmail4 = "uploader@onion1234567.com";
-            string serviceProfessionType4 = Service.GetProfessionsList()[3];
+            string serviceProfessionType4 = Service.GetProfessionsList().Last().Value.Last();
             string serviceEntityType4 = "Organization";
             var coordinatesFromAddress4 = geocodingService.GetCoordinatesFromAddress(location4);
             decimal latitude4 = coordinatesFromAddress4.Item1;
@@ -311,7 +317,12 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string phoneNumber5 = "03455138018";
             string serviceEmail5 = "lone@cartist1234567.com";
             string uploaderEmail5 = "uploader@lone1234567.com";
-            string serviceProfessionType5 = Service.GetProfessionsList()[4];
+
+            // Get a profession somewhere from the middle of the dictionary
+            IReadOnlyList<string> vehicleProfession;
+            Service.GetProfessionsList().TryGetValue("Vehicle Services", out vehicleProfession);
+            Assert.IsNotNull(vehicleProfession);
+            string serviceProfessionType5 = vehicleProfession[1];
             string serviceEntityType5 = "Individual";
             var coordinatesFromAddress5 = geocodingService.GetCoordinatesFromAddress(location5);
             decimal latitude5 = coordinatesFromAddress5.Item1;
@@ -332,7 +343,12 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string phoneNumber6 = "03455138018";
             string serviceEmail6 = "food@salsalo1234567.com";
             string uploaderEmail6 = "uploader@osalsalo1234567.com";
-            string serviceProfessionType6 = Service.GetProfessionsList()[5];
+
+            // Get a profession somewhere from the middle of the dictionary
+            IReadOnlyList<string> vehicleProfession2;
+            Service.GetProfessionsList().TryGetValue("Vehicle Services", out vehicleProfession2);
+            Assert.IsNotNull(vehicleProfession2);
+            string serviceProfessionType6 = vehicleProfession2[2];
             string serviceEntityType6 = "Organization";
             var coordinatesFromAddress6 = geocodingService.GetCoordinatesFromAddress(location6);
             decimal latitude6 = coordinatesFromAddress6.Item1;
