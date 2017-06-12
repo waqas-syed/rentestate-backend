@@ -92,21 +92,24 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         public IList<Service> GetServicesByLocationAndProfession(decimal latitude, decimal longitude,
             string serviceProfessionType, int pageNo = 0)
         {
-            // In the below formula, enter 3959 for miles; 6371 for kilometers
-            IList houses =
-                _session.CreateSQLQuery(
-                        "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius AND service_profession_type=:serviceProfessionType ORDER BY distance")
-                    // LIMIT 0 , 20")//("SELECT name, latitude, longitude, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM geo_location HAVING distance < 25 ORDER BY distance LIMIT 0 , 20")
-                    .AddEntity(typeof(Service))
-                    .SetParameter("inputLatitude", latitude)
-                    .SetParameter("inputLongitude", longitude)
-                    .SetParameter("serviceProfessionType", serviceProfessionType)
-                    .SetParameter("radius", _radius)
-                    .SetFirstResult(pageNo * _resultsPerPage)
-                    .SetMaxResults(_resultsPerPage)
-                    .List();
+            using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                // In the below formula, enter 3959 for miles; 6371 for kilometers
+                IList houses =
+                    _session.CreateSQLQuery(
+                            "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius AND service_profession_type=:serviceProfessionType ORDER BY distance")
+                        // LIMIT 0 , 20")//("SELECT name, latitude, longitude, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM geo_location HAVING distance < 25 ORDER BY distance LIMIT 0 , 20")
+                        .AddEntity(typeof(Service))
+                        .SetParameter("inputLatitude", latitude)
+                        .SetParameter("inputLongitude", longitude)
+                        .SetParameter("serviceProfessionType", serviceProfessionType)
+                        .SetParameter("radius", _radius)
+                        .SetFirstResult(pageNo*_resultsPerPage)
+                        .SetMaxResults(_resultsPerPage)
+                        .List();
 
-            return houses.Cast<Service>().ToList();
+                return houses.Cast<Service>().ToList();
+            }
         }
 
         /// <summary>
@@ -118,18 +121,26 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         public IList<Service> GetServicesByProfession(string serviceProfessionType, 
             int pageNo = 0)
         {
-            return _session
-                .QueryOver<Service>()
-                .Where(x => x.ServiceProfessionType == serviceProfessionType)
-                .List<Service>();
+            using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return _session
+                    .QueryOver<Service>()
+                    .Where(x => x.ServiceProfessionType == serviceProfessionType)
+                    .List<Service>();
+            }
         }
 
         /// <summary>
         /// Delete the service
         /// </summary>
-        /// <param name="id"></param>
-        public void DeleteService(string id)
+        /// <param name="service"></param>
+        public void DeleteService(Service service)
         {
+            using (var transaction = _session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                _session.Delete(service);
+                transaction.Commit();
+            }
         }
     }
 }

@@ -682,6 +682,55 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(0, retrievedService.Reviews.Count);
         }
 
+        [Test]
+        public void
+            DeleteServicetest_ChecksIfAnInstanceisDeletedFromTheDatabaseSuccessfully_VerifiesThroughTheValueNotReturned()
+        {
+            // Get the ServiceRepository instance using Ninejct DI
+            var servicesRepository = _kernel.Get<IServicesRepository>();
+
+            // Get the GeocodingService from the Common module
+            var geocodingService = _kernel.Get<IGeocodingService>();
+
+            // House # 1
+            string name = "The Stone Chopper";
+            string description = "Our swords can chop stones. Easily!!!";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string phoneNumber = "03455138018";
+            string serviceEmail = "stone@chopper1234567.com";
+            string uploaderEmail = "uploader@chopper1234567.com";
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
+            string serviceEntityType = "Organization";
+            var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(location);
+            decimal latitude = coordinatesFromAddress.Item1;
+            decimal longitude = coordinatesFromAddress.Item2;
+            DateTime dateEstablished = DateTime.Now.AddYears(-2);
+            Service service = new Service.ServiceBuilder().Name(name).Description(description)
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
+                .ServiceEntityType(serviceEntityType)
+                .Latitude(latitude).Longitude(longitude).DateEstablished(dateEstablished).Build();
+            // Provide a review to save
+            string reviewAuthorName = "King Arthur";
+            string reviewAuthorEmail = "kingofthelingbling@kingdomcup12345678.com";
+            string reviewDescription = "Off goes your head";
+            service.AddReview(reviewAuthorName, reviewAuthorEmail, reviewDescription);
+            // Save the Service
+            servicesRepository.SaveOrUpdate(service);
+
+            // Retrieve Service to verify it exists
+            var retrievedService = servicesRepository.GetServiceById(service.Id);
+            Assert.NotNull(retrievedService);
+
+            // Delete service
+            servicesRepository.DeleteService(retrievedService);
+
+            // Query the service again
+            retrievedService = servicesRepository.GetServiceById(service.Id);
+            // This time it should not be present
+            Assert.IsNull(retrievedService);
+        }
+
         /// <summary>
         /// Ignores miliseconds in the datetime provided and then asserts it against the expected DateTime
         /// value

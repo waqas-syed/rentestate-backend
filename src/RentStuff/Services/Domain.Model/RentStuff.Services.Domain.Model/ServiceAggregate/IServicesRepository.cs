@@ -51,7 +51,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Delete the service
         /// </summary>
-        /// <param name="id"></param>
-        void DeleteService(string id);
+        /// <param name="service"></param>
+        void DeleteService(Service service);
     }
 }
