@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RentStuff.Common.Domain.Model;
 // ReSharper disable VirtualMemberCallInConstructor
 
@@ -17,7 +18,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         private string _phoneNumber;
         private string _serviceEmail;
         private string _uploaderEmail;
-        private ServiceProfessionType _serviceProfessionType;
+        private string _serviceProfessionType;
         private ServiceEntityType _serviceEntityType;
         private decimal _latitude;
         private decimal _longitude;
@@ -44,13 +45,13 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             PhoneNumber = phoneNumber;
             ServiceEmail = serviceEmail;
             UploaderEmail = uploaderEmail;
-            SetServiceProfessionType(serviceProfessionType);
+            ServiceProfessionType = serviceProfessionType;
             SetServiceEntityType(serviceEntityType);
             DateEstablished = dateEstablished;
             Latitude = latitude;
             Longitude = longitude;
-            Ratings = new Ratings();
-            Ratings.Service = this;
+            //Ratings = new Ratings();
+           // Ratings.Service = this;
             Reviews = new List<Review>();
         }
 
@@ -78,7 +79,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             PhoneNumber = phoneNumber;
             ServiceEmail = serviceEmail;
             UploaderEmail = uploaderEmail;
-            SetServiceProfessionType(serviceProfessionType);
+            ServiceProfessionType = serviceProfessionType;
             SetServiceEntityType(serviceEntityType);
             DateEstablished = dateEstablished;
             Latitude = latitude;
@@ -89,10 +90,10 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// Add a new rating for this service
         /// </summary>
         /// <param name="ratingStars"></param>
-        public virtual void AddNewRating(int ratingStars)
+        /*public virtual void AddNewRating(int ratingStars)
         {
             this.Ratings.UpdateRatings(ratingStars);
-        }
+        }*/
         
         /// <summary>
         /// Add a review to this service
@@ -186,25 +187,35 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
                 _uploaderEmail = value;
             }
         }
-
-        /// <summary>
-        /// Sets the ServiceProviderType by parsing the string and converting it to the expected Enum
-        /// </summary>
-        /// <param name="serviceProfessionType"></param>
-        public virtual void SetServiceProfessionType(string serviceProfessionType)
-        {
-            Assertion.AssertStringNotNullorEmpty(serviceProfessionType);
-            _serviceProfessionType = (ServiceProfessionType)Enum.Parse(typeof(ServiceProfessionType), serviceProfessionType);
-        }
-
+        
         /// <summary>
         /// Gets the ServiceProfessionalType. If you want to set this value, provide a string to the
         /// SetServiceProfessionType method in this class. The reason for a separate method is to accept a 
         /// string and convert it into ServiceProfessionType enum
         /// </summary>
-        public virtual ServiceProfessionType ServiceProfessionType
+        public virtual string ServiceProfessionType
         {
             get { return _serviceProfessionType; }
+            set
+            {
+                // Check that it is not null or empty
+                Assertion.AssertStringNotNullorEmpty(value);
+
+                //Check that the value is present within the defined set of Service Profession types
+                if (!ServiceProfessions.List.Contains(value))
+                {
+                    throw new InvalidOperationException("The provided profession type is not a recognizable profession type.");
+                }
+                _serviceProfessionType = value;
+            }
+        }
+
+        /// <summary>
+        /// Get all the professions that our app supports
+        /// </summary>
+        public static IReadOnlyList<string> GetProfessionsList()
+        {
+            return ServiceProfessions.List;
         }
 
         /// <summary>
@@ -266,7 +277,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Rating of this service by users
         /// </summary>
-        public virtual Ratings Ratings { get; }
+        //public virtual Ratings Ratings { get; }
 
         /// <summary>
         /// Reviews of this service by users

@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 
 namespace RentStuff.Services.Domain.Model.ServiceAggregate
 {
@@ -73,3 +73,4 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual decimal OneStarVotes { get { return _oneStarVotes; } protected internal set { _oneStarVotes = value; } }
     }
 }
+*/

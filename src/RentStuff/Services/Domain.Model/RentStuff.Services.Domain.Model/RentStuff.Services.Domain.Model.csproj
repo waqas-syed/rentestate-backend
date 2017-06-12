@@ -44,7 +44,7 @@
     <Compile Include="ServiceAggregate\Ratings.cs" />
     <Compile Include="ServiceAggregate\Review.cs" />
     <Compile Include="ServiceAggregate\Service.cs" />
-    <Compile Include="ServiceAggregate\ServiceProfessionType.cs" />
+    <Compile Include="ServiceAggregate\ServiceProfessions.cs" />
     <Compile Include="ServiceAggregate\ServiceEntityType.cs" />
     <Compile Include="ServiceAggregate\IServicesRepository.cs" />
   </ItemGroup>

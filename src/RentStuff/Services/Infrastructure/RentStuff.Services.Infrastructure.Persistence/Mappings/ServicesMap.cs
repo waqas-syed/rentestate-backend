@@ -17,12 +17,12 @@ namespace RentStuff.Services.Infrastructure.Persistence.Mappings
             Map(x => x.PhoneNumber).Column("phone_number");
             Map(x => x.ServiceEmail).Column("service_email");
             Map(x => x.UploaderEmail).Column("uploader_email");
-            Map(x => x.ServiceProfessionType).Column("service_profession_type").CustomType(typeof(ServiceProfessionType));
+            Map(x => x.ServiceProfessionType).Column("service_profession_type");
             Map(x => x.ServiceEntityType).Column("service_entity_type").CustomType(typeof(ServiceEntityType));
             Map(x => x.Latitude);
             Map(x => x.Longitude);
             Map(x => x.DateEstablished).Column("date_established");
-            HasOne(x => x.Ratings).Cascade.All();
+            //HasOne(x => x.Ratings).Cascade.All();
             HasMany(x => x.Reviews).KeyColumn("service_id").Inverse().Cascade.AllDeleteOrphan();
         }
     }

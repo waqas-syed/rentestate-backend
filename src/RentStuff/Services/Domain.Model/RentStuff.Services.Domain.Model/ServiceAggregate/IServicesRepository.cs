@@ -38,7 +38,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <param name="pageNo"></param>
         /// <returns></returns>
         IList<Service> GetServicesByLocationAndProfession(decimal latitude, decimal longitude, 
-            ServiceProfessionType serviceProfessionType, int pageNo = 0);
+            string serviceProfessionType, int pageNo = 0);
 
         /// <summary>
         /// Get Services by providing ServiceProfessionType
@@ -46,7 +46,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <param name="serviceProfessionType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<Service> GetServicesByProfession(ServiceProfessionType serviceProfessionType, int pageNo = 0);
+        IList<Service> GetServicesByProfession(string serviceProfessionType, int pageNo = 0);
 
         /// <summary>
         /// Delete the service

@@ -1,4 +1,4 @@
-﻿using FluentNHibernate.Mapping;
+﻿/*using FluentNHibernate.Mapping;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
 
 namespace RentStuff.Services.Infrastructure.Persistence.Mappings
@@ -21,3 +21,4 @@ namespace RentStuff.Services.Infrastructure.Persistence.Mappings
         }
     }
 }
+*/

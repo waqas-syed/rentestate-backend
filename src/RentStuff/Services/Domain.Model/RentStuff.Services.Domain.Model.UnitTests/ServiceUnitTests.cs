@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
 
@@ -18,14 +19,14 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = ServiceProfessionType.Welder.ToString();
+            string serviceProfessionType = Service.GetProfessionsList().First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
-                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
                 .Latitude(latitude).Longitude(longitude).Build();
 
@@ -35,8 +36,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             Assert.AreEqual(location, service.Location);
             Assert.AreEqual(phoneNumber, service.PhoneNumber);
             Assert.AreEqual(serviceEmail, service.ServiceEmail);
-            Assert.AreEqual((ServiceProfessionType)Enum.Parse(typeof(ServiceProfessionType), serviceProviderType),
-                            service.ServiceProfessionType);
+            Assert.AreEqual(serviceProfessionType, service.ServiceProfessionType);
             Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType),
                             service.ServiceEntityType);
             Assert.AreEqual(dateEstablished, service.DateEstablished);
@@ -54,7 +54,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = ServiceProfessionType.Welder.ToString();
+            string serviceProviderType = Service.GetProfessionsList().First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
@@ -76,7 +76,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = ServiceProfessionType.Welder.ToString();
+            string serviceProviderType = Service.GetProfessionsList().First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
@@ -98,7 +98,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string location = "Pindora, Rawalpindi, Pakistan";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = ServiceProfessionType.Welder.ToString();
+            string serviceProviderType = Service.GetProfessionsList().First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
@@ -120,7 +120,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string location = "Pindora, Rawalpindi, Pakistan";
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
-            string serviceProviderType = ServiceProfessionType.Welder.ToString();
+            string serviceProviderType = Service.GetProfessionsList().First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
@@ -165,7 +165,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = ServiceProfessionType.Welder.ToString();
+            string serviceProviderType = Service.GetProfessionsList().First();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
@@ -187,7 +187,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = ServiceProfessionType.Welder.ToString();
+            string serviceProviderType = Service.GetProfessionsList().First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal longitude = 73.1M;
@@ -209,7 +209,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = ServiceProfessionType.Welder.ToString();
+            string serviceProviderType = Service.GetProfessionsList().First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
@@ -222,10 +222,68 @@ namespace RentStuff.Services.Domain.Model.UnitTests
 
         #endregion Service Tests
 
+        #region Reviews Tests
+
+        [Test]
+        public void ReviewAdditionTest_ChecksIfTheExpectedResultIsAsExpected_VerifiesByTheReturnValue()
+        {
+            string name = "Black Smith Inc";
+            string description = "We create the worlds best swords, spears and hammers!";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string phoneNumber = "03455138018";
+            string serviceEmail = "smithy@smithereene1234567.com";
+            string uploaderEmail = "provider@smithereene1234567.com";
+            string serviceProviderType = Service.GetProfessionsList().First();
+            string serviceEntityType = ServiceEntityType.Organization.ToString();
+            DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
+            Service service = new Service.ServiceBuilder().Name(name).Description(description)
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
+                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
+                .Latitude(latitude).Longitude(longitude).Build();
+            
+            // Initial Count of reviews
+            Assert.AreEqual(0, service.Reviews.Count);
+
+            string authorName = "Bailin Of Ibelin";
+            string authorEmail = "bailin@ofibelin1234567.com";
+            string reviewDescription = "I have purchased some swords from this place and found them " +
+                                       "to be quite balanced, sharp and agile. I cannot recommend any other" +
+                                       " place more";
+            
+            service.AddReview(authorName, authorEmail, reviewDescription);
+
+            string authorName2 = "Bailin Of Ibelin 2";
+            string authorEmail2 = "bailin2@ofibelin1234567.com";
+            string reviewDescription2 = "My second review for them. I have purchased some swords from this " +
+                                       "place and found them to be quite balanced, sharp and agile. I cannot " +
+                                       "recommend any other place more";
+            service.AddReview(authorName2, authorEmail2, reviewDescription2);
+
+            // 2 reviews have been added
+            Assert.AreEqual(2, service.Reviews.Count);
+
+            // First review
+            Assert.AreEqual(authorName, service.Reviews[0].Authorname);
+            Assert.AreEqual(authorName, service.Reviews[0].Authorname);
+            Assert.AreEqual(reviewDescription, service.Reviews[0].ReviewDescription);
+
+            // Second review
+            Assert.AreEqual(authorName2, service.Reviews[1].Authorname);
+            Assert.AreEqual(authorName2, service.Reviews[1].Authorname);
+            Assert.AreEqual(reviewDescription2, service.Reviews[1].ReviewDescription);
+
+        }
+
+        #endregion Reviews Tests
+
+        // Ratings code: commented out but let it stay for possible future reference
         #region Ratings Tests
 
         // A few 5 star ratings initially, then a few 4 star ratings, followed by many 5 star ratings
-        [Test]
+        /*[Test]
         public void RatingCalculationTest1_ChecksIfTheExpectedResultIsAsExpected_VerifiesByTheReturnValue()
         {
             string name = "Black Smith Inc";
@@ -234,7 +292,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = ServiceProfessionType.Welder.ToString();
+            string serviceProviderType = ServiceProfessions.List.First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
@@ -322,7 +380,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string phoneNumber = "03455138018";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = ServiceProfessionType.Welder.ToString();
+            string serviceProviderType = ServiceProfessions.List.First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
             decimal latitude = 33.7M;
@@ -374,68 +432,8 @@ namespace RentStuff.Services.Domain.Model.UnitTests
 
             service.AddNewRating(3);
             Assert.AreEqual(4.1, service.Ratings.RatingStars);
-        }
+        }*/
 
         #endregion Ratings Tests
-
-        #region Reviews Tests
-
-        [Test]
-        public void ReviewAdditionTest_ChecksIfTheExpectedResultIsAsExpected_VerifiesByTheReturnValue()
-        {
-            string name = "Black Smith Inc";
-            string description = "We create the worlds best swords, spears and hammers!";
-            string location = "Pindora, Rawalpindi, Pakistan";
-            string phoneNumber = "03455138018";
-            string serviceEmail = "smithy@smithereene1234567.com";
-            string uploaderEmail = "provider@smithereene1234567.com";
-            string serviceProviderType = ServiceProfessionType.Welder.ToString();
-            string serviceEntityType = ServiceEntityType.Organization.ToString();
-            DateTime dateEstablished = DateTime.Today.AddYears(-101);
-            decimal latitude = 33.7M;
-            decimal longitude = 73.1M;
-            Service service = new Service.ServiceBuilder().Name(name).Description(description)
-                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
-                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProviderType)
-                .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
-                .Latitude(latitude).Longitude(longitude).Build();
-
-            // Initial Rating is 0
-            Assert.AreEqual(0, service.Ratings.RatingStars);
-            
-            // Initial Count of reviews
-            Assert.AreEqual(0, service.Reviews.Count);
-
-            string authorName = "Bailin Of Ibelin";
-            string authorEmail = "bailin@ofibelin1234567.com";
-            string reviewDescription = "I have purchased some swords from this place and found them " +
-                                       "to be quite balanced, sharp and agile. I cannot recommend any other" +
-                                       " place more";
-            
-            service.AddReview(authorName, authorEmail, reviewDescription);
-
-            string authorName2 = "Bailin Of Ibelin 2";
-            string authorEmail2 = "bailin2@ofibelin1234567.com";
-            string reviewDescription2 = "My second review for them. I have purchased some swords from this " +
-                                       "place and found them to be quite balanced, sharp and agile. I cannot " +
-                                       "recommend any other place more";
-            service.AddReview(authorName2, authorEmail2, reviewDescription2);
-
-            // 2 reviews have been added
-            Assert.AreEqual(2, service.Reviews.Count);
-
-            // First review
-            Assert.AreEqual(authorName, service.Reviews[0].Authorname);
-            Assert.AreEqual(authorName, service.Reviews[0].Authorname);
-            Assert.AreEqual(reviewDescription, service.Reviews[0].ReviewDescription);
-
-            // Second review
-            Assert.AreEqual(authorName2, service.Reviews[1].Authorname);
-            Assert.AreEqual(authorName2, service.Reviews[1].Authorname);
-            Assert.AreEqual(reviewDescription2, service.Reviews[1].ReviewDescription);
-
-        }
-
-        #endregion Reviews Tests
     }
 }
