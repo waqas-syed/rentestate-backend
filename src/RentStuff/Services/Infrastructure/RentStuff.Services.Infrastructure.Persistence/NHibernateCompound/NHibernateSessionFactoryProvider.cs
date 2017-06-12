@@ -3,6 +3,7 @@ using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
+using RentStuff.Common;
 using RentStuff.Services.Infrastructure.Persistence.Repositories;
 
 namespace RentStuff.Services.Infrastructure.Persistence.NHibernateCompound
@@ -28,7 +29,8 @@ namespace RentStuff.Services.Infrastructure.Persistence.NHibernateCompound
 
         public NHibernateSessionFactoryProvider()
         {
-            _connectionString = ConfigurationManager.ConnectionStrings["MySql"].ConnectionString;
+            // Get the deciphered connection string from the StringCipher class
+            _connectionString = StringCipher.DecipheredConnectionString;
         }
 
         public ISessionFactory GetSessionFactory()

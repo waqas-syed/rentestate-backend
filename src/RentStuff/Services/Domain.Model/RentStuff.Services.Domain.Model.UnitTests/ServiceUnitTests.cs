@@ -10,8 +10,9 @@ namespace RentStuff.Services.Domain.Model.UnitTests
     {
         #region Service Tests
 
+        // Successful instance creation with all the fields; mandatory and non-mandatory
         [Test]
-        public void SuccessfulInstanceCreation_ChecksThatAnInstanceIsCreatedSuccessfully_VerifiesThroughReturnedValue()
+        public void SuccessfulInstanceWithAllFieldsCreation_ChecksThatAnInstanceIsCreatedSuccessfully_VerifiesThroughReturnedValue()
         {
             string name = "Black Smith Inc";
             string description = "We create the worlds best swords, spears and hammers!";
@@ -22,13 +23,19 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string serviceProfessionType = Service.GetProfessionsList().First();
             string serviceEntityType = ServiceEntityType.Organization.ToString();
             DateTime dateEstablished = DateTime.Today.AddYears(-101);
+            string facebookLink = "https://dummyfacebooklink-123456789-1.com";
+            string instagramLink = "https://dummyinstagramlink-123456789-1.com";
+            string twitterLink = "https://dummytwitterlink-123456789-1.com";
+            string websiteLink = "https://dummytwitterlink-123456789-1.com";
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
                 .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
-                .Latitude(latitude).Longitude(longitude).Build();
+                .Latitude(latitude).Longitude(longitude).FacebookLink(facebookLink)
+                .InstagramLink(instagramLink).TwitterLink(twitterLink).WebsiteLink(websiteLink)
+                .Build();
 
             Assert.IsNotNull(service);
             Assert.AreEqual(name, service.Name);
@@ -36,14 +43,49 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             Assert.AreEqual(location, service.Location);
             Assert.AreEqual(phoneNumber, service.PhoneNumber);
             Assert.AreEqual(serviceEmail, service.ServiceEmail);
+            Assert.AreEqual(uploaderEmail, service.UploaderEmail);
             Assert.AreEqual(serviceProfessionType, service.ServiceProfessionType);
             Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType),
                             service.ServiceEntityType);
             Assert.AreEqual(dateEstablished, service.DateEstablished);
             Assert.AreEqual(latitude, service.Latitude);
             Assert.AreEqual(longitude, service.Longitude);
+            Assert.AreEqual(facebookLink, service.FacebookLink);
+            Assert.AreEqual(instagramLink, service.InstagramLink);
+            Assert.AreEqual(twitterLink, service.TwitterLink);
+            Assert.AreEqual(websiteLink, service.WebsiteLink);
         }
 
+        // Successful instance creation with all mandatory fields, excluding non-mandatory ones
+        [Test]
+        public void SuccessfulInstanceCreation_ChecksThatAnInstanceIsCreatedSuccessfully_VerifiesThroughReturnedValue()
+        {
+            string name = "Black Smith Inc";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string phoneNumber = "03455138018";
+            string uploaderEmail = "provider@smithereene1234567.com";
+            string serviceProfessionType = Service.GetProfessionsList().First();
+            string serviceEntityType = ServiceEntityType.Organization.ToString();
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
+            Service service = new Service.ServiceBuilder().Name(name)
+                .Location(location).PhoneNumber(phoneNumber)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
+                .ServiceEntityType(serviceEntityType)
+                .Latitude(latitude).Longitude(longitude).Build();
+
+            Assert.IsNotNull(service);
+            Assert.AreEqual(name, service.Name);
+            Assert.AreEqual(location, service.Location);
+            Assert.AreEqual(phoneNumber, service.PhoneNumber);
+            Assert.AreEqual(uploaderEmail, service.UploaderEmail);
+            Assert.AreEqual(serviceProfessionType, service.ServiceProfessionType);
+            Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType),
+                            service.ServiceEntityType);
+            Assert.AreEqual(latitude, service.Latitude);
+            Assert.AreEqual(longitude, service.Longitude);
+        }
+        
         // No name provided
         [Test]
         [ExpectedException(typeof(NullReferenceException))]
@@ -220,11 +262,11 @@ namespace RentStuff.Services.Domain.Model.UnitTests
                 .Latitude(latitude).Build();
         }
 
+        //We provide a false profession to the service builder and the service will raise exception a result
         [Test]
         [ExpectedException(typeof(InvalidOperationException))]
         public void WrongServiceProfessionTypeFailTest_ChecksThatTheSystemThrowsErrorIfAnNonRecognizableProfessionisSupplied_VerifiesThroughRasedException()
         {
-            //We provide a false profession to the service builder and the service will raise exception a result
             string name = "Black Smith Inc";
             string description = "We create the worlds best swords, spears and hammers!";
             string location = "Pindora, Rawalpindi, Pakistan";

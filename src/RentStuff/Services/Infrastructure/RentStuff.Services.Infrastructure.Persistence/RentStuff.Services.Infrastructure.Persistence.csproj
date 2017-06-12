@@ -70,6 +70,10 @@
     <Compile Include="Repositories\ServicesRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\RentStuff.Common\RentStuff.Common.csproj">
+      <Project>{85eed18f-3c13-49ef-9c12-48fdb2661896}</Project>
+      <Name>RentStuff.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Domain.Model\RentStuff.Services.Domain.Model\RentStuff.Services.Domain.Model.csproj">
       <Project>{8fd494e6-ac07-47f4-a868-59163e4f4477}</Project>
       <Name>RentStuff.Services.Domain.Model</Name>

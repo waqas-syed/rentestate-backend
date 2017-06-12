@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using NHibernate;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
-using RentStuff.Services.Infrastructure.Persistence.NHibernateCompound;
 
 namespace RentStuff.Services.Infrastructure.Persistence.Repositories
 {
@@ -19,7 +17,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         // http://stackoverflow.com/questions/9686309/list-of-surrounding-towns-within-a-given-radius
 
         // The radius that we need to search in. Starting point is the location entered by the user
-        private readonly int _radius = 38;
+        private readonly int _radius = 35;
         private readonly int _resultsPerPage = 10;
         
         private ISession _session;
@@ -66,6 +64,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         {
             using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
+                // In the below formula, enter 3959 for miles; 6371 for kilometers
                 IList houses =
                     _session.CreateSQLQuery(
                             "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius ORDER BY distance")
@@ -91,7 +90,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <param name="pageNo"></param>
         /// <returns></returns>
         public IList<Service> GetServicesByLocationAndProfession(decimal latitude, decimal longitude,
-            ServiceProfessionType serviceProfessionType, int pageNo = 0)
+            string serviceProfessionType, int pageNo = 0)
         {
             return null;
         }
@@ -102,7 +101,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <param name="serviceProfessionType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public IList<Service> GetServicesByProfession(ServiceProfessionType serviceProfessionType, 
+        public IList<Service> GetServicesByProfession(string serviceProfessionType, 
             int pageNo = 0)
         {
             return null;

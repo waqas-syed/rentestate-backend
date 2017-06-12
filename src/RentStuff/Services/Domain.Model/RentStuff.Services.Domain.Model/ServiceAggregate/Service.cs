@@ -37,7 +37,8 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// </summary>
         private Service(string name, string description, string location, string phoneNumber, 
             string serviceEmail, string uploaderEmail, string serviceProfessionType, string serviceEntityType,
-            DateTime dateEstablished, decimal latitude, decimal longitude)
+            DateTime dateEstablished, decimal latitude, decimal longitude, string facebookLink,
+            string instagramLink, string twitterLink, string websiteLink)
         {
             Name = name;
             Description = description;
@@ -53,6 +54,10 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             //Ratings = new Ratings();
            // Ratings.Service = this;
             Reviews = new List<Review>();
+            FacebookLink = facebookLink;
+            InstagramLink = instagramLink;
+            TwitterLink = twitterLink;
+            WebsiteLink = websiteLink;
         }
 
         /// <summary>
@@ -168,8 +173,13 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             get { return _serviceEmail; }
             set
             {
-                Assertion.IsEmailValid(value);
-                _serviceEmail = value;
+                // Don't apply Assertion for null. This is a non-mandatory field. Just let it pass if the value
+                // is empty, check it is a valid email if is contains a value
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    Assertion.IsEmailValid(value);
+                    _serviceEmail = value;
+                }
             }
         }
 
@@ -275,6 +285,26 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         }
 
         /// <summary>
+        /// Link to the Service provider's Facebook page
+        /// </summary>
+        public string FacebookLink { get; private set; }
+
+        /// <summary>
+        /// Link to the Service provider's Instagram account
+        /// </summary>
+        public string InstagramLink { get; private set; }
+
+        /// <summary>
+        /// Link to the Service provider's Twitter account
+        /// </summary>
+        public string TwitterLink { get; private set; }
+
+        /// <summary>
+        /// Link to the Service provider's website
+        /// </summary>
+        public string WebsiteLink { get; private set; }
+
+        /// <summary>
         /// Rating of this service by users
         /// </summary>
         //public virtual Ratings Ratings { get; }
@@ -300,6 +330,10 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             private DateTime _dateEstablished;
             private decimal _latitude;
             private decimal _longitude;
+            private string _facebookLink;
+            private string _instagramLink;
+            private string _twitterLink;
+            private string _websiteLink;
 
             /// <summary>
             /// Name
@@ -422,11 +456,55 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
                 return this;
             }
 
+            /// <summary>
+            /// Link to the service provider's Facebook page
+            /// </summary>
+            /// <param name="facebookLink"></param>
+            /// <returns></returns>
+            public ServiceBuilder FacebookLink(string facebookLink)
+            {
+                _facebookLink = facebookLink;
+                return this;
+            }
+
+            /// <summary>
+            /// Link to the service provider's Instagram account
+            /// </summary>
+            /// <param name="instagramLink"></param>
+            /// <returns></returns>
+            public ServiceBuilder InstagramLink(string instagramLink)
+            {
+                _instagramLink = instagramLink;
+                return this;
+            }
+
+            /// <summary>
+            /// Link to the service provider's Twitter account
+            /// </summary>
+            /// <param name="twitterLink"></param>
+            /// <returns></returns>
+            public ServiceBuilder TwitterLink(string twitterLink)
+            {
+                _twitterLink = twitterLink;
+                return this;
+            }
+
+            /// <summary>
+            /// Link to the service provider's website
+            /// </summary>
+            /// <param name="websiteLink"></param>
+            /// <returns></returns>
+            public ServiceBuilder WebsiteLink(string websiteLink)
+            {
+                _websiteLink = websiteLink;
+                return this;
+            }
+
             public Service Build()
             {
                 return new Service(_name, _description, _location, _phoneNumber, _serviceEmail, 
                     _uploaderEmail, _serviceProfessionType, _serviceEntityType, _dateEstablished,
-                    _latitude, _longitude);
+                    _latitude, _longitude, _facebookLink, _instagramLink, _twitterLink, _websiteLink);
             }
         }
     }

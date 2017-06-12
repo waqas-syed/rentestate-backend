@@ -15,29 +15,33 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             "Carpenter",
             "Mason/Mistry",
             "Maid",
+            "Car Tow/Recovery",
+            "Butcher/Qassai",
+            "Makeup Artist/Beautician",
+            "Car Mechanic",
+            "Car Electrician",
+            "Wall Painter",
             "Tv Technician",
             "Fridge Technician",
             "Electric Motor Technician",
             "Geyser Technician",
-            "Makeup Artist/Beautician",
-            "Butcher/Qassai",
+            "Ac Technician",
             "Welder",
+            "Wall Grace Painter",
+            "Wall Panel Installer",
 
             // Organization(or possibly individual)
+            "Tutor Service",
+            "Light Decoration",
             "Food Catering",
             "Interior Designing",
-            "Car Mechanic",
-            "Ac Technician",
             "Cargo Service",
-            "Furniture Furnishing",
+            "Furnishing(Furniture)",
             "Fire Safety Engineering",
-            "Wall Painting",
             "Car Denting/Painting",
             "Vehicle Body Parts",
-            "Light Decoration",
             "Cable Tv Service",
-            "Dish Antenna Service",
-            "Tutor Service"
+            "Dish Antenna Service"
         };
 
         internal static IReadOnlyList<string> List { get { return _serviceProfessionList.AsReadOnly(); } }

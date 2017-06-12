@@ -12,6 +12,10 @@ using MySql.Data.MySqlClient;
 
 namespace RentStuff.Common
 {
+    /// <summary>
+    /// Deciphers the connection string named "MySql" using the passphrase in AppSettings called 
+    /// "StringDecipherPassphrase". Make sure these two settings are present in the app.config/web.config
+    /// </summary>
     public class StringCipher
     {
         private static string _passphrase = ConfigurationManager.AppSettings.Get("StringDecipherPassphrase");
