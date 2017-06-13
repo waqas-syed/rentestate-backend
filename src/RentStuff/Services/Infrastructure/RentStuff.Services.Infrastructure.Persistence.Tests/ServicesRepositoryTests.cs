@@ -65,13 +65,19 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
                 .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(entity).DateEstablished(dateEstablished)
                 .Latitude(latitude).Longitude(longitude).Build();
+            string image1Id = Guid.NewGuid().ToString();
+            string image2Id = Guid.NewGuid().ToString();
+            string image3Id = Guid.NewGuid().ToString();
+            service.AddImage(image1Id);
+            service.AddImage(image2Id);
+            service.AddImage(image3Id);
 
             // Provide a review to save
             string authorName = "King Arthur";
             string authorEmail = "kingofthelingbling@kingdomcup12345678.com";
             string reviewDescription = "Off goes your head";
             service.AddReview(authorName, authorEmail, reviewDescription);
-            
+            // Save Service in the repository
             servicesRepository.SaveOrUpdate(service);
 
             // Retrieve the result
@@ -97,6 +103,78 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(authorEmail, retrievedService.Reviews[0].AuthorEmail);
             Assert.AreEqual(reviewDescription, retrievedService.Reviews[0].ReviewDescription);
             Assert.AreEqual(service, retrievedService.Reviews[0].Service);
+
+            // Check the Service Images
+            Assert.NotNull(retrievedService.Images);
+            Assert.AreEqual(3, retrievedService.Images.Count);
+            Assert.AreEqual(image1Id, retrievedService.Images[0]);
+            Assert.AreEqual(image2Id, retrievedService.Images[1]);
+            Assert.AreEqual(image3Id, retrievedService.Images[2]);
+        }
+
+        [Test]
+        public void ServiceImagesSaveAndDeleteTest_ChecksIfTheServiceImagesAreSavedAndDeetedAsExpected_VerifiesByTheReturnedValue()
+        {
+            // Get the ServiceRepository instance using Ninejct DI
+            var servicesRepository = _kernel.Get<IServicesRepository>();
+
+            string name = "The Stone Chopper";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string phoneNumber = "03168948486";
+            string uploaderEmail = "uploader@chopper1234567.com";
+            
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
+            string entity = "Organization";
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
+            Service service = new Service.ServiceBuilder().Name(name)
+                .Location(location).PhoneNumber(phoneNumber)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
+                .ServiceEntityType(entity)
+                .Latitude(latitude).Longitude(longitude).Build();
+
+            // Add some images to the Service
+            string image1Id = Guid.NewGuid().ToString();
+            string image2Id = Guid.NewGuid().ToString();
+            string image3Id = Guid.NewGuid().ToString();
+            service.AddImage(image1Id);
+            service.AddImage(image2Id);
+            service.AddImage(image3Id);
+            // Save Service in the repository
+            servicesRepository.SaveOrUpdate(service);
+
+            // Retrieve the result
+            var retrievedService = servicesRepository.GetServiceById(service.Id);
+            Assert.IsNotNull(retrievedService);
+            // Check the Service Images
+            Assert.NotNull(retrievedService.Images);
+            Assert.AreEqual(3, retrievedService.Images.Count);
+            Assert.AreEqual(image1Id, retrievedService.Images[0]);
+            Assert.AreEqual(image2Id, retrievedService.Images[1]);
+            Assert.AreEqual(image3Id, retrievedService.Images[2]);
+
+            retrievedService.DeleteImage(image2Id);
+            servicesRepository.SaveOrUpdate(retrievedService);
+            // Retrieve the result
+            retrievedService = servicesRepository.GetServiceById(service.Id);
+            Assert.IsNotNull(retrievedService);
+            // Check the Service Images
+            Assert.NotNull(retrievedService.Images);
+            Assert.AreEqual(2, retrievedService.Images.Count);
+            Assert.AreEqual(image1Id, retrievedService.Images[0]);
+            Assert.AreEqual(image3Id, retrievedService.Images[1]);
+
+            // Now provide an iamge id that doesn't exist in the Images List
+            retrievedService.DeleteImage(image3Id + "1");
+            servicesRepository.SaveOrUpdate(retrievedService);
+            // Retrieve the result
+            retrievedService = servicesRepository.GetServiceById(service.Id);
+            Assert.IsNotNull(retrievedService);
+            // Check the Service Images
+            Assert.NotNull(retrievedService.Images);
+            Assert.AreEqual(2, retrievedService.Images.Count);
+            Assert.AreEqual(image1Id, retrievedService.Images[0]);
+            Assert.AreEqual(image3Id, retrievedService.Images[1]);
         }
 
         [Test]

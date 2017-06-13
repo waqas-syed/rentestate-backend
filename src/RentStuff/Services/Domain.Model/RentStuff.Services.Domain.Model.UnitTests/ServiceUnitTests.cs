@@ -91,6 +91,53 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             Assert.AreEqual(latitude, service.Latitude);
             Assert.AreEqual(longitude, service.Longitude);
         }
+
+        public void
+            ServiceImagesSavAndDeleteTest_ChecksIfImagesAerSavedAndDeletedAsExpected_VerifiesThroughTheReturnedValue()
+        {
+            string name = "The Stone Chopper";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string phoneNumber = "03168948486";
+            string uploaderEmail = "uploader@chopper1234567.com";
+
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
+            string entity = "Organization";
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
+            Service service = new Service.ServiceBuilder().Name(name)
+                .Location(location).PhoneNumber(phoneNumber)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
+                .ServiceEntityType(entity)
+                .Latitude(latitude).Longitude(longitude).Build();
+
+            // Add some images to the Service
+            string image1Id = Guid.NewGuid().ToString();
+            string image2Id = Guid.NewGuid().ToString();
+            string image3Id = Guid.NewGuid().ToString();
+            service.AddImage(image1Id);
+            service.AddImage(image2Id);
+            service.AddImage(image3Id);
+            
+            // Check the Service and its images are populated
+            Assert.IsNotNull(service);
+            Assert.NotNull(service.Images);
+            Assert.AreEqual(3, service.Images.Count);
+            Assert.AreEqual(image1Id, service.Images[0]);
+            Assert.AreEqual(image2Id, service.Images[1]);
+            Assert.AreEqual(image3Id, service.Images[2]);
+
+            // Delete an image from the collection and check if the results reflect that
+            service.DeleteImage(image2Id);
+            Assert.AreEqual(2, service.Images.Count);
+            Assert.AreEqual(image1Id, service.Images[0]);
+            Assert.AreEqual(image3Id, service.Images[1]);
+
+            // Now provide an image id that doesn't exist in the Images List. image count should be the same
+            service.DeleteImage(image3Id + "1");
+            Assert.AreEqual(2, service.Images.Count);
+            Assert.AreEqual(image1Id, service.Images[0]);
+            Assert.AreEqual(image3Id, service.Images[1]);
+        }
         
         // No name provided
         [Test]

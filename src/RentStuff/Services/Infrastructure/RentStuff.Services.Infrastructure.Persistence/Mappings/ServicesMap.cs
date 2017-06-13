@@ -22,6 +22,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Mappings
             Map(x => x.Latitude);
             Map(x => x.Longitude);
             Map(x => x.DateEstablished).Column("date_established");
+            HasMany(x => x.Images).Table("serviceimages").KeyColumn("service_id").Element("image_id");
             //HasOne(x => x.Ratings).Cascade.All();
             HasMany(x => x.Reviews).KeyColumn("service_id").Inverse().Cascade.AllDeleteOrphan();
         }

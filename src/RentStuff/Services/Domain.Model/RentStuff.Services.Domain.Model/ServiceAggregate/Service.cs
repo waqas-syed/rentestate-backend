@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using RentStuff.Common.Domain.Model;
 // ReSharper disable VirtualMemberCallInConstructor
@@ -22,6 +23,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         private ServiceEntityType _serviceEntityType;
         private decimal _latitude;
         private decimal _longitude;
+        private IList<string> _images = new List<string>();
 
         /// <summary>
         /// Default Constructor. To Initialize the Service, use the ServiceBuilder type that uses the Builder
@@ -339,6 +341,31 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// </summary>
         public virtual IList<Review> Reviews { get; }
 
+        /// <summary>
+        /// Add an image to this service
+        /// </summary>
+        /// <param name="id"></param>
+        public virtual void AddImage(string id)
+        {
+            if (!_images.Contains(id))
+            {
+                _images.Add(id);
+            }
+        }
+
+        /// <summary>
+        /// Delet the sspecified image from this service
+        /// </summary>
+        public virtual void DeleteImage(string id)
+        {
+            _images.Remove(id);
+        }
+
+        /// <summary>
+        /// List of image identifiers related to this Service
+        /// </summary>
+        public virtual IList<string> Images { get { return _images; } }
+        
         /// <summary>
         /// Instance builder for the Service class
         /// </summary>

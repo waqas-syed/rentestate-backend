@@ -64,6 +64,10 @@ DROP TABLE IF EXISTS `service`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 
+DROP TABLE IF EXISTS `serviceimages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
 --
 -- Table structure for table `__migrationhistory`
 --
@@ -259,11 +263,11 @@ CREATE TABLE `ratings` (
 --
 
 CREATE TABLE `review` (
-  `id` varchar(255) NOT NULL,
-  `author_name` varchar(255) DEFAULT NULL,
-  `author_email` varchar(255) DEFAULT NULL,
-  `review_description` varchar(255) DEFAULT NULL,
-  `service_id` varchar(255) DEFAULT NULL,
+  `id` varchar(60) NOT NULL,
+  `author_name` varchar(100) DEFAULT NULL,
+  `author_email` varchar(100) DEFAULT NULL,
+  `review_description` varchar(1000) DEFAULT NULL,
+  `service_id` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -273,20 +277,31 @@ CREATE TABLE `review` (
 --
 
 CREATE TABLE `service` (
-  `id` varchar(40) NOT NULL,
+  `id` varchar(60) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `description` varchar(500) DEFAULT NULL,
-  `location` varchar(70) NOT NULL,
+  `description` varchar(1500) DEFAULT NULL,
+  `location` varchar(100) NOT NULL,
   `phone_number` varchar(13) NOT NULL,
-  `service_email` varchar(50) NOT NULL,
-  `uploader_email` varchar(50) NOT NULL,
-  `service_entity_type` varchar(32) NOT NULL,
-  `service_profession_type` varchar(32) NOT NULL,
+  `service_email` varchar(100) DEFAULT NULL,
+  `uploader_email` varchar(100) NOT NULL,
+  `service_entity_type` varchar(60) NOT NULL,
+  `service_profession_type` varchar(60) NOT NULL,
   `latitude` decimal(13,9) NOT NULL,
   `longitude` decimal(13,9) NOT NULL,
   `date_established` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `serviceimages`
+--
+
+CREATE TABLE `serviceimages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `service_id` varchar(60) NOT NULL,
+  `image_id` varchar(60) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- Dump completed on 2017-02-24 10:32:53
