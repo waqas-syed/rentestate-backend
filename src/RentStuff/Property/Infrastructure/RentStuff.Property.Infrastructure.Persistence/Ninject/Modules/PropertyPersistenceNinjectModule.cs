@@ -16,7 +16,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Ninject.Modules
         {
             Bind<ISessionFactory>().ToConstant(NHibernateSessionFactoryProvider.SessionFactory).InSingletonScope();
             Bind<INhibernateSessionWrapper>().To<NHibernateSessionWrapper>().InRequestScope();
-            Bind<IHouseRepository>().To<HouseRepository>().InRequestScope();
+            Bind<IHouseRepository>().To<HouseRepository>().InTransientScope();
         }
     }
 }

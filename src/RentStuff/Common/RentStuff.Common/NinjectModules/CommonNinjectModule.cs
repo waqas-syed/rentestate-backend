@@ -17,8 +17,8 @@ namespace RentStuff.Common.NinjectModules
         /// <summary>Loads the module into the kernel.</summary>
         public override void Load()
         {
-            Bind<IGeocodingService>().To<GeocodingService>();
-            Bind<IPhotoStorageService>().To<PhotoStorageService>();
+            Bind<IGeocodingService>().To<GeocodingService>().InTransientScope();
+            Bind<IPhotoStorageService>().To<PhotoStorageService>().InTransientScope();
         }
     }
 }

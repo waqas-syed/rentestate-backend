@@ -17,7 +17,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Ninject.Modules
         /// <summary>Loads the module into the kernel.</summary>
         public override void Load()
         {
-            Bind<HouseController>().To<HouseController>().InRequestScope();
+            Bind<HouseController>().To<HouseController>().InTransientScope();
         }
     }
 }
