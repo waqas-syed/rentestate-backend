@@ -143,7 +143,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual string Name
         {
             get { return _name; }
-            set
+            protected internal set
             {
                 Assertion.AssertStringNotNullorEmpty(value);
                 _name = value;
@@ -156,7 +156,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual string Description
         {
             get { return _description; }
-            set { _description = value; }
+            protected internal set { _description = value; }
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual string Location
         {
             get { return _location; }
-            set
+            protected internal set
             {
                 Assertion.AssertStringNotNullorEmpty(value);
                 _location = value;
@@ -178,7 +178,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual string MobileNumber
         {
             get { return _mobileNumber; }
-            set
+            protected internal set
             {
                 Assertion.AssertStringNotNullorEmpty(value);
                 Assertion.IsPhoneNumberValid(value);
@@ -192,7 +192,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual string ServiceEmail
         {
             get { return _serviceEmail; }
-            set
+            protected internal set
             {
                 // Don't apply Assertion for null. This is a non-mandatory field. Just let it pass if the value
                 // is empty, check it is a valid email if is contains a value
@@ -211,7 +211,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual string UploaderEmail
         {
             get { return _uploaderEmail; }
-            set
+            protected internal set
             {
                 Assertion.AssertStringNotNullorEmpty(value);
                 Assertion.IsEmailValid(value);
@@ -227,7 +227,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual string ServiceProfessionType
         {
             get { return _serviceProfessionType; }
-            set
+            protected internal set
             {
                 // Check that it is not null or empty
                 Assertion.AssertStringNotNullorEmpty(value);
@@ -277,7 +277,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Sets the ServiceEntityType by parsing the string and converting it to the expected Enum
         /// </summary>
-        public virtual void SetServiceEntityType(string serviceEntityType)
+        protected internal virtual void SetServiceEntityType(string serviceEntityType)
         {
             Assertion.AssertStringNotNullorEmpty(serviceEntityType);
             _serviceEntityType = (ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType);
@@ -296,7 +296,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// When was this service established by the provider
         /// </summary>
-        public virtual DateTime? DateEstablished { get; set; }
+        public virtual DateTime? DateEstablished { get; protected internal set; }
 
         /// <summary>
         /// Latitude
@@ -307,7 +307,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             {
                 return _latitude;
             }
-            set
+            protected internal set
             {
                 Assertion.AssertDecimalNotZero(value);
                 _latitude = value;
@@ -323,7 +323,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             {
                 return _longitude;
             }
-            set
+            protected internal set
             {
                 Assertion.AssertDecimalNotZero(value);
                 _longitude = value;
@@ -356,7 +356,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual string SecondaryMobileNumber
         {
             get { return _secondaryMobileNumber; }
-            set
+            protected internal set
             {
                 if (!string.IsNullOrWhiteSpace(value))
                 {
@@ -372,7 +372,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual string LandlinePhoneNumber
         {
             get { return _landlinePhoneNumber; }
-            set
+            protected internal set
             {
                 if (!string.IsNullOrWhiteSpace(value))
                 {
@@ -387,7 +387,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual string Fax
         {
             get { return _fax; }
-            set { _fax = value; }
+            protected internal set { _fax = value; }
         }
 
         /// <summary>
