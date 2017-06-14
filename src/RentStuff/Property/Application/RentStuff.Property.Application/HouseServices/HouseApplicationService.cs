@@ -227,7 +227,7 @@ namespace RentStuff.Property.Application.HouseServices
         {
             // Get the coordinates for the location using the Geocoding API service
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
-            // Get 20 coordinates within the range of around 30 kilometers radius
+            // Get houses around the given coordinates
             IList<House> houses = _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2,
                 pageNo);
             return ConvertHouseToRepresentation(houses);

@@ -12,12 +12,14 @@ namespace RentStuff.Services.Application.Commands
     public class CreateServiceCommand
     {
         /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
-        public CreateServiceCommand(string name, string description, string location, string phoneNumber, string serviceEmail, string uploaderEmail, string serviceProfesionType, string serviceEntityType, DateTime dateEstablished, string facebookLink, string instagramLink, string twitterLink, string websiteLink)
+        public CreateServiceCommand(string name, string description, string location, string mobileNumber, 
+            string serviceEmail, string uploaderEmail, string serviceProfesionType, string serviceEntityType, 
+            DateTime? dateEstablished, string facebookLink, string instagramLink, string twitterLink, string websiteLink)
         {
             Name = name;
             Description = description;
             Location = location;
-            MobileNumber = phoneNumber;
+            MobileNumber = mobileNumber;
             ServiceEmail = serviceEmail;
             UploaderEmail = uploaderEmail;
             ServiceProfesionType = serviceProfesionType;

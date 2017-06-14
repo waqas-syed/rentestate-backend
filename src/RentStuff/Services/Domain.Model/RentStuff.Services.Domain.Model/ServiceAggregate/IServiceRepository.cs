@@ -11,7 +11,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// Save or update the service
         /// </summary>
         /// <param name="service"></param>
-        void SaveOrUpdate(Service service);
+        string SaveOrUpdate(Service service);
         
         /// <summary>
         /// Get the Service by it's ID
@@ -21,6 +21,14 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         Service GetServiceById(string id);
 
         /// <summary>
+        /// Get Services by Email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        IList<Service> GetServicesByEmail(string email, int pageNo = 0);
+
+            /// <summary>
         /// Get Services by providing latitude and longitude
         /// </summary>
         /// <param name="latitude"></param>

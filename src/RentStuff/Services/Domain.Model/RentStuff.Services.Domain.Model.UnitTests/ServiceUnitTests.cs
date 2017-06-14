@@ -32,7 +32,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string facebookLink = "https://dummyfacebooklink-123456789-1.com";
             string instagramLink = "https://dummyinstagramlink-123456789-1.com";
             string twitterLink = "https://dummytwitterlink-123456789-1.com";
-            string websiteLink = "https://dummytwitterlink-123456789-1.com";
+            string websiteLink = "https://dummywebsitelink-123456789-1.com";
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
             string secondaryMobileNumber = "00000000002";

@@ -1,19 +1,24 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using RentStuff.Services.Domain.Model.ServiceAggregate;
 
 namespace RentStuff.Services.Application.Representations
 {
     /// <summary>
-    /// Partial Representation showing minimal information that is a must to show
+    /// Represents as complete set of the Service type
     /// </summary>
     [DataContract]
-    public class ServicePartialRepresentation
+    public class ServiceFullRepresentation
     {
         /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
-        public ServicePartialRepresentation(string name, string location, string mobileNumber, 
-            string serviceEmail, string serviceProfessionType, string serviceEntityType, string facebookLink,
-            string instagramLink, string twitterLink, string websiteLink, string defaultImageLink)
+        public ServiceFullRepresentation(string name, string description, string location, string mobileNumber,
+            string serviceEmail, string serviceProfessionType, string serviceEntityType, string facebookLink, 
+            string instagramLink, string twitterLink, string websiteLink, DateTime? dateEstablished, 
+            IList<string> images, IList<Review> reviews)
         {
             Name = name;
+            Description = description;
             Location = location;
             MobileNumber = mobileNumber;
             ServiceEmail = serviceEmail;
@@ -23,11 +28,15 @@ namespace RentStuff.Services.Application.Representations
             InstagramLink = instagramLink;
             TwitterLink = twitterLink;
             WebsiteLink = websiteLink;
-            DefaultImageLink = defaultImageLink;
+            DateEstablished = dateEstablished;
+            Images = images;
+            Reviews = reviews;
         }
-
+        
         [DataMember]
         public string Name { get; private set; }
+        [DataMember]
+        public string Description { get; private set; }
         [DataMember]
         public string Location { get; private set; }
         [DataMember]
@@ -47,6 +56,10 @@ namespace RentStuff.Services.Application.Representations
         [DataMember]
         public string WebsiteLink { get; private set; }
         [DataMember]
-        public string DefaultImageLink { get; private set; }
+        public DateTime? DateEstablished { get; private set; }
+        [DataMember]
+        public IReadOnlyList<string> Images { get; private set; }
+        [DataMember]
+        public IReadOnlyList<Review> Reviews { get; private set; }
     }
 }

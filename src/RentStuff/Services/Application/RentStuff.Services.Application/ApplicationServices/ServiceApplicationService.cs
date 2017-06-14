@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using NLog;
+using RentStuff.Common.Services.GoogleStorageServices;
 using RentStuff.Common.Services.LocationServices;
 using RentStuff.Services.Application.Commands;
 using RentStuff.Services.Application.Representations;
@@ -17,20 +20,22 @@ namespace RentStuff.Services.Application.ApplicationServices
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private IServiceRepository _servicesRepository;
         private IGeocodingService _geocodingService;
+        private IPhotoStorageService _photoStorageService;
 
         /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
-        public ServiceApplicationService(IServiceRepository servicesRepository, 
-            IGeocodingService geocodingService)
+        public ServiceApplicationService(IServiceRepository servicesRepository,
+            IGeocodingService geocodingService, IPhotoStorageService photoStorageService)
         {
             _servicesRepository = servicesRepository;
             _geocodingService = geocodingService;
+            _photoStorageService = photoStorageService;
         }
 
         /// <summary>
         /// Save the new given Service
         /// </summary>
         /// <param name="createServiceCommand"></param>
-        public void SaveNewService(CreateServiceCommand createServiceCommand)
+        public string SaveNewService(CreateServiceCommand createServiceCommand)
         {
             // Get the coordinates for the location using the Geocoding API service
             Tuple<decimal, decimal> coordinates = _geocodingService.GetCoordinatesFromAddress(
@@ -40,14 +45,15 @@ namespace RentStuff.Services.Application.ApplicationServices
             {
                 _logger.Error("Error while getting coordinates for the given address. Address: {0} | " +
                               "UploaderEmail: {1}",
-                               createServiceCommand.Location, createServiceCommand.UploaderEmail);
+                    createServiceCommand.Location, createServiceCommand.UploaderEmail);
                 throw new InvalidDataException($"Could not find coordinates from the given address." +
                                                $" Address: {createServiceCommand.Location} |" +
                                                $" UploaderEmail: {createServiceCommand.UploaderEmail}");
             }
 
             // Build the Service
-            Service service = new Service.ServiceBuilder().Name(createServiceCommand.Name)
+            Service service = new Service.ServiceBuilder()
+                .Name(createServiceCommand.Name)
                 .Description(createServiceCommand.Description)
                 .Location(createServiceCommand.Location)
                 .PhoneNumber(createServiceCommand.MobileNumber)
@@ -56,10 +62,14 @@ namespace RentStuff.Services.Application.ApplicationServices
                 .ServiceProfessionType(createServiceCommand.ServiceProfesionType)
                 .ServiceEntityType(createServiceCommand.ServiceEntityType)
                 .DateEstablished(createServiceCommand.DateEstablished)
-                .Latitude(latitude).Longitude(longitude).SecondaryMobileNumber(secondaryMobileNumber)
-                .LandlinePhoneNumber(landlinePhoneNumber).Fax(fax)
+                .Latitude(coordinates.Item1)
+                .Longitude(coordinates.Item2)
+                .FacebookLink(createServiceCommand.FacebookLink)
+                .TwitterLink(createServiceCommand.TwitterLink)
+                .InstagramLink(createServiceCommand.InstagramLink)
+                .WebsiteLink(createServiceCommand.WebsiteLink)
                 .Build();
-            _servicesRepository.SaveOrUpdate();
+            return _servicesRepository.SaveOrUpdate(service);
         }
 
         /// <summary>
@@ -68,6 +78,39 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// <param name="updateServiceCommand"></param>
         public void UpdateService(UpdateServiceCommand updateServiceCommand)
         {
+            if (updateServiceCommand == null)
+            {
+                throw new NullReferenceException("UpdateServiceCommand is null");
+            }
+
+            // Retrieve the servie and check if it is null
+            var service = _servicesRepository.GetServiceById(updateServiceCommand.Id);
+            if (service == null)
+            {
+                _logger.Error("No Service found for the given ServiceId: {0}", updateServiceCommand.Id);
+                throw new NullReferenceException("No Service found for the given ServiceId: "
+                                                 + updateServiceCommand.Id);
+            }
+
+            Tuple<decimal, decimal> updatedCoordinates;
+            // If the location of the Service is changed, then change the coordinates as well
+            if (!service.Location.Equals(updateServiceCommand.Location))
+            {
+                updatedCoordinates =
+                    _geocodingService.GetCoordinatesFromAddress(updateServiceCommand.Location);
+            }
+            else
+            {
+                updatedCoordinates = new Tuple<decimal, decimal>(service.Latitude, service.Longitude);
+            }
+            service.UpdateService(updateServiceCommand.Name, updateServiceCommand.Description,
+                updateServiceCommand.Location, updateServiceCommand.MobileNumber,
+                updateServiceCommand.ServiceEmail, updateServiceCommand.UploaderEmail,
+                updateServiceCommand.ServiceProfesionType, updateServiceCommand.ServiceEntityType,
+                updateServiceCommand.DateEstablished, updatedCoordinates.Item1, updatedCoordinates.Item2,
+                updateServiceCommand.FacebookLink, updateServiceCommand.InstagramLink,
+                updateServiceCommand.TwitterLink, updateServiceCommand.WebsiteLink);
+            _servicesRepository.SaveOrUpdate(service);
         }
 
         public void AddImageToService(string service, IList<string> iamges)
@@ -78,17 +121,30 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// Get the Service by Id
         /// </summary>
         /// <param name="id"></param>
-        public void GetServiceById(string id)
+        public ServiceFullRepresentation GetServiceById(string id)
         {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                throw new NullReferenceException("The ServiceId for retrieving Service is empty");
+            }
+            var service = _servicesRepository.GetServiceById(id);
+            if (service == null)
+            {
+                _logger.Error("No Service found for ServiceId: {0}", id);
+                throw new NullReferenceException($"No Service found for ServiceId{id}");
+            }
+            return ConvertSingleServiceToFullRepresentation(service);
         }
 
         /// <summary>
         /// Get the Services given the uploader's email
         /// </summary>
         /// <param name="uploaderEmail"></param>
-        public ServicePartialRepresentation GetServicesByUploaderEmail(string uploaderEmail)
+        /// <param name="pageNo"></param>
+        public IList<ServicePartialRepresentation> GetServicesByUploaderEmail(string uploaderEmail, int pageNo = 0)
         {
-            return null;
+            var retrievedServices = _servicesRepository.GetServicesByEmail(uploaderEmail);
+            return ConvertServicesToPartialRepresentations(retrievedServices);
         }
 
         /// <summary>
@@ -96,9 +152,13 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// </summary>
         /// <param name="location"></param>
         /// <param name="pageNo"></param>
-        public ServicePartialRepresentation SearchServicesByLocation(string location, int pageNo = 0)
+        public IList<ServicePartialRepresentation> SearchServicesByLocation(string location, int pageNo = 0)
         {
-            return null;
+            // Get the coordinates for the location using the Geocoding API service
+            var coordinates = _geocodingService.GetCoordinatesFromAddress(location);
+            var retrievedServices = _servicesRepository.GetServicesByLocation(coordinates.Item1,
+                coordinates.Item2, pageNo);
+            return ConvertServicesToPartialRepresentations(retrievedServices);
         }
 
         /// <summary>
@@ -107,10 +167,14 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// <param name="location"></param>
         /// <param name="serviceProfessionType"></param>
         /// <param name="pageNo"></param>
-        public ServicePartialRepresentation SearchServicesByLocationAndProfession(string location, string serviceProfessionType,
-            int pageNo = 0)
+        public IList<ServicePartialRepresentation> SearchServicesByLocationAndProfession(string location,
+            string serviceProfessionType, int pageNo = 0)
         {
-            return null;
+            // Get the coordinates for the location using the Geocoding API service
+            var coordinates = _geocodingService.GetCoordinatesFromAddress(location);
+            var retrievedServices = _servicesRepository.GetServicesByLocationAndProfession(coordinates.Item1,
+                coordinates.Item2, serviceProfessionType, pageNo);
+            return ConvertServicesToPartialRepresentations(retrievedServices);
         }
 
         /// <summary>
@@ -118,9 +182,12 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// </summary>
         /// <param name="serviceProfessionType"></param>
         /// <param name="pageNo"></param>
-        public ServicePartialRepresentation SearchServicesByProfession(string serviceProfessionType, int pageNo = 0)
+        public IList<ServicePartialRepresentation> SearchServicesByProfession(string serviceProfessionType,
+            int pageNo = 0)
         {
-            return null;
+            var retrievedServices = _servicesRepository.GetServicesByProfession(
+                serviceProfessionType, pageNo);
+            return ConvertServicesToPartialRepresentations(retrievedServices);
         }
 
         /// <summary>
@@ -129,6 +196,21 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// <param name="serviceId"></param>
         public void DeleteService(string serviceId)
         {
+            // Check if Service id is not null
+            if (string.IsNullOrWhiteSpace(serviceId))
+            {
+                _logger.Error("ServiceId to delete Service is empty");
+                throw new NullReferenceException("ServiceId to delete Service is empty");
+            }
+            // Get the service
+            var service = _servicesRepository.GetServiceById(serviceId);
+            // Check if the service is found or not
+            if (service == null)
+            {
+                _logger.Error("No Service found for ServiceId: {0}", serviceId);
+                throw new NullReferenceException($"No Service found for ServiceId{serviceId}");
+            }
+            _servicesRepository.DeleteService(service);
         }
 
         /// <summary>
@@ -136,6 +218,89 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// </summary>
         public void DeleteImagesFromService(string serviceId, List<string> images)
         {
+            // Get the service
+            var service = GetServiceByIdUsingChecks(serviceId);
+
+            foreach (var image in images)
+            {
+                bool imageRemoved = service.Images.Remove(image);
+                if (imageRemoved)
+                {
+                    try
+                    {
+                        _photoStorageService.DeletePhoto(image);
+                    }
+                    catch (Exception)
+                    {
+                        _logger.Error("GOOGLE CLOUD: Coud not delete image. ServiceId: {0} | ImageLink : {1} " +
+                                      "| UploaderEmail: {2}", serviceId, image, service.UploaderEmail);
+                    }
+                }
+            }
+            _servicesRepository.SaveOrUpdate(service);
         }
+
+        #region Private Methods
+
+        /// <summary>
+        /// Abstract method for getting a service by the given Id. Asserts multiple checks
+        /// </summary>
+        /// <param name="serviceId"></param>
+        private Service GetServiceByIdUsingChecks(string serviceId)
+        {
+            // Check if Service id is not null
+            if (string.IsNullOrWhiteSpace(serviceId))
+            {
+                _logger.Error("ServiceId to delete Service is empty");
+                throw new NullReferenceException("ServiceId to delete Service is empty");
+            }
+            // Get the service
+            var service = _servicesRepository.GetServiceById(serviceId);
+            // Check if the service is found or not
+            if (service == null)
+            {
+                _logger.Error("No Service found for ServiceId: {0}", serviceId);
+                throw new NullReferenceException($"No Service found for ServiceId{serviceId}");
+            }
+            return service;
+        }
+
+        /// <summary>
+        /// Converts a single service a ServiceFullRepresentation
+        /// </summary>
+        /// <param name="service"></param>
+        /// <returns></returns>
+        private ServiceFullRepresentation ConvertSingleServiceToFullRepresentation(Service service)
+        {
+            return new ServiceFullRepresentation(service.Name, service.Description,
+                service.Location, service.MobileNumber, service.ServiceEmail, service.ServiceProfessionType,
+                service.ServiceEntityType.ToString(), service.FacebookLink, service.InstagramLink, service.TwitterLink,
+                service.WebsiteLink, service.DateEstablished, 
+                // Provide the images and review as a read-only collection
+                new ReadOnlyCollection<string>(service.Images),
+                new ReadOnlyCollection<Review>(service.Reviews));
+        }
+
+        /// <summary>
+        /// Converts the given set of services to corresponding Partial Services instances
+        /// </summary>
+        /// <param name="serviceList"></param>
+        /// <returns></returns>
+        private IList<ServicePartialRepresentation> ConvertServicesToPartialRepresentations(IList<Service>
+            serviceList)
+        {
+            IList<ServicePartialRepresentation> partialServiceList = new List<ServicePartialRepresentation>();
+            foreach (var service in serviceList)
+            {
+                var servicePartialRepresentation = new ServicePartialRepresentation(service.Name,
+                    service.Location, service.MobileNumber, service.ServiceEmail, 
+                    service.ServiceProfessionType, service.ServiceEntityType.ToString(), service.FacebookLink,
+                    service.InstagramLink, service.TwitterLink, service.WebsiteLink, service.Images.First());
+                partialServiceList.Add(servicePartialRepresentation);
+            }
+            return partialServiceList;
+        }
+
+        #endregion Private Methods
     }
 }

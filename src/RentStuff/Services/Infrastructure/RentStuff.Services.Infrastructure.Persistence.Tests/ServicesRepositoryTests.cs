@@ -61,6 +61,10 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             DateTime? dateEstablished = DateTime.Now;
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
+            string facebookLink = "https://dummyfacebooklink-123456789-1.com";
+            string instagramLink = "https://dummyinstagramlink-123456789-1.com";
+            string twitterLink = "https://dummytwitterlink-123456789-1.com";
+            string websiteLink = "https://dummywebsitelink-123456789-1.com";
             string secondaryMobileNumber = "00000000002";
             string landlinePhoneNumber = "0000000001";
             string fax = "0000000003";
@@ -69,7 +73,8 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
                 .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(entity).DateEstablished(dateEstablished)
                 .Latitude(latitude).Longitude(longitude).SecondaryMobileNumber(secondaryMobileNumber)
-                .LandlinePhoneNumber(landlinePhoneNumber).Fax(fax)
+                .FacebookLink(facebookLink).TwitterLink(twitterLink).InstagramLink(instagramLink)
+                .WebsiteLink(websiteLink).LandlinePhoneNumber(landlinePhoneNumber).Fax(fax)
                 .Build();
             string image1Id = Guid.NewGuid().ToString();
             string image2Id = Guid.NewGuid().ToString();
@@ -101,6 +106,10 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             AssertDateTime(dateEstablished, retrievedService.DateEstablished);
             Assert.AreEqual(latitude, retrievedService.Latitude);
             Assert.AreEqual(longitude, retrievedService.Longitude);
+            Assert.AreEqual(facebookLink, retrievedService.FacebookLink);
+            Assert.AreEqual(twitterLink, retrievedService.TwitterLink);
+            Assert.AreEqual(instagramLink, retrievedService.InstagramLink);
+            Assert.AreEqual(websiteLink, retrievedService.WebsiteLink);
             Assert.AreEqual(secondaryMobileNumber, service.SecondaryMobileNumber);
             Assert.AreEqual(landlinePhoneNumber, service.LandlinePhoneNumber);
             Assert.AreEqual(fax, service.Fax);

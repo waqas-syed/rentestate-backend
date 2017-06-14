@@ -45,7 +45,8 @@ namespace RentStuff.Common.Services.GoogleStorageServices
         /// <returns></returns>
         public void DeletePhoto(string fileName)
         {
-            // Parse the object name out of the link
+            // Parse the object name out of the link to ignore the rest of the link and get the file
+            // name at the end
             var lastIndexOfSlash = fileName.LastIndexOf("/", StringComparison.CurrentCulture);
             var objectName = fileName.Substring(lastIndexOfSlash + 1, (fileName.Length) - (lastIndexOfSlash + 1));
             _storageClient.DeleteObject(

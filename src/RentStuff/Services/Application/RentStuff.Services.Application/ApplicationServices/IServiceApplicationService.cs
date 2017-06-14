@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using RentStuff.Services.Application.Commands;
 using RentStuff.Services.Application.Representations;
+using RentStuff.Services.Domain.Model.ServiceAggregate;
 
 namespace RentStuff.Services.Application.ApplicationServices
 {
@@ -13,7 +14,7 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// Save the new given Service
         /// </summary>
         /// <param name="createServiceCommand"></param>
-        void SaveNewService(CreateServiceCommand createServiceCommand);
+        string SaveNewService(CreateServiceCommand createServiceCommand);
 
         /// <summary>
         /// Update the given Service
@@ -27,20 +28,21 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// Get the Service by Id
         /// </summary>
         /// <param name="id"></param>
-        void GetServiceById(string id);
+        ServiceFullRepresentation GetServiceById(string id);
 
         /// <summary>
         /// Get the Services given the uploader's email
         /// </summary>
         /// <param name="uploaderEmail"></param>
-        ServicePartialRepresentation GetServicesByUploaderEmail(string uploaderEmail);
+        /// <param name="pageNo"></param>
+        IList<ServicePartialRepresentation> GetServicesByUploaderEmail(string uploaderEmail, int pageNo = 0);
 
         /// <summary>
         /// Search the service by the given Location
         /// </summary>
         /// <param name="location"></param>
         /// <param name="pageNo"></param>
-        ServicePartialRepresentation SearchServicesByLocation(string location, int pageNo = 0);
+        IList<ServicePartialRepresentation> SearchServicesByLocation(string location, int pageNo = 0);
 
         /// <summary>
         /// Search the service by the given Location and ServiceProfesionType
@@ -48,15 +50,15 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// <param name="location"></param>
         /// <param name="serviceProfessionType"></param>
         /// <param name="pageNo"></param>
-        ServicePartialRepresentation SearchServicesByLocationAndProfession(string location, string serviceProfessionType, 
-            int pageNo = 0);
+        IList<ServicePartialRepresentation> SearchServicesByLocationAndProfession(string location, 
+            string serviceProfessionType, int pageNo = 0);
 
         /// <summary>
         /// Search the service by the given ServiceProfesionType
         /// </summary>
         /// <param name="serviceProfessionType"></param>
         /// <param name="pageNo"></param>
-        ServicePartialRepresentation SearchServicesByProfession(string serviceProfessionType, int pageNo = 0);
+        IList<ServicePartialRepresentation> SearchServicesByProfession(string serviceProfessionType, int pageNo = 0);
 
         /// <summary>
         /// Delete the Service with the given ID

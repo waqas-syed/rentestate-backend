@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -31,15 +32,16 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// Save or update the service
         /// </summary>
         /// <param name="service"></param>
-        public void SaveOrUpdate(Service service)
+        public string SaveOrUpdate(Service service)
         {
             using (var transaction = _session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 _session.SaveOrUpdate(service);
                 transaction.Commit();
             }
+            return service.Id;
         }
-        
+
         /// <summary>
         /// Get the Service by it's ID
         /// </summary>
@@ -50,6 +52,24 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
             using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 return _session.QueryOver<Service>().Where(x => x.Id == id).SingleOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Get Services by Email
+        /// </summary>
+        /// <param name="uploaderEmail"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        public IList<Service> GetServicesByEmail(string uploaderEmail, int pageNo = 0)
+        {
+            using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return _session.QueryOver<Service>()
+                        .Where(x => x.UploaderEmail.Equals(uploaderEmail))
+                        .Skip(pageNo*_resultsPerPage)
+                        .Take(_resultsPerPage)
+                        .List<Service>();
             }
         }
 
@@ -125,7 +145,9 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
             {
                 return _session
                     .QueryOver<Service>()
-                    .Where(x => x.ServiceProfessionType == serviceProfessionType)
+                    .Where(x => x.ServiceProfessionType.Equals(serviceProfessionType))
+                    .Skip(pageNo * _resultsPerPage)
+                    .Take(_resultsPerPage)
                     .List<Service>();
             }
         }

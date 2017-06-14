@@ -73,7 +73,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <param name="name"></param>
         /// <param name="description"></param>
         /// <param name="location"></param>
-        /// <param name="phoneNumber"></param>
+        /// <param name="mobileNumber"></param>
         /// <param name="serviceEmail"></param>
         /// <param name="uploaderEmail"></param>
         /// <param name="serviceProfessionType"></param>
@@ -81,14 +81,19 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <param name="dateEstablished"></param>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
-        public virtual void UpdateService(string name, string description, string location, string phoneNumber, 
-            string serviceEmail, string uploaderEmail, string serviceProfessionType, string serviceEntityType,
-            DateTime dateEstablished, decimal latitude, decimal longitude)
+        /// <param name="facebookLink"></param>
+        /// <param name="instagramLink"></param>
+        /// <param name="twitterLink"></param>
+        /// <param name="websiteLink"></param>
+        public virtual void UpdateService(string name, string description, string location, 
+            string mobileNumber, string serviceEmail, string uploaderEmail, string serviceProfessionType, 
+            string serviceEntityType, DateTime dateEstablished, decimal latitude, decimal longitude,
+            string facebookLink, string instagramLink, string twitterLink, string websiteLink)
         {
             Name = name;
             Description = description;
             Location = location;
-            MobileNumber = phoneNumber;
+            MobileNumber = mobileNumber;
             ServiceEmail = serviceEmail;
             UploaderEmail = uploaderEmail;
             ServiceProfessionType = serviceProfessionType;
@@ -96,6 +101,10 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             DateEstablished = dateEstablished;
             Latitude = latitude;
             Longitude = longitude;
+            FacebookLink = facebookLink;
+            InstagramLink = instagramLink;
+            TwitterLink = twitterLink;
+            WebsiteLink = websiteLink;
         }
         
         /// <summary>
