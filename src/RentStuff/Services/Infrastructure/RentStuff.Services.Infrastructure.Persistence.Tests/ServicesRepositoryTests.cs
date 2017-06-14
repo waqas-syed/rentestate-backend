@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using Ninject;
 using NUnit.Framework;
@@ -38,11 +37,13 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             _databaseUtility.Create();
         }
 
+        // Saves a Service while assigning values to all mandatory and non-mandatory fields and then retrieves
+        // it
         [Test]
         public void ServiceSaveAndRetrieveTest_ChecksIfTheServiceInstanceIsSavedAsExpected_VerifiesByTheReturnedValue()
         {
             // Get the ServiceRepository instance using Ninejct DI
-            var servicesRepository = _kernel.Get<IServicesRepository>();
+            var servicesRepository = _kernel.Get<IServiceRepository>();
 
             string name = "The Stone Chopper";
             string description = "We make swrods so sharp and strong, they can chop stones";
@@ -57,14 +58,19 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.IsNotNull(vehicleProfession);
             string serviceProfessionType = vehicleProfession[3];
             string entity = "Organization";
-            DateTime dateEstablished = DateTime.Now;
+            DateTime? dateEstablished = DateTime.Now;
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
+            string secondaryMobileNumber = "00000000002";
+            string landlinePhoneNumber = "0000000001";
+            string fax = "0000000003";
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
                 .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(entity).DateEstablished(dateEstablished)
-                .Latitude(latitude).Longitude(longitude).Build();
+                .Latitude(latitude).Longitude(longitude).SecondaryMobileNumber(secondaryMobileNumber)
+                .LandlinePhoneNumber(landlinePhoneNumber).Fax(fax)
+                .Build();
             string image1Id = Guid.NewGuid().ToString();
             string image2Id = Guid.NewGuid().ToString();
             string image3Id = Guid.NewGuid().ToString();
@@ -86,7 +92,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(name, retrievedService.Name);
             Assert.AreEqual(description, retrievedService.Description);
             Assert.AreEqual(location, retrievedService.Location);
-            Assert.AreEqual(phoneNumber, retrievedService.PhoneNumber);
+            Assert.AreEqual(phoneNumber, retrievedService.MobileNumber);
             Assert.AreEqual(serviceEmail, retrievedService.ServiceEmail);
             Assert.AreEqual(uploaderEmail, retrievedService.UploaderEmail);
             Assert.AreEqual(serviceProfessionType, retrievedService.ServiceProfessionType);
@@ -95,6 +101,9 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             AssertDateTime(dateEstablished, retrievedService.DateEstablished);
             Assert.AreEqual(latitude, retrievedService.Latitude);
             Assert.AreEqual(longitude, retrievedService.Longitude);
+            Assert.AreEqual(secondaryMobileNumber, service.SecondaryMobileNumber);
+            Assert.AreEqual(landlinePhoneNumber, service.LandlinePhoneNumber);
+            Assert.AreEqual(fax, service.Fax);
 
             // Check the Reviews
             Assert.IsNotNull(retrievedService.Reviews);
@@ -112,11 +121,12 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(image3Id, retrievedService.Images[2]);
         }
 
+        // Service Images Save + Delete test
         [Test]
         public void ServiceImagesSaveAndDeleteTest_ChecksIfTheServiceImagesAreSavedAndDeetedAsExpected_VerifiesByTheReturnedValue()
         {
             // Get the ServiceRepository instance using Ninejct DI
-            var servicesRepository = _kernel.Get<IServicesRepository>();
+            var servicesRepository = _kernel.Get<IServiceRepository>();
 
             string name = "The Stone Chopper";
             string location = "Pindora, Rawalpindi, Pakistan";
@@ -177,11 +187,12 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(image3Id, retrievedService.Images[1]);
         }
 
+        // Service Save + update + delete test
         [Test]
         public void ServiceSaveUpdateAndRetrieveTest_ChecksIfTheServiceInstanceIsSavedAndThenUpdatedAsExpected_VerifiesByTheReturnedValue()
         {
             // Get the ServiceRepository instance using Ninejct DI
-            var servicesRepository = _kernel.Get<IServicesRepository>();
+            var servicesRepository = _kernel.Get<IServiceRepository>();
 
             string name = "The Stone Chopper";
             string description = "We make swrods so sharp and strong, they can chop stones";
@@ -209,7 +220,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(name, retrievedService.Name);
             Assert.AreEqual(description, retrievedService.Description);
             Assert.AreEqual(location, retrievedService.Location);
-            Assert.AreEqual(phoneNumber, retrievedService.PhoneNumber);
+            Assert.AreEqual(phoneNumber, retrievedService.MobileNumber);
             Assert.AreEqual(serviceEmail, retrievedService.ServiceEmail);
             Assert.AreEqual(uploaderEmail, retrievedService.UploaderEmail);
             Assert.AreEqual(serviceProfessionType, retrievedService.ServiceProfessionType);
@@ -239,7 +250,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(name2, retrievedService.Name);
             Assert.AreEqual(description2, retrievedService.Description);
             Assert.AreEqual(location2, retrievedService.Location);
-            Assert.AreEqual(phoneNumber2, retrievedService.PhoneNumber);
+            Assert.AreEqual(phoneNumber2, retrievedService.MobileNumber);
             Assert.AreEqual(serviceEmail2, retrievedService.ServiceEmail);
             Assert.AreEqual(profession2, retrievedService.ServiceProfessionType);
             Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), entity2),
@@ -249,11 +260,12 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(longitude2, retrievedService.Longitude);
         }
 
+        // Saves the service wih all the mandatory fields leaving out non-mandatory ones
         [Test]
         public void ServiceSaveWithoutMandatoryFieldsTest_ChecksIfTheServiceInstanceIsSavedWithoutThemandatoryFieldsAsExpected_VerifiesByTheReturnedValue()
         {
             // Get the ServiceRepository instance using Ninejct DI
-            var servicesRepository = _kernel.Get<IServicesRepository>();
+            var servicesRepository = _kernel.Get<IServiceRepository>();
 
             string name = "The Stone Chopper";
             string location = "Pindora, Rawalpindi, Pakistan";
@@ -277,6 +289,36 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.IsNotNull(retrievedService);
         }
 
+        // DateEstablished assigned null Test
+        [Test]
+        public void ServiceSaveWithDateEstablishedAsNull_ChecksIfTheServiceInstanceIsSavedWithTheDateAssignedNullAsExpected_VerifiesByTheReturnedValue()
+        {
+            // Get the ServiceRepository instance using Ninejct DI
+            var servicesRepository = _kernel.Get<IServiceRepository>();
+
+            string name = "The Stone Chopper";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string phoneNumber = "03455138018";
+            string serviceEmail = "stone@chopper1234567.com";
+            string uploaderEmail = "uploader@chopper1234567.com";
+            string profession = Service.GetProfessionsList().First().Value.First();
+            string entity = "Organization";
+            decimal latitude = 34.7M;
+            decimal longitude = 74.1M;
+            DateTime? dateEstablished = null;
+            Service service = new Service.ServiceBuilder().Name(name)
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(profession).ServiceEntityType(entity)
+                .Latitude(latitude).Longitude(longitude).DateEstablished(dateEstablished).Build();
+
+            // Save the Service
+            servicesRepository.SaveOrUpdate(service);
+
+            // Retrieve the result and just check that we got one
+            var retrievedService = servicesRepository.GetServiceById(service.Id);
+            Assert.IsNotNull(retrievedService);
+        }
+
         // Search using the coordinates
         [Test]
         public void SearchServiceUsingLocationCoordinatesTest_ChecksIfTheServiceInstanceIsSavedWithoutThemandatoryFieldsAsExpected_VerifiesByTheReturnedValue()
@@ -288,7 +330,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // directly
 
             // Get the ServiceRepository instance using Ninejct DI
-            var servicesRepository = _kernel.Get<IServicesRepository>();
+            var servicesRepository = _kernel.Get<IServiceRepository>();
 
             // Get the GeocodingService from the Common module
             var geocodingService = _kernel.Get<IGeocodingService>();
@@ -453,7 +495,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(name6, retrievedService.Name);
             Assert.AreEqual(description6, retrievedService.Description);
             Assert.AreEqual(location6, retrievedService.Location);
-            Assert.AreEqual(phoneNumber6, retrievedService.PhoneNumber);
+            Assert.AreEqual(phoneNumber6, retrievedService.MobileNumber);
             Assert.AreEqual(serviceEmail6, retrievedService.ServiceEmail);
             Assert.AreEqual(uploaderEmail6, retrievedService.UploaderEmail);
             Assert.AreEqual(serviceProfessionType6, retrievedService.ServiceProfessionType);
@@ -472,7 +514,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(name, retrievedService.Name);
             Assert.AreEqual(description, retrievedService.Description);
             Assert.AreEqual(location, retrievedService.Location);
-            Assert.AreEqual(phoneNumber, retrievedService.PhoneNumber);
+            Assert.AreEqual(phoneNumber, retrievedService.MobileNumber);
             Assert.AreEqual(serviceEmail, retrievedService.ServiceEmail);
             Assert.AreEqual(uploaderEmail, retrievedService.UploaderEmail);
             Assert.AreEqual(serviceProfessionType, retrievedService.ServiceProfessionType);
@@ -495,7 +537,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(name3, retrievedService.Name);
             Assert.AreEqual(description3, retrievedService.Description);
             Assert.AreEqual(location3, retrievedService.Location);
-            Assert.AreEqual(phoneNumber3, retrievedService.PhoneNumber);
+            Assert.AreEqual(phoneNumber3, retrievedService.MobileNumber);
             Assert.AreEqual(serviceEmail3, retrievedService.ServiceEmail);
             Assert.AreEqual(uploaderEmail3, retrievedService.UploaderEmail);
             Assert.AreEqual(serviceProfessionType3, retrievedService.ServiceProfessionType);
@@ -518,7 +560,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(name4, retrievedService.Name);
             Assert.AreEqual(description4, retrievedService.Description);
             Assert.AreEqual(location4, retrievedService.Location);
-            Assert.AreEqual(phoneNumber4, retrievedService.PhoneNumber);
+            Assert.AreEqual(phoneNumber4, retrievedService.MobileNumber);
             Assert.AreEqual(serviceEmail4, retrievedService.ServiceEmail);
             Assert.AreEqual(uploaderEmail4, retrievedService.UploaderEmail);
             Assert.AreEqual(serviceProfessionType4, retrievedService.ServiceProfessionType);
@@ -537,7 +579,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(name2, retrievedService.Name);
             Assert.AreEqual(description2, retrievedService.Description);
             Assert.AreEqual(location2, retrievedService.Location);
-            Assert.AreEqual(phoneNumber2, retrievedService.PhoneNumber);
+            Assert.AreEqual(phoneNumber2, retrievedService.MobileNumber);
             Assert.AreEqual(serviceEmail2, retrievedService.ServiceEmail);
             Assert.AreEqual(uploaderEmail2, retrievedService.UploaderEmail);
             Assert.AreEqual(serviceProfessionType2, retrievedService.ServiceProfessionType);
@@ -566,7 +608,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // leave the rest
             
             // Get the ServiceRepository instance using Ninejct DI
-            var servicesRepository = _kernel.Get<IServicesRepository>();
+            var servicesRepository = _kernel.Get<IServiceRepository>();
 
             // Get the GeocodingService from the Common module
             var geocodingService = _kernel.Get<IGeocodingService>();
@@ -723,7 +765,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(name4, retrievedService.Name);
             Assert.AreEqual(description4, retrievedService.Description);
             Assert.AreEqual(location4, retrievedService.Location);
-            Assert.AreEqual(phoneNumber4, retrievedService.PhoneNumber);
+            Assert.AreEqual(phoneNumber4, retrievedService.MobileNumber);
             Assert.AreEqual(serviceEmail4, retrievedService.ServiceEmail);
             Assert.AreEqual(uploaderEmail4, retrievedService.UploaderEmail);
             Assert.AreEqual(serviceProfessionType3, retrievedService.ServiceProfessionType);
@@ -746,7 +788,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(name6, retrievedService.Name);
             Assert.AreEqual(description6, retrievedService.Description);
             Assert.AreEqual(location6, retrievedService.Location);
-            Assert.AreEqual(phoneNumber6, retrievedService.PhoneNumber);
+            Assert.AreEqual(phoneNumber6, retrievedService.MobileNumber);
             Assert.AreEqual(serviceEmail6, retrievedService.ServiceEmail);
             Assert.AreEqual(uploaderEmail6, retrievedService.UploaderEmail);
             Assert.AreEqual(serviceProfessionType3, retrievedService.ServiceProfessionType);
@@ -769,7 +811,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // services saved with that Profession and should ignore their location completely
 
             // Get the ServiceRepository instance using Ninejct DI
-            var servicesRepository = _kernel.Get<IServicesRepository>();
+            var servicesRepository = _kernel.Get<IServiceRepository>();
 
             // Get the GeocodingService from the Common module
             var geocodingService = _kernel.Get<IGeocodingService>();
@@ -821,7 +863,11 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
                 .UploaderEmail(uploaderEmail2).ServiceProfessionType(serviceProfessionType2)
                 .ServiceEntityType(serviceEntityType2)
                 .Latitude(latitude2).Longitude(longitude2).DateEstablished(dateEstablished2).Build();
-            // Save the Service
+            // Provide a review to save
+            string reviewAuthorName2 = "King Arthur 2";
+            string reviewAuthorEmail2 = "kingofthelingbling2@kingdomcup12345678.com";
+            string reviewDescription2 = "Off goes your head 2 times";
+            service2.AddReview(reviewAuthorName2, reviewAuthorEmail2, reviewDescription2);
             servicesRepository.SaveOrUpdate(service2);
 
             // House # 3 - serviceProfessionType2
@@ -917,32 +963,28 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.IsNotNull(retrievedServices);
             Assert.AreEqual(2, retrievedServices.Count);
             
-            // Verify House # 3
-            var retrievedService = retrievedServices[0];
-            Assert.IsNotNull(retrievedService);
-            Assert.AreEqual(name3, retrievedService.Name);
-            Assert.AreEqual(description3, retrievedService.Description);
-            Assert.AreEqual(location3, retrievedService.Location);
-            Assert.AreEqual(phoneNumber3, retrievedService.PhoneNumber);
-            Assert.AreEqual(serviceEmail3, retrievedService.ServiceEmail);
-            Assert.AreEqual(uploaderEmail3, retrievedService.UploaderEmail);
-            Assert.AreEqual(serviceProfessionType2, retrievedService.ServiceProfessionType);
-            Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType3),
-                retrievedService.ServiceEntityType);
-            AssertDateTime(dateEstablished3, retrievedService.DateEstablished);
-            Assert.AreEqual(latitude3, retrievedService.Latitude);
-            Assert.AreEqual(longitude3, retrievedService.Longitude);
-            // Check the Reviews of House no 3
-            Assert.IsNotNull(retrievedService.Reviews);
-            Assert.AreEqual(0, retrievedService.Reviews.Count);
+            Service retrievedService;
+            Service retrievedService2;
+            // We dont know in what order wil the services be retrieved, a in this case we are searching only
+            // using the profession tpye and not the location. So we will check in which order the services 
+            // are retrieved and then assert them correspondingly.
+            if (retrievedServices[0].Name.Equals(name2))
+            {
+                retrievedService = retrievedServices[0];
+                retrievedService2 = retrievedServices[1];
+            }
+            else
+            {
+                retrievedService2 = retrievedServices[0];
+                retrievedService = retrievedServices[1];
+            }
 
             // Verify House # 2
-            retrievedService = retrievedServices[1];
             Assert.IsNotNull(retrievedService);
             Assert.AreEqual(name2, retrievedService.Name);
             Assert.AreEqual(description2, retrievedService.Description);
             Assert.AreEqual(location2, retrievedService.Location);
-            Assert.AreEqual(phoneNumber2, retrievedService.PhoneNumber);
+            Assert.AreEqual(phoneNumber2, retrievedService.MobileNumber);
             Assert.AreEqual(serviceEmail2, retrievedService.ServiceEmail);
             Assert.AreEqual(uploaderEmail2, retrievedService.UploaderEmail);
             Assert.AreEqual(serviceProfessionType2, retrievedService.ServiceProfessionType);
@@ -953,7 +995,29 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(longitude2, retrievedService.Longitude);
             // Check the Reviews of House no 2
             Assert.IsNotNull(retrievedService.Reviews);
-            Assert.AreEqual(0, retrievedService.Reviews.Count);
+            Assert.AreEqual(1, retrievedService.Reviews.Count);
+            Assert.AreEqual(reviewAuthorName2, retrievedService.Reviews[0].Authorname);
+            Assert.AreEqual(reviewAuthorEmail2, retrievedService.Reviews[0].AuthorEmail);
+            Assert.AreEqual(reviewDescription2, retrievedService.Reviews[0].ReviewDescription);
+            Assert.AreEqual(service2, retrievedService.Reviews[0].Service);
+
+            // Verify House # 3
+            Assert.IsNotNull(retrievedService2);
+            Assert.AreEqual(name3, retrievedService2.Name);
+            Assert.AreEqual(description3, retrievedService2.Description);
+            Assert.AreEqual(location3, retrievedService2.Location);
+            Assert.AreEqual(phoneNumber3, retrievedService2.MobileNumber);
+            Assert.AreEqual(serviceEmail3, retrievedService2.ServiceEmail);
+            Assert.AreEqual(uploaderEmail3, retrievedService2.UploaderEmail);
+            Assert.AreEqual(serviceProfessionType2, retrievedService2.ServiceProfessionType);
+            Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType3),
+                retrievedService2.ServiceEntityType);
+            AssertDateTime(dateEstablished3, retrievedService2.DateEstablished);
+            Assert.AreEqual(latitude3, retrievedService2.Latitude);
+            Assert.AreEqual(longitude3, retrievedService2.Longitude);
+            // Check the Reviews of House no 3
+            Assert.IsNotNull(retrievedService2.Reviews);
+            Assert.AreEqual(0, retrievedService2.Reviews.Count);
         }
 
         [Test]
@@ -961,7 +1025,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             DeleteServicetest_ChecksIfAnInstanceisDeletedFromTheDatabaseSuccessfully_VerifiesThroughTheValueNotReturned()
         {
             // Get the ServiceRepository instance using Ninejct DI
-            var servicesRepository = _kernel.Get<IServicesRepository>();
+            var servicesRepository = _kernel.Get<IServiceRepository>();
 
             // Get the GeocodingService from the Common module
             var geocodingService = _kernel.Get<IGeocodingService>();
@@ -1018,10 +1082,16 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
         /// </summary>
         /// <param name="expectedDateTime"></param>
         /// <param name="actualDateTime"></param>
-        private void AssertDateTime(DateTime expectedDateTime, DateTime actualDateTime)
+        private void AssertDateTime(DateTime? expectedDateTime, DateTime? actualDateTime)
         {
-            actualDateTime = actualDateTime.AddTicks(-actualDateTime.Ticks % TimeSpan.TicksPerSecond);
-            expectedDateTime = expectedDateTime.AddTicks(-expectedDateTime.Ticks % TimeSpan.TicksPerSecond);
+            if (actualDateTime != null)
+            {
+                actualDateTime = actualDateTime.Value.AddTicks(-actualDateTime.Value.Ticks%TimeSpan.TicksPerSecond);
+            }
+            if (expectedDateTime != null)
+            {
+                expectedDateTime = expectedDateTime.Value.AddTicks(-expectedDateTime.Value.Ticks%TimeSpan.TicksPerSecond);
+            }
             Assert.AreEqual(expectedDateTime, actualDateTime);
         }
     }

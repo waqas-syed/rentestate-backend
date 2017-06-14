@@ -39,7 +39,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.NinjectModules
             })*/
             ;
             
-            Bind<IServicesRepository>().To<ServicesRepository>();
+            Bind<IServiceRepository>().To<ServiceRepository>();
         }
     }
 }

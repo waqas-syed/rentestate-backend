@@ -39,7 +39,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.NHibernateCompound
                 Fluently.Configure()
                 .Database(MySQLConfiguration.Standard
                 .ConnectionString(_connectionString).ShowSql())
-                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ServicesRepository>())
+                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ServiceRepository>())
                 .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true))
                 .BuildSessionFactory();
         }

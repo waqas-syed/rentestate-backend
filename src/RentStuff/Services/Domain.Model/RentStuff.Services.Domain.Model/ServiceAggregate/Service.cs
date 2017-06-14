@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using RentStuff.Common.Domain.Model;
 // ReSharper disable VirtualMemberCallInConstructor
 
@@ -16,7 +14,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         private string _name;
         private string _description;
         private string _location;
-        private string _phoneNumber;
+        private string _mobileNumber;
         private string _serviceEmail;
         private string _uploaderEmail;
         private string _serviceProfessionType;
@@ -24,6 +22,9 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         private decimal _latitude;
         private decimal _longitude;
         private IList<string> _images = new List<string>();
+        private string _secondaryMobileNumber;
+        private string _landlinePhoneNumber;
+        private string _fax;
 
         /// <summary>
         /// Default Constructor. To Initialize the Service, use the ServiceBuilder type that uses the Builder
@@ -39,13 +40,14 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// </summary>
         private Service(string name, string description, string location, string phoneNumber, 
             string serviceEmail, string uploaderEmail, string serviceProfessionType, string serviceEntityType,
-            DateTime dateEstablished, decimal latitude, decimal longitude, string facebookLink,
-            string instagramLink, string twitterLink, string websiteLink)
+            DateTime? dateEstablished, decimal latitude, decimal longitude, string facebookLink,
+            string instagramLink, string twitterLink, string websiteLink, string secondaryMobileNumber,
+            string landlineNumber, string fax)
         {
             Name = name;
             Description = description;
             Location = location;
-            PhoneNumber = phoneNumber;
+            MobileNumber = phoneNumber;
             ServiceEmail = serviceEmail;
             UploaderEmail = uploaderEmail;
             ServiceProfessionType = serviceProfessionType;
@@ -60,6 +62,9 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             InstagramLink = instagramLink;
             TwitterLink = twitterLink;
             WebsiteLink = websiteLink;
+            SecondaryMobileNumber = secondaryMobileNumber;
+            LandlinePhoneNumber = landlineNumber;
+            Fax = fax;
         }
 
         /// <summary>
@@ -83,7 +88,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             Name = name;
             Description = description;
             Location = location;
-            PhoneNumber = phoneNumber;
+            MobileNumber = phoneNumber;
             ServiceEmail = serviceEmail;
             UploaderEmail = uploaderEmail;
             ServiceProfessionType = serviceProfessionType;
@@ -156,14 +161,14 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// The phone number of the service provider
         /// </summary>
-        public virtual string PhoneNumber
+        public virtual string MobileNumber
         {
-            get { return _phoneNumber; }
+            get { return _mobileNumber; }
             set
             {
                 Assertion.AssertStringNotNullorEmpty(value);
                 Assertion.IsPhoneNumberValid(value);
-                _phoneNumber = value;
+                _mobileNumber = value;
             }
         }
 
@@ -277,7 +282,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// When was this service established by the provider
         /// </summary>
-        public virtual DateTime DateEstablished { get; set; }
+        public virtual DateTime? DateEstablished { get; set; }
 
         /// <summary>
         /// Latitude
@@ -332,6 +337,46 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual string WebsiteLink { get; protected internal set; }
 
         /// <summary>
+        /// Optional secondary Mobile number.
+        /// </summary>
+        public virtual string SecondaryMobileNumber
+        {
+            get { return _secondaryMobileNumber; }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    Assertion.IsPhoneNumberValid(value);
+                    _secondaryMobileNumber = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Landline phone number
+        /// </summary>
+        public virtual string LandlinePhoneNumber
+        {
+            get { return _landlinePhoneNumber; }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    _landlinePhoneNumber = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Fax
+        /// </summary>
+        public virtual string Fax
+        {
+            get { return _fax; }
+            set { _fax = value; }
+        }
+
+        /// <summary>
         /// Rating of this service by users
         /// </summary>
         //public virtual Ratings Ratings { get; }
@@ -379,13 +424,16 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             private string _uploaderEmail;
             private string _serviceProfessionType;
             private string _serviceEntityType;
-            private DateTime _dateEstablished;
+            private DateTime? _dateEstablished;
             private decimal _latitude;
             private decimal _longitude;
             private string _facebookLink;
             private string _instagramLink;
             private string _twitterLink;
             private string _websiteLink;
+            private string _secondaryMobileNumber;
+            private string _landlinePhoneNumber;
+            private string _fax;
 
             /// <summary>
             /// Name
@@ -480,7 +528,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             /// </summary>
             /// <param name="dateEstablished"></param>
             /// <returns></returns>
-            public ServiceBuilder DateEstablished(DateTime dateEstablished)
+            public ServiceBuilder DateEstablished(DateTime? dateEstablished)
             {
                 _dateEstablished = dateEstablished;
                 return this;
@@ -552,11 +600,45 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
                 return this;
             }
 
+            /// <summary>
+            /// Secondary Mobile Number
+            /// </summary>
+            /// <param name="secondaryMobileNumber"></param>
+            /// <returns></returns>
+            public ServiceBuilder SecondaryMobileNumber(string secondaryMobileNumber)
+            {
+                _secondaryMobileNumber = secondaryMobileNumber;
+                return this;
+            }
+
+            /// <summary>
+            /// Landline Phone NUmber
+            /// </summary>
+            /// <param name="landlinePhoneNumber"></param>
+            /// <returns></returns>
+            public ServiceBuilder LandlinePhoneNumber(string landlinePhoneNumber)
+            {
+                _landlinePhoneNumber = landlinePhoneNumber;
+                return this;
+            }
+
+            /// <summary>
+            /// Fax
+            /// </summary>
+            /// <param name="fax"></param>
+            /// <returns></returns>
+            public ServiceBuilder Fax(string fax)
+            {
+                _fax = fax;
+                return this;
+            }
+
             public Service Build()
             {
                 return new Service(_name, _description, _location, _phoneNumber, _serviceEmail, 
                     _uploaderEmail, _serviceProfessionType, _serviceEntityType, _dateEstablished,
-                    _latitude, _longitude, _facebookLink, _instagramLink, _twitterLink, _websiteLink);
+                    _latitude, _longitude, _facebookLink, _instagramLink, _twitterLink, _websiteLink,
+                    _secondaryMobileNumber, _landlinePhoneNumber, _fax);
             }
         }
     }

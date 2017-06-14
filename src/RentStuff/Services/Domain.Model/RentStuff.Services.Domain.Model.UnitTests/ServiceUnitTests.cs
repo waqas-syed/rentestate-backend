@@ -18,7 +18,7 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string name = "Black Smith Inc";
             string description = "We create the worlds best swords, spears and hammers!";
             string location = "Pindora, Rawalpindi, Pakistan";
-            string phoneNumber = "03455138018";
+            string phoneNumber = "00000000001";
             string serviceEmail = "smithy@smithereene1234567.com";
             string uploaderEmail = "provider@smithereene1234567.com";
 
@@ -35,19 +35,24 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             string websiteLink = "https://dummytwitterlink-123456789-1.com";
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
+            string secondaryMobileNumber = "00000000002";
+            string landlinePhoneNumber = "0000000001";
+            string fax = "0000000003";
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
                 .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(serviceEntityType).DateEstablished(dateEstablished)
                 .Latitude(latitude).Longitude(longitude).FacebookLink(facebookLink)
                 .InstagramLink(instagramLink).TwitterLink(twitterLink).WebsiteLink(websiteLink)
+                .SecondaryMobileNumber(secondaryMobileNumber).LandlinePhoneNumber(landlinePhoneNumber)
+                .Fax(fax)
                 .Build();
 
             Assert.IsNotNull(service);
             Assert.AreEqual(name, service.Name);
             Assert.AreEqual(description, service.Description);
             Assert.AreEqual(location, service.Location);
-            Assert.AreEqual(phoneNumber, service.PhoneNumber);
+            Assert.AreEqual(phoneNumber, service.MobileNumber);
             Assert.AreEqual(serviceEmail, service.ServiceEmail);
             Assert.AreEqual(uploaderEmail, service.UploaderEmail);
             Assert.AreEqual(serviceProfessionType, service.ServiceProfessionType);
@@ -60,6 +65,9 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             Assert.AreEqual(instagramLink, service.InstagramLink);
             Assert.AreEqual(twitterLink, service.TwitterLink);
             Assert.AreEqual(websiteLink, service.WebsiteLink);
+            Assert.AreEqual(secondaryMobileNumber, service.SecondaryMobileNumber);
+            Assert.AreEqual(landlinePhoneNumber, service.LandlinePhoneNumber);
+            Assert.AreEqual(fax, service.Fax);
         }
 
         // Successful instance creation with all mandatory fields, excluding non-mandatory ones
@@ -83,13 +91,34 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             Assert.IsNotNull(service);
             Assert.AreEqual(name, service.Name);
             Assert.AreEqual(location, service.Location);
-            Assert.AreEqual(phoneNumber, service.PhoneNumber);
+            Assert.AreEqual(phoneNumber, service.MobileNumber);
             Assert.AreEqual(uploaderEmail, service.UploaderEmail);
             Assert.AreEqual(serviceProfessionType, service.ServiceProfessionType);
             Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType),
                             service.ServiceEntityType);
             Assert.AreEqual(latitude, service.Latitude);
             Assert.AreEqual(longitude, service.Longitude);
+        }
+
+        // DateEstablished assigned as null test
+        [Test]
+        public void ServiceSaveWithDateEstablishedAssignedNullTest_ChecksIfTheServiceInstanceisBuiltAsExpectedWhenTheDateTimeIsNull_VerifiesByTheReturnedValue()
+        {
+            string name = "Black Smith Inc";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string phoneNumber = "03455138018";
+            string uploaderEmail = "provider@smithereene1234567.com";
+            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
+            string serviceEntityType = ServiceEntityType.Organization.ToString();
+            decimal latitude = 33.7M;
+            decimal longitude = 73.1M;
+            Service service = new Service.ServiceBuilder().Name(name)
+                .Location(location).PhoneNumber(phoneNumber)
+                .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
+                .ServiceEntityType(serviceEntityType)
+                .Latitude(latitude).Longitude(longitude).DateEstablished(null).Build();
+
+            Assert.IsNotNull(service);
         }
 
         public void

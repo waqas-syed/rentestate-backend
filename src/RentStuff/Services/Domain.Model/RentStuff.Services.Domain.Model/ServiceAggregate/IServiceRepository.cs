@@ -5,7 +5,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
     /// <summary>
     /// Interface for ServicesRepository
     /// </summary>
-    public interface IServicesRepository
+    public interface IServiceRepository
     {
         /// <summary>
         /// Save or update the service

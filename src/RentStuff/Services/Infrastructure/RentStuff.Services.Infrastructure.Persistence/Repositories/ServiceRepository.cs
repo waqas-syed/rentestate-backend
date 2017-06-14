@@ -10,7 +10,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
     /// <summary>
     /// Repository for Services
     /// </summary>
-    public class ServicesRepository : IServicesRepository
+    public class ServiceRepository : IServiceRepository
     {
         // The radius in kilometers from the location that was searched. We search within this radius for results
         // The formula is given here: https://developers.google.com/maps/articles/phpsqlsearch_v3
@@ -22,7 +22,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         
         private ISession _session;
 
-        public ServicesRepository(ISession session)
+        public ServiceRepository(ISession session)
         {
             _session = session;
         }
