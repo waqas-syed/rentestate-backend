@@ -65,6 +65,8 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             SecondaryMobileNumber = secondaryMobileNumber;
             LandlinePhoneNumber = landlineNumber;
             Fax = fax;
+            DatePosted = DateTime.Now;
+            LastUpdated = DateTime.Now;
         }
 
         /// <summary>
@@ -87,7 +89,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <param name="websiteLink"></param>
         public virtual void UpdateService(string name, string description, string location, 
             string mobileNumber, string serviceEmail, string uploaderEmail, string serviceProfessionType, 
-            string serviceEntityType, DateTime dateEstablished, decimal latitude, decimal longitude,
+            string serviceEntityType, DateTime? dateEstablished, decimal latitude, decimal longitude,
             string facebookLink, string instagramLink, string twitterLink, string websiteLink)
         {
             Name = name;
@@ -105,6 +107,8 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             InstagramLink = instagramLink;
             TwitterLink = twitterLink;
             WebsiteLink = websiteLink;
+
+            LastUpdated = DateTime.Now;
         }
         
         /// <summary>
@@ -125,6 +129,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual void AddReview(string authorName, string authorEmail, string reviewDescription)
         {
             Reviews.Add(new Review(authorName, authorEmail, reviewDescription, this));
+            LastUpdated = DateTime.Now;
         }
 
         public virtual string Id
@@ -194,8 +199,8 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     Assertion.IsEmailValid(value);
-                    _serviceEmail = value;
                 }
+                _serviceEmail = value;
             }
         }
 
@@ -386,6 +391,16 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         }
 
         /// <summary>
+        /// The date when this Service was posted
+        /// </summary>
+        public virtual DateTime DatePosted { get; protected internal set; }
+
+        /// <summary>
+        /// The DateTime when this Service was last updated
+        /// </summary>
+        public virtual DateTime LastUpdated { get; protected internal set; }
+
+        /// <summary>
         /// Rating of this service by users
         /// </summary>
         //public virtual Ratings Ratings { get; }
@@ -404,6 +419,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             if (!_images.Contains(id))
             {
                 _images.Add(id);
+                LastUpdated = DateTime.Now;
             }
         }
 
@@ -413,6 +429,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual void DeleteImage(string id)
         {
             _images.Remove(id);
+            LastUpdated = DateTime.Now;
         }
 
         /// <summary>

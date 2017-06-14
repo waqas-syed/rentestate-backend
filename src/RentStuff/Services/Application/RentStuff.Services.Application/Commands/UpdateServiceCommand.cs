@@ -12,7 +12,7 @@ namespace RentStuff.Services.Application.Commands
         /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
         public UpdateServiceCommand(string id, string name, string description, string location, 
             string mobileNumber, string serviceEmail, string uploaderEmail, string serviceProfesionType, 
-            string serviceEntityType, DateTime dateEstablished, string facebookLink, string instagramLink, 
+            string serviceEntityType, DateTime? dateEstablished, string facebookLink, string instagramLink, 
             string twitterLink, string websiteLink)
         {
             Id = id;
@@ -50,7 +50,7 @@ namespace RentStuff.Services.Application.Commands
         [DataMember]
         public string ServiceEntityType { get; private set; }
         [DataMember]
-        public DateTime DateEstablished { get; private set; }
+        public DateTime? DateEstablished { get; private set; }
         [DataMember]
         public string FacebookLink { get; private set; }
         [DataMember]

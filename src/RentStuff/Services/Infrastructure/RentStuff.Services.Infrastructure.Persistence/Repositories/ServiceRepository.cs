@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -66,7 +65,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
             using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 return _session.QueryOver<Service>()
-                        .Where(x => x.UploaderEmail.Equals(uploaderEmail))
+                        .Where(x => x.UploaderEmail == uploaderEmail)
                         .Skip(pageNo*_resultsPerPage)
                         .Take(_resultsPerPage)
                         .List<Service>();
@@ -145,7 +144,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
             {
                 return _session
                     .QueryOver<Service>()
-                    .Where(x => x.ServiceProfessionType.Equals(serviceProfessionType))
+                    .Where(x => x.ServiceProfessionType == serviceProfessionType)
                     .Skip(pageNo * _resultsPerPage)
                     .Take(_resultsPerPage)
                     .List<Service>();

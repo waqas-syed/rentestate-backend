@@ -272,7 +272,7 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// <returns></returns>
         private ServiceFullRepresentation ConvertSingleServiceToFullRepresentation(Service service)
         {
-            return new ServiceFullRepresentation(service.Name, service.Description,
+            return new ServiceFullRepresentation(service.Id, service.Name, service.Description,
                 service.Location, service.MobileNumber, service.ServiceEmail, service.ServiceProfessionType,
                 service.ServiceEntityType.ToString(), service.FacebookLink, service.InstagramLink, service.TwitterLink,
                 service.WebsiteLink, service.DateEstablished, 
@@ -292,10 +292,15 @@ namespace RentStuff.Services.Application.ApplicationServices
             IList<ServicePartialRepresentation> partialServiceList = new List<ServicePartialRepresentation>();
             foreach (var service in serviceList)
             {
+                string defaultImageLink = null;
+                if (service.Images.Count > 0)
+                {
+                    defaultImageLink = service.Images.First();
+                }
                 var servicePartialRepresentation = new ServicePartialRepresentation(service.Name,
                     service.Location, service.MobileNumber, service.ServiceEmail, 
                     service.ServiceProfessionType, service.ServiceEntityType.ToString(), service.FacebookLink,
-                    service.InstagramLink, service.TwitterLink, service.WebsiteLink, service.Images.First());
+                    service.InstagramLink, service.TwitterLink, service.WebsiteLink, defaultImageLink);
                 partialServiceList.Add(servicePartialRepresentation);
             }
             return partialServiceList;

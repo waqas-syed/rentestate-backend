@@ -12,11 +12,12 @@ namespace RentStuff.Services.Application.Representations
     public class ServiceFullRepresentation
     {
         /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
-        public ServiceFullRepresentation(string name, string description, string location, string mobileNumber,
+        public ServiceFullRepresentation(string id, string name, string description, string location, string mobileNumber,
             string serviceEmail, string serviceProfessionType, string serviceEntityType, string facebookLink, 
             string instagramLink, string twitterLink, string websiteLink, DateTime? dateEstablished, 
-            IList<string> images, IList<Review> reviews)
+            IReadOnlyList<string> images, IReadOnlyList<Review> reviews)
         {
+            Id = id;
             Name = name;
             Description = description;
             Location = location;
@@ -32,7 +33,9 @@ namespace RentStuff.Services.Application.Representations
             Images = images;
             Reviews = reviews;
         }
-        
+
+        [DataMember]
+        public string Id { get; private set; }
         [DataMember]
         public string Name { get; private set; }
         [DataMember]

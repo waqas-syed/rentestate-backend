@@ -278,6 +278,7 @@ CREATE TABLE `review` (
 
 CREATE TABLE `service` (
   `id` varchar(60) NOT NULL,
+  `db_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `description` varchar(1500) DEFAULT NULL,
   `location` varchar(100) NOT NULL,
@@ -292,7 +293,11 @@ CREATE TABLE `service` (
   `latitude` decimal(13,9) NOT NULL,
   `longitude` decimal(13,9) NOT NULL,
   `date_established` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `date_posted` datetime NOT NULL,
+  `last_updated` datetime NOT NULL,
+  PRIMARY KEY (`db_id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `db_id_UNIQUE` (`db_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

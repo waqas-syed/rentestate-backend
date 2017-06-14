@@ -25,6 +25,8 @@ namespace RentStuff.Services.Infrastructure.Persistence.Mappings
             Map(x => x.SecondaryMobileNumber).Column("secondary_mobile_number");
             Map(x => x.LandlinePhoneNumber).Column("landline_phone_number");
             Map(x => x.Fax).Column("fax");
+            Map(x => x.DatePosted).Column("date_posted");
+            Map(x => x.LastUpdated).Column("last_updated");
             HasMany(x => x.Images).Table("serviceimages").KeyColumn("service_id").Element("image_id");
             //HasOne(x => x.Ratings).Cascade.All();
             HasMany(x => x.Reviews).KeyColumn("service_id").Inverse().Cascade.AllDeleteOrphan();

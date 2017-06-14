@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Ninject;
 using NUnit.Framework;
 using RentStuff.Common;
 using RentStuff.Common.NinjectModules;
+using RentStuff.Common.Services.LocationServices;
 using RentStuff.Services.Application.ApplicationServices;
 using RentStuff.Services.Application.Commands;
 using RentStuff.Services.Application.Ninject.Modules;
-using RentStuff.Services.Domain.Model.ServiceAggregate;
 using RentStuff.Services.Infrastructure.Persistence.NinjectModules;
 
 namespace RentStuff.Services.Application.IntegrationTests
@@ -53,8 +51,8 @@ namespace RentStuff.Services.Application.IntegrationTests
             string mobileNumber = "00001000001";
             string serviceEmail = "stone@chopper1234567.com";
             string uploaderEmail = "uploader@chopper1234567.com";
-            string serviceProfessionType = Service.GetProfessionsList().First().Value.First();
-            string serviceEntityType = "Organization";
+            string serviceProfessionType = "Plumber";
+            string serviceEntityType = "Individual";
             DateTime? dateEstablished = DateTime.Now;
             string facebookLink = "https://dummyfacebooklink-123456789-1.com";
             string instagramLink = "https://dummyinstagramlink-123456789-1.com";
@@ -68,6 +66,313 @@ namespace RentStuff.Services.Application.IntegrationTests
 
             var savedServiceId = serviceAppicationService.SaveNewService(createServiceCommand);
             Assert.IsFalse(string.IsNullOrWhiteSpace(savedServiceId));
+            var serviceFullRepresentation = serviceAppicationService.GetServiceById(savedServiceId);
+            Assert.IsNotNull(serviceFullRepresentation);
+            Assert.AreEqual(name, serviceFullRepresentation.Name);
+            Assert.AreEqual(description, serviceFullRepresentation.Description);
+            Assert.AreEqual(location, serviceFullRepresentation.Location);
+            Assert.AreEqual(mobileNumber, serviceFullRepresentation.MobileNumber);
+            Assert.AreEqual(serviceEmail, serviceFullRepresentation.ServiceEmail);
+            Assert.AreEqual(serviceProfessionType, serviceFullRepresentation.ServiceProfessionType);
+            Assert.AreEqual(serviceEntityType, serviceFullRepresentation.ServiceEntityType);
+            AssertDateTime(dateEstablished, serviceFullRepresentation.DateEstablished);
+            Assert.AreEqual(facebookLink, serviceFullRepresentation.FacebookLink);
+            Assert.AreEqual(twitterLink, serviceFullRepresentation.TwitterLink);
+            Assert.AreEqual(instagramLink, serviceFullRepresentation.InstagramLink);
+            Assert.AreEqual(websiteLink, serviceFullRepresentation.WebsiteLink);
         }
+
+        // Service Save Test while using only the mandatory fields and providing optional fields as null
+        [Test]
+        public void SaveServiceWithMandatoryFieldsOnlyTest_VerifiesThatTheServiecIsSavedAsExpected_VerifiesByThEDatabaseRetrieval()
+        {
+            var serviceAppicationService = _kernel.Get<IServiceApplicationService>();
+            Assert.NotNull(serviceAppicationService);
+
+            string name = "The Stone Chopper";
+            string description = null;
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string mobileNumber = "00001000001";
+            string serviceEmail = null;
+            string uploaderEmail = "uploader@chopper1234567.com";
+            string serviceProfessionType = "Interior Designing";
+            string serviceEntityType = "Organization";
+            DateTime? dateEstablished = null;
+            string facebookLink = null;
+            string instagramLink = null;
+            string twitterLink = null;
+            string websiteLink = null;
+
+            var createServiceCommand = new CreateServiceCommand(name, description, location, mobileNumber,
+                serviceEmail, uploaderEmail, serviceProfessionType, serviceEntityType, dateEstablished,
+                facebookLink, instagramLink, twitterLink, websiteLink);
+            Assert.IsNotNull(createServiceCommand);
+
+            var savedServiceId = serviceAppicationService.SaveNewService(createServiceCommand);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(savedServiceId));
+            var serviceFullRepresentation = serviceAppicationService.GetServiceById(savedServiceId);
+            Assert.IsNotNull(serviceFullRepresentation);
+            Assert.AreEqual(savedServiceId, serviceFullRepresentation.Id);
+            Assert.AreEqual(name, serviceFullRepresentation.Name);
+            Assert.AreEqual(serviceProfessionType, serviceFullRepresentation.ServiceProfessionType);
+            Assert.AreEqual(serviceEntityType, serviceFullRepresentation.ServiceEntityType);
+            Assert.AreEqual(mobileNumber, serviceFullRepresentation.MobileNumber);
+            Assert.AreEqual(location, serviceFullRepresentation.Location);
+            Assert.IsNull(serviceFullRepresentation.Description);
+            Assert.IsNull(serviceFullRepresentation.ServiceEmail);
+            Assert.IsNull(serviceFullRepresentation.DateEstablished);
+            Assert.IsNull(serviceFullRepresentation.FacebookLink);
+            Assert.IsNull(serviceFullRepresentation.TwitterLink);
+            Assert.IsNull(serviceFullRepresentation.InstagramLink);
+            Assert.IsNull(serviceFullRepresentation.WebsiteLink);
+        }
+
+        // Service Save and Update test. Ofcourse retrieval is involved as well
+        [Test]
+        public void SaveAndUpdateServiceTest_VerifiesThatTheServiecIsSavedAsExpected_VerifiesByThEDatabaseRetrieval()
+        {
+            var serviceApplicationService = _kernel.Get<IServiceApplicationService>();
+            Assert.NotNull(serviceApplicationService);
+            var geocodingService = _kernel.Get<IGeocodingService>();
+            Assert.NotNull(geocodingService);
+
+            string name = "The Stone Chopper";
+            string description = "We make swrods so sharp and strong, they can chop stones";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string mobileNumber = "00001000001";
+            string serviceEmail = "stone@chopper1234567.com";
+            string uploaderEmail = "uploader@chopper1234567.com";
+            string serviceProfessionType = "Plumber";
+            string serviceEntityType = "Individual";
+            DateTime? dateEstablished = DateTime.Now;
+            string facebookLink = "https://dummyfacebooklink-123456789-1.com";
+            string instagramLink = "https://dummyinstagramlink-123456789-1.com";
+            string twitterLink = "https://dummytwitterlink-123456789-1.com";
+            string websiteLink = "https://dummywebsitelink-123456789-1.com";
+
+            var createServiceCommand = new CreateServiceCommand(name, description, location, mobileNumber,
+                serviceEmail, uploaderEmail, serviceProfessionType, serviceEntityType, dateEstablished,
+                facebookLink, instagramLink, twitterLink, websiteLink);
+            Assert.IsNotNull(createServiceCommand);
+
+            var savedServiceId = serviceApplicationService.SaveNewService(createServiceCommand);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(savedServiceId));
+            var serviceFullRepresentation = serviceApplicationService.GetServiceById(savedServiceId);
+            Assert.IsNotNull(serviceFullRepresentation);
+            Assert.AreEqual(savedServiceId, serviceFullRepresentation.Id);
+            Assert.AreEqual(name, serviceFullRepresentation.Name);
+            Assert.AreEqual(description, serviceFullRepresentation.Description);
+            Assert.AreEqual(location, serviceFullRepresentation.Location);
+            Assert.AreEqual(mobileNumber, serviceFullRepresentation.MobileNumber);
+            Assert.AreEqual(serviceEmail, serviceFullRepresentation.ServiceEmail);
+            Assert.AreEqual(serviceProfessionType, serviceFullRepresentation.ServiceProfessionType);
+            Assert.AreEqual(serviceEntityType, serviceFullRepresentation.ServiceEntityType);
+            AssertDateTime(dateEstablished, serviceFullRepresentation.DateEstablished);
+            Assert.AreEqual(facebookLink, serviceFullRepresentation.FacebookLink);
+            Assert.AreEqual(twitterLink, serviceFullRepresentation.TwitterLink);
+            Assert.AreEqual(instagramLink, serviceFullRepresentation.InstagramLink);
+            Assert.AreEqual(websiteLink, serviceFullRepresentation.WebsiteLink);
+
+            string name2 = "The Lightning Bolt";
+            string description2 = "Bolt, Electrify!";
+            string location2 = "Islamabad, Pakistan";
+            string mobileNumber2 = "03168948486";
+            string serviceEmail2 = null;
+            string uploaderEmail2 = "uploader@bolt1234567.com";
+            string serviceProfessionType2 = "Electrician";
+            string serviceEntityType2 = "Organization";
+            string facebookLink2 = "https://dummyfacebooklink-123456789-1.com";
+            string twitterLink2 = "https://dummytwitterlink-123456789-1.com";
+
+            // Update the Service
+            serviceApplicationService.UpdateService(new UpdateServiceCommand(savedServiceId, name2,
+                description2, location2, mobileNumber2, serviceEmail2, uploaderEmail2, serviceProfessionType2,
+                serviceEntityType2, dateEstablished, facebookLink2, instagramLink, twitterLink2, websiteLink));
+            
+            // Retrieve the Service form the database again
+            serviceFullRepresentation = serviceApplicationService.GetServiceById(savedServiceId);
+            Assert.IsNotNull(serviceFullRepresentation);
+            Assert.AreEqual(savedServiceId, serviceFullRepresentation.Id);
+            Assert.AreEqual(name2, serviceFullRepresentation.Name);
+            Assert.AreEqual(description2, serviceFullRepresentation.Description);
+            Assert.AreEqual(location2, serviceFullRepresentation.Location);
+            Assert.AreEqual(mobileNumber2, serviceFullRepresentation.MobileNumber);
+            Assert.AreEqual(serviceEmail2, serviceFullRepresentation.ServiceEmail);
+            Assert.AreEqual(serviceProfessionType2, serviceFullRepresentation.ServiceProfessionType);
+            Assert.AreEqual(serviceEntityType2, serviceFullRepresentation.ServiceEntityType);
+            AssertDateTime(dateEstablished, serviceFullRepresentation.DateEstablished);
+            Assert.AreEqual(facebookLink2, serviceFullRepresentation.FacebookLink);
+            Assert.AreEqual(twitterLink2, serviceFullRepresentation.TwitterLink);
+            Assert.AreEqual(instagramLink, serviceFullRepresentation.InstagramLink);
+            Assert.AreEqual(websiteLink, serviceFullRepresentation.WebsiteLink);
+        }
+
+        // Service Save and delete test
+        [Test]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void SaveAndDeleteServiceTest_VerifiesThatTheServiecIsSavedAsExpected_VerifiesByThEDatabaseRetrieval()
+        {
+            var serviceApplicationService = _kernel.Get<IServiceApplicationService>();
+            Assert.NotNull(serviceApplicationService);
+            var geocodingService = _kernel.Get<IGeocodingService>();
+            Assert.NotNull(geocodingService);
+
+            string name = "The Stone Chopper";
+            string description = "We make swrods so sharp and strong, they can chop stones";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string mobileNumber = "00001000001";
+            string serviceEmail = "stone@chopper1234567.com";
+            string uploaderEmail = "uploader@chopper1234567.com";
+            string serviceProfessionType = "Plumber";
+            string serviceEntityType = "Individual";
+            DateTime? dateEstablished = DateTime.Now;
+            string facebookLink = "https://dummyfacebooklink-123456789-1.com";
+            string instagramLink = "https://dummyinstagramlink-123456789-1.com";
+            string twitterLink = "https://dummytwitterlink-123456789-1.com";
+            string websiteLink = "https://dummywebsitelink-123456789-1.com";
+
+            var createServiceCommand = new CreateServiceCommand(name, description, location, mobileNumber,
+                serviceEmail, uploaderEmail, serviceProfessionType, serviceEntityType, dateEstablished,
+                facebookLink, instagramLink, twitterLink, websiteLink);
+            Assert.IsNotNull(createServiceCommand);
+
+            //Save the service
+            var savedServiceId = serviceApplicationService.SaveNewService(createServiceCommand);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(savedServiceId));
+            var serviceFullRepresentation = serviceApplicationService.GetServiceById(savedServiceId);
+            Assert.IsNotNull(serviceFullRepresentation);
+            
+            // Delete the service
+            serviceApplicationService.DeleteService(savedServiceId);
+            serviceApplicationService.GetServiceById(savedServiceId);
+        }
+
+        // Save multiple services using a single uploader email and then retrieve them using that email
+        [Test]
+        public void GetServicesByEmail_VerifiesThatTheServiecIsSavedAsExpected_VerifiesByThEDatabaseRetrieval()
+        {
+            var serviceApplicationService = _kernel.Get<IServiceApplicationService>();
+            Assert.NotNull(serviceApplicationService);
+            var geocodingService = _kernel.Get<IGeocodingService>();
+            Assert.NotNull(geocodingService);
+            
+            // The email that we will use to search for the corresponding instances
+            string mainEmail = "uploader@chopper1234567.com";
+            string name = "The Stone Chopper";
+            string description = "We make swrods so sharp and strong, they can chop stones";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string mobileNumber = "00001000001";
+            string serviceEmail = "stone@chopper1234567.com";
+            string serviceProfessionType = "Plumber";
+            string serviceEntityType = "Individual";
+            DateTime? dateEstablished = DateTime.Now;
+            string facebookLink = "https://dummyfacebooklink-123456789-1.com";
+            string instagramLink = "https://dummyinstagramlink-123456789-1.com";
+            string twitterLink = "https://dummytwitterlink-123456789-1.com";
+            string websiteLink = "https://dummywebsitelink-123456789-1.com";
+            
+            // Save the service
+            var savedServiceId = serviceApplicationService.SaveNewService(new CreateServiceCommand(
+                name, description, location, mobileNumber,
+                serviceEmail, mainEmail, serviceProfessionType, serviceEntityType, dateEstablished,
+                facebookLink, instagramLink, twitterLink, websiteLink));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(savedServiceId));
+
+            string name2 = "The Lightning Bolt";
+            string description2 = "Bolt, Electrify!";
+            string location2 = "Islamabad, Pakistan";
+            string mobileNumber2 = "03168948486";
+            string serviceEmail2 = "bolt@chopper1234567.com";
+            string uploaderEmail2 = "uploader@bolt1234567.com";
+            string serviceProfessionType2 = "Electrician";
+            string serviceEntityType2 = "Organization";
+            DateTime dateEstablished2 = DateTime.Now.AddYears(-2);
+            string facebookLink2 = "https://dummyfacebooklink-123456789-2.com";
+            string instagramLink2 = "https://dummyinstagramlink-123456789-2.com";
+            string twitterLink2 = "https://dummytwitterlink-123456789-2.com";
+            string websiteLink2 = "https://dummywebsitelink-123456789-2.com";
+            
+            //Save the service
+            var savedServiceId2 = serviceApplicationService.SaveNewService(new CreateServiceCommand(
+                name2, description2, location2, mobileNumber2,
+                serviceEmail2, uploaderEmail2, serviceProfessionType2, serviceEntityType2, dateEstablished2,
+                facebookLink2, instagramLink2, twitterLink2, websiteLink2));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(savedServiceId2));
+
+            string name3 = "The Grass Hopper";
+            string description3 = "We make choppers, so they can chop grass :D";
+            string location3 = "Rawalpindi, Pakistan";
+            string mobileNumber3 = "03168948486";
+            string serviceEmail3 = "grass@hopper1234567.com";
+            string serviceProfessionType3 = "Carpenter";
+            string serviceEntityType3 = "Individual";
+            DateTime? dateEstablished3 = null;
+            string facebookLink3 = "https://dummyfacebooklink-123456789-3.com";
+            string instagramLink3 = null;
+            string twitterLink3 = null;
+            string websiteLink3 = null;
+            
+            // Save the service
+            var savedServiceId3 = serviceApplicationService.SaveNewService(new CreateServiceCommand(
+                name3, description3, location3, mobileNumber3,
+                serviceEmail3, mainEmail, serviceProfessionType3, serviceEntityType3, dateEstablished3,
+                facebookLink3, instagramLink3, twitterLink3, websiteLink3));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(savedServiceId3));
+
+            // Retrieve the services by email
+            var retrievedServices = serviceApplicationService.GetServicesByUploaderEmail(mainEmail);
+            Assert.IsNotNull(retrievedServices);
+            Assert.AreEqual(2, retrievedServices.Count);
+            // Verify House no 1
+            var retrievedService = retrievedServices[0];
+            Assert.IsNotNull(retrievedService);
+            Assert.AreEqual(name, retrievedService.Name);
+            Assert.AreEqual(location, retrievedService.Location);
+            Assert.AreEqual(mobileNumber, retrievedService.MobileNumber);
+            Assert.AreEqual(serviceEmail, retrievedService.ServiceEmail);
+            Assert.AreEqual(serviceProfessionType, retrievedService.ServiceProfessionType);
+            Assert.AreEqual(serviceEntityType, retrievedService.ServiceEntityType);
+            Assert.AreEqual(facebookLink, retrievedService.FacebookLink);
+            Assert.AreEqual(twitterLink, retrievedService.TwitterLink);
+            Assert.AreEqual(instagramLink, retrievedService.InstagramLink);
+            Assert.AreEqual(websiteLink, retrievedService.WebsiteLink);
+
+            // Verify Service no 3
+            retrievedService = retrievedServices[1];
+            Assert.IsNotNull(retrievedService);
+            Assert.AreEqual(name3, retrievedService.Name);
+            Assert.AreEqual(location3, retrievedService.Location);
+            Assert.AreEqual(mobileNumber3, retrievedService.MobileNumber);
+            Assert.AreEqual(serviceEmail3, retrievedService.ServiceEmail);
+            Assert.AreEqual(serviceProfessionType3, retrievedService.ServiceProfessionType);
+            Assert.AreEqual(serviceEntityType3, retrievedService.ServiceEntityType);
+            Assert.AreEqual(facebookLink3, retrievedService.FacebookLink);
+            Assert.IsNull(retrievedService.TwitterLink);
+            Assert.IsNull(retrievedService.InstagramLink);
+            Assert.IsNull(retrievedService.WebsiteLink);
+        }
+
+        #region Private Methods
+
+        /// <summary>
+        /// Ignores miliseconds in the datetime provided and then asserts it against the expected DateTime
+        /// value
+        /// </summary>
+        /// <param name="expectedDateTime"></param>
+        /// <param name="actualDateTime"></param>
+        private void AssertDateTime(DateTime? expectedDateTime, DateTime? actualDateTime)
+        {
+            if (actualDateTime != null)
+            {
+                actualDateTime = actualDateTime.Value.AddTicks(-actualDateTime.Value.Ticks % TimeSpan.TicksPerSecond);
+            }
+            if (expectedDateTime != null)
+            {
+                expectedDateTime = expectedDateTime.Value.AddTicks(-expectedDateTime.Value.Ticks % TimeSpan.TicksPerSecond);
+            }
+            Assert.AreEqual(expectedDateTime, actualDateTime);
+        }
+
+        #endregion Private Methods
     }
 }

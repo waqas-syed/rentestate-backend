@@ -113,6 +113,9 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(secondaryMobileNumber, service.SecondaryMobileNumber);
             Assert.AreEqual(landlinePhoneNumber, service.LandlinePhoneNumber);
             Assert.AreEqual(fax, service.Fax);
+            Assert.AreEqual(DateTime.Now.Date, service.DatePosted.Date);
+            Assert.AreEqual(DateTime.Now.Date, service.DatePosted.Date);
+            Assert.AreEqual(fax, service.Fax);
 
             // Check the Reviews
             Assert.IsNotNull(retrievedService.Reviews);
@@ -214,11 +217,16 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             DateTime dateEstablished = DateTime.Now;
             decimal latitude = 33.7M;
             decimal longitude = 73.1M;
+            string facebookLink = "https://dummyfacebooklink-123456789-1.com";
+            string instagramLink = "https://dummyinstagramlink-123456789-1.com";
+            string twitterLink = "https://dummytwitterlink-123456789-1.com";
+            string websiteLink = "https://dummywebsitelink-123456789-1.com";
             Service service = new Service.ServiceBuilder().Name(name).Description(description)
                 .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
                 .UploaderEmail(uploaderEmail).ServiceProfessionType(serviceProfessionType)
                 .ServiceEntityType(entity).DateEstablished(dateEstablished)
-                .Latitude(latitude).Longitude(longitude).Build();
+                .Latitude(latitude).Longitude(longitude).FacebookLink(facebookLink)
+                .TwitterLink(twitterLink).InstagramLink(instagramLink).WebsiteLink(websiteLink).Build();
             
             // Save the Service
             servicesRepository.SaveOrUpdate(service);
@@ -238,6 +246,10 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             AssertDateTime(dateEstablished, retrievedService.DateEstablished);
             Assert.AreEqual(latitude, retrievedService.Latitude);
             Assert.AreEqual(longitude, retrievedService.Longitude);
+            Assert.AreEqual(facebookLink, retrievedService.FacebookLink);
+            Assert.AreEqual(twitterLink, retrievedService.TwitterLink);
+            Assert.AreEqual(instagramLink, retrievedService.InstagramLink);
+            Assert.AreEqual(websiteLink, retrievedService.WebsiteLink);
 
             // Now update the Service
             string name2 = "The Grass Hopper";
@@ -250,9 +262,14 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string entity2 = "Individual";
             decimal latitude2 = 34.7M;
             decimal longitude2 = 74.1M;
+            string facebookLink2 = "https://dummyfacebooklink-123456789-2.com";
+            string instagramLink2 = "https://dummyinstagramlink-123456789-2.com";
+            string twitterLink2 = "https://dummytwitterlink-123456789-2.com";
+            string websiteLink2 = "https://dummywebsitelink-123456789-2.com";
             DateTime dateEstablished2 = DateTime.Now.AddDays(1);
             retrievedService.UpdateService(name2, description2, location2, phoneNumber2, serviceEmail2,
-                uploaderEmail2, profession2, entity2, dateEstablished2, latitude2, longitude2);
+                uploaderEmail2, profession2, entity2, dateEstablished2, latitude2, longitude2,
+                facebookLink2, instagramLink2, twitterLink2, websiteLink2);
 
             retrievedService = servicesRepository.GetServiceById(service.Id);
             Assert.IsNotNull(retrievedService);
@@ -267,6 +284,10 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             AssertDateTime(dateEstablished2, retrievedService.DateEstablished);
             Assert.AreEqual(latitude2, retrievedService.Latitude);
             Assert.AreEqual(longitude2, retrievedService.Longitude);
+            Assert.AreEqual(facebookLink2, retrievedService.FacebookLink);
+            Assert.AreEqual(twitterLink2, retrievedService.TwitterLink);
+            Assert.AreEqual(instagramLink2, retrievedService.InstagramLink);
+            Assert.AreEqual(websiteLink2, retrievedService.WebsiteLink);
         }
 
         // Saves the service wih all the mandatory fields leaving out non-mandatory ones
@@ -830,7 +851,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string serviceProfessionType2 = Service.GetProfessionsList().First().Value.Last();
             string serviceProfessionType3 = Service.GetProfessionsList().Last().Value.First();
 
-            // House # 1 - serviceProfessionType1
+            // Service # 1 - serviceProfessionType1
             string name = "The Stone Chopper";
             string description = "Our swords can chop stones. Easily!!!";
             string location = "Pindora, Rawalpindi, Pakistan";
@@ -855,7 +876,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Save the Service
             servicesRepository.SaveOrUpdate(service);
 
-            // House # 2 - serviceProfessionType2
+            // Service # 2 - serviceProfessionType2
             string name2 = "The Lightning Bolt";
             string description2 = "Bolt, Electrify!";
             string location2 = "Islamabad, Pakistan";
@@ -879,7 +900,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             service2.AddReview(reviewAuthorName2, reviewAuthorEmail2, reviewDescription2);
             servicesRepository.SaveOrUpdate(service2);
 
-            // House # 3 - serviceProfessionType2
+            // Service # 3 - serviceProfessionType2
             string name3 = "The Grass Hopper";
             string description3 = "We make choppers, so they can chop grass :D";
             string location3 = "Rawalpindi, Pakistan";
@@ -899,7 +920,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Save the Service
             servicesRepository.SaveOrUpdate(service3);
 
-            // House # 4 - serviceProfessionType3
+            // Service # 4 - serviceProfessionType3
             string name4 = "The Onion Chopper";
             string description4 = "Meat, carbs and sauces. All combined in perfect proportions.";
             string location4 = "E-11, Islamabad, Islamabad Capital Territory, Pakistan";
@@ -924,7 +945,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Save the Service
             servicesRepository.SaveOrUpdate(service4);
 
-            // House # 5 - serviceProfessionType1
+            // Service # 5 - serviceProfessionType1
             string name5 = "The Lone Artist";
             string description5 = "Whatever colors you need will be painted. But by my imagination.";
             string location5 = "Saddar, Rawalpindi, Pakistan";
@@ -945,7 +966,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Save the Service
             servicesRepository.SaveOrUpdate(service5);
 
-            // House # 6 - serviceProfessionType3
+            // Service # 6 - serviceProfessionType3
             string name6 = "Salsalo";
             string description6 = "You have never tasted such delights before!";
             string location6 = "Bahria Town, Rawalpindi, Punjab, Pakistan";
@@ -1027,6 +1048,142 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Check the Reviews of House no 3
             Assert.IsNotNull(retrievedService2.Reviews);
             Assert.AreEqual(0, retrievedService2.Reviews.Count);
+        }
+
+        // Searches by providing the uplaoder's email
+        [Test]
+        public void SearchHousesByUploaderEmailTest_ChecksIfSearchByEmailReturnsValuesAsExpected_VerifiesByTheReturnedValues()
+        {
+            // Saves 3 houses, 2 with same email that is used for searching, and 1 with another one.
+            // The 2 houses should be retrieved
+            // Get the ServiceRepository instance using Ninejct DI
+            var servicesRepository = _kernel.Get<IServiceRepository>();
+
+            // Get the GeocodingService from the Common module
+            var geocodingService = _kernel.Get<IGeocodingService>();
+
+            string mainUploaderEmail = "uploader@chopper1234567.com";
+            
+            // Service # 1 - Saved with MainUploaderEmail
+            string name = "The Stone Chopper";
+            string description = "Our swords can chop stones. Easily!!!";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string phoneNumber = "03455138018";
+            string serviceEmail = "stone@chopper1234567.com";
+            string serviceEntityType = "Organization";
+            var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(location);
+            decimal latitude = coordinatesFromAddress.Item1;
+            decimal longitude = coordinatesFromAddress.Item2;
+            DateTime dateEstablished = DateTime.Now.AddYears(-2);
+            string serviceProfessionType = "Carpenter";
+            Service service = new Service.ServiceBuilder().Name(name).Description(description)
+                .Location(location).PhoneNumber(phoneNumber).ServiceEmail(serviceEmail)
+                .UploaderEmail(mainUploaderEmail).ServiceProfessionType(serviceProfessionType)
+                .ServiceEntityType(serviceEntityType)
+                .Latitude(latitude).Longitude(longitude).DateEstablished(dateEstablished).Build();
+            // Provide a review to save
+            string reviewAuthorName = "King Arthur";
+            string reviewAuthorEmail = "kingofthelingbling@kingdomcup12345678.com";
+            string reviewDescription = "Off goes your head";
+            service.AddReview(reviewAuthorName, reviewAuthorEmail, reviewDescription);
+            // Save the Service
+            servicesRepository.SaveOrUpdate(service);
+
+            // Service # 2 - Saved with MainUploaderEmail
+            string name2 = "The Lightning Bolt";
+            string description2 = "Bolt, Electrify!";
+            string location2 = "Islamabad, Pakistan";
+            string phoneNumber2 = "03168948486";
+            string serviceEmail2 = "bolt@chopper1234567.com";
+            string serviceEntityType2 = "Organization";
+            string serviceProfessionType2 = "Electrician";
+            var coordinatesFromAddress2 = geocodingService.GetCoordinatesFromAddress(location2);
+            decimal latitude2 = coordinatesFromAddress2.Item1;
+            decimal longitude2 = coordinatesFromAddress2.Item2;
+            DateTime dateEstablished2 = DateTime.Now.AddYears(-2);
+            Service service2 = new Service.ServiceBuilder().Name(name2).Description(description2)
+                .Location(location2).PhoneNumber(phoneNumber2).ServiceEmail(serviceEmail2)
+                .UploaderEmail(mainUploaderEmail).ServiceProfessionType(serviceProfessionType2)
+                .ServiceEntityType(serviceEntityType2)
+                .Latitude(latitude2).Longitude(longitude2).DateEstablished(dateEstablished2).Build();
+            // Provide a review to save
+            string reviewAuthorName2 = "King Arthur 2";
+            string reviewAuthorEmail2 = "kingofthelingbling2@kingdomcup12345678.com";
+            string reviewDescription2 = "Off goes your head 2 times";
+            service2.AddReview(reviewAuthorName2, reviewAuthorEmail2, reviewDescription2);
+            servicesRepository.SaveOrUpdate(service2);
+
+            // Service # 3 - Saved with an email thaat won't be searched
+            string name3 = "The Grass Hopper";
+            string description3 = "We make choppers, so they can chop grass :D";
+            string location3 = "Rawalpindi, Pakistan";
+            string phoneNumber3 = "03168948486";
+            string serviceEmail3 = "grass@hopper1234567.com";
+            string uploaderEmail3 = "uploader@hopper1234567.com";
+            string serviceEntityType3 = "Individual";
+            string serviceProfessionType3 = "Carpenter";
+            var coordinatesFromAddress3 = geocodingService.GetCoordinatesFromAddress(location3);
+            decimal latitude3 = coordinatesFromAddress3.Item1;
+            decimal longitude3 = coordinatesFromAddress3.Item2;
+            DateTime dateEstablished3 = DateTime.Now.AddYears(-3);
+            Service service3 = new Service.ServiceBuilder().Name(name3).Description(description3)
+                .Location(location3).PhoneNumber(phoneNumber3).ServiceEmail(serviceEmail3)
+                .UploaderEmail(uploaderEmail3).ServiceProfessionType(serviceProfessionType3)
+                .ServiceEntityType(serviceEntityType3)
+                .Latitude(latitude3).Longitude(longitude3).DateEstablished(dateEstablished3).Build();
+            // Save the Service
+            servicesRepository.SaveOrUpdate(service3);
+            
+            // House # 1 and house # 2 should be retrieved as they are saved with the main uploader email
+            var retrievedServices = servicesRepository.GetServicesByEmail(mainUploaderEmail);
+            Assert.IsNotNull(retrievedServices);
+            Assert.AreEqual(2, retrievedServices.Count);
+
+            // Verify Service # 1
+            Service retrievedService = retrievedServices[0];
+            Assert.IsNotNull(retrievedService);
+            Assert.AreEqual(name, retrievedService.Name);
+            Assert.AreEqual(description, retrievedService.Description);
+            Assert.AreEqual(location, retrievedService.Location);
+            Assert.AreEqual(phoneNumber, retrievedService.MobileNumber);
+            Assert.AreEqual(serviceEmail, retrievedService.ServiceEmail);
+            Assert.AreEqual(mainUploaderEmail, retrievedService.UploaderEmail);
+            Assert.AreEqual(serviceProfessionType, retrievedService.ServiceProfessionType);
+            Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType),
+                retrievedService.ServiceEntityType);
+            AssertDateTime(dateEstablished, retrievedService.DateEstablished);
+            Assert.AreEqual(latitude, retrievedService.Latitude);
+            Assert.AreEqual(longitude, retrievedService.Longitude);
+            // Check the Reviews of Service no 1
+            Assert.IsNotNull(retrievedService.Reviews);
+            Assert.AreEqual(1, retrievedService.Reviews.Count);
+            Assert.AreEqual(reviewAuthorName, retrievedService.Reviews[0].Authorname);
+            Assert.AreEqual(reviewAuthorEmail, retrievedService.Reviews[0].AuthorEmail);
+            Assert.AreEqual(reviewDescription, retrievedService.Reviews[0].ReviewDescription);
+            Assert.AreEqual(service, retrievedService.Reviews[0].Service);
+
+            // Verify Service # 2
+            Service retrievedService2 = retrievedServices[1];
+            Assert.IsNotNull(retrievedService2);
+            Assert.AreEqual(name2, retrievedService2.Name);
+            Assert.AreEqual(description2, retrievedService2.Description);
+            Assert.AreEqual(location2, retrievedService2.Location);
+            Assert.AreEqual(phoneNumber2, retrievedService2.MobileNumber);
+            Assert.AreEqual(serviceEmail2, retrievedService2.ServiceEmail);
+            Assert.AreEqual(mainUploaderEmail, retrievedService2.UploaderEmail);
+            Assert.AreEqual(serviceProfessionType2, retrievedService2.ServiceProfessionType);
+            Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), serviceEntityType2),
+                retrievedService2.ServiceEntityType);
+            AssertDateTime(dateEstablished2, retrievedService2.DateEstablished);
+            Assert.AreEqual(latitude2, retrievedService2.Latitude);
+            Assert.AreEqual(longitude2, retrievedService2.Longitude);
+            // Check the Reviews of Service no 2
+            Assert.IsNotNull(retrievedService2.Reviews);
+            Assert.AreEqual(1, retrievedService2.Reviews.Count);
+            Assert.AreEqual(reviewAuthorName2, retrievedService2.Reviews[0].Authorname);
+            Assert.AreEqual(reviewAuthorEmail2, retrievedService2.Reviews[0].AuthorEmail);
+            Assert.AreEqual(reviewDescription2, retrievedService2.Reviews[0].ReviewDescription);
+            Assert.AreEqual(service2, retrievedService2.Reviews[0].Service);
         }
 
         [Test]
