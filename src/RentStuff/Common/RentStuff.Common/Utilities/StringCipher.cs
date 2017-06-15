@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Configuration;
-using System.Data.Common;
-using System.Data.Entity.Core.EntityClient;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using MySql.Data.MySqlClient;
 
-namespace RentStuff.Common
+namespace RentStuff.Common.Utilities
 {
     /// <summary>
     /// Deciphers the connection string named "MySql" using the passphrase in AppSettings called 

@@ -11,6 +11,7 @@ using Ninject;
 using NUnit.Framework;
 using RentStuff.Common;
 using RentStuff.Common.NinjectModules;
+using RentStuff.Common.Utilities;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
 using RentStuff.Property.Application.Ninject.Modules;

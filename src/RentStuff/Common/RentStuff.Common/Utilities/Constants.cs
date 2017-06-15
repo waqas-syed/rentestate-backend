@@ -1,7 +1,7 @@
 ﻿
 using System.Configuration;
 
-namespace RentStuff.Common
+namespace RentStuff.Common.Utilities
 {
     public class Constants
     {

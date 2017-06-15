@@ -4,6 +4,7 @@ using System.Runtime.Remoting;
 using Microsoft.AspNet.Identity;
 using NUnit.Framework;
 using RentStuff.Common;
+using RentStuff.Common.Utilities;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
 using RentStuff.Identity.Infrastructure.Services.Email;
 using RentStuff.Identity.Infrastructure.Services.Identity;

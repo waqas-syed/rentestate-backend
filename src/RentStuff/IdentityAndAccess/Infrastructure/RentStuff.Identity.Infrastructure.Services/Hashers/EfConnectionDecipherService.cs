@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using NLog;
 using RentStuff.Common;
+using RentStuff.Common.Utilities;
 
 namespace RentStuff.Identity.Infrastructure.Services.Hashers
 {

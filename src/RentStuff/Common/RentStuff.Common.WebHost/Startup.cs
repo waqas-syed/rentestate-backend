@@ -14,6 +14,7 @@ using Ninject.Web.WebApi.OwinHost;
 using NLog;
 using Owin;
 using RentStuff.Common.NinjectModules;
+using RentStuff.Common.Utilities;
 using RentStuff.Common.WebHost.Providers;
 using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;

@@ -8,7 +8,7 @@ using RentStuff.Identity.Application.Account.Representations;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
 using RentStuff.Identity.Infrastructure.Services.Email;
 using RentStuff.Identity.Infrastructure.Services.Identity;
-using Constants = RentStuff.Common.Constants;
+using Constants = RentStuff.Common.Utilities.Constants;
 
 namespace RentStuff.Identity.Application.Account
 {

@@ -4,6 +4,7 @@ using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using RentStuff.Common;
+using RentStuff.Common.Utilities;
 using RentStuff.Services.Infrastructure.Persistence.Repositories;
 
 namespace RentStuff.Services.Infrastructure.Persistence.NHibernateCompound

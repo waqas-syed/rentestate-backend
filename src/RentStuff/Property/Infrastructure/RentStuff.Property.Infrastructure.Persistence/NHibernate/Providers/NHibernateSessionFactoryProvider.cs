@@ -1,6 +1,7 @@
 ﻿using NHibernate;
 using NHibernate.Cfg;
 using RentStuff.Common;
+using RentStuff.Common.Utilities;
 
 namespace RentStuff.Property.Infrastructure.Persistence.NHibernate.Providers
 {

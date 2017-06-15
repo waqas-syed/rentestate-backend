@@ -9,6 +9,7 @@ using System.Web.Http.Results;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using RentStuff.Common;
+using RentStuff.Common.Utilities;
 using RentStuff.Identity.Application.Account.Commands;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
 using RentStuff.Identity.Ports.Adapter.Rest.Controllers;

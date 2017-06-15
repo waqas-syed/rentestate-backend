@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.IO;
 using MySql.Data.MySqlClient;
 
-namespace RentStuff.Common
+namespace RentStuff.Common.Utilities
 {
     /// <summary>
     /// Database utility class to run script

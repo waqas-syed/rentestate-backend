@@ -3,6 +3,7 @@ using System.Configuration;
 using Microsoft.AspNet.Identity;
 using NUnit.Framework;
 using RentStuff.Common;
+using RentStuff.Common.Utilities;
 using RentStuff.Identity.Application.Account;
 using RentStuff.Identity.Application.Account.Commands;
 using RentStuff.Identity.Application.Account.Representations;

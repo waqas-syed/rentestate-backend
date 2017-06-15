@@ -152,6 +152,23 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         }
 
         /// <summary>
+        /// Gets all the services
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        public IList<Service> GetAllServices(int pageNo = 0)
+        {
+            using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return _session
+                    .QueryOver<Service>()
+                    .Skip(pageNo * _resultsPerPage)
+                    .Take(_resultsPerPage)
+                    .List<Service>();
+            }
+        }
+
+        /// <summary>
         /// Delete the service
         /// </summary>
         /// <param name="service"></param>

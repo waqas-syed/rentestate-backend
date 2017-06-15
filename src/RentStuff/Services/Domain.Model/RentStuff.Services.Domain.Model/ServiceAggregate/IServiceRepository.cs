@@ -57,6 +57,13 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         IList<Service> GetServicesByProfession(string serviceProfessionType, int pageNo = 0);
 
         /// <summary>
+        /// Gets all the services
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        IList<Service> GetAllServices(int pageNo = 0);
+
+        /// <summary>
         /// Delete the service
         /// </summary>
         /// <param name="service"></param>

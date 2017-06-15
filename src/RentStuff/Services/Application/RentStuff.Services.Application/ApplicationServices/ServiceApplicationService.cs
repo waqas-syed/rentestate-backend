@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using NLog;
+using NLog.Internal;
+using RentStuff.Common;
 using RentStuff.Common.Services.GoogleStorageServices;
 using RentStuff.Common.Services.LocationServices;
+using RentStuff.Common.Utilities;
 using RentStuff.Services.Application.Commands;
 using RentStuff.Services.Application.Representations;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
@@ -141,9 +146,10 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// </summary>
         /// <param name="uploaderEmail"></param>
         /// <param name="pageNo"></param>
-        public IList<ServicePartialRepresentation> GetServicesByUploaderEmail(string uploaderEmail, int pageNo = 0)
+        public IList<ServicePartialRepresentation> GetServicesByUploaderEmail(string uploaderEmail, 
+            int pageNo = 0)
         {
-            var retrievedServices = _servicesRepository.GetServicesByEmail(uploaderEmail);
+            var retrievedServices = _servicesRepository.GetServicesByEmail(uploaderEmail, pageNo);
             return ConvertServicesToPartialRepresentations(retrievedServices);
         }
 
@@ -188,6 +194,58 @@ namespace RentStuff.Services.Application.ApplicationServices
             var retrievedServices = _servicesRepository.GetServicesByProfession(
                 serviceProfessionType, pageNo);
             return ConvertServicesToPartialRepresentations(retrievedServices);
+        }
+
+        /// <summary>
+        /// Gets all the services present in the database
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        public IList<ServicePartialRepresentation> GetAllServices(int pageNo = 0)
+        {
+            var retrievedServices = _servicesRepository.GetAllServices(pageNo);
+            return ConvertServicesToPartialRepresentations(retrievedServices);
+        }
+
+        /// <summary>
+        /// Add an image to this service
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <param name="photoStream"></param>
+        public void AddSingleImageToService(string serviceId, Stream photoStream)
+        {
+            using (var image = Image.FromStream(photoStream))
+            {
+                // Get the house from the repository
+                Service service = _servicesRepository.GetServiceById(serviceId);
+                // If we find a hosue with the given ID
+                if (service != null)
+                {
+                    // Create a name for this image
+                    string imageId = "IMG_" + Guid.NewGuid().ToString();
+                    // Add extension to the file name
+                    String fileName = imageId + ImageFurnace.GetImageExtension();
+                    // Resize the image to the size that we will be using as default
+                    var finalImage = ImageFurnace.ResizeImage(image, 830, 500);
+                    // Get the stream of the image
+                    var httpPostedStream = ImageFurnace.ToStream(finalImage);
+                    _photoStorageService.UploadPhoto(fileName, httpPostedStream);
+                    // Get the url of the bucket and append with it the name of the file. This will be the public 
+                    // url for this image and ready to view
+                    fileName = System.Configuration.ConfigurationManager.AppSettings["GoogleCloudStoragePhotoBucketUrl"] + fileName;
+                    // Add the image link to the list of images this house owns
+                    service.AddImage(fileName);
+                    // Save the updated house in the repository
+                    _servicesRepository.SaveOrUpdate(service);
+                    // Log the info
+                    _logger.Info("Added images to house successfully. HouseId: {0}", service.Id);
+                }
+                // Otherwise throw an exception
+                else
+                {
+                    throw new NullReferenceException("No house found with the given ID");
+                }
+            }
         }
 
         /// <summary>
@@ -305,7 +363,7 @@ namespace RentStuff.Services.Application.ApplicationServices
             }
             return partialServiceList;
         }
-
+        
         #endregion Private Methods
     }
 }

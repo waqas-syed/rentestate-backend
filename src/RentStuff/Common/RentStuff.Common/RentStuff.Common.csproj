@@ -118,11 +118,11 @@
     <Compile Include="Services\GoogleStorageServices\IPhotoStorageService.cs" />
     <Compile Include="Services\GoogleStorageServices\PhotoStorageService.cs" />
     <Compile Include="Services\LocationServices\GeocodingService.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="DatabaseUtility.cs" />
+    <Compile Include="Utilities\Constants.cs" />
+    <Compile Include="Utilities\DatabaseUtility.cs" />
     <Compile Include="NinjectModules\CommonNinjectModule.cs" />
-    <Compile Include="StringCipher.cs" />
-    <Compile Include="ImageFormatProvider.cs" />
+    <Compile Include="Utilities\StringCipher.cs" />
+    <Compile Include="Utilities\ImageFurnace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

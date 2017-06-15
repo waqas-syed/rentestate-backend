@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using RentStuff.Services.Application.Commands;
 using RentStuff.Services.Application.Representations;
-using RentStuff.Services.Domain.Model.ServiceAggregate;
 
 namespace RentStuff.Services.Application.ApplicationServices
 {
@@ -59,6 +59,20 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// <param name="serviceProfessionType"></param>
         /// <param name="pageNo"></param>
         IList<ServicePartialRepresentation> SearchServicesByProfession(string serviceProfessionType, int pageNo = 0);
+
+        /// <summary>
+        /// Gets all the services present in the database
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        IList<ServicePartialRepresentation> GetAllServices(int pageNo = 0);
+
+        /// <summary>
+        /// Adds the given image to this Service
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <param name="photoStream"></param>
+        void AddSingleImageToService(string serviceId, Stream photoStream);
 
         /// <summary>
         /// Delete the Service with the given ID
