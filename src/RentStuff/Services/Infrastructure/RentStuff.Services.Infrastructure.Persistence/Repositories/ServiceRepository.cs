@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -179,6 +180,79 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
                 _session.Delete(service);
                 transaction.Commit();
             }
+        }
+
+        /// <summary>
+        /// Get the total number of services with the given property type present in the database
+        /// </summary>
+        /// <param name="serviceProfessionType"></param>
+        /// <returns></returns>
+        public Tuple<int, int> GetRecordCountByProfessionType(string serviceProfessionType)
+        {
+            return new Tuple<int, int>(_session
+                                        .QueryOver<Service>()
+                                        .Where(x => x.ServiceProfessionType == serviceProfessionType)
+                                        .RowCount(),
+                                        _resultsPerPage);
+        }
+
+        /// <summary>
+        /// Get the total number of services with the given location present in the database
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <returns></returns>
+        public Tuple<int, int> GetRecordCountByLocation(decimal latitude, decimal longitude)
+        {
+            return new Tuple<int, int>(
+                        _session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius ORDER BY distance")
+                        .AddEntity(typeof(Service))
+                        .SetParameter("inputLatitude", latitude)
+                        .SetParameter("inputLongitude", longitude)
+                        .SetParameter("radius", _radius)
+                        .List().Count, _resultsPerPage);
+        }
+
+        /// <summary>
+        /// Get the total number of services with the given email present in the database
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<int, int> GetRecordCountByEmail(string uploaderEmail)
+        {
+            return new Tuple<int, int>(_session
+                                        .QueryOver<Service>()
+                                        .Where(x => x.UploaderEmail == uploaderEmail)
+                                        .RowCount(),
+                                        _resultsPerPage);
+        }
+
+        /// <summary>
+        /// Get the total number of services with the given location  and PropertyType present in the database
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="serviceProfessionType"></param>
+        /// <returns></returns>
+        public Tuple<int, int> GetRecordCountByLocationAndProfessionType(decimal latitude, decimal longitude, string serviceProfessionType)
+        {
+            return new Tuple<int, int>(
+                _session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius AND service_profession_type=:serviceProfessionType ORDER BY distance")
+                        .AddEntity(typeof(Service))
+                        .SetParameter("inputLatitude", latitude)
+                        .SetParameter("inputLongitude", longitude)
+                        .SetParameter("serviceProfessionType", serviceProfessionType)
+                        .SetParameter("radius", _radius)
+                        .List().Count, 
+                        _resultsPerPage);
+        }
+
+        /// <summary>
+        /// Get the total number of services present in the database
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<int, int> GetTotalRecordCount()
+        {
+            return new Tuple<int, int>(_session.QueryOver<Service>().RowCount(), _resultsPerPage);
         }
     }
 }

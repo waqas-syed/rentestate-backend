@@ -210,9 +210,14 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         //[Transaction]
         public Tuple<int, int> GetRecordCountByLocation(decimal latitude, decimal longitude)
         {
-            return new Tuple<int, int>(_session.Session.QueryOver<House>()
-                .Where(x => x.Latitude == latitude && x.Longitude == longitude)
-                .RowCount(), _resultsPerPage);
+            return new Tuple<int, int>(
+                _session.Session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house HAVING distance < :radius ORDER BY distance")// LIMIT 0 , 20")//("SELECT name, latitude, longitude, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM geo_location HAVING distance < 25 ORDER BY distance LIMIT 0 , 20")
+                .AddEntity(typeof(House))
+                .SetParameter("inputLatitude", latitude)
+                .SetParameter("inputLongitude", longitude)
+                .SetParameter("radius", _radius)
+                .List().Count
+                , _resultsPerPage);
         }
 
         /// <summary>
@@ -239,8 +244,14 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         //[Transaction]
         public Tuple<int, int> GetRecordCountByLocationAndPropertyType(decimal latitude, decimal longitude, PropertyType propertyType)
         {
-            return new Tuple<int, int>(_session.Session.QueryOver<House>().Where(x => x.Latitude == latitude && x.Longitude == longitude &&
-            x.PropertyType == propertyType).RowCount(), _resultsPerPage);
+            return new Tuple<int, int>(
+                _session.Session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house HAVING distance < :radius AND property_type=:propertyType ORDER BY distance")
+                .AddEntity(typeof(House))
+                .SetParameter("inputLatitude", latitude)
+                .SetParameter("inputLongitude", longitude)
+                .SetParameter("propertyType", propertyType)
+                .SetParameter("radius", _radius)
+                .List().Count, _resultsPerPage);
         }
 
         /// <summary>

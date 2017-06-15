@@ -6,7 +6,7 @@ using RentStuff.Common.NinjectModules;
 using RentStuff.Common.Services.LocationServices;
 using RentStuff.Common.Utilities;
 using RentStuff.Services.Application.ApplicationServices;
-using RentStuff.Services.Application.Commands;
+using RentStuff.Services.Application.ApplicationServices.Commands;
 using RentStuff.Services.Application.Ninject.Modules;
 using RentStuff.Services.Infrastructure.Persistence.NinjectModules;
 using RentStuff.Services.Infrastructure.Persistence.Repositories;
@@ -180,7 +180,6 @@ namespace RentStuff.Services.Application.IntegrationTests
             string location2 = "Islamabad, Pakistan";
             string mobileNumber2 = "03168948486";
             string serviceEmail2 = null;
-            string uploaderEmail2 = "uploader@bolt1234567.com";
             string serviceProfessionType2 = "Electrician";
             string serviceEntityType2 = "Organization";
             string facebookLink2 = "https://dummyfacebooklink-123456789-1.com";
@@ -188,7 +187,7 @@ namespace RentStuff.Services.Application.IntegrationTests
 
             // Update the Service
             serviceApplicationService.UpdateService(new UpdateServiceCommand(savedServiceId, name2,
-                description2, location2, mobileNumber2, serviceEmail2, uploaderEmail2, serviceProfessionType2,
+                description2, location2, mobileNumber2, serviceEmail2, serviceProfessionType2,
                 serviceEntityType2, dateEstablished, facebookLink2, instagramLink, twitterLink2, websiteLink));
             
             // Retrieve the Service form the database again

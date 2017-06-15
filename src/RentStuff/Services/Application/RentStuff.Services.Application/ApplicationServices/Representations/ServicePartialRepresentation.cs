@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace RentStuff.Services.Application.Representations
+namespace RentStuff.Services.Application.ApplicationServices.Representations
 {
     /// <summary>
     /// Partial Representation showing minimal information that is a must to show

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
 
-namespace RentStuff.Services.Application.Representations
+namespace RentStuff.Services.Application.ApplicationServices.Representations
 {
     /// <summary>
     /// Represents as complete set of the Service type

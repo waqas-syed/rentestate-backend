@@ -258,7 +258,6 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string location2 = "Satellite Town, Rawalpindi, Pakistan";
             string phoneNumber2 = "03168948486";
             string serviceEmail2 = "grass@hopper1234567.com";
-            string uploaderEmail2 = "uplaoder@hopper1234567.com";
             string profession2 = Service.GetProfessionsList().Last().Value.First();
             string entity2 = "Individual";
             decimal latitude2 = 34.7M;
@@ -269,7 +268,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             string websiteLink2 = "https://dummywebsitelink-123456789-2.com";
             DateTime dateEstablished2 = DateTime.Now.AddDays(1);
             retrievedService.UpdateService(name2, description2, location2, phoneNumber2, serviceEmail2,
-                uploaderEmail2, profession2, entity2, dateEstablished2, latitude2, longitude2,
+                profession2, entity2, dateEstablished2, latitude2, longitude2,
                 facebookLink2, instagramLink2, twitterLink2, websiteLink2);
 
             retrievedService = servicesRepository.GetServiceById(service.Id);

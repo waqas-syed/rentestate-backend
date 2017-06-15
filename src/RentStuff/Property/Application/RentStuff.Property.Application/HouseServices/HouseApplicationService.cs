@@ -402,7 +402,13 @@ namespace RentStuff.Property.Application.HouseServices
             }
         }
 
-        public bool HouseOwnershipEmailCheck(string houseId, string requesterEmail)
+        /// <summary>
+        /// Check that the given email is the same as the owner of the given house id
+        /// </summary>
+        /// <param name="houseId"></param>
+        /// <param name="requesterEmail"></param>
+        /// <returns></returns>
+        public bool HouseOwnershipCheck(string houseId, string requesterEmail)
         {
             var house = _houseRepository.GetHouseById(houseId);
             if (house == null)

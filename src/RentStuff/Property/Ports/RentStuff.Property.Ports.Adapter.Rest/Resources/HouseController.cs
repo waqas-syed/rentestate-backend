@@ -49,7 +49,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     CreateHouseCommand houseReborn = null;
                     // First try to convert it to CreateHouseCommand
                     houseReborn = JsonConvert.DeserializeObject<CreateHouseCommand>(jsonString);
-                    ConfirmHouseOwner(houseReborn.OwnerEmail);
+                    CheckOwnerEmailIntegrity(houseReborn.OwnerEmail);
                     return Ok(_houseApplicationService.SaveNewHouseOffer(houseReborn));
                 }
             }
@@ -76,7 +76,11 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     UpdateHouseCommand refurbishedHouse = null;
                     // If above fails, then try to convert it to UpdateHouseCommand
                     refurbishedHouse = JsonConvert.DeserializeObject<UpdateHouseCommand>(jsonString);
-                    ConfirmHouseOwner(refurbishedHouse.OwnerEmail);
+                    // First check that the request initiator has the same email as the uploader of the house
+                    CheckOwnerEmailIntegrity(refurbishedHouse.OwnerEmail);
+                    // Then check that this house was actually upoaded by the current requestor
+                    _houseApplicationService.HouseOwnershipCheck(refurbishedHouse.Id,
+                                                                        refurbishedHouse.OwnerEmail);
                     return Ok(_houseApplicationService.UpdateHouse(refurbishedHouse));
                 }
             }
@@ -88,7 +92,12 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             return BadRequest();
         }
 
-        private void ConfirmHouseOwner(string houseOwnerEmail)
+        /// <summary>
+        /// Checks that the current user's email and the request house's uploader emails are the same
+        /// </summary>
+        /// <param name="houseOwnerEmail"></param>
+        /// <returns></returns>
+        private void CheckOwnerEmailIntegrity(string houseOwnerEmail)
         {
             // Check if the current caller is using his own email in the CreateHouseCommand to upload a new house
             var currentUserEmail = User.Identity.Name;
@@ -115,7 +124,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             String[] headerValues = (String[]) Request.Headers.GetValues("HouseId");
             string houseId = headerValues[0];
             var userEmail = User.Identity.Name;
-            bool allowedToEditHouse = _houseApplicationService.HouseOwnershipEmailCheck(houseId, userEmail);
+            bool allowedToEditHouse = _houseApplicationService.HouseOwnershipCheck(houseId, userEmail);
             try
             {
                 if (allowedToEditHouse)
@@ -172,7 +181,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         public IHttpActionResult ImageDelete([FromBody] DeleteImageCommand deleteImageCommand)
         {
             var userEmail = User.Identity.Name;
-            bool allowedToEditHouse = _houseApplicationService.HouseOwnershipEmailCheck(deleteImageCommand.HouseId,
+            bool allowedToEditHouse = _houseApplicationService.HouseOwnershipCheck(deleteImageCommand.HouseId,
                 userEmail);
 
             try
@@ -292,7 +301,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 if (!string.IsNullOrEmpty(id))
                 {
                     var userEmail = User.Identity.Name;
-                    bool allowedToEditHouse = _houseApplicationService.HouseOwnershipEmailCheck(id, userEmail);
+                    bool allowedToEditHouse = _houseApplicationService.HouseOwnershipCheck(id, userEmail);
                     if (allowedToEditHouse)
                     {
                         _houseApplicationService.DeleteHouse(id);

@@ -4,15 +4,12 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
 using NLog;
-using NLog.Internal;
-using RentStuff.Common;
 using RentStuff.Common.Services.GoogleStorageServices;
 using RentStuff.Common.Services.LocationServices;
 using RentStuff.Common.Utilities;
-using RentStuff.Services.Application.Commands;
-using RentStuff.Services.Application.Representations;
+using RentStuff.Services.Application.ApplicationServices.Commands;
+using RentStuff.Services.Application.ApplicationServices.Representations;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
 
 namespace RentStuff.Services.Application.ApplicationServices
@@ -110,18 +107,14 @@ namespace RentStuff.Services.Application.ApplicationServices
             }
             service.UpdateService(updateServiceCommand.Name, updateServiceCommand.Description,
                 updateServiceCommand.Location, updateServiceCommand.MobileNumber,
-                updateServiceCommand.ServiceEmail, updateServiceCommand.UploaderEmail,
+                updateServiceCommand.ServiceEmail,
                 updateServiceCommand.ServiceProfesionType, updateServiceCommand.ServiceEntityType,
                 updateServiceCommand.DateEstablished, updatedCoordinates.Item1, updatedCoordinates.Item2,
                 updateServiceCommand.FacebookLink, updateServiceCommand.InstagramLink,
                 updateServiceCommand.TwitterLink, updateServiceCommand.WebsiteLink);
             _servicesRepository.SaveOrUpdate(service);
         }
-
-        public void AddImageToService(string service, IList<string> iamges)
-        {
-        }
-
+        
         /// <summary>
         /// Get the Service by Id
         /// </summary>
@@ -274,7 +267,7 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// <summary>
         /// Delete the provided images from the given Service
         /// </summary>
-        public void DeleteImagesFromService(string serviceId, List<string> images)
+        public void DeleteImagesFromService(string serviceId, IList<string> images)
         {
             // Get the service
             var service = GetServiceByIdUsingChecks(serviceId);
@@ -296,6 +289,88 @@ namespace RentStuff.Services.Application.ApplicationServices
                 }
             }
             _servicesRepository.SaveOrUpdate(service);
+        }
+
+        /// <summary>
+        /// Get the count of records using the given criteria
+        /// </summary>
+        /// <param name="serviceProfessionType"></param>
+        /// <param name="location"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public ServiceCountRepresentation GetServicesCount(string serviceProfessionType, string location, 
+            string email)
+        {
+            Tuple<int, int> recordCount = null;
+            // If location is not null
+            if (!string.IsNullOrWhiteSpace(location))
+            {
+                // Get the coordinates for the location using the Geocoding API service
+                var coordinates = _geocodingService.GetCoordinatesFromAddress(location);
+                // And profession type is also not null
+                if (!string.IsNullOrWhiteSpace(serviceProfessionType))
+                {
+                    recordCount = _servicesRepository.GetRecordCountByLocationAndProfessionType(
+                        coordinates.Item1, coordinates.Item2, serviceProfessionType);
+                    return new ServiceCountRepresentation(recordCount.Item1, recordCount.Item2);
+                }
+                // Otherwise just get the count for houses given the coordinates
+                else
+                {
+                    recordCount = _servicesRepository.GetRecordCountByLocation(coordinates.Item1, coordinates.Item2);
+                    return new ServiceCountRepresentation(recordCount.Item1, recordCount.Item2);
+                }
+            }
+            // Get the count given only profession type
+            if (!string.IsNullOrWhiteSpace(serviceProfessionType))
+            {
+                recordCount = _servicesRepository.GetRecordCountByProfessionType(serviceProfessionType);
+                return new ServiceCountRepresentation(recordCount.Item1, recordCount.Item2);
+            }
+            // Get the count given only email
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                recordCount = _servicesRepository.GetRecordCountByEmail(email);
+                return new ServiceCountRepresentation(recordCount.Item1, recordCount.Item2);
+            }
+            // If no criteria is given, return the total number of houses present in the database
+            recordCount = _servicesRepository.GetTotalRecordCount();
+            return new ServiceCountRepresentation(recordCount.Item1, recordCount.Item2);
+        }
+
+        /// <summary>
+        /// Returns all the Service profession types that are provided by our app
+        /// </summary>
+        /// <returns></returns>
+        public IReadOnlyDictionary<string, IReadOnlyList<string>> GetAllServiceProfessionTypes()
+        {
+            return Service.GetProfessionsList();
+        }
+
+        /// <summary>
+        ///  Checks that the Service to be modified ibelongs to the request initiator
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <param name="currentUserEmail"></param>
+        /// <returns></returns>
+        public bool ServiceOwnershipCheck(string serviceId, string currentUserEmail)
+        {
+            var service = _servicesRepository.GetServiceById(serviceId);
+            if (service == null)
+            {
+                throw new NullReferenceException($"No Serice found for the given ServiceId: {serviceId}");
+            }
+            if (service.UploaderEmail.Equals(currentUserEmail))
+            {
+                return true;
+            }
+            else
+            {
+                _logger.Error("Current user cannot upload service using another user's email. " +
+                 "CurrentUserEmail:{0} | ServiceUploaderEmail:{1}", currentUserEmail, service.UploaderEmail);
+                throw new InvalidOperationException("Current user cannot upload service using another user's " +
+                                                    "email.");
+            }
         }
 
         #region Private Methods

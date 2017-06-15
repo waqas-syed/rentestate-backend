@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace RentStuff.Services.Application.Commands
+namespace RentStuff.Services.Application.ApplicationServices.Commands
 {
     /// <summary>
     /// Data Object for updating a Service
@@ -11,7 +11,7 @@ namespace RentStuff.Services.Application.Commands
     {
         /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
         public UpdateServiceCommand(string id, string name, string description, string location, 
-            string mobileNumber, string serviceEmail, string uploaderEmail, string serviceProfesionType, 
+            string mobileNumber, string serviceEmail, string serviceProfesionType, 
             string serviceEntityType, DateTime? dateEstablished, string facebookLink, string instagramLink, 
             string twitterLink, string websiteLink)
         {
@@ -21,7 +21,6 @@ namespace RentStuff.Services.Application.Commands
             Location = location;
             MobileNumber = mobileNumber;
             ServiceEmail = serviceEmail;
-            UploaderEmail = uploaderEmail;
             ServiceProfesionType = serviceProfesionType;
             ServiceEntityType = serviceEntityType;
             DateEstablished = dateEstablished;
@@ -43,8 +42,6 @@ namespace RentStuff.Services.Application.Commands
         public string MobileNumber { get; private set; }
         [DataMember]
         public string ServiceEmail { get; private set; }
-        [DataMember]
-        public string UploaderEmail { get; private set; }
         [DataMember]
         public string ServiceProfesionType { get; private set; }
         [DataMember]

@@ -77,7 +77,6 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <param name="location"></param>
         /// <param name="mobileNumber"></param>
         /// <param name="serviceEmail"></param>
-        /// <param name="uploaderEmail"></param>
         /// <param name="serviceProfessionType"></param>
         /// <param name="serviceEntityType"></param>
         /// <param name="dateEstablished"></param>
@@ -88,7 +87,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <param name="twitterLink"></param>
         /// <param name="websiteLink"></param>
         public virtual void UpdateService(string name, string description, string location, 
-            string mobileNumber, string serviceEmail, string uploaderEmail, string serviceProfessionType, 
+            string mobileNumber, string serviceEmail, string serviceProfessionType, 
             string serviceEntityType, DateTime? dateEstablished, decimal latitude, decimal longitude,
             string facebookLink, string instagramLink, string twitterLink, string websiteLink)
         {
@@ -97,7 +96,6 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             Location = location;
             MobileNumber = mobileNumber;
             ServiceEmail = serviceEmail;
-            UploaderEmail = uploaderEmail;
             ServiceProfessionType = serviceProfessionType;
             SetServiceEntityType(serviceEntityType);
             DateEstablished = dateEstablished;

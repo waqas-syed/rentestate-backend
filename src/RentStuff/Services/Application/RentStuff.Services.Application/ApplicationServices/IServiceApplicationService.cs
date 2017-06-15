@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using RentStuff.Services.Application.Commands;
-using RentStuff.Services.Application.Representations;
+using RentStuff.Services.Application.ApplicationServices.Commands;
+using RentStuff.Services.Application.ApplicationServices.Representations;
 
 namespace RentStuff.Services.Application.ApplicationServices
 {
@@ -21,9 +21,7 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// </summary>
         /// <param name="updateServiceCommand"></param>
         void UpdateService(UpdateServiceCommand updateServiceCommand);
-
-        void AddImageToService(string service, IList<string> iamges);
-
+        
         /// <summary>
         /// Get the Service by Id
         /// </summary>
@@ -83,6 +81,30 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// <summary>
         /// Delete the provided images from the given Service
         /// </summary>
-        void DeleteImagesFromService(string serviceId, List<string> images);
+        void DeleteImagesFromService(string serviceId, IList<string> images);
+
+        /// <summary>
+        ///  Checks that the Service to be modified belongs to the current user
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <param name="requesterEmail"></param>
+        /// <returns></returns>
+        bool ServiceOwnershipCheck(string serviceId, string requesterEmail);
+
+        /// <summary>
+        /// Get the count of records using the given criteria
+        /// </summary>
+        /// <param name="serviceProfessionType"></param>
+        /// <param name="location"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        ServiceCountRepresentation GetServicesCount(string serviceProfessionType, string location,
+            string email);
+
+        /// <summary>
+        /// Returns all the Service profession types that are provided by our app
+        /// </summary>
+        /// <returns></returns>
+        IReadOnlyDictionary<string, IReadOnlyList<string>> GetAllServiceProfessionTypes();
     }
 }

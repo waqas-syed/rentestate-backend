@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace RentStuff.Services.Domain.Model.ServiceAggregate
 {
@@ -68,5 +69,42 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// </summary>
         /// <param name="service"></param>
         void DeleteService(Service service);
+
+        /// <summary>
+        /// Get the total number of services with the given property type present in the database
+        /// </summary>
+        /// <param name="serviceProfessionType"></param>
+        /// <returns></returns>
+        Tuple<int, int> GetRecordCountByProfessionType(string serviceProfessionType);
+
+        /// <summary>
+        /// Get the total number of services with the given location present in the database
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <returns></returns>
+        Tuple<int, int> GetRecordCountByLocation(decimal latitude, decimal longitude);
+
+        /// <summary>
+        /// Get the total number of services with the given email present in the database
+        /// </summary>
+        /// <returns></returns>
+        Tuple<int, int> GetRecordCountByEmail(string email);
+
+        /// <summary>
+        /// Get the total number of services with the given location and PropertyType present in the database
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="serviceProfessionType"></param>
+        /// <returns></returns>
+        Tuple<int, int> GetRecordCountByLocationAndProfessionType(decimal latitude, decimal longitude,
+            string serviceProfessionType);
+
+        /// <summary>
+        /// Get the total number of services present in the database
+        /// </summary>
+        /// <returns></returns>
+        Tuple<int, int> GetTotalRecordCount();
     }
 }
