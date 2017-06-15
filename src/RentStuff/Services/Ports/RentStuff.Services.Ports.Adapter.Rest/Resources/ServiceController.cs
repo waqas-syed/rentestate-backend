@@ -28,26 +28,56 @@ namespace RentStuff.Services.Ports.Adapter.Rest.Resources
         [Route("service")]
         [HttpPost]
         [Authorize]
-        public IHttpActionResult Post([FromBody] Object house)
+        public IHttpActionResult Post([FromBody] Object service)
         {
             try
             {
-                if (house != null)
+                if (service != null)
                 {
-                    var jsonString = house.ToString();
+                    var jsonString = service.ToString();
 
                     CreateServiceCommand serviceBorn = null;
                     // First try to convert it to CreateServiceCommand
                     serviceBorn = JsonConvert.DeserializeObject<CreateServiceCommand>(jsonString);
                     // Check that the current user and the UploaderEmail are the same 
-                    CheckOwnerEmailIntegrity(serviceBorn.UploaderEmail);
+                    _serviceApplicationService.NewServiceEmailOwnershipCheck(User.Identity.Name, serviceBorn.UploaderEmail);
                     return Ok(_serviceApplicationService.SaveNewService(serviceBorn));
                 }
             }
             catch (Exception exception)
             {
                 _logger.Error("Error occured while uploading Service. Exception: {0} | Service: {1}",
-                    exception, house);
+                    exception, service);
+                return InternalServerError();
+            }
+            return BadRequest();
+        }
+
+        [Route("review")]
+        [HttpPost]
+        [Authorize]
+        public IHttpActionResult PostReview([FromBody] Object reviewObject)
+        {
+            try
+            {
+                if (reviewObject != null)
+                {
+                    var jsonString = reviewObject.ToString();
+
+                    AddReviewCommand serviceBorn = null;
+                    // First try to convert it to CreateServiceCommand
+                    serviceBorn = JsonConvert.DeserializeObject<AddReviewCommand>(jsonString);
+                    // Check that the current user is the actual uploader of the Service
+                    _serviceApplicationService.ServiceOwnershipCheck(serviceBorn.ServiceId, User.Identity.Name);
+                    // Add the Review
+                    _serviceApplicationService.AddReview(serviceBorn);
+                    return Ok();
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.Error("Error occured while uploading Service. Exception: {0} | Service: {1}",
+                    exception, reviewObject);
                 return InternalServerError();
             }
             return BadRequest();
@@ -83,7 +113,7 @@ namespace RentStuff.Services.Ports.Adapter.Rest.Resources
             }
             return BadRequest();
         }
-
+        
         /// <summary>
         /// Separate method is used for uploading the images for a Service. So two POST calls are involved; 
         /// One for saving the Service(in the above code), and then another(this one) to save the images 
@@ -302,35 +332,5 @@ namespace RentStuff.Services.Ports.Adapter.Rest.Resources
                 return InternalServerError(exception);
             }
         }
-
-        #region Private Methods
-
-        /// <summary>
-        /// Check that the current HTTP request initiator's email is the same as the provided email
-        /// </summary>
-        /// <param name="uploaderEmail"></param>
-        private void CheckOwnerEmailIntegrity(string uploaderEmail)
-        {
-            // Check if the current caller is using his own email in the CreateHouseCommand to upload a new 
-            // service
-            if (!string.IsNullOrWhiteSpace(User.Identity?.Name))
-            {
-                if (!User.Identity.Name.Equals(uploaderEmail))
-                {
-                    _logger.Error(
-                        "Current user cannot upload service using another user's email. CurrentUserEmail:{0} " +
-                        "| ServiceUploaderEmail:{1}", User.Identity?.Name, uploaderEmail);
-                    throw new InvalidOperationException("Current user cannot upload service using another user's " +
-                                                        "email.");
-                }
-            }
-            else
-            {
-                _logger.Error("No User identity present in the current HTTp context");
-                throw new NullReferenceException("No User identity present in the current HTTP context");
-            }
-        }
-
-        #endregion Private Methods
     }
 }

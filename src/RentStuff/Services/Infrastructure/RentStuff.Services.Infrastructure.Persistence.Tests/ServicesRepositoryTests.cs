@@ -278,6 +278,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             Assert.AreEqual(location2, retrievedService.Location);
             Assert.AreEqual(phoneNumber2, retrievedService.MobileNumber);
             Assert.AreEqual(serviceEmail2, retrievedService.ServiceEmail);
+            Assert.AreEqual(uploaderEmail, retrievedService.UploaderEmail);
             Assert.AreEqual(profession2, retrievedService.ServiceProfessionType);
             Assert.AreEqual((ServiceEntityType)Enum.Parse(typeof(ServiceEntityType), entity2),
                 retrievedService.ServiceEntityType);

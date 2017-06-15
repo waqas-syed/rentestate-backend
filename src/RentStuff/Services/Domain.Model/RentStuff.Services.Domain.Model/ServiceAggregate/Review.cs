@@ -27,9 +27,9 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         }
 
         public virtual string Id { get { return _id; } }
-        public virtual string Authorname { get; set; }
-        public virtual string AuthorEmail { get; set; }
-        public virtual string ReviewDescription { get; set; }
-        public virtual Service Service { get; set; }
+        public virtual string Authorname { get; protected internal set; }
+        public virtual string AuthorEmail { get; protected internal set; }
+        public virtual string ReviewDescription { get; protected internal set; }
+        public virtual Service Service { get; protected internal set; }
     }
 }

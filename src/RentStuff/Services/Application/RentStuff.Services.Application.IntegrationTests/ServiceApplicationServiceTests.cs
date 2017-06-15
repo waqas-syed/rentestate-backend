@@ -2,6 +2,7 @@
 using Ninject;
 using NUnit.Framework;
 using RentStuff.Common;
+using RentStuff.Common.Domain.Model;
 using RentStuff.Common.NinjectModules;
 using RentStuff.Common.Services.LocationServices;
 using RentStuff.Common.Utilities;
@@ -77,7 +78,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             Assert.AreEqual(serviceEmail, serviceFullRepresentation.ServiceEmail);
             Assert.AreEqual(serviceProfessionType, serviceFullRepresentation.ServiceProfessionType);
             Assert.AreEqual(serviceEntityType, serviceFullRepresentation.ServiceEntityType);
-            AssertDateTime(dateEstablished, serviceFullRepresentation.DateEstablished);
+            Assertion.AssertNullableDateTime(dateEstablished, serviceFullRepresentation.DateEstablished);
             Assert.AreEqual(facebookLink, serviceFullRepresentation.FacebookLink);
             Assert.AreEqual(twitterLink, serviceFullRepresentation.TwitterLink);
             Assert.AreEqual(instagramLink, serviceFullRepresentation.InstagramLink);
@@ -169,7 +170,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             Assert.AreEqual(serviceEmail, serviceFullRepresentation.ServiceEmail);
             Assert.AreEqual(serviceProfessionType, serviceFullRepresentation.ServiceProfessionType);
             Assert.AreEqual(serviceEntityType, serviceFullRepresentation.ServiceEntityType);
-            AssertDateTime(dateEstablished, serviceFullRepresentation.DateEstablished);
+            Assertion.AssertNullableDateTime(dateEstablished, serviceFullRepresentation.DateEstablished);
             Assert.AreEqual(facebookLink, serviceFullRepresentation.FacebookLink);
             Assert.AreEqual(twitterLink, serviceFullRepresentation.TwitterLink);
             Assert.AreEqual(instagramLink, serviceFullRepresentation.InstagramLink);
@@ -201,7 +202,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             Assert.AreEqual(serviceEmail2, serviceFullRepresentation.ServiceEmail);
             Assert.AreEqual(serviceProfessionType2, serviceFullRepresentation.ServiceProfessionType);
             Assert.AreEqual(serviceEntityType2, serviceFullRepresentation.ServiceEntityType);
-            AssertDateTime(dateEstablished, serviceFullRepresentation.DateEstablished);
+            Assertion.AssertNullableDateTime(dateEstablished, serviceFullRepresentation.DateEstablished);
             Assert.AreEqual(facebookLink2, serviceFullRepresentation.FacebookLink);
             Assert.AreEqual(twitterLink2, serviceFullRepresentation.TwitterLink);
             Assert.AreEqual(instagramLink, serviceFullRepresentation.InstagramLink);
@@ -798,24 +799,7 @@ namespace RentStuff.Services.Application.IntegrationTests
         
         #region Private Methods
 
-        /// <summary>
-        /// Ignores miliseconds in the datetime provided and then asserts it against the expected DateTime
-        /// value
-        /// </summary>
-        /// <param name="expectedDateTime"></param>
-        /// <param name="actualDateTime"></param>
-        private void AssertDateTime(DateTime? expectedDateTime, DateTime? actualDateTime)
-        {
-            if (actualDateTime != null)
-            {
-                actualDateTime = actualDateTime.Value.AddTicks(-actualDateTime.Value.Ticks % TimeSpan.TicksPerSecond);
-            }
-            if (expectedDateTime != null)
-            {
-                expectedDateTime = expectedDateTime.Value.AddTicks(-expectedDateTime.Value.Ticks % TimeSpan.TicksPerSecond);
-            }
-            Assert.AreEqual(expectedDateTime, actualDateTime);
-        }
+        
 
         #endregion Private Methods
     }

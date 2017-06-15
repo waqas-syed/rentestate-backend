@@ -86,5 +86,21 @@ namespace RentStuff.Common.Domain.Model
                 throw new InvalidOperationException("Invalid phone number");
             }
         }
+
+        /// <summary>
+        /// Ignores miliseconds in the datetime provided and then asserts it against the expected DateTime
+        /// value
+        /// </summary>
+        /// <param name="expectedDateTime"></param>
+        /// <param name="actualDateTime"></param>
+        public static void AssertNullableDateTime(DateTime? expectedDateTime, DateTime? actualDateTime)
+        {
+            actualDateTime = actualDateTime?.AddTicks(-actualDateTime.Value.Ticks % TimeSpan.TicksPerSecond);
+            expectedDateTime = expectedDateTime?.AddTicks(-expectedDateTime.Value.Ticks % TimeSpan.TicksPerSecond);
+            if (!expectedDateTime.Equals(actualDateTime))
+            {
+                throw new InvalidOperationException("The expected DateTime and actual DateTime are not equal");
+            }
+        }
     }
 }

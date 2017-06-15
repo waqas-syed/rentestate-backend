@@ -107,14 +107,44 @@ namespace RentStuff.Services.Application.ApplicationServices
             }
             service.UpdateService(updateServiceCommand.Name, updateServiceCommand.Description,
                 updateServiceCommand.Location, updateServiceCommand.MobileNumber,
-                updateServiceCommand.ServiceEmail,
+                updateServiceCommand.ServiceEmail, 
                 updateServiceCommand.ServiceProfesionType, updateServiceCommand.ServiceEntityType,
                 updateServiceCommand.DateEstablished, updatedCoordinates.Item1, updatedCoordinates.Item2,
                 updateServiceCommand.FacebookLink, updateServiceCommand.InstagramLink,
                 updateServiceCommand.TwitterLink, updateServiceCommand.WebsiteLink);
             _servicesRepository.SaveOrUpdate(service);
         }
-        
+
+        /// <summary>
+        /// Add a new review to the given Service
+        /// </summary>
+        /// <param name="addReviewCommand"></param>
+        public void AddReview(AddReviewCommand addReviewCommand)
+        {
+            // Check if the object is not null and the id is not empty
+            if (!string.IsNullOrWhiteSpace(addReviewCommand?.ServiceId))
+            {
+                var service = _servicesRepository.GetServiceById(addReviewCommand.ServiceId);
+                if (service != null)
+                {
+                    // Add the Review
+                    service.AddReview(addReviewCommand.AuthorName, addReviewCommand.AuthorEmail, 
+                        addReviewCommand.ReviewDescription);
+                    // Save the Review
+                    _servicesRepository.SaveOrUpdate(service);
+                }
+                else
+                {
+                    _logger.Error("No Service found for ServiceId: {0}", addReviewCommand.ServiceId);
+                    throw new NullReferenceException($"No Service found for ServiceId{addReviewCommand.ServiceId}");
+                }
+            }
+            else
+            {
+                throw new NullReferenceException("AddReview Failed; no ServiceId provided");
+            }
+        }
+
         /// <summary>
         /// Get the Service by Id
         /// </summary>
@@ -348,6 +378,33 @@ namespace RentStuff.Services.Application.ApplicationServices
         }
 
         /// <summary>
+        /// Check that the current HTTP request initiator's email is the same as the provided email
+        /// </summary>
+        /// <param name="currentUserEmail"></param>
+        /// <param name="uploaderEmail"></param>
+        public void NewServiceEmailOwnershipCheck(string currentUserEmail, string uploaderEmail)
+        {
+            // Check if the current caller is using his own email in the CreateHouseCommand to upload a new 
+            // service
+            if (!string.IsNullOrWhiteSpace(currentUserEmail))
+            {
+                if (!currentUserEmail.Equals(uploaderEmail))
+                {
+                    _logger.Error(
+                        "Current user cannot upload service using another user's email. CurrentUserEmail:{0} " +
+                        "| ServiceUploaderEmail:{1}", currentUserEmail, uploaderEmail);
+                    throw new InvalidOperationException("Current user cannot upload service using another user's " +
+                                                        "email.");
+                }
+            }
+            else
+            {
+                _logger.Error("No User identity present in the current HTTp context");
+                throw new NullReferenceException("No User identity present in the current HTTP context");
+            }
+        }
+
+        /// <summary>
         ///  Checks that the Service to be modified ibelongs to the request initiator
         /// </summary>
         /// <param name="serviceId"></param>
@@ -405,13 +462,19 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// <returns></returns>
         private ServiceFullRepresentation ConvertSingleServiceToFullRepresentation(Service service)
         {
+            List<ReviewRepresentation> reviewRepresentationList = new List<ReviewRepresentation>();
+            foreach (var review in service.Reviews)
+            {
+                reviewRepresentationList.Add(new ReviewRepresentation(review.Authorname, review.AuthorEmail,
+                    review.ReviewDescription, review.Service.Id));
+            }
             return new ServiceFullRepresentation(service.Id, service.Name, service.Description,
                 service.Location, service.MobileNumber, service.ServiceEmail, service.ServiceProfessionType,
                 service.ServiceEntityType.ToString(), service.FacebookLink, service.InstagramLink, service.TwitterLink,
                 service.WebsiteLink, service.DateEstablished, 
                 // Provide the images and review as a read-only collection
                 new ReadOnlyCollection<string>(service.Images),
-                new ReadOnlyCollection<Review>(service.Reviews));
+                new ReadOnlyCollection<ReviewRepresentation>(reviewRepresentationList));
         }
 
         /// <summary>

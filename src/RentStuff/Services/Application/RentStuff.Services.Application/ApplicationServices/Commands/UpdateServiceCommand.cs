@@ -7,7 +7,7 @@ namespace RentStuff.Services.Application.ApplicationServices.Commands
     /// Data Object for updating a Service
     /// </summary>
     [DataContract]
-    public class UpdateServiceCommand
+    public class UpdateServiceCommand : IServiceCommand
     {
         /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
         public UpdateServiceCommand(string id, string name, string description, string location, 

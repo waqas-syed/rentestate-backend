@@ -15,7 +15,7 @@ namespace RentStuff.Services.Application.ApplicationServices.Representations
         public ServiceFullRepresentation(string id, string name, string description, string location, string mobileNumber,
             string serviceEmail, string serviceProfessionType, string serviceEntityType, string facebookLink, 
             string instagramLink, string twitterLink, string websiteLink, DateTime? dateEstablished, 
-            IReadOnlyList<string> images, IReadOnlyList<Review> reviews)
+            IReadOnlyList<string> images, IReadOnlyList<ReviewRepresentation> reviews)
         {
             Id = id;
             Name = name;
@@ -63,6 +63,6 @@ namespace RentStuff.Services.Application.ApplicationServices.Representations
         [DataMember]
         public IReadOnlyList<string> Images { get; private set; }
         [DataMember]
-        public IReadOnlyList<Review> Reviews { get; private set; }
+        public IReadOnlyList<ReviewRepresentation> Reviews { get; private set; }
     }
 }

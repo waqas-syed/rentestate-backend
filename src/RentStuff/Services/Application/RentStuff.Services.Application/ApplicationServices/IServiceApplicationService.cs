@@ -21,6 +21,12 @@ namespace RentStuff.Services.Application.ApplicationServices
         /// </summary>
         /// <param name="updateServiceCommand"></param>
         void UpdateService(UpdateServiceCommand updateServiceCommand);
+
+        /// <summary>
+        /// Add a new review to the given Service
+        /// </summary>
+        /// <param name="addReviewCommand"></param>
+        void AddReview(AddReviewCommand addReviewCommand);
         
         /// <summary>
         /// Get the Service by Id
@@ -84,12 +90,19 @@ namespace RentStuff.Services.Application.ApplicationServices
         void DeleteImagesFromService(string serviceId, IList<string> images);
 
         /// <summary>
+        /// Check that the current HTTP request initiator's email is the same as the provided email
+        /// </summary>
+        /// <param name="currentUserEmail"></param>
+        /// <param name="uploaderEmail"></param>
+        void NewServiceEmailOwnershipCheck(string currentUserEmail, string uploaderEmail);
+
+        /// <summary>
         ///  Checks that the Service to be modified belongs to the current user
         /// </summary>
         /// <param name="serviceId"></param>
-        /// <param name="requesterEmail"></param>
+        /// <param name="currentUserEmail"></param>
         /// <returns></returns>
-        bool ServiceOwnershipCheck(string serviceId, string requesterEmail);
+        bool ServiceOwnershipCheck(string serviceId, string currentUserEmail);
 
         /// <summary>
         /// Get the count of records using the given criteria
