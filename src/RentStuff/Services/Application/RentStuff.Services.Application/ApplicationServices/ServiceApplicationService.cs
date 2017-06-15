@@ -493,7 +493,7 @@ namespace RentStuff.Services.Application.ApplicationServices
                 {
                     defaultImageLink = service.Images.First();
                 }
-                var servicePartialRepresentation = new ServicePartialRepresentation(service.Name,
+                var servicePartialRepresentation = new ServicePartialRepresentation(service.Id, service.Name,
                     service.Location, service.MobileNumber, service.ServiceEmail, 
                     service.ServiceProfessionType, service.ServiceEntityType.ToString(), service.FacebookLink,
                     service.InstagramLink, service.TwitterLink, service.WebsiteLink, defaultImageLink);
@@ -505,3 +505,4 @@ namespace RentStuff.Services.Application.ApplicationServices
         #endregion Private Methods
     }
 }
+

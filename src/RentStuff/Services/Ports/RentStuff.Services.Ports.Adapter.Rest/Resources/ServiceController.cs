@@ -321,7 +321,7 @@ namespace RentStuff.Services.Ports.Adapter.Rest.Resources
         [Route("service-profession-types")]
         [HttpGet]
         [Obsolete]
-        public IHttpActionResult GetPropertyTypes()
+        public IHttpActionResult GetProfessionTypes()
         {
             try
             {

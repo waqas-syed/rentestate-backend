@@ -9,10 +9,11 @@ namespace RentStuff.Services.Application.ApplicationServices.Representations
     public class ServicePartialRepresentation
     {
         /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
-        public ServicePartialRepresentation(string name, string location, string mobileNumber, 
+        public ServicePartialRepresentation(string id, string name, string location, string mobileNumber, 
             string serviceEmail, string serviceProfessionType, string serviceEntityType, string facebookLink,
             string instagramLink, string twitterLink, string websiteLink, string defaultImageLink)
         {
+            Id = id;
             Name = name;
             Location = location;
             MobileNumber = mobileNumber;
@@ -26,6 +27,8 @@ namespace RentStuff.Services.Application.ApplicationServices.Representations
             DefaultImageLink = defaultImageLink;
         }
 
+        [DataMember]
+        public string Id { get; private set; }
         [DataMember]
         public string Name { get; private set; }
         [DataMember]

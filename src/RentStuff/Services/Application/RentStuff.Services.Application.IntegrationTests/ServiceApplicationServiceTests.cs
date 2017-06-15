@@ -328,6 +328,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             // Verify House no 1
             var retrievedService = retrievedServices[0];
             Assert.IsNotNull(retrievedService);
+            Assert.AreEqual(savedServiceId, retrievedService.Id);
             Assert.AreEqual(name, retrievedService.Name);
             Assert.AreEqual(location, retrievedService.Location);
             Assert.AreEqual(mobileNumber, retrievedService.MobileNumber);
@@ -342,6 +343,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             // Verify Service no 3
             retrievedService = retrievedServices[1];
             Assert.IsNotNull(retrievedService);
+            Assert.AreEqual(savedServiceId3, retrievedService.Id);
             Assert.AreEqual(name3, retrievedService.Name);
             Assert.AreEqual(location3, retrievedService.Location);
             Assert.AreEqual(mobileNumber3, retrievedService.MobileNumber);
@@ -436,6 +438,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             // Verify House # 1
             var retrievedService = retrievedServices[0];
             Assert.IsNotNull(retrievedService);
+            Assert.AreEqual(savedServiceId, retrievedService.Id);
             Assert.AreEqual(name, retrievedService.Name);
             Assert.AreEqual(location, retrievedService.Location);
             Assert.AreEqual(mobileNumber, retrievedService.MobileNumber);
@@ -450,6 +453,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             // Verify Service # 2
             retrievedService = retrievedServices[1];
             Assert.IsNotNull(retrievedService);
+            Assert.AreEqual(savedServiceId2, retrievedService.Id);
             Assert.AreEqual(name2, retrievedService.Name);
             Assert.AreEqual(location2, retrievedService.Location);
             Assert.AreEqual(mobileNumber2, retrievedService.MobileNumber);
@@ -551,6 +555,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             // Verify House # 1
             var retrievedService = retrievedServices[0];
             Assert.IsNotNull(retrievedService);
+            Assert.AreEqual(savedServiceId, retrievedService.Id);
             Assert.AreEqual(name, retrievedService.Name);
             Assert.AreEqual(location, retrievedService.Location);
             Assert.AreEqual(mobileNumber, retrievedService.MobileNumber);
@@ -649,6 +654,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             // Verify Service # 2
             var retrievedService = retrievedServices[0];
             Assert.IsNotNull(retrievedService);
+            Assert.AreEqual(savedServiceId2, retrievedService.Id);
             Assert.AreEqual(name2, retrievedService.Name);
             Assert.AreEqual(location2, retrievedService.Location);
             Assert.AreEqual(mobileNumber2, retrievedService.MobileNumber);
@@ -663,6 +669,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             // Verify Service # 3
             retrievedService = retrievedServices[1];
             Assert.IsNotNull(retrievedService);
+            Assert.AreEqual(savedServiceId3, retrievedService.Id);
             Assert.AreEqual(name3, retrievedService.Name);
             Assert.AreEqual(location3, retrievedService.Location);
             Assert.AreEqual(mobileNumber3, retrievedService.MobileNumber);
@@ -757,6 +764,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             // Verify Service # 1
             var retrievedService = retrievedServices[0];
             Assert.IsNotNull(retrievedService);
+            Assert.AreEqual(savedServiceId, retrievedService.Id);
             Assert.AreEqual(name, retrievedService.Name);
             Assert.AreEqual(location, retrievedService.Location);
             Assert.AreEqual(mobileNumber, retrievedService.MobileNumber);
@@ -771,6 +779,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             // Verify Service # 2
             retrievedService = retrievedServices[1];
             Assert.IsNotNull(retrievedService);
+            Assert.AreEqual(savedServiceId2, retrievedService.Id);
             Assert.AreEqual(name2, retrievedService.Name);
             Assert.AreEqual(location2, retrievedService.Location);
             Assert.AreEqual(mobileNumber2, retrievedService.MobileNumber);
@@ -785,6 +794,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             // Verify Service # 3
             retrievedService = retrievedServices[2];
             Assert.IsNotNull(retrievedService);
+            Assert.AreEqual(savedServiceId3, retrievedService.Id);
             Assert.AreEqual(name3, retrievedService.Name);
             Assert.AreEqual(location3, retrievedService.Location);
             Assert.AreEqual(mobileNumber3, retrievedService.MobileNumber);
@@ -796,11 +806,5 @@ namespace RentStuff.Services.Application.IntegrationTests
             Assert.AreEqual(instagramLink3, retrievedService.InstagramLink);
             Assert.IsNull(retrievedService.WebsiteLink);
         }
-        
-        #region Private Methods
-
-        
-
-        #endregion Private Methods
     }
 }
