@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
@@ -9,7 +7,7 @@ using RentStuff.Identity.Application.Account;
 using RentStuff.Identity.Application.Account.Commands;
 using RentStuff.Identity.Application.Account.Representations;
 
-namespace RentStuff.Identity.Ports.Adapter.Rest.Controllers
+namespace RentStuff.Identity.Ports.Adapter.Rest.Resources
 {
     [RoutePrefix("v1/Account")]
     //[EnableCors(origins: "http://mywebclient.azurewebsites.net", headers: "*", methods: "*")]

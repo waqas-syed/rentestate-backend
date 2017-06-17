@@ -7,13 +7,17 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Newtonsoft.Json;
+using Ninject;
 using NUnit.Framework;
 using RentStuff.Common;
 using RentStuff.Common.Utilities;
 using RentStuff.Identity.Application.Account.Commands;
+using RentStuff.Identity.Application.Ninject.Modules;
+using RentStuff.Identity.Infrastructure.Persistence.Ninject.Modules;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
-using RentStuff.Identity.Ports.Adapter.Rest.Controllers;
-using Spring.Context.Support;
+using RentStuff.Identity.Infrastructure.Services.Ninject.Modules;
+using RentStuff.Identity.Ports.Adapter.Rest.Ninject.Modules;
+using RentStuff.Identity.Ports.Adapter.Rest.Resources;
 
 namespace RentStuff.Identity.Ports.Adapter.Rest.IntegrationTests
 {
@@ -37,10 +41,24 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.IntegrationTests
             _databaseUtility.Create();
         }
 
-        [Test]
-        public async void RegisterUserTest_TestsIfTheUserIsSavedAsExpectedWhenRegisterMethodIsCalled_VerifiesThroughTheRetruendValue()
+        /// <summary>
+        /// Loads the dependencies defined in Ninject modules and injects them where necessary
+        /// </summary>
+        private IKernel InitializeNinjectDepedencyInjection()
         {
-            AccountController accountController = (AccountController) ContextRegistry.GetContext()["AccountController"];
+            var kernel = new StandardKernel();
+            kernel.Load<MockIdentityAccessServicesNinjectModule>();
+            kernel.Load<IdentityAccessPersistenceNinjectModule>();
+            kernel.Load<IdentityAccessApplicationNinjectModule>();
+            kernel.Load<IdentityAccessPortsNinjectModule>();
+            return kernel;
+        }
+
+        [Test]
+        public void RegisterUserTest_TestsIfTheUserIsSavedAsExpectedWhenRegisterMethodIsCalled_VerifiesThroughTheRetruendValue()
+        {
+            var kernel = InitializeNinjectDepedencyInjection();
+            AccountController accountController = kernel.Get<AccountController>();
             Assert.NotNull(accountController);
 
             string name = "Thorin";

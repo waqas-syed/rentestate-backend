@@ -36,9 +36,9 @@ namespace RentStuff.Identity.Application.IntegrationTests
         }
 
         /// <summary>
-        /// Loads the instances that will be used in the production environment. No Mocks or fakes
+        /// Loads the dependencies defined in Ninject modules and injects them where necessary
         /// </summary>
-        private IKernel InitializeNinjectMockLive()
+        private IKernel InitializeNinjectDepedencyInjection()
         { 
             var kernel = new StandardKernel();
             kernel.Load<MockIdentityAccessServicesNinjectModule>();
@@ -50,7 +50,7 @@ namespace RentStuff.Identity.Application.IntegrationTests
         [Test]
         public void RegisterUserTest_RegistersAUserAndActivatesHerAccount_VerifiesByDatabaseObjectRetreivalForThatUser()
         {
-            var kernel = InitializeNinjectMockLive();
+            var kernel = InitializeNinjectDepedencyInjection();
             IAccountApplicationService accountApplicationService = kernel.Get<AccountApplicationService>();
             Assert.NotNull(accountApplicationService);
             string name = "Gandalf The Grey";
@@ -75,7 +75,7 @@ namespace RentStuff.Identity.Application.IntegrationTests
             RegisterAndActivateUserTest_RegistersAUserAndActivatesHerAccount_VerifiesByDatabaseObjectRetreivalForThatUser
             ()
         {
-            var kernel = InitializeNinjectMockLive();
+            var kernel = InitializeNinjectDepedencyInjection();
             IAccountApplicationService accountApplicationService = kernel.Get<AccountApplicationService>();
             IAccountRepository accountRepository = kernel.Get<AccountRepository>();
             IUserTokenProvider<CustomIdentityUser, string> userTokenProvider = kernel.Get<UserTokenProviderService>();
@@ -112,7 +112,7 @@ namespace RentStuff.Identity.Application.IntegrationTests
         public void
             ActivationFailBadTokenTest_ChecksIfActivationFailsIfTheTokenProvidedIsNotValid_VerifiesByTheRaisedException()
         {
-            var kernel = InitializeNinjectMockLive();
+            var kernel = InitializeNinjectDepedencyInjection();
             IAccountApplicationService accountApplicationService = kernel.Get<AccountApplicationService>();
             IAccountRepository accountRepository = kernel.Get<AccountRepository>();
             IUserTokenProvider<CustomIdentityUser, string> userTokenProvider = kernel.Get<UserTokenProviderService>();
@@ -144,7 +144,7 @@ namespace RentStuff.Identity.Application.IntegrationTests
         public void
             ActivationFailBadEmailTest_ChecksIfActivationFailsIfTheTokenProvidedIsNotValid_VerifiesByTheRaisedException()
         {
-            var kernel = InitializeNinjectMockLive();
+            var kernel = InitializeNinjectDepedencyInjection();
             IAccountApplicationService accountApplicationService = kernel.Get<AccountApplicationService>();
             IAccountRepository accountRepository = kernel.Get<AccountRepository>();
             IUserTokenProvider<CustomIdentityUser, string> userTokenProvider = kernel.Get<UserTokenProviderService>();
@@ -176,7 +176,7 @@ namespace RentStuff.Identity.Application.IntegrationTests
         [ExpectedException(typeof(ArgumentException))]
         public async void RegisterUserFailTest_ChecksExceptionIsThrownWhenEmailIsNull_VerifiesByRaisedException()
         {
-            var kernel = InitializeNinjectMockLive();
+            var kernel = InitializeNinjectDepedencyInjection();
             IAccountApplicationService accountApplicationService = kernel.Get<AccountApplicationService>();
             Assert.NotNull(accountApplicationService);
             string name = "Gandalf The Grey";
@@ -193,7 +193,7 @@ namespace RentStuff.Identity.Application.IntegrationTests
         [ExpectedException(typeof(ArgumentException))]
         public void RegisterUserFailTest_ChecksExceptionIsThrownWhenNameIsNull_VerifiesByRaisedException()
         {
-            var kernel = InitializeNinjectMockLive();
+            var kernel = InitializeNinjectDepedencyInjection();
             IAccountApplicationService accountApplicationService = kernel.Get<AccountApplicationService>();
             Assert.NotNull(accountApplicationService);
             string name = "";
@@ -209,7 +209,7 @@ namespace RentStuff.Identity.Application.IntegrationTests
         [ExpectedException(typeof(ArgumentException))]
         public void RegisterUserFailTest_ChecksExceptionIsThrownWhenPasswordIsNull_VerifiesByRaisedException()
         {
-            var kernel = InitializeNinjectMockLive();
+            var kernel = InitializeNinjectDepedencyInjection();
             IAccountApplicationService accountApplicationService = kernel.Get<AccountApplicationService>();
             Assert.NotNull(accountApplicationService);
             string name = "Gandalf";
@@ -225,7 +225,7 @@ namespace RentStuff.Identity.Application.IntegrationTests
         [ExpectedException(typeof(ArgumentException))]
         public void RegisterUserFailTest_ChecksExceptionIsThrownWhenConfirmPasswordIsEmpty_VerifiesByRaisedException()
         {
-            var kernel = InitializeNinjectMockLive();
+            var kernel = InitializeNinjectDepedencyInjection();
             IAccountApplicationService accountApplicationService = kernel.Get<AccountApplicationService>();
             Assert.NotNull(accountApplicationService);
             string name = "Gandalf";
@@ -241,7 +241,7 @@ namespace RentStuff.Identity.Application.IntegrationTests
         [ExpectedException(typeof(ArgumentException))]
         public void RegisterUserFailTest_ChecksExceptionIsThrownWhenNameIsTooLong_VerifiesByRaisedException()
         {
-            var kernel = InitializeNinjectMockLive();
+            var kernel = InitializeNinjectDepedencyInjection();
             IAccountApplicationService accountApplicationService = kernel.Get<AccountApplicationService>();
             Assert.NotNull(accountApplicationService);
             // name should be <= 19 characters long
@@ -260,7 +260,7 @@ namespace RentStuff.Identity.Application.IntegrationTests
             RegisterUserFailTest_ChecksThatUserIsNotRegisteredWhenThePasswordAndConfirmPasswordDontMatch_VerifiesByRaisedException
             ()
         {
-            var kernel = InitializeNinjectMockLive();
+            var kernel = InitializeNinjectDepedencyInjection();
             IAccountApplicationService accountApplicationService = kernel.Get<AccountApplicationService>();
             Assert.NotNull(accountApplicationService);
             string name = "Gandalf The Grey";
@@ -277,7 +277,7 @@ namespace RentStuff.Identity.Application.IntegrationTests
         public void
             PasswordResetSuccessfulTest_ChecksIfThePasswordResetScenarioGoesAsExpected_VerifiesThroughReturnedValue()
         {
-            var kernel = InitializeNinjectMockLive();
+            var kernel = InitializeNinjectDepedencyInjection();
             IAccountApplicationService accountApplicationService = kernel.Get<AccountApplicationService>();
             IAccountRepository accountRepository = kernel.Get<AccountRepository>();
             Assert.NotNull(accountApplicationService);
@@ -304,7 +304,7 @@ namespace RentStuff.Identity.Application.IntegrationTests
         public void
             PasswordResetFailTest_ChecksIfThePasswordResetScenarioFailsBecauseThePasswordResetRequestIsNotMade_VerifiesThroughReturnedValue()
         {
-            var kernel = InitializeNinjectMockLive();
+            var kernel = InitializeNinjectDepedencyInjection();
             IAccountApplicationService accountApplicationService = kernel.Get<AccountApplicationService>();
             IAccountRepository accountRepository = kernel.Get<AccountRepository>();
             Assert.NotNull(accountApplicationService);
@@ -329,7 +329,7 @@ namespace RentStuff.Identity.Application.IntegrationTests
         public void
             PasswordResetFailTest_ChecksIfThePasswordResetScenarioFailsBecauseThePasswordIsAlreadyReset_VerifiesThroughReturnedValue()
         {
-            var kernel = InitializeNinjectMockLive();
+            var kernel = InitializeNinjectDepedencyInjection();
             IAccountApplicationService accountApplicationService = kernel.Get<AccountApplicationService>();
             IAccountRepository accountRepository = kernel.Get<AccountRepository>();
             Assert.NotNull(accountApplicationService);
