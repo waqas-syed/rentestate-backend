@@ -2,7 +2,6 @@
 using System.Data.Common;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using RentStuff.Common;
 using RentStuff.Identity.Infrastructure.Services.Hashers;
 using RentStuff.Identity.Infrastructure.Services.Identity;
 using RentStuff.Identity.Infrastructure.Services.PasswordReset;
@@ -12,14 +11,15 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 {
     public class AccountRepository : IAccountRepository, IDisposable
     {
+        private DbConnection _dbConnection;
         private AuthContext _ctx;
 
         private UserManager<CustomIdentityUser> _userManager;
         
         public AccountRepository()
         {
-            DbConnection dbConnection = EfConnectionDecipherService.GetEntityFrameDecipheredString();
-            _ctx = new AuthContext(dbConnection, true);            
+            _dbConnection = EfConnectionDecipherService.GetEntityFrameDecipheredString();
+            _ctx = new AuthContext(_dbConnection, true);       
             _userManager = new UserManager<CustomIdentityUser>(new UserStore<CustomIdentityUser>(_ctx));
             _userManager.UserValidator = new CustomUserValidator<CustomIdentityUser>(_userManager);
             _userManager.PasswordHasher = new CustomPasswordHasher();
@@ -99,6 +99,7 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 
         public void Dispose()
         {
+            _dbConnection.Dispose();
             _ctx.Dispose();
             _userManager.Dispose();
         }

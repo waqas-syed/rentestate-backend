@@ -82,11 +82,13 @@
     <Compile Include="Email\EmailConstants.cs" />
     <Compile Include="Email\CustomEmailService.cs" />
     <Compile Include="Email\ICustomEmailService.cs" />
+    <Compile Include="Email\MockCustomEmailService.cs" />
     <Compile Include="Hashers\EfConnectionDecipherService.cs" />
     <Compile Include="Hashers\CustomCrypto.cs" />
     <Compile Include="Hashers\CustomPasswordHasher.cs" />
     <Compile Include="Identity\CustomIdentityUser.cs" />
     <Compile Include="Ninject\Modules\IdentityAccessServicesNinjectModule.cs" />
+    <Compile Include="Ninject\Modules\MockIdentityAccessServicesNinjectModule.cs" />
     <Compile Include="PasswordReset\UserTokenProviderService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validators\CustomUserValidator.cs" />
