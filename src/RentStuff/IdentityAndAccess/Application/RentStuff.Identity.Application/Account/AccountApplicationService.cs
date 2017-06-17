@@ -17,14 +17,12 @@ namespace RentStuff.Identity.Application.Account
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private ICustomEmailService _emailService;
         private IAccountRepository _accountRepository;
-        private IUserTokenProvider<CustomIdentityUser,string> _userTokenService;
 
-        public AccountApplicationService(IAccountRepository accountRepository, ICustomEmailService customEmailService,
-            IUserTokenProvider<CustomIdentityUser, string> userTokenProviderService)
+        public AccountApplicationService(IAccountRepository accountRepository, 
+            ICustomEmailService customEmailService)
         {
             _accountRepository = accountRepository;
             _emailService = customEmailService;
-            _userTokenService = userTokenProviderService;
         }
         
         public string Register(CreateUserCommand userModel)

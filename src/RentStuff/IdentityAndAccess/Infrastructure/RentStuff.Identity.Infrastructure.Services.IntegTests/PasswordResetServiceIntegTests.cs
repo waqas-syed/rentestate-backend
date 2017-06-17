@@ -12,7 +12,7 @@ namespace RentStuff.Identity.Infrastructure.Services.IntegTests
     class PasswordResetServiceIntegTests
     {
         /// <summary>
-        /// Loads the instances that will be used in the production environment. No Mocks or fakes
+        /// Load the Mocked dependencies
         /// </summary>
         private IKernel InitializeNinjectMockDependencies()
         {
