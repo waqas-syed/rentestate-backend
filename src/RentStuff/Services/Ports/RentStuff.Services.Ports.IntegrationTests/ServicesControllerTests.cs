@@ -12,7 +12,8 @@ using RentStuff.Common.Utilities;
 using RentStuff.Services.Application.ApplicationServices.Commands;
 using RentStuff.Services.Application.ApplicationServices.Representations;
 using RentStuff.Services.Application.Ninject.Modules;
-using RentStuff.Services.Infrastructure.Persistence.NinjectModules;
+using RentStuff.Services.Infrastructure.Persistence.Ninject;
+using RentStuff.Services.Infrastructure.Persistence.Ninject.Modules;
 using RentStuff.Services.Ports.Adapter.Rest.Ninject.Modules;
 using RentStuff.Services.Ports.Adapter.Rest.Resources;
 

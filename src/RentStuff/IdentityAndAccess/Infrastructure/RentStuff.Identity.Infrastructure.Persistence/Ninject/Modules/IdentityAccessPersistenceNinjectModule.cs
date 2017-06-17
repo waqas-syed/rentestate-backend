@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ninject.Modules;
+using Ninject.Web.Common;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
 
 namespace RentStuff.Identity.Infrastructure.Persistence.Ninject.Modules
@@ -16,7 +17,7 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Ninject.Modules
         /// <summary>Loads the module into the kernel.</summary>
         public override void Load()
         {
-            Bind<IAccountRepository>().To<AccountRepository>().InTransientScope();
+            Bind<IAccountRepository>().To<AccountRepository>().InRequestScope();
         }
     }
 }

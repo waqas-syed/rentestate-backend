@@ -1,12 +1,13 @@
 ﻿using NHibernate;
 using Ninject;
-using Ninject.Activation;
 using Ninject.Modules;
+using Ninject.Web.Common;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
-using RentStuff.Services.Infrastructure.Persistence.NHibernateCompound;
+using RentStuff.Services.Infrastructure.Persistence.NHibernate.Providers;
+using RentStuff.Services.Infrastructure.Persistence.NHibernate.Wrappers;
 using RentStuff.Services.Infrastructure.Persistence.Repositories;
 
-namespace RentStuff.Services.Infrastructure.Persistence.NinjectModules
+namespace RentStuff.Services.Infrastructure.Persistence.Ninject.Modules
 {
     public class ServicesPersistenceNinjectModule : NinjectModule
     {
@@ -14,7 +15,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.NinjectModules
         {
             NHibernateSessionFactoryProvider nHibernateSessionCompound = new NHibernateSessionFactoryProvider();
             Bind<ISessionFactory>().ToConstant(nHibernateSessionCompound.SessionFactory).InSingletonScope();
-            Bind<ISession>().ToMethod(context => context.Kernel.Get<ISessionFactory>().OpenSession());
+            Bind<INhibernateSessionWrapper>().To<NHibernateSessionWrapper>().InRequestScope();
             /*.OnActivation(session =>
             {
                 session.BeginTransaction();

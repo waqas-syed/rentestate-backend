@@ -8,7 +8,8 @@ using RentStuff.Common.NinjectModules;
 using RentStuff.Common.Services.LocationServices;
 using RentStuff.Common.Utilities;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
-using RentStuff.Services.Infrastructure.Persistence.NinjectModules;
+using RentStuff.Services.Infrastructure.Persistence.Ninject;
+using RentStuff.Services.Infrastructure.Persistence.Ninject.Modules;
 
 namespace RentStuff.Services.Infrastructure.Persistence.Tests
 {

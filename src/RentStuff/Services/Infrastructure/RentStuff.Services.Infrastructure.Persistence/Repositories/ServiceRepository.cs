@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using NHibernate;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
+using RentStuff.Services.Infrastructure.Persistence.NHibernate.Wrappers;
 
 namespace RentStuff.Services.Infrastructure.Persistence.Repositories
 {
@@ -21,11 +21,11 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         private readonly int _radius = 35;
         private readonly int _resultsPerPage = 10;
         
-        private ISession _session;
+        private INhibernateSessionWrapper _sessionWrapper;
 
-        public ServiceRepository(ISession session)
+        public ServiceRepository(INhibernateSessionWrapper sessionWrapper)
         {
-            _session = session;
+            _sessionWrapper = sessionWrapper;
         }
 
         /// <summary>
@@ -34,9 +34,9 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <param name="service"></param>
         public string SaveOrUpdate(Service service)
         {
-            using (var transaction = _session.BeginTransaction(IsolationLevel.ReadCommitted))
+            using (var transaction = _sessionWrapper.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                _session.SaveOrUpdate(service);
+                _sessionWrapper.Session.SaveOrUpdate(service);
                 transaction.Commit();
             }
             return service.Id;
@@ -49,9 +49,9 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         public Service GetServiceById(string id)
         {
-            using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
+            using (_sessionWrapper.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                return _session.QueryOver<Service>().Where(x => x.Id == id).SingleOrDefault();
+                return _sessionWrapper.Session.QueryOver<Service>().Where(x => x.Id == id).SingleOrDefault();
             }
         }
 
@@ -63,9 +63,9 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         public IList<Service> GetServicesByEmail(string uploaderEmail, int pageNo = 0)
         {
-            using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
+            using (_sessionWrapper.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                return _session.QueryOver<Service>()
+                return _sessionWrapper.Session.QueryOver<Service>()
                         .Where(x => x.UploaderEmail == uploaderEmail)
                         .Skip(pageNo*_resultsPerPage)
                         .Take(_resultsPerPage)
@@ -82,11 +82,11 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         public IList<Service> GetServicesByLocation(decimal latitude, decimal longitude, int pageNo = 0)
         {
-            using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
+            using (_sessionWrapper.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 // In the below formula, enter 3959 for miles; 6371 for kilometers
                 IList houses =
-                    _session.CreateSQLQuery(
+                    _sessionWrapper.Session.CreateSQLQuery(
                             "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius ORDER BY distance")
                         // LIMIT 0 , 20")//("SELECT name, latitude, longitude, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM geo_location HAVING distance < 25 ORDER BY distance LIMIT 0 , 20")
                         .AddEntity(typeof(Service))
@@ -112,11 +112,11 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         public IList<Service> GetServicesByLocationAndProfession(decimal latitude, decimal longitude,
             string serviceProfessionType, int pageNo = 0)
         {
-            using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
+            using (_sessionWrapper.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 // In the below formula, enter 3959 for miles; 6371 for kilometers
                 IList houses =
-                    _session.CreateSQLQuery(
+                    _sessionWrapper.Session.CreateSQLQuery(
                             "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius AND service_profession_type=:serviceProfessionType ORDER BY distance")
                         // LIMIT 0 , 20")//("SELECT name, latitude, longitude, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM geo_location HAVING distance < 25 ORDER BY distance LIMIT 0 , 20")
                         .AddEntity(typeof(Service))
@@ -141,9 +141,9 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         public IList<Service> GetServicesByProfession(string serviceProfessionType, 
             int pageNo = 0)
         {
-            using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
+            using (_sessionWrapper.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                return _session
+                return _sessionWrapper.Session
                     .QueryOver<Service>()
                     .Where(x => x.ServiceProfessionType == serviceProfessionType)
                     .Skip(pageNo * _resultsPerPage)
@@ -159,9 +159,9 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         public IList<Service> GetAllServices(int pageNo = 0)
         {
-            using (_session.BeginTransaction(IsolationLevel.ReadCommitted))
+            using (_sessionWrapper.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                return _session
+                return _sessionWrapper.Session
                     .QueryOver<Service>()
                     .Skip(pageNo * _resultsPerPage)
                     .Take(_resultsPerPage)
@@ -175,9 +175,9 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <param name="service"></param>
         public void DeleteService(Service service)
         {
-            using (var transaction = _session.BeginTransaction(IsolationLevel.ReadCommitted))
+            using (var transaction = _sessionWrapper.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                _session.Delete(service);
+                _sessionWrapper.Session.Delete(service);
                 transaction.Commit();
             }
         }
@@ -189,7 +189,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         public Tuple<int, int> GetRecordCountByProfessionType(string serviceProfessionType)
         {
-            return new Tuple<int, int>(_session
+            return new Tuple<int, int>(_sessionWrapper.Session
                                         .QueryOver<Service>()
                                         .Where(x => x.ServiceProfessionType == serviceProfessionType)
                                         .RowCount(),
@@ -205,7 +205,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         public Tuple<int, int> GetRecordCountByLocation(decimal latitude, decimal longitude)
         {
             return new Tuple<int, int>(
-                        _session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius ORDER BY distance")
+                        _sessionWrapper.Session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius ORDER BY distance")
                         .AddEntity(typeof(Service))
                         .SetParameter("inputLatitude", latitude)
                         .SetParameter("inputLongitude", longitude)
@@ -219,7 +219,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         public Tuple<int, int> GetRecordCountByEmail(string uploaderEmail)
         {
-            return new Tuple<int, int>(_session
+            return new Tuple<int, int>(_sessionWrapper.Session
                                         .QueryOver<Service>()
                                         .Where(x => x.UploaderEmail == uploaderEmail)
                                         .RowCount(),
@@ -236,7 +236,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         public Tuple<int, int> GetRecordCountByLocationAndProfessionType(decimal latitude, decimal longitude, string serviceProfessionType)
         {
             return new Tuple<int, int>(
-                _session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius AND service_profession_type=:serviceProfessionType ORDER BY distance")
+                _sessionWrapper.Session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius AND service_profession_type=:serviceProfessionType ORDER BY distance")
                         .AddEntity(typeof(Service))
                         .SetParameter("inputLatitude", latitude)
                         .SetParameter("inputLongitude", longitude)
@@ -252,7 +252,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         public Tuple<int, int> GetTotalRecordCount()
         {
-            return new Tuple<int, int>(_session.QueryOver<Service>().RowCount(), _resultsPerPage);
+            return new Tuple<int, int>(_sessionWrapper.Session.QueryOver<Service>().RowCount(), _resultsPerPage);
         }
     }
 }

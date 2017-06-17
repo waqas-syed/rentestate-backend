@@ -1,13 +1,11 @@
-﻿using System.Configuration;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
-using RentStuff.Common;
 using RentStuff.Common.Utilities;
 using RentStuff.Services.Infrastructure.Persistence.Repositories;
 
-namespace RentStuff.Services.Infrastructure.Persistence.NHibernateCompound
+namespace RentStuff.Services.Infrastructure.Persistence.NHibernate.Providers
 {
     /// <summary>
     /// NHibernate Session Factory for the Services Bounded Context
