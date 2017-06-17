@@ -83,7 +83,6 @@
     <Compile Include="Email\CustomEmailService.cs" />
     <Compile Include="Email\ICustomEmailService.cs" />
     <Compile Include="Email\MockCustomEmailService.cs" />
-    <Compile Include="Hashers\EfConnectionDecipherService.cs" />
     <Compile Include="Hashers\CustomCrypto.cs" />
     <Compile Include="Hashers\CustomPasswordHasher.cs" />
     <Compile Include="Identity\CustomIdentityUser.cs" />
