@@ -120,7 +120,7 @@ namespace RentStuff.Services.Ports.Adapter.Rest.Resources
         /// related to a Service
         /// </summary>
         /// <returns></returns>
-        [Route("house-image-upload")]
+        [Route("service-image-upload")]
         [HttpPost]
         [Authorize]
         public IHttpActionResult PostImageUpload()
@@ -180,7 +180,7 @@ namespace RentStuff.Services.Ports.Adapter.Rest.Resources
             }
         }
 
-        [Route("house-image-upload")]
+        [Route("service-image-upload")]
         [HttpPut]
         [Authorize]
         public IHttpActionResult ImageDelete([FromBody] DeleteImageCommand deleteImageCommand)
@@ -213,11 +213,11 @@ namespace RentStuff.Services.Ports.Adapter.Rest.Resources
             }
         }
         
-        [Route("house")]
+        [Route("service")]
         [HttpGet]
-        public IHttpActionResult GetHouse(string email = null, string location = null, 
+        public IHttpActionResult Get(string email = null, string location = null, 
             string serviceProfessionType = null, string serviceId = null, bool getCount = false, 
-            int pageNo = 1)
+            bool getAllProfessionTypes = false, int pageNo = 1)
         {
             try
             {
@@ -275,6 +275,10 @@ namespace RentStuff.Services.Ports.Adapter.Rest.Resources
                     _logger.Info("Get Service by ServiceId {0}", serviceId);
                     return Ok(_serviceApplicationService.GetServiceById(serviceId));
                 }
+                else if (getAllProfessionTypes)
+                {
+                    return Ok(_serviceApplicationService.GetAllServiceProfessionTypes());
+                }
                 // Otherwise if no criteria is provided, then return all the Services
                 else
                 {
@@ -288,7 +292,7 @@ namespace RentStuff.Services.Ports.Adapter.Rest.Resources
             }
         }
 
-        [Route("house/{id}")]
+        [Route("service/{id}")]
         [HttpDelete]
         public IHttpActionResult Delete(string id)
         {
@@ -311,21 +315,6 @@ namespace RentStuff.Services.Ports.Adapter.Rest.Resources
                     }
                 }
                 return BadRequest();
-            }
-            catch (Exception exception)
-            {
-                return InternalServerError(exception);
-            }
-        }
-
-        [Route("service-profession-types")]
-        [HttpGet]
-        [Obsolete]
-        public IHttpActionResult GetProfessionTypes()
-        {
-            try
-            {
-                return Ok(_serviceApplicationService.GetAllServiceProfessionTypes());
             }
             catch (Exception exception)
             {

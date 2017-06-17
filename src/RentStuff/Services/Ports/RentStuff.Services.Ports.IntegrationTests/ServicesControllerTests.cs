@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Web.Http.Results;
 using Newtonsoft.Json;
@@ -110,7 +111,7 @@ namespace RentStuff.Services.Ports.IntegrationTests
             var addReview2 = new AddReviewCommand(authorName2, authorEmail2, reviewDescription2, savedServiceId);
             serviceController.PostReview(JsonConvert.SerializeObject(addReview2));
             // Get the service by providing the ServiceId
-            var getHttpResponse = serviceController.GetHouse(serviceId:savedServiceId);
+            var getHttpResponse = serviceController.Get(serviceId:savedServiceId);
             var serviceFullRepresentation = ((OkNegotiatedContentResult<ServiceFullRepresentation>) getHttpResponse).Content;
             Assert.IsNotNull(serviceFullRepresentation);
             Assert.AreEqual(savedServiceId, serviceFullRepresentation.Id);
@@ -182,7 +183,7 @@ namespace RentStuff.Services.Ports.IntegrationTests
             Assert.IsFalse(string.IsNullOrWhiteSpace(savedServiceId));
             
             // Get the service by providing the ServiceId
-            var getHttpResponse = serviceController.GetHouse(serviceId: savedServiceId);
+            var getHttpResponse = serviceController.Get(serviceId: savedServiceId);
             var serviceFullRepresentation = ((OkNegotiatedContentResult<ServiceFullRepresentation>)getHttpResponse).Content;
             Assert.IsNotNull(serviceFullRepresentation);
             Assert.AreEqual(savedServiceId, serviceFullRepresentation.Id);
@@ -225,7 +226,7 @@ namespace RentStuff.Services.Ports.IntegrationTests
             serviceController.PostReview(JsonConvert.SerializeObject(addReview));
 
             // Get the service by providing the ServiceId
-            getHttpResponse = serviceController.GetHouse(serviceId: savedServiceId);
+            getHttpResponse = serviceController.Get(serviceId: savedServiceId);
             serviceFullRepresentation = ((OkNegotiatedContentResult<ServiceFullRepresentation>)getHttpResponse).Content;
             Assert.IsNotNull(serviceFullRepresentation);
             Assert.AreEqual(savedServiceId, serviceFullRepresentation.Id);
@@ -304,7 +305,7 @@ namespace RentStuff.Services.Ports.IntegrationTests
             var addReview2 = new AddReviewCommand(authorName2, authorEmail2, reviewDescription2, savedServiceId);
             serviceController.PostReview(JsonConvert.SerializeObject(addReview2));
             // Get the service by providing the ServiceId
-            var getHttpResponse = serviceController.GetHouse(serviceId: savedServiceId);
+            var getHttpResponse = serviceController.Get(serviceId: savedServiceId);
             var serviceFullRepresentation = ((OkNegotiatedContentResult<ServiceFullRepresentation>)getHttpResponse).Content;
             Assert.IsNotNull(serviceFullRepresentation);
             Assert.AreEqual(savedServiceId, serviceFullRepresentation.Id);
@@ -337,7 +338,7 @@ namespace RentStuff.Services.Ports.IntegrationTests
             // DELETE THE SERVICE
             serviceController.Delete(savedServiceId);
             // Response should be null
-            getHttpResponse = serviceController.GetHouse(serviceId: savedServiceId);
+            getHttpResponse = serviceController.Get(serviceId: savedServiceId);
             Assert.AreEqual(getHttpResponse.GetType().Name, typeof(BadRequestErrorMessageResult).Name);
         }
 
@@ -416,7 +417,7 @@ namespace RentStuff.Services.Ports.IntegrationTests
 
             // Get the services by providing the ServiceProfessionType.
             // Should yield only the 1st Service that corresponds to the ServiceProfessionType
-            var getHttpResponse = serviceController.GetHouse(serviceProfessionType: serviceProfessionType);
+            var getHttpResponse = serviceController.Get(serviceProfessionType: serviceProfessionType);
             var servicePartialRepresentations = ((OkNegotiatedContentResult<IList<ServicePartialRepresentation>>)getHttpResponse).Content;
             Assert.NotNull(servicePartialRepresentations);
             Assert.AreEqual(1, servicePartialRepresentations.Count);
@@ -511,7 +512,7 @@ namespace RentStuff.Services.Ports.IntegrationTests
 
             // Get the services by providing the Location
             string searchLocation = "Bahria Town, Rawalpindi, Pakistan";
-            var getHttpResponse = serviceController.GetHouse(location: searchLocation);
+            var getHttpResponse = serviceController.Get(location: searchLocation);
             var servicePartialRepresentations = ((OkNegotiatedContentResult<IList<ServicePartialRepresentation>>)getHttpResponse).Content;
             Assert.NotNull(servicePartialRepresentations);
             Assert.AreEqual(2, servicePartialRepresentations.Count);
@@ -621,7 +622,7 @@ namespace RentStuff.Services.Ports.IntegrationTests
 
             // Get the services by providing the Location
             string searchLocation = "Bahria Town, Rawalpindi, Pakistan";
-            var getHttpResponse = serviceController.GetHouse(location: searchLocation, 
+            var getHttpResponse = serviceController.Get(location: searchLocation, 
                                     serviceProfessionType:serviceProfessionType2);
             var servicePartialRepresentations = ((OkNegotiatedContentResult<IList<ServicePartialRepresentation>>)getHttpResponse).Content;
             Assert.NotNull(servicePartialRepresentations);
@@ -686,7 +687,7 @@ namespace RentStuff.Services.Ports.IntegrationTests
             Assert.IsFalse(string.IsNullOrWhiteSpace(savedServiceId));
 
             // Retrieve Service no 1 via email
-            var getHttpResponse = serviceController.GetHouse(email: uploaderEmail);
+            var getHttpResponse = serviceController.Get(email: uploaderEmail);
             var servicePartialRepresentations = ((OkNegotiatedContentResult<IList<ServicePartialRepresentation>>)getHttpResponse).Content;
             Assert.NotNull(servicePartialRepresentations);
             Assert.AreEqual(1, servicePartialRepresentations.Count);
@@ -737,7 +738,7 @@ namespace RentStuff.Services.Ports.IntegrationTests
             Assert.IsFalse(string.IsNullOrWhiteSpace(savedServiceId2));
 
             // Retrieve Service no 2 via email
-            getHttpResponse = serviceController.GetHouse(email: uploaderEmail2);
+            getHttpResponse = serviceController.Get(email: uploaderEmail2);
             servicePartialRepresentations = ((OkNegotiatedContentResult<IList<ServicePartialRepresentation>>)getHttpResponse).Content;
             Assert.NotNull(servicePartialRepresentations);
             Assert.AreEqual(1, servicePartialRepresentations.Count);
@@ -830,7 +831,7 @@ namespace RentStuff.Services.Ports.IntegrationTests
             Assert.IsFalse(string.IsNullOrWhiteSpace(savedServiceId2));
 
             // Retrieve Service no 1 via email
-            var getHttpResponse = serviceController.GetHouse(email: uploaderEmail);
+            var getHttpResponse = serviceController.Get(email: uploaderEmail);
             Assert.AreEqual(getHttpResponse.GetType().Name, typeof(BadRequestErrorMessageResult).Name);
         }
 
@@ -908,7 +909,7 @@ namespace RentStuff.Services.Ports.IntegrationTests
             Assert.IsFalse(string.IsNullOrWhiteSpace(savedServiceId2));
             
             // Get All Services
-            var getHttpResponse = serviceController.GetHouse();
+            var getHttpResponse = serviceController.Get();
             var servicePartialRepresentations = ((OkNegotiatedContentResult<IList<ServicePartialRepresentation>>)getHttpResponse).Content;
             Assert.NotNull(servicePartialRepresentations);
             Assert.AreEqual(2, servicePartialRepresentations.Count);
@@ -942,6 +943,271 @@ namespace RentStuff.Services.Ports.IntegrationTests
             Assert.AreEqual(twitterLink2, servicePartialRepresentation.TwitterLink);
             Assert.AreEqual(instagramLink2, servicePartialRepresentation.InstagramLink);
             Assert.AreEqual(websiteLink2, servicePartialRepresentation.WebsiteLink);
+        }
+
+        // Retrieves all of the Profession Types defined by the backend Domain Model
+        [Test]
+        public void GetAllProfessionTypesTest_ChecksIfTHeProfessionTypesAreAllReturnedAsExpected_VerifiesByTheRetrievedValue()
+        {
+            var kernel = InitiateLiveDependencies();
+
+            var serviceController = kernel.Get<ServiceController>();
+            var httpActionResult = serviceController.Get(getAllProfessionTypes:true);
+            var httpResult = ((OkNegotiatedContentResult<IReadOnlyDictionary<string, IReadOnlyList<string>>>) httpActionResult).Content;
+            Assert.IsNotNull(httpResult);
+            // Count of the items in the Dictionary
+            Assert.Greater(httpResult.Count, 9);
+            // Count of the items in the List that is contained within the dictionary
+            Assert.Greater(httpResult.First().Value.Count, 1);
+        }
+
+        // Checks the number of records fetched by location
+        [Test]
+        public void GetCountOfRecordsByLocationTest_ChecksIfNumberOfRecordsToUseForPaginationIsReturnedAsExpected_VerifiesByTheRetrievedValue()
+        {
+            // 4 Services with one Location that will requested, and 1 Location
+            // that is different and will not be counted in theresult count
+            var kernel = InitiateLiveDependencies();
+
+            // Service that will be inserted multipe time
+            var serviceController = kernel.Get<ServiceController>();
+            string name = "The Stone Chopper";
+            string description = "We make swrods so sharp and strong, they can chop stones";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string mobileNumber = "03770000000";
+            string serviceEmail = "stone@chopper1234567.com";
+            string uploaderEmail = "uploader@chopper1234567.com";
+            string serviceProfessionType = "Plumber";
+            string serviceEntityType = "Individual";
+
+            var createServiceCommand = new CreateServiceCommand(name, description, location, mobileNumber,
+                serviceEmail, uploaderEmail, serviceProfessionType, serviceEntityType, null,
+                null, null, null, null);
+
+            var location2 = "Lahore, Pakistan";
+            var createServiceCommand2 = new CreateServiceCommand(name, description, location2, mobileNumber,
+                serviceEmail, uploaderEmail, serviceProfessionType, serviceEntityType, null,
+                null, null, null, null);
+            // Set the Current User's username(which is the same as his email), otherwise the request for posting a new service will fail
+            serviceController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
+            {
+                new ClaimsIdentity(new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, uploaderEmail)
+                })
+            });
+            // Save the Service multiple times so we have enough ercords to test
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            // Service with a different location
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand2));
+
+            // Get the count of the Services by the given location.
+            var httpActionResult = serviceController.Get(location: location, getCount: true);
+            var recordsCount = ((OkNegotiatedContentResult<ServiceCountRepresentation>) httpActionResult).Content;
+            Assert.AreEqual(4, recordsCount.RecordCount);
+        }
+
+        // Checks the number of records fetched by Profession type
+        [Test]
+        public void GetCountOfRecordsByProfessionTypeTest_ChecksIfNumberOfRecordsToUseForPaginationIsReturnedAsExpected_VerifiesByTheRetrievedValue()
+        {
+            // 4 Services with one ServiceProfessionType that will requested, and 1 ServiceProfessionType
+            // that is different and will not be counted in theresult count
+            var kernel = InitiateLiveDependencies();
+
+            // Service that will be inserted multipe time
+            var serviceController = kernel.Get<ServiceController>();
+            string name = "The Stone Chopper";
+            string description = "We make swrods so sharp and strong, they can chop stones";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string mobileNumber = "03770000000";
+            string serviceEmail = "stone@chopper1234567.com";
+            string uploaderEmail = "uploader@chopper1234567.com";
+            string serviceProfessionType = "Plumber";
+            string serviceEntityType = "Individual";
+
+            var createServiceCommand = new CreateServiceCommand(name, description, location, mobileNumber,
+                serviceEmail, uploaderEmail, serviceProfessionType, serviceEntityType, null,
+                null, null, null, null);
+
+            var serviceProfessionType2 = "Electrician";
+            var createServiceCommand2 = new CreateServiceCommand(name, description, location, mobileNumber,
+                serviceEmail, uploaderEmail, serviceProfessionType2, serviceEntityType, null,
+                null, null, null, null);
+            // Set the Current User's username(which is the same as his email), otherwise the request for posting a new service will fail
+            serviceController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
+            {
+                new ClaimsIdentity(new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, uploaderEmail)
+                })
+            });
+            // Save the Service multiple times so we have enough records to test
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            // Service with a different Profession
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand2));
+
+            // Get the count of the Services by the given profession.
+            var httpActionResult = serviceController.Get(serviceProfessionType: serviceProfessionType, getCount: true);
+            var recordsCount = ((OkNegotiatedContentResult<ServiceCountRepresentation>)httpActionResult).Content;
+            Assert.AreEqual(4, recordsCount.RecordCount);
+        }
+
+        // Checks the number of records fetched by Profession and location. Profession is different in the 
+        // used instances
+        [Test]
+        public void GetCountOfRecordsByProfessionAndLocationTest_ChecksIfNumberOfRecordsToUseForPaginationIsReturnedAsExpected_VerifiesByTheRetrievedValue()
+        {
+            // 4 Services with one profession and location that will be requested, and 1 service 
+            // with a different profession only(same location) and will not be counted in the result count
+            var kernel = InitiateLiveDependencies();
+
+            // Service that will be inserted multipe time
+            var serviceController = kernel.Get<ServiceController>();
+            string name = "The Stone Chopper";
+            string description = "We make swrods so sharp and strong, they can chop stones";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string mobileNumber = "03770000000";
+            string serviceEmail = "stone@chopper1234567.com";
+            string uploaderEmail = "uploader@chopper1234567.com";
+            string serviceProfessionType = "Plumber";
+            string serviceEntityType = "Individual";
+
+            var createServiceCommand = new CreateServiceCommand(name, description, location, mobileNumber,
+                serviceEmail, uploaderEmail, serviceProfessionType, serviceEntityType, null,
+                null, null, null, null);
+
+            var serviceProfessionType2 = "Electrician";
+            var createServiceCommand2 = new CreateServiceCommand(name, description, location, mobileNumber,
+                serviceEmail, uploaderEmail, serviceProfessionType2, serviceEntityType, null,
+                null, null, null, null);
+            // Set the Current User's username(which is the same as his email), otherwise the request for posting a new service will fail
+            serviceController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
+            {
+                new ClaimsIdentity(new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, uploaderEmail)
+                })
+            });
+            // Save the Service multiple times so we have enough records to test
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            // Service with a different Profession
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand2));
+
+            // Get the count of the Services by the given profession.
+            var httpActionResult = serviceController.Get(
+                serviceProfessionType: serviceProfessionType, location: location, getCount: true);
+            var recordsCount = ((OkNegotiatedContentResult<ServiceCountRepresentation>)httpActionResult).Content;
+            Assert.AreEqual(4, recordsCount.RecordCount);
+        }
+
+        // Checks the number of records fetched by Profession and location. Location is different in the 
+        // used instances
+        [Test]
+        public void GetCountOfRecordsByProfessionAndLocationTest2_ChecksIfNumberOfRecordsToUseForPaginationIsReturnedAsExpected_VerifiesByTheRetrievedValue()
+        {
+            // 4 Services with one profession and location that will be requested, and 1 service 
+            // with a different location only(same profession) and will not be counted in the result count
+            var kernel = InitiateLiveDependencies();
+
+            // Service that will be inserted multipe time
+            var serviceController = kernel.Get<ServiceController>();
+            string name = "The Stone Chopper";
+            string description = "We make swrods so sharp and strong, they can chop stones";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string mobileNumber = "03770000000";
+            string serviceEmail = "stone@chopper1234567.com";
+            string uploaderEmail = "uploader@chopper1234567.com";
+            string serviceProfessionType = "Plumber";
+            string serviceEntityType = "Individual";
+
+            var createServiceCommand = new CreateServiceCommand(name, description, location, mobileNumber,
+                serviceEmail, uploaderEmail, serviceProfessionType, serviceEntityType, null,
+                null, null, null, null);
+
+            var location2 = "Lahore, Pakistan";
+            var createServiceCommand2 = new CreateServiceCommand(name, description, location2, mobileNumber,
+                serviceEmail, uploaderEmail, serviceProfessionType, serviceEntityType, null,
+                null, null, null, null);
+            // Set the Current User's username(which is the same as his email), otherwise the request for posting a new service will fail
+            serviceController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
+            {
+                new ClaimsIdentity(new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, uploaderEmail)
+                })
+            });
+            // Save the Service multiple times so we have enough records to test
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            // Service with a different Profession
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand2));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand2));
+
+            // Get the count of the Services by the given profession.
+            var httpActionResult = serviceController.Get(
+                serviceProfessionType: serviceProfessionType, location: location, getCount: true);
+            var recordsCount = ((OkNegotiatedContentResult<ServiceCountRepresentation>)httpActionResult).Content;
+            Assert.AreEqual(3, recordsCount.RecordCount);
+        }
+
+        // Get the record count for all the services present in the database
+        [Test]
+        public void GetCountOfRecordsOfAllServicesTest_ChecksIfNumberOfRecordsToUseForPaginationIsReturnedAsExpected_VerifiesByTheRetrievedValue()
+        {
+            // 4 Services with one profession and location that will be requested, and 1 service 
+            // with a different location only(same profession)
+            var kernel = InitiateLiveDependencies();
+
+            // Service that will be inserted multipe time
+            var serviceController = kernel.Get<ServiceController>();
+            string name = "The Stone Chopper";
+            string description = "We make swrods so sharp and strong, they can chop stones";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string mobileNumber = "03770000000";
+            string serviceEmail = "stone@chopper1234567.com";
+            string uploaderEmail = "uploader@chopper1234567.com";
+            string serviceProfessionType = "Plumber";
+            string serviceEntityType = "Individual";
+
+            var createServiceCommand = new CreateServiceCommand(name, description, location, mobileNumber,
+                serviceEmail, uploaderEmail, serviceProfessionType, serviceEntityType, null,
+                null, null, null, null);
+
+            var location2 = "Lahore, Pakistan";
+            var createServiceCommand2 = new CreateServiceCommand(name, description, location2, mobileNumber,
+                serviceEmail, uploaderEmail, serviceProfessionType, serviceEntityType, null,
+                null, null, null, null);
+            // Set the Current User's username(which is the same as his email), otherwise the request for posting a new service will fail
+            serviceController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
+            {
+                new ClaimsIdentity(new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, uploaderEmail)
+                })
+            });
+            // Save the Service multiple times so we have enough records to test
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand));
+            // Service with a different Profession
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand2));
+            serviceController.Post(JsonConvert.SerializeObject(createServiceCommand2));
+
+            // Get the count of the Services by the given profession.
+            var httpActionResult = serviceController.Get(getCount: true);
+            var recordsCount = ((OkNegotiatedContentResult<ServiceCountRepresentation>)httpActionResult).Content;
+            Assert.AreEqual(5, recordsCount.RecordCount);
         }
     }
 }
