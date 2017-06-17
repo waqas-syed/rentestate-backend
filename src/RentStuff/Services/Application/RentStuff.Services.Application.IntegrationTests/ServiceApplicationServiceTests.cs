@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using Ninject;
 using NUnit.Framework;
 using RentStuff.Common;
@@ -83,6 +86,72 @@ namespace RentStuff.Services.Application.IntegrationTests
             Assert.AreEqual(twitterLink, serviceFullRepresentation.TwitterLink);
             Assert.AreEqual(instagramLink, serviceFullRepresentation.InstagramLink);
             Assert.AreEqual(websiteLink, serviceFullRepresentation.WebsiteLink);
+        }
+
+        // Add and Delete Image Test
+        [Test]
+        public void AddImageTest_VerifiesThatTheImageIsAddedToTheServiceAsExpected_VerifiesByThEDatabaseRetrieval()
+        {
+            // We create a separate Kernel for this test, because we will use Mock services for the Common 
+            // Module
+            var kernel = new StandardKernel();
+            kernel.Load<MockCommonNinjectModule>();
+            kernel.Load<ServicesPersistenceNinjectModule>();
+            kernel.Load<ServiceApplicationNinjectModule>();
+            var serviceAppicationService = kernel.Get<IServiceApplicationService>();
+            Assert.NotNull(serviceAppicationService);
+
+            string name = "The Stone Chopper";
+            string description = "We make swrods so sharp and strong, they can chop stones";
+            string location = "Pindora, Rawalpindi, Pakistan";
+            string mobileNumber = "00001000001";
+            string serviceEmail = "stone@chopper1234567.com";
+            string uploaderEmail = "uploader@chopper1234567.com";
+            string serviceProfessionType = "Plumber";
+            string serviceEntityType = "Individual";
+            DateTime? dateEstablished = DateTime.Now;
+            string facebookLink = "https://dummyfacebooklink-123456789-1.com";
+            string instagramLink = "https://dummyinstagramlink-123456789-1.com";
+            string twitterLink = "https://dummytwitterlink-123456789-1.com";
+            string websiteLink = "https://dummywebsitelink-123456789-1.com";
+
+            var createServiceCommand = new CreateServiceCommand(name, description, location, mobileNumber,
+                serviceEmail, uploaderEmail, serviceProfessionType, serviceEntityType, dateEstablished,
+                facebookLink, instagramLink, twitterLink, websiteLink);
+            Assert.IsNotNull(createServiceCommand);
+            var savedServiceId = serviceAppicationService.SaveNewService(createServiceCommand);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(savedServiceId));
+            // Get the image from the link, convert it to a Stream and pass it along to the method that adds
+            // an image
+            // Save Image # 1
+            var imageLink = "https://s-media-cache-ak0.pinimg.com/originals/bb/7b/6e/bb7b6eba3b48a348ee9ccc017b63da49.jpg";
+            var webClient = new WebClient();
+            byte[] imageBytes = webClient.DownloadData(imageLink);
+            Stream stream = new MemoryStream(imageBytes);
+            serviceAppicationService.AddSingleImageToService(savedServiceId, stream);
+            // Save Image # 2
+            var imageLink2 = "https://i.ytimg.com/vi/eNcSWhcz2sU/maxresdefault.jpg";
+            webClient = new WebClient();
+            imageBytes = webClient.DownloadData(imageLink2);
+            stream = new MemoryStream(imageBytes);
+            serviceAppicationService.AddSingleImageToService(savedServiceId, stream);
+            
+            // Retrieve the Service
+            var serviceFullRepresentation = serviceAppicationService.GetServiceById(savedServiceId);
+            Assert.IsNotNull(serviceFullRepresentation);
+            Assert.IsNotNull(serviceFullRepresentation.Images);
+            Assert.AreEqual(2, serviceFullRepresentation.Images.Count);
+
+            // Now delete the 1st image
+            serviceAppicationService.DeleteImagesFromService(savedServiceId, new List<string>()
+            {
+                serviceFullRepresentation.Images[0]
+            });
+            // Retrieve the Service and its images. The image count should now be 1
+            serviceFullRepresentation = serviceAppicationService.GetServiceById(savedServiceId);
+            Assert.IsNotNull(serviceFullRepresentation);
+            Assert.IsNotNull(serviceFullRepresentation.Images);
+            Assert.AreEqual(1, serviceFullRepresentation.Images.Count);
         }
 
         // Service Save Test while using only the mandatory fields and providing optional fields as null

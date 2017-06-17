@@ -16,7 +16,9 @@ namespace RentStuff.Property.Infrastructure.Persistence.NHibernate.Providers
         public static ISessionFactory GetSessionFactory()
         {
             // The connection string provided in the config file is encrypted. We need to decrypt it and 
-            // provide the original conenction string to the NHibernate connection
+            // provide the original connection string to the NHibernate connection. The decryption is done 
+            // entirely in the following Utitlity method present in the RentStuff.Common.Utility.StringCipher
+            // class
             var decipheredConnectionString = StringCipher.DecipheredConnectionString;
             // Create an NHibernate configuration by code and specify the properties
             global::NHibernate.Cfg.Configuration cfg = new global::NHibernate.Cfg.Configuration()
