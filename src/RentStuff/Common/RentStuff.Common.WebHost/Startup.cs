@@ -16,9 +16,16 @@ using Owin;
 using RentStuff.Common.NinjectModules;
 using RentStuff.Common.Utilities;
 using RentStuff.Common.WebHost.Providers;
+using RentStuff.Identity.Application.Ninject.Modules;
+using RentStuff.Identity.Infrastructure.Persistence.Ninject.Modules;
+using RentStuff.Identity.Infrastructure.Services.Ninject.Modules;
+using RentStuff.Identity.Ports.Adapter.Rest.Ninject.Modules;
 using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 using RentStuff.Property.Ports.Adapter.Rest.Ninject.Modules;
+using RentStuff.Services.Application.Ninject.Modules;
+using RentStuff.Services.Infrastructure.Persistence.Ninject.Modules;
+using RentStuff.Services.Ports.Adapter.Rest.Ninject.Modules;
 
 [assembly: OwinStartup(typeof(RentStuff.Common.WebHost.Startup))]
 namespace RentStuff.Common.WebHost
@@ -73,10 +80,23 @@ namespace RentStuff.Common.WebHost
         private static StandardKernel CreateKernel()
         {
             var kernel = new StandardKernel();
+            // Common
             kernel.Load<CommonNinjectModule>();
+            //Identity & Access
+            kernel.Load<IdentityAccessServicesNinjectModule>();
+            kernel.Load<IdentityAccessPersistenceNinjectModule>();
+            kernel.Load<IdentityAccessApplicationNinjectModule>();
+            kernel.Load<IdentityAccessPortsNinjectModule>();
+            // Property
             kernel.Load<PropertyPersistenceNinjectModule>();
             kernel.Load<PropertyApplicationNinjectModule>();
             kernel.Load<PropertyPortsNinjectModule>();
+            // Services
+            kernel.Load<ServicePersistenceNinjectModule>();
+            kernel.Load<ServiceApplicationNinjectModule>();
+            kernel.Load<ServicePortsNinjectModule>();
+
+            // Apply Ninject as the dependency resolver
             GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
             return kernel;
         }

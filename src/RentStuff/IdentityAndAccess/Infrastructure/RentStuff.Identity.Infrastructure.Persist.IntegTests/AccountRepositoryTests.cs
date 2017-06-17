@@ -36,7 +36,6 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
         private IKernel InitializeNinjectLiveDependencies()
         {
             var kernel = new StandardKernel();
-            kernel.Load<CommonNinjectModule>();
             kernel.Load<IdentityAccessPersistenceNinjectModule>();
             return kernel;
         }

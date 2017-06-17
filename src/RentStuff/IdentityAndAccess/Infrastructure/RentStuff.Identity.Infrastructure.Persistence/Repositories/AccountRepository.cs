@@ -2,6 +2,8 @@
 using System.Data.Common;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using NLog;
+using RentStuff.Common.Utilities;
 using RentStuff.Identity.Infrastructure.Services.Hashers;
 using RentStuff.Identity.Infrastructure.Services.Identity;
 using RentStuff.Identity.Infrastructure.Services.PasswordReset;
@@ -11,19 +13,35 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 {
     public class AccountRepository : IAccountRepository, IDisposable
     {
-        private DbConnection _dbConnection;
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
         private AuthContext _ctx;
 
         private UserManager<CustomIdentityUser> _userManager;
         
         public AccountRepository()
         {
-            _dbConnection = EfConnectionDecipherService.GetEntityFrameDecipheredString();
-            _ctx = new AuthContext(_dbConnection, true);       
+            var dbConnection = CreateDbConnection();
+            _ctx = new AuthContext(dbConnection, true);       
             _userManager = new UserManager<CustomIdentityUser>(new UserStore<CustomIdentityUser>(_ctx));
             _userManager.UserValidator = new CustomUserValidator<CustomIdentityUser>(_userManager);
             _userManager.PasswordHasher = new CustomPasswordHasher();
             _userManager.UserTokenProvider = new UserTokenProviderService();
+        }
+
+        /// <summary>
+        /// Creates the DbConnection required for the AuthContext
+        /// </summary>
+        /// <returns></returns>
+        public DbConnection CreateDbConnection()
+        {
+            var connection = DbProviderFactories.GetFactory("MySql.Data.MySqlClient").CreateConnection();
+            if (connection == null)
+            {
+                _logger.Error("Could not create connection to DB for Entity Framework.");
+                throw new NullReferenceException("Could not create DB connection for Entity Framework");
+            }
+            connection.ConnectionString = StringCipher.DecipheredConnectionString;
+            return connection;
         }
 
         public IdentityResult RegisterUser(string name, string email, string password)
@@ -99,7 +117,6 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 
         public void Dispose()
         {
-            _dbConnection.Dispose();
             _ctx.Dispose();
             _userManager.Dispose();
         }

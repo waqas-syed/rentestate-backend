@@ -15,7 +15,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Resources
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private IAccountApplicationService _accountApplicationService;
-
+        
         public AccountController(IAccountApplicationService accountApplicationService)
         {
             _accountApplicationService = accountApplicationService;

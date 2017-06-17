@@ -9,7 +9,7 @@ using RentStuff.Services.Infrastructure.Persistence.Repositories;
 
 namespace RentStuff.Services.Infrastructure.Persistence.Ninject.Modules
 {
-    public class ServicesPersistenceNinjectModule : NinjectModule
+    public class ServicePersistenceNinjectModule : NinjectModule
     {
         public override void Load()
         {

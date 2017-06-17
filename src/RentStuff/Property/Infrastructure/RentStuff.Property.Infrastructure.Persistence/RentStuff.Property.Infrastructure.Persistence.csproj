@@ -66,7 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NHibernate\Providers\NHibernateSessionFactoryProvider.cs" />
+    <Compile Include="NHibernate\Wrappers\NHibernateSessionFactoryProvider.cs" />
     <Compile Include="NHibernate\Wrappers\INhibernateSessionWrapper.cs" />
     <Compile Include="NHibernate\Wrappers\NHibernateSessionWrapper.cs" />
     <Compile Include="Ninject\Modules\PropertyPersistenceNinjectModule.cs" />
@@ -102,6 +102,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NHibernate\Providers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

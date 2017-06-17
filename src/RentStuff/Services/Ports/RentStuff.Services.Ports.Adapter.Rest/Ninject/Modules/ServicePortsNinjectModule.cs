@@ -11,7 +11,7 @@ namespace RentStuff.Services.Ports.Adapter.Rest.Ninject.Modules
     /// <summary>
     /// Ninject DI provider for the Services.Ports layer
     /// </summary>
-    public class ServicesPortsNinjectModule : NinjectModule
+    public class ServicePortsNinjectModule : NinjectModule
     {
         /// <summary>Loads the module into the kernel.</summary>
         public override void Load()

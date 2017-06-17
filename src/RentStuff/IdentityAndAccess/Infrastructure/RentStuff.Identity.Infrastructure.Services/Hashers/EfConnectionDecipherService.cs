@@ -17,18 +17,6 @@ namespace RentStuff.Identity.Infrastructure.Services.Hashers
     /// </summary>
     public class EfConnectionDecipherService
     {
-        private static Logger _logger = LogManager.GetCurrentClassLogger();
         
-        public static DbConnection GetEntityFrameDecipheredString()
-        {
-            var connection = DbProviderFactories.GetFactory("MySql.Data.MySqlClient").CreateConnection();
-            if (connection == null)
-            {
-                _logger.Error("Could not create connection to DB for Entity Framework.");
-                throw new NullReferenceException("Could not create DB connection for Entity Framework");
-            }
-            connection.ConnectionString = StringCipher.DecipheredConnectionString;
-            return connection;
-        }
     }
 }

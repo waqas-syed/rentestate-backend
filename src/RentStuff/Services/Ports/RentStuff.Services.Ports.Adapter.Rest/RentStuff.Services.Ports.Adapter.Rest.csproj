@@ -60,7 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Ninject\Modules\ServicesPortsNinjectModule.cs" />
+    <Compile Include="Ninject\Modules\ServicePortsNinjectModule.cs" />
     <Compile Include="Resources\ServiceController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

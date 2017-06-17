@@ -50,10 +50,10 @@ namespace RentStuff.Services.Ports.IntegrationTests
         private IKernel InitiateLiveDependencies()
         {
              var kernel = new StandardKernel();
-            kernel.Load<ServicesPersistenceNinjectModule>();
+            kernel.Load<ServicePersistenceNinjectModule>();
             kernel.Load<CommonNinjectModule>();
             kernel.Load<ServiceApplicationNinjectModule>();
-            kernel.Load<ServicesPortsNinjectModule>();
+            kernel.Load<ServicePortsNinjectModule>();
 
             return kernel;
         }

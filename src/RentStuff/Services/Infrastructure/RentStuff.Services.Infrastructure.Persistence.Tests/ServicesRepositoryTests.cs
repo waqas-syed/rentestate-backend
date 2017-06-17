@@ -29,7 +29,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             //NhConnectionDecipherService.SetupDecipheredConnectionString();
             //_databaseUtility.Populate();
             _kernel = new StandardKernel();
-            _kernel.Load<ServicesPersistenceNinjectModule>();
+            _kernel.Load<ServicePersistenceNinjectModule>();
             _kernel.Load<CommonNinjectModule>();
         }
 

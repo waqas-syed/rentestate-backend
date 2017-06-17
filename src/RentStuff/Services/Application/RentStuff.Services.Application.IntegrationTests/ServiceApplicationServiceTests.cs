@@ -35,7 +35,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             //_databaseUtility.Populate();
             _kernel = new StandardKernel();
             _kernel.Load<CommonNinjectModule>();
-            _kernel.Load<ServicesPersistenceNinjectModule>();
+            _kernel.Load<ServicePersistenceNinjectModule>();
             _kernel.Load<ServiceApplicationNinjectModule>();
         }
 
@@ -97,7 +97,7 @@ namespace RentStuff.Services.Application.IntegrationTests
             // Module
             var kernel = new StandardKernel();
             kernel.Load<MockCommonNinjectModule>();
-            kernel.Load<ServicesPersistenceNinjectModule>();
+            kernel.Load<ServicePersistenceNinjectModule>();
             kernel.Load<ServiceApplicationNinjectModule>();
             var serviceAppicationService = kernel.Get<IServiceApplicationService>();
             Assert.NotNull(serviceAppicationService);
