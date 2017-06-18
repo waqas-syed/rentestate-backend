@@ -174,7 +174,7 @@ namespace RentStuff.Identity.Application.IntegrationTests
 
         [Test]
         [ExpectedException(typeof(ArgumentException))]
-        public async void RegisterUserFailTest_ChecksExceptionIsThrownWhenEmailIsNull_VerifiesByRaisedException()
+        public void RegisterUserFailTest_ChecksExceptionIsThrownWhenEmailIsNull_VerifiesByRaisedException()
         {
             var kernel = InitializeNinjectDepedencyInjection();
             IAccountApplicationService accountApplicationService = kernel.Get<AccountApplicationService>();

@@ -153,6 +153,10 @@ namespace RentStuff.Identity.Application.Account
         /// <param name="forgotPasswordCommand"></param>
         public void ForgotPassword(ForgotPasswordCommand forgotPasswordCommand)
         {
+            if (string.IsNullOrWhiteSpace(forgotPasswordCommand.Email))
+            {
+                throw new NullReferenceException("Email for ForgotPassword is empty");
+            }
             var user = _accountRepository.GetUserByEmail(forgotPasswordCommand.Email);
             if (user == null)
             {

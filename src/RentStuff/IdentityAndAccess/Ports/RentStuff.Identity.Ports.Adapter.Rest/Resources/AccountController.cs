@@ -121,17 +121,14 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Resources
             {
                 if (forgotPasswordCommand != null)
                 {
-                    if (!string.IsNullOrWhiteSpace(forgotPasswordCommand.Email))
+                    if (string.IsNullOrWhiteSpace(forgotPasswordCommand.Email))
                     {
-                        _logger.Info("Forgot-password process started. Email: {0}", forgotPasswordCommand.Email);
-                        _accountApplicationService.ForgotPassword(forgotPasswordCommand);
-                        return Ok();
+                        _logger.Error("ForgotPassword email is empty");
+                        return BadRequest("ForgotPassword email is empty");
                     }
-                    else
-                    {
-                        _logger.Error("No email provided for processing Forgot-Password request.");
-                        return BadRequest("No email provided");
-                    }
+                    _logger.Info("Forgot-password process started. Email: {0}", forgotPasswordCommand.Email);
+                    _accountApplicationService.ForgotPassword(forgotPasswordCommand);
+                    return Ok();
                 }
                 else
                 {
@@ -153,6 +150,10 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Resources
         {
             try
             {
+                if (resetPasswordCommand == null)
+                {
+                    return BadRequest("ResetpasswordCommand object is null");
+                }
                 _logger.Info("Reset-password process started.");
                 _accountApplicationService.ResetPassword(resetPasswordCommand);
                 return Ok();
@@ -160,7 +161,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Resources
             catch (Exception exception)
             {
                 _logger.Error("Error while resetting the password. {0}", exception.ToString());
-                return BadRequest(exception.ToString());
+                return InternalServerError();
             }
         }
 
@@ -180,8 +181,8 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Resources
                 }
                 else
                 {
-                    _logger.Error("No Email provided");
-                    return BadRequest("No email provided");
+                    _logger.Error("No Email provided to GetUser");
+                    return BadRequest("No email provided to GetUser");
                 }
             }
             catch (Exception exception)
