@@ -13,8 +13,8 @@ namespace RentStuff.Services.Infrastructure.Persistence.Ninject.Modules
     {
         public override void Load()
         {
-            Bind<IMappingProvider>().To<NhibernateMappingProvider>();
-            Bind<IServiceRepository>().To<ServiceRepository>();
+            Bind<IServiceMappingProvider>().To<ServiceMappingProvider>().InSingletonScope();
+            Bind<IServiceRepository>().To<ServiceRepository>().InTransientScope();
         }
     }
 }

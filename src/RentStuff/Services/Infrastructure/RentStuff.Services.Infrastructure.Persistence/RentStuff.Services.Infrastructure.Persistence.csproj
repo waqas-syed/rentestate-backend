@@ -65,7 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NHibernate\Providers\NhibernateMappingProvider.cs" />
+    <Compile Include="NHibernate\Providers\ServiceMappingProvider.cs" />
     <Compile Include="Ninject\Modules\ServicePersistenceNinjectModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ServiceRepository.cs" />

@@ -126,8 +126,9 @@
   <ItemGroup>
     <Compile Include="Domain.Model\Assertion.cs" />
     <Compile Include="Domain.Model\Entity.cs" />
-    <Compile Include="NHibernate\Providers\IMappingProvider.cs" />
+    <Compile Include="NHibernate\Providers\IPropertyMappingProvider.cs" />
     <Compile Include="NHibernate\Providers\INHibernateSessionFactoryProvider.cs" />
+    <Compile Include="NHibernate\Providers\IServiceMappingProvider.cs" />
     <Compile Include="NHibernate\Providers\NHibernateSessionFactoryProvider.cs" />
     <Compile Include="NHibernate\Wrappers\INhibernateSessionWrapper.cs" />
     <Compile Include="NHibernate\Wrappers\NHibernateSessionWrapper.cs" />

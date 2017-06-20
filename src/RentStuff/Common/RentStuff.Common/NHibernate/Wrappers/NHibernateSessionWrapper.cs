@@ -22,6 +22,16 @@ namespace RentStuff.Common.NHibernate.Wrappers
         /// <summary>
         /// The NHibernate Session
         /// </summary>
-        public ISession Session { get { return _session ?? (_session = _sessionFactory.OpenSession()); } }
+        public ISession Session
+        {
+            get
+            {
+                if (_session == null)
+                {
+                    _session = _sessionFactory.OpenSession();
+                }
+                return _session;
+            }
+        }
     }
 }

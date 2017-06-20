@@ -15,12 +15,49 @@ namespace RentStuff.Common.NHibernate.Providers
             get { return _sessionFactory ?? (_sessionFactory = GetSessionFactory()); }
         }
 
-        private static IMappingProvider _mappingProvider;
-        public NHibernateSessionFactoryProvider(IMappingProvider mappingProvider)
+        private static IPropertyMappingProvider _propertyMappingProvider;
+        private static IServiceMappingProvider _serviceMappingProvider;
+
+        /// <summary>
+        /// Accepts both the PropertyMappingProvider and ServiceMappingProvider. This way using Dependency
+        /// Injection it can call these implementations to add assemblies without having to reference their 
+        /// implementation projects, as it results in Circular Dependency
+        /// </summary>
+        /// <param name="mappingProvider"></param>
+        /// <param name="serviceMappingProvider"></param>
+        public NHibernateSessionFactoryProvider(IPropertyMappingProvider mappingProvider, 
+            IServiceMappingProvider serviceMappingProvider)
         {
-            _mappingProvider = mappingProvider;
+            _propertyMappingProvider = mappingProvider;
+            _serviceMappingProvider = serviceMappingProvider;
+        }
+
+        /// <summary>
+        /// Accepts Only the PropertyMappingProvider when Property BC's test cases are run. This way using
+        /// Dependency Injection, it can call these implementations to add assemblies without having to reference their 
+        /// implementation projects, as it results in Circular Dependency
+        /// </summary>
+        /// <param name="mappingProvider"></param>
+        public NHibernateSessionFactoryProvider(IPropertyMappingProvider mappingProvider)
+        {
+            _propertyMappingProvider = mappingProvider;
+        }
+
+        /// <summary>
+        /// Accepts Only the ServiceMappingProvider when Property BC's test cases are run. This way using
+        /// Dependency Injection, it can call these implementations to add assemblies without having to reference their 
+        /// implementation projects, as it results in Circular Dependency
+        /// </summary>
+        /// <param name="serviceMappingProvider"></param>
+        public NHibernateSessionFactoryProvider(IServiceMappingProvider serviceMappingProvider)
+        {
+            _serviceMappingProvider = serviceMappingProvider;
         }
         
+        /// <summary>
+        /// Creates and returns the Session Factory
+        /// </summary>
+        /// <returns></returns>
         private ISessionFactory GetSessionFactory()
         {
             // The connection string provided in the config file is encrypted. We need to decrypt it and 
@@ -38,7 +75,18 @@ namespace RentStuff.Common.NHibernate.Providers
                     x.LogFormattedSql = true;
                 });
             
-            _mappingProvider.GetMappings(cfg);
+            // If the PropertyMapping Provider is implemented, then call the implementation to add the 
+            // NHibernate mapping assemblies to the Nhibernate configuration
+            if (_propertyMappingProvider != null)
+            {
+                _propertyMappingProvider.AddMappingAssemblies(cfg);
+            }
+            // Likewise if the PropertyMapping Provider is implemented, then call the implementation to add the 
+            // NHibernate mapping assemblies to the Nhibernate configuration
+            if (_serviceMappingProvider != null)
+            {
+                _serviceMappingProvider.AddMappingAssemblies(cfg);
+            }
             cfg.Configure();
             // Build the Session Factory using the Configuration
             return cfg.BuildSessionFactory();
@@ -56,11 +104,6 @@ namespace RentStuff.Common.NHibernate.Providers
             // DatabaseIntegration.IsolationLevel 
             // DatabaseIntegration.LogFormattedSql 
             // DatabaseIntegration.AutoCommentSql 
-        }
-
-        [Inject]
-        public static IMappingProvider MappingProvider { get;
-            set;
         }
     }
 }

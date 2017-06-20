@@ -13,12 +13,19 @@ using RentStuff.Services.Infrastructure.Persistence.Repositories;
 
 namespace RentStuff.Services.Infrastructure.Persistence.NHibernate.Providers
 {
-    public class NhibernateMappingProvider : IMappingProvider
+    /// <summary>
+    /// Implementation of the IServiceMappingProvider. This class adds the assemblies that contain the 
+    /// Domain model's Nhibernate mapping in the Service Bounded Context
+    /// </summary>
+    public class ServiceMappingProvider : IServiceMappingProvider
     {
-        public void GetMappings(Configuration configuration)
+        /// <summary>
+        /// The implementation of this method adds the NHibernate mapping assemblies to the given configuration
+        /// </summary>
+        /// <param name="configuration"></param>
+        public void AddMappingAssemblies(Configuration configuration)
         {
             configuration.AddAssembly(typeof(Service).Assembly);
-            configuration.AddAssembly(typeof(ServiceRepository).Assembly);
         }
     }
 }
