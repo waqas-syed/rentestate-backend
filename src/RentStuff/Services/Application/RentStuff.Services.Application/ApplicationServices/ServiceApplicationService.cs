@@ -465,7 +465,7 @@ namespace RentStuff.Services.Application.ApplicationServices
             List<ReviewRepresentation> reviewRepresentationList = new List<ReviewRepresentation>();
             foreach (var review in service.Reviews)
             {
-                reviewRepresentationList.Add(new ReviewRepresentation(review.Authorname, review.AuthorEmail,
+                reviewRepresentationList.Add(new ReviewRepresentation(review.AuthorName, review.AuthorEmail,
                     review.ReviewDescription, review.Service.Id));
             }
             return new ServiceFullRepresentation(service.Id, service.Name, service.Description,

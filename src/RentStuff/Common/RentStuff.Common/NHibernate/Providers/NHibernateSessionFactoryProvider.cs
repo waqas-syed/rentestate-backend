@@ -1,19 +1,27 @@
 ﻿using NHibernate;
 using NHibernate.Cfg;
-using RentStuff.Common;
+using NHibernate.Dialect;
+using NHibernate.Driver;
+using Ninject;
 using RentStuff.Common.Utilities;
 
-namespace RentStuff.Property.Infrastructure.Persistence.NHibernate.Providers
+namespace RentStuff.Common.NHibernate.Providers
 {
-    public class NHibernateSessionFactoryProvider
+    public class NHibernateSessionFactoryProvider : INHibernateSessionFactoryProvider
     {
-        private static ISessionFactory _sessionFactory;
-        public static ISessionFactory SessionFactory
+        private ISessionFactory _sessionFactory;
+        public ISessionFactory SessionFactory
         {
             get { return _sessionFactory ?? (_sessionFactory = GetSessionFactory()); }
         }
+
+        private static IMappingProvider _mappingProvider;
+        public NHibernateSessionFactoryProvider(IMappingProvider mappingProvider)
+        {
+            _mappingProvider = mappingProvider;
+        }
         
-        public static ISessionFactory GetSessionFactory()
+        private ISessionFactory GetSessionFactory()
         {
             // The connection string provided in the config file is encrypted. We need to decrypt it and 
             // provide the original connection string to the NHibernate connection. The decryption is done 
@@ -25,9 +33,12 @@ namespace RentStuff.Property.Infrastructure.Persistence.NHibernate.Providers
                 .DataBaseIntegration(x =>
                 {
                     x.ConnectionString = decipheredConnectionString;
+                    x.Dialect<MySQL5Dialect>();
+                    x.Driver<MySqlDataDriver>();
+                    x.LogFormattedSql = true;
                 });
             
-            // Configure NHibernate
+            _mappingProvider.GetMappings(cfg);
             cfg.Configure();
             // Build the Session Factory using the Configuration
             return cfg.BuildSessionFactory();
@@ -45,6 +56,11 @@ namespace RentStuff.Property.Infrastructure.Persistence.NHibernate.Providers
             // DatabaseIntegration.IsolationLevel 
             // DatabaseIntegration.LogFormattedSql 
             // DatabaseIntegration.AutoCommentSql 
+        }
+
+        [Inject]
+        public static IMappingProvider MappingProvider { get;
+            set;
         }
     }
 }

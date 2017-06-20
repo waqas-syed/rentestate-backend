@@ -1,6 +1,6 @@
 ﻿using NHibernate;
 
-namespace RentStuff.Services.Infrastructure.Persistence.NHibernate.Wrappers
+namespace RentStuff.Common.NHibernate.Wrappers
 {
     /// <summary>
     /// NhibernateSessionWrapper insterface

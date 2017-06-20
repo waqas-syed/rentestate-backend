@@ -10,7 +10,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
     /// </summary>
     public class Service
     {
-        private readonly string _id = Guid.NewGuid().ToString();
+        private string _id = Guid.NewGuid().ToString();
         private string _name;
         private string _description;
         private string _location;
@@ -133,6 +133,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual string Id
         {
             get { return _id; }
+            private set { _id = value; }
         }
 
         /// <summary>
@@ -289,6 +290,8 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         public virtual ServiceEntityType ServiceEntityType
         {
             get { return _serviceEntityType; }
+            // Setter required for Nhibernate to work. Oh dear!
+            private set { _serviceEntityType = value; }
         }
 
         /// <summary>
@@ -406,7 +409,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// Reviews of this service by users
         /// </summary>
-        public virtual IList<Review> Reviews { get; }
+        public virtual IList<Review> Reviews { get; private set; }
 
         /// <summary>
         /// Add an image to this service
@@ -433,7 +436,7 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
         /// <summary>
         /// List of image identifiers related to this Service
         /// </summary>
-        public virtual IList<string> Images { get { return _images; } }
+        public virtual IList<string> Images { get { return _images; }private set { _images = value; } }
         
         /// <summary>
         /// Instance builder for the Service class

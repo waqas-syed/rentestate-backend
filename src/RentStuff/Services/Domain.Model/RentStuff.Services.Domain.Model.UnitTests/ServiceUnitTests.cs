@@ -414,13 +414,13 @@ namespace RentStuff.Services.Domain.Model.UnitTests
             Assert.AreEqual(2, service.Reviews.Count);
 
             // First review
-            Assert.AreEqual(authorName, service.Reviews[0].Authorname);
-            Assert.AreEqual(authorName, service.Reviews[0].Authorname);
+            Assert.AreEqual(authorName, service.Reviews[0].AuthorName);
+            Assert.AreEqual(authorName, service.Reviews[0].AuthorName);
             Assert.AreEqual(reviewDescription, service.Reviews[0].ReviewDescription);
 
             // Second review
-            Assert.AreEqual(authorName2, service.Reviews[1].Authorname);
-            Assert.AreEqual(authorName2, service.Reviews[1].Authorname);
+            Assert.AreEqual(authorName2, service.Reviews[1].AuthorName);
+            Assert.AreEqual(authorName2, service.Reviews[1].AuthorName);
             Assert.AreEqual(reviewDescription2, service.Reviews[1].ReviewDescription);
         }
         

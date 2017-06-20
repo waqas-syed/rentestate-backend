@@ -2,12 +2,12 @@
 <hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
   <session-factory name="NHibernateSessionFactory">
     <!--The Connection String isp rovided in code where the NHibernate SessionFactory is created-->
-    <!--<property name="connection.connection_string"></property>-->
+    <!--<property name="connection.connection_string"></property>
     <property name="dialect">NHibernate.Dialect.MySQL5Dialect</property>
     <property name="connection.driver_class">NHibernate.Driver.MySqlDataDriver</property>
-    <property name="show_sql">true</property>
+    <property name="show_sql">true</property>-->
 
-    <mapping assembly="RentStuff.Property.Infrastructure.Persistence"/>
+    <!--<mapping assembly="RentStuff.Property.Infrastructure.Persistence"/>-->
     
   </session-factory>
 </hibernate-configuration>

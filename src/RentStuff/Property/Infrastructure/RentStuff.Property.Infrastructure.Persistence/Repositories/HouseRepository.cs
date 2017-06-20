@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using NHibernate;
+using RentStuff.Common.NHibernate.Wrappers;
 using RentStuff.Property.Domain.Model.HouseAggregate;
-using RentStuff.Property.Infrastructure.Persistence.NHibernate.Wrappers;
 
 //using Spring.Transaction;
 //using Spring.Transaction.Interceptor;

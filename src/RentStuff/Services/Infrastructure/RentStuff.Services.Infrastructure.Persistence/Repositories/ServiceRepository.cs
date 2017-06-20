@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using RentStuff.Common.NHibernate.Wrappers;
 using RentStuff.Services.Domain.Model.ServiceAggregate;
-using RentStuff.Services.Infrastructure.Persistence.NHibernate.Wrappers;
 
 namespace RentStuff.Services.Infrastructure.Persistence.Repositories
 {

@@ -31,6 +31,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             _kernel = new StandardKernel();
             _kernel.Load<ServicePersistenceNinjectModule>();
             _kernel.Load<CommonNinjectModule>();
+            
         }
 
         [TearDown]
@@ -122,7 +123,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Check the Reviews
             Assert.IsNotNull(retrievedService.Reviews);
             Assert.AreEqual(1, retrievedService.Reviews.Count);
-            Assert.AreEqual(authorName, retrievedService.Reviews[0].Authorname);
+            Assert.AreEqual(authorName, retrievedService.Reviews[0].AuthorName);
             Assert.AreEqual(authorEmail, retrievedService.Reviews[0].AuthorEmail);
             Assert.AreEqual(reviewDescription, retrievedService.Reviews[0].ReviewDescription);
             Assert.AreEqual(service, retrievedService.Reviews[0].Service);
@@ -558,7 +559,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Check the Reviews of House no 1
             Assert.IsNotNull(retrievedService.Reviews);
             Assert.AreEqual(1, retrievedService.Reviews.Count);
-            Assert.AreEqual(reviewAuthorName, retrievedService.Reviews[0].Authorname);
+            Assert.AreEqual(reviewAuthorName, retrievedService.Reviews[0].AuthorName);
             Assert.AreEqual(reviewAuthorEmail, retrievedService.Reviews[0].AuthorEmail);
             Assert.AreEqual(reviewDescription, retrievedService.Reviews[0].ReviewDescription);
             Assert.AreEqual(service, retrievedService.Reviews[0].Service);
@@ -581,7 +582,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Check the Reviews of House no 3
             Assert.IsNotNull(retrievedService.Reviews);
             Assert.AreEqual(1, retrievedService.Reviews.Count);
-            Assert.AreEqual(reviewAuthorName3, retrievedService.Reviews[0].Authorname);
+            Assert.AreEqual(reviewAuthorName3, retrievedService.Reviews[0].AuthorName);
             Assert.AreEqual(reviewAuthorEmail3, retrievedService.Reviews[0].AuthorEmail);
             Assert.AreEqual(reviewDescription3, retrievedService.Reviews[0].ReviewDescription);
             Assert.AreEqual(service3, retrievedService.Reviews[0].Service);
@@ -762,7 +763,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Check the Reviews of House no 1
             Assert.IsNotNull(retrievedService.Reviews);
             Assert.AreEqual(1, retrievedService.Reviews.Count);
-            Assert.AreEqual(reviewAuthorName, retrievedService.Reviews[0].Authorname);
+            Assert.AreEqual(reviewAuthorName, retrievedService.Reviews[0].AuthorName);
             Assert.AreEqual(reviewAuthorEmail, retrievedService.Reviews[0].AuthorEmail);
             Assert.AreEqual(reviewDescription, retrievedService.Reviews[0].ReviewDescription);
             Assert.AreEqual(service, retrievedService.Reviews[0].Service);
@@ -812,7 +813,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Check the Reviews of House no 3
             Assert.IsNotNull(retrievedService.Reviews);
             Assert.AreEqual(1, retrievedService.Reviews.Count);
-            Assert.AreEqual(reviewAuthorName3, retrievedService.Reviews[0].Authorname);
+            Assert.AreEqual(reviewAuthorName3, retrievedService.Reviews[0].AuthorName);
             Assert.AreEqual(reviewAuthorEmail3, retrievedService.Reviews[0].AuthorEmail);
             Assert.AreEqual(reviewDescription3, retrievedService.Reviews[0].ReviewDescription);
             Assert.AreEqual(service3, retrievedService.Reviews[0].Service);
@@ -1021,7 +1022,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Check the Reviews of House no 4
             Assert.IsNotNull(retrievedService.Reviews);
             Assert.AreEqual(1, retrievedService.Reviews.Count);
-            Assert.AreEqual(reviewAuthorName4, retrievedService.Reviews[0].Authorname);
+            Assert.AreEqual(reviewAuthorName4, retrievedService.Reviews[0].AuthorName);
             Assert.AreEqual(reviewAuthorEmail4, retrievedService.Reviews[0].AuthorEmail);
             Assert.AreEqual(reviewDescription4, retrievedService.Reviews[0].ReviewDescription);
             Assert.AreEqual(service4, retrievedService.Reviews[0].Service);
@@ -1240,7 +1241,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Check the Reviews of House no 2
             Assert.IsNotNull(retrievedService.Reviews);
             Assert.AreEqual(1, retrievedService.Reviews.Count);
-            Assert.AreEqual(reviewAuthorName2, retrievedService.Reviews[0].Authorname);
+            Assert.AreEqual(reviewAuthorName2, retrievedService.Reviews[0].AuthorName);
             Assert.AreEqual(reviewAuthorEmail2, retrievedService.Reviews[0].AuthorEmail);
             Assert.AreEqual(reviewDescription2, retrievedService.Reviews[0].ReviewDescription);
             Assert.AreEqual(service2, retrievedService.Reviews[0].Service);
@@ -1371,7 +1372,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Check the Reviews of Service no 1
             Assert.IsNotNull(retrievedService.Reviews);
             Assert.AreEqual(1, retrievedService.Reviews.Count);
-            Assert.AreEqual(reviewAuthorName, retrievedService.Reviews[0].Authorname);
+            Assert.AreEqual(reviewAuthorName, retrievedService.Reviews[0].AuthorName);
             Assert.AreEqual(reviewAuthorEmail, retrievedService.Reviews[0].AuthorEmail);
             Assert.AreEqual(reviewDescription, retrievedService.Reviews[0].ReviewDescription);
             Assert.AreEqual(service, retrievedService.Reviews[0].Service);
@@ -1394,7 +1395,7 @@ namespace RentStuff.Services.Infrastructure.Persistence.Tests
             // Check the Reviews of Service no 2
             Assert.IsNotNull(retrievedService2.Reviews);
             Assert.AreEqual(1, retrievedService2.Reviews.Count);
-            Assert.AreEqual(reviewAuthorName2, retrievedService2.Reviews[0].Authorname);
+            Assert.AreEqual(reviewAuthorName2, retrievedService2.Reviews[0].AuthorName);
             Assert.AreEqual(reviewAuthorEmail2, retrievedService2.Reviews[0].AuthorEmail);
             Assert.AreEqual(reviewDescription2, retrievedService2.Reviews[0].ReviewDescription);
             Assert.AreEqual(service2, retrievedService2.Reviews[0].Service);
