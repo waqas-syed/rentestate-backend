@@ -431,7 +431,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdate(house4);
 
             // Saving House # 5: Should NOT be in the search results, outside bounds of search location
-            string area5 = "Saddar, Rawalpindi, Punjab, Pakistan";
+            string area5 = "Khajut, Pakistan";
             var coordinatesFromAddress5 = geocodingService.GetCoordinatesFromAddress(area5);
             string title5 = "Title # 5";
             string description5 = "It was a Hobbit Hole 5. Which means it had good food and a warm hearth.";
@@ -821,7 +821,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdate(house4);
 
             // Saving House # 5: Should NOT be in the search results
-            string area5 = "Saddar, Rawalpindi, Punjab, Pakistan";
+            string area5 = "Khajut, Pakistan";
             var coordinatesFromAddress5 = geocodingService.GetCoordinatesFromAddress(area5);
             string title5 = "Title # 5";
             string email5 = "special2@spsp123456-5.com";

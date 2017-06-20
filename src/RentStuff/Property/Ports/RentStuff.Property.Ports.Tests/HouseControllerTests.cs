@@ -419,7 +419,7 @@ namespace RentStuff.Property.Ports.Tests
                 bool garageAvailable4 = true;
                 bool smokingAllowed4 = true;
                 string propertyType4 = PropertyType.House.ToString();
-                string area4 = "Saddar, Rawalpindi, Punjab, Pakistan";
+                string area4 = "Kahuta, Pakistan";
                 string dimensionType4 = DimensionType.Kanal.ToString();
                 string dimensionString4 = "4";
                 decimal dimensionDecimal4 = 0;
@@ -879,7 +879,7 @@ namespace RentStuff.Property.Ports.Tests
             bool garageAvailable3 = true;
             bool smokingAllowed3 = true;
             string propertyType3 = PropertyType.Apartment.ToString();
-            string area3 = "Saddar, Rawalpindi, Pakistan";
+            string area3 = "Kahuta, Pakistan";
             string dimensionType3 = DimensionType.Kanal.ToString();
             string dimensionString3 = "3";
             decimal dimensionDecimal3 = 0;

@@ -189,11 +189,14 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         public Tuple<int, int> GetRecordCountByProfessionType(string serviceProfessionType)
         {
-            return new Tuple<int, int>(_sessionWrapper.Session
-                                        .QueryOver<Service>()
-                                        .Where(x => x.ServiceProfessionType == serviceProfessionType)
-                                        .RowCount(),
-                                        _resultsPerPage);
+            using (_sessionWrapper.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return new Tuple<int, int>(_sessionWrapper.Session
+                                            .QueryOver<Service>()
+                                            .Where(x => x.ServiceProfessionType == serviceProfessionType)
+                                            .RowCount(),
+                                            _resultsPerPage);
+            }
         }
 
         /// <summary>
@@ -204,13 +207,17 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         public Tuple<int, int> GetRecordCountByLocation(decimal latitude, decimal longitude)
         {
-            return new Tuple<int, int>(
-                        _sessionWrapper.Session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius ORDER BY distance")
+            using (_sessionWrapper.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return new Tuple<int, int>(
+                         _sessionWrapper.Session.CreateSQLQuery(
+                            "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius ORDER BY distance")
                         .AddEntity(typeof(Service))
                         .SetParameter("inputLatitude", latitude)
                         .SetParameter("inputLongitude", longitude)
                         .SetParameter("radius", _radius)
                         .List().Count, _resultsPerPage);
+            }
         }
 
         /// <summary>
@@ -219,11 +226,14 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         public Tuple<int, int> GetRecordCountByEmail(string uploaderEmail)
         {
-            return new Tuple<int, int>(_sessionWrapper.Session
-                                        .QueryOver<Service>()
-                                        .Where(x => x.UploaderEmail == uploaderEmail)
-                                        .RowCount(),
-                                        _resultsPerPage);
+            using (_sessionWrapper.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return new Tuple<int, int>(_sessionWrapper.Session
+                                            .QueryOver<Service>()
+                                            .Where(x => x.UploaderEmail == uploaderEmail)
+                                            .RowCount(),
+                                            _resultsPerPage);
+            }
         }
 
         /// <summary>
@@ -235,15 +245,19 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         public Tuple<int, int> GetRecordCountByLocationAndProfessionType(decimal latitude, decimal longitude, string serviceProfessionType)
         {
-            return new Tuple<int, int>(
-                _sessionWrapper.Session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius AND service_profession_type=:serviceProfessionType ORDER BY distance")
+            using (_sessionWrapper.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return new Tuple<int, int>(
+                        _sessionWrapper.Session.CreateSQLQuery(
+                        "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM service HAVING distance < :radius AND service_profession_type=:serviceProfessionType ORDER BY distance")
                         .AddEntity(typeof(Service))
                         .SetParameter("inputLatitude", latitude)
                         .SetParameter("inputLongitude", longitude)
                         .SetParameter("serviceProfessionType", serviceProfessionType)
                         .SetParameter("radius", _radius)
-                        .List().Count, 
-                        _resultsPerPage);
+                        .List().Count,
+                    _resultsPerPage);
+            }
         }
 
         /// <summary>
@@ -252,7 +266,13 @@ namespace RentStuff.Services.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         public Tuple<int, int> GetTotalRecordCount()
         {
-            return new Tuple<int, int>(_sessionWrapper.Session.QueryOver<Service>().RowCount(), _resultsPerPage);
+            using (_sessionWrapper.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return new Tuple<int, int>(_sessionWrapper.Session
+                                            .QueryOver<Service>()
+                                            .RowCount(),
+                                            _resultsPerPage);
+            }
         }
     }
 }

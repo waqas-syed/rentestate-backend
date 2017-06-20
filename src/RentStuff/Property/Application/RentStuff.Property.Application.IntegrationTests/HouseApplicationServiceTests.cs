@@ -391,7 +391,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             int numberOfKitchens2 = 2;
             string houseNo2 = "747-2";
             string streetNo2 = "13-2";
-            string area2 = "Saddar, Rawalpindi, Pakistan";
+            string area2 = "Kahuta, Pakistan";
             string title2 = "Bellagio";
             string dimensionType2 = "Kanal";
             string dimensionString2 = "50";
@@ -604,7 +604,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Tuple<decimal, decimal> coordinates = geocodingService.GetCoordinatesFromAddress(area);
             Assert.IsNotNull(coordinates);
 
-            area = "E-11, Islamabad, Pakistan";
+            area = "Kahuta, Pakistan";
             IList<HousePartialRepresentation> retreivedHouses = houseApplicationService.SearchHousesByArea(area);
             Assert.NotNull(retreivedHouses);
             Assert.AreEqual(0, retreivedHouses.Count);
