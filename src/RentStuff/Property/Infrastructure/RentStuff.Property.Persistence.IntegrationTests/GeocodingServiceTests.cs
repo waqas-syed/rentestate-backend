@@ -1,7 +1,7 @@
 ﻿using System;
 using Ninject;
 using NUnit.Framework;
-using RentStuff.Common.NinjectModules;
+using RentStuff.Common.Ninject.Modules;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 
 namespace RentStuff.Property.Persistence.IntegrationTests

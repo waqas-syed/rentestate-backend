@@ -1,6 +1,4 @@
-﻿
-using System;
-using FluentNHibernate.Automapping;
+﻿using System;
 
 namespace RentStuff.Services.Domain.Model.ServiceAggregate
 {

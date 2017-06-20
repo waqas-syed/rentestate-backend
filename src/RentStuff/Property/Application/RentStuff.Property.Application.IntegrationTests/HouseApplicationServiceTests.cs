@@ -4,7 +4,7 @@ using System.Configuration;
 using Ninject;
 using NUnit.Framework;
 using RentStuff.Common;
-using RentStuff.Common.NinjectModules;
+using RentStuff.Common.Ninject.Modules;
 using RentStuff.Common.Utilities;
 using RentStuff.Property.Application.HouseServices;
 using RentStuff.Property.Application.HouseServices.Commands;

@@ -4,17 +4,17 @@ using Ninject.Modules;
 using Ninject.Web.Common;
 using RentStuff.Common.NHibernate.Providers;
 using RentStuff.Common.NHibernate.Wrappers;
-//using RentStuff.Common.NHibernate.Providers;
-//using RentStuff.Common.NHibernate.Wrappers;
 using RentStuff.Common.Services.GoogleStorageServices;
+using RentStuff.Common.Services.GoogleStorageServices.Mocks;
 using RentStuff.Common.Services.LocationServices;
+using RentStuff.Common.Services.LocationServices.Mocks;
 
-namespace RentStuff.Common.NinjectModules
+namespace RentStuff.Common.Ninject.Modules
 {
     /// <summary>
-    /// Module for declaring types for Ninject to prepare for Dependency Injection
+    /// Ninject module for loading the Mock dependenciess
     /// </summary>
-    public class CommonNinjectModule : NinjectModule
+    public class MockCommonNinjectModule : NinjectModule
     {
         /// <summary>Loads the module into the kernel.</summary>
         public override void Load()
@@ -23,8 +23,8 @@ namespace RentStuff.Common.NinjectModules
             Bind<ISessionFactory>().ToMethod(context => context.Kernel.Get<NHibernateSessionFactoryProvider>().SessionFactory).InSingletonScope();
             //Bind<ISessionFactory>().ToConstant(NHibernateSessionFactoryProvider.SessionFactory).InSingletonScope();
             Bind<INhibernateSessionWrapper>().To<NHibernateSessionWrapper>().InRequestScope();
-            Bind<IGeocodingService>().To<GeocodingService>().InTransientScope();
-            Bind<IPhotoStorageService>().To<PhotoStorageService>().InTransientScope();
+            Bind<IGeocodingService>().To<MockGeocodingService>().InTransientScope();
+            Bind<IPhotoStorageService>().To<MockPhotoStorageService>().InTransientScope();
         }
     }
 }

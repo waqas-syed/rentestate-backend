@@ -2,7 +2,6 @@
 using Microsoft.AspNet.Identity;
 using Ninject;
 using NUnit.Framework;
-using RentStuff.Common.NinjectModules;
 using RentStuff.Common.Utilities;
 using RentStuff.Identity.Infrastructure.Persistence.Ninject.Modules;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;

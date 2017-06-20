@@ -6,7 +6,7 @@ using Ninject;
 using NUnit.Framework;
 using RentStuff.Common;
 using RentStuff.Common.Domain.Model;
-using RentStuff.Common.NinjectModules;
+using RentStuff.Common.Ninject.Modules;
 using RentStuff.Common.Services.LocationServices;
 using RentStuff.Common.Utilities;
 using RentStuff.Services.Application.ApplicationServices;

@@ -91,8 +91,8 @@
       <HintPath>..\..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NHibernate.4.0.0.4000\lib\net40\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
@@ -132,7 +132,7 @@
     <Compile Include="NHibernate\Providers\NHibernateSessionFactoryProvider.cs" />
     <Compile Include="NHibernate\Wrappers\INhibernateSessionWrapper.cs" />
     <Compile Include="NHibernate\Wrappers\NHibernateSessionWrapper.cs" />
-    <Compile Include="NinjectModules\MockCommonNinjectModule.cs" />
+    <Compile Include="Ninject\Modules\MockCommonNinjectModule.cs" />
     <Compile Include="Services\LocationServices\IGeocodingService.cs" />
     <Compile Include="Services\GoogleStorageServices\IPhotoStorageService.cs" />
     <Compile Include="Services\GoogleStorageServices\PhotoStorageService.cs" />
@@ -141,7 +141,7 @@
     <Compile Include="Services\LocationServices\Mocks\MockGeocodingService.cs" />
     <Compile Include="Utilities\Constants.cs" />
     <Compile Include="Utilities\DatabaseUtility.cs" />
-    <Compile Include="NinjectModules\CommonNinjectModule.cs" />
+    <Compile Include="Ninject\Modules\CommonNinjectModule.cs" />
     <Compile Include="Utilities\StringCipher.cs" />
     <Compile Include="Utilities\ImageFurnace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using Ninject;
 using NUnit.Framework;
 using RentStuff.Common.Domain.Model;
-using RentStuff.Common.NinjectModules;
+using RentStuff.Common.Ninject.Modules;
 using RentStuff.Common.Utilities;
 using RentStuff.Services.Application.ApplicationServices.Commands;
 using RentStuff.Services.Application.ApplicationServices.Representations;

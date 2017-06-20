@@ -13,7 +13,7 @@ using Ninject.Web.WebApi;
 using Ninject.Web.WebApi.OwinHost;
 using NLog;
 using Owin;
-using RentStuff.Common.NinjectModules;
+using RentStuff.Common.Ninject.Modules;
 using RentStuff.Common.Utilities;
 using RentStuff.Common.WebHost.Providers;
 using RentStuff.Identity.Application.Ninject.Modules;

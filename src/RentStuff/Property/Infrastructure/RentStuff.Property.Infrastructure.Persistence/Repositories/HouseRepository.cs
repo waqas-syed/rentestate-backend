@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using NHibernate;
 using RentStuff.Common.NHibernate.Wrappers;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 
@@ -20,7 +19,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         // The radius in kilometers from the location that was searched. We search within this radius for results
         // The formula is given here: https://developers.google.com/maps/articles/phpsqlsearch_v3
         // http://stackoverflow.com/questions/9686309/list-of-surrounding-towns-within-a-given-radius
-        private readonly int _radius = 2;
+        private readonly int _radius = 10;
         private readonly int _resultsPerPage = 10;
         private INhibernateSessionWrapper _session;
 
@@ -57,7 +56,11 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
        // [Transaction(TransactionPropagation.Required, ReadOnly = false)]
         public void Delete(House house)
         {
-            _session.Session.Delete(house);
+            using (var transaction = _session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                _session.Session.Delete(house);
+                transaction.Commit();
+            }
         }
 
         /// <summary>
