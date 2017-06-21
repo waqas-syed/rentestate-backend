@@ -16,12 +16,12 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             "Mason/Mistry",
             "Maid",
             "Welder",
+			"Wall Painter",
             "Fire Safety Engineering"
         };
 
         private static readonly List<string> HouseDecorationServices = new List<string>()
         {
-            "Wall Painter",
             "Wall Grace Painter",
             "Wall Panel Installer",
             "Interior Designing",
@@ -34,19 +34,21 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             "Fridge Technician",
             "Electric Motor Technician",
             "Geyser Technician",
-            "Ac Technician"
+            "AC Technician"
         };
 
         private static readonly List<string> FestivityServices = new List<string>()
         {
             "Butcher/Qassai",
-            "Light Decoration"
+            "Light Decoration",
+			"Food Catering",
+            "Events Management",
+			"Flower Decoration"
         };
 
         private static readonly List<string> AcademicServices = new List<string>()
         {
-            "Home Tution",
-            "Tution Classes"
+            "Tution"
         };
 
         private static readonly List<string> VehicleServices = new List<string>()
@@ -57,12 +59,6 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
             "Car Denting/Painting",
             "Vehicle Body Parts",
             "Car Tow/Recovery"
-        };
-
-        private static readonly List<string> EventsAndCateringServices = new List<string>()
-        {
-            "Food Catering",
-            "Events Management"
         };
 
         private static readonly List<string> GoodsAndTransportServices = new List<string>()
