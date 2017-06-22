@@ -9,7 +9,7 @@ namespace RentStuff.Services.Application.ApplicationServices.Commands
     {
         /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
         public CreateServiceCommand(string name, string description, string location, string mobileNumber, 
-            string serviceEmail, string uploaderEmail, string serviceProfesionType, string serviceEntityType, 
+            string serviceEmail, string uploaderEmail, string serviceProfessionType, string serviceEntityType, 
             DateTime? dateEstablished, string facebookLink, string instagramLink, string twitterLink, string websiteLink)
         {
             Name = name;
@@ -18,7 +18,7 @@ namespace RentStuff.Services.Application.ApplicationServices.Commands
             MobileNumber = mobileNumber;
             ServiceEmail = serviceEmail;
             UploaderEmail = uploaderEmail;
-            ServiceProfesionType = serviceProfesionType;
+            ServiceProfessionType = serviceProfessionType;
             ServiceEntityType = serviceEntityType;
             DateEstablished = dateEstablished;
             FacebookLink = facebookLink;
@@ -33,7 +33,7 @@ namespace RentStuff.Services.Application.ApplicationServices.Commands
         public string MobileNumber { get; private set; }
         public string ServiceEmail { get; private set; }
         public string UploaderEmail { get; private set; }
-        public string ServiceProfesionType { get; private set; }
+        public string ServiceProfessionType { get; private set; }
         public string ServiceEntityType { get; private set; }
         public DateTime? DateEstablished { get; private set; }
         public string FacebookLink { get; private set; }

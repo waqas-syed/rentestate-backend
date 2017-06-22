@@ -126,7 +126,7 @@ namespace RentStuff.Services.Ports.Adapter.Rest.Resources
         public IHttpActionResult PostImageUpload()
         {
             bool imageUploaded = false;
-            String[] headerValues = (String[])Request.Headers.GetValues("HouseId");
+            String[] headerValues = (String[])Request.Headers.GetValues("serviceId");
             string serviceId = headerValues[0];
             var userEmail = User.Identity.Name;
             bool allowedToEditHouse = _serviceApplicationService.ServiceOwnershipCheck(serviceId, userEmail);

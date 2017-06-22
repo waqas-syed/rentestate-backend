@@ -61,7 +61,7 @@ namespace RentStuff.Services.Application.ApplicationServices
                 .PhoneNumber(createServiceCommand.MobileNumber)
                 .ServiceEmail(createServiceCommand.ServiceEmail)
                 .UploaderEmail(createServiceCommand.UploaderEmail)
-                .ServiceProfessionType(createServiceCommand.ServiceProfesionType)
+                .ServiceProfessionType(createServiceCommand.ServiceProfessionType)
                 .ServiceEntityType(createServiceCommand.ServiceEntityType)
                 .DateEstablished(createServiceCommand.DateEstablished)
                 .Latitude(coordinates.Item1)

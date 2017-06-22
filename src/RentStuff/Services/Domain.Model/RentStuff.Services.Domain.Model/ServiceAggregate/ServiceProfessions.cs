@@ -92,7 +92,6 @@ namespace RentStuff.Services.Domain.Model.ServiceAggregate
                 { "Festivity Services", FestivityServices.AsReadOnly() },
                 { "Academic Services", AcademicServices.AsReadOnly() },
                 { "Vehicle Services", VehicleServices.AsReadOnly() },
-                { "Events and Catering Services", EventsAndCateringServices.AsReadOnly() },
                 { "Goods and Transport Services", GoodsAndTransportServices.AsReadOnly() },
                 { "Media Services", MediaServices.AsReadOnly() },
                 { "Beautician Services", BeauticianServices.AsReadOnly() }

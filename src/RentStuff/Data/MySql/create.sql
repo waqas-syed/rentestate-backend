@@ -173,9 +173,9 @@ CREATE TABLE `AspNetUsers` (
 --
 
 CREATE TABLE `dimension` (
-  `id` varchar(45) NOT NULL,
-  `dimension_type` varchar(10) NOT NULL,
-  `string_value` varchar(10) DEFAULT NULL,
+  `id` varchar(100) NOT NULL,
+  `dimension_type` varchar(100) NOT NULL,
+  `string_value` varchar(100) DEFAULT NULL,
   `decimal_value` decimal(6,4) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -187,11 +187,11 @@ CREATE TABLE `dimension` (
 --
 
 CREATE TABLE `house` (
-  `id` varchar(45) NOT NULL,
+  `id` varchar(100) NOT NULL,
   `db_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `title` varchar(42) NOT NULL,
-  `description` varchar(200) DEFAULT NULL,
-  `owner_email` varchar(50) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `description` varchar(1500) DEFAULT NULL,
+  `owner_email` varchar(100) NOT NULL,
   `monthly_rent` bigint(20) NOT NULL,
   `number_of_bedrooms` int(11) NOT NULL,
   `number_of_kitchens` int(11) NOT NULL,
@@ -201,16 +201,16 @@ CREATE TABLE `house` (
   `cable_tv_available` tinyint(1) DEFAULT NULL,
   `garage_available` tinyint(1) DEFAULT NULL,
   `smoking_allowed` tinyint(1) DEFAULT NULL,
-  `property_type` varchar(50) DEFAULT NULL,
-  `gender_restriction` varchar(16) DEFAULT NULL,
-  `owner_phone_number` varchar(13) NOT NULL,
+  `property_type` varchar(100) DEFAULT NULL,
+  `gender_restriction` varchar(100) DEFAULT NULL,
+  `owner_phone_number` varchar(25) NOT NULL,
   `latitude` decimal(13,9) NOT NULL,
   `longitude` decimal(13,9) NOT NULL,
-  `house_no` varchar(40) DEFAULT NULL,
-  `street_no` varchar(10) DEFAULT NULL,
-  `area` varchar(72) DEFAULT NULL,
-  `dimension_id` varchar(45) DEFAULT NULL,  
-  `owner_name` varchar(22) NOT NULL,
+  `house_no` varchar(100) DEFAULT NULL,
+  `street_no` varchar(100) DEFAULT NULL,
+  `area` varchar(100) DEFAULT NULL,
+  `dimension_id` varchar(100) DEFAULT NULL,  
+  `owner_name` varchar(100) NOT NULL,
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
@@ -225,7 +225,7 @@ CREATE TABLE `house` (
 
 CREATE TABLE `houseimages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `house_id` varchar(45) NOT NULL,
+  `house_id` varchar(100) NOT NULL,
   `image_id` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
@@ -263,11 +263,11 @@ CREATE TABLE `ratings` (
 --
 
 CREATE TABLE `review` (
-  `id` varchar(60) NOT NULL,
+  `id` varchar(100) NOT NULL,
   `author_name` varchar(100) DEFAULT NULL,
   `author_email` varchar(100) DEFAULT NULL,
   `review_description` varchar(1000) DEFAULT NULL,
-  `service_id` varchar(60) DEFAULT NULL,
+  `service_id` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -277,19 +277,19 @@ CREATE TABLE `review` (
 --
 
 CREATE TABLE `service` (
-  `id` varchar(60) NOT NULL,
+  `id` varchar(100) NOT NULL,
   `db_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `description` varchar(1500) DEFAULT NULL,
   `location` varchar(100) NOT NULL,
-  `mobile_number` varchar(20) NOT NULL,
+  `mobile_number` varchar(25) NOT NULL,
   `service_email` varchar(100) DEFAULT NULL,
   `uploader_email` varchar(100) NOT NULL,
-  `service_entity_type` varchar(60) NOT NULL,
-  `service_profession_type` varchar(60) NOT NULL,
-  `secondary_mobile_number` varchar(20) DEFAULT NULL,
-  `landline_phone_number` varchar(20) DEFAULT NULL,
-  `fax` varchar(20) DEFAULT NULL,
+  `service_entity_type` varchar(100) NOT NULL,
+  `service_profession_type` varchar(100) NOT NULL,
+  `secondary_mobile_number` varchar(25) DEFAULT NULL,
+  `landline_phone_number` varchar(25) DEFAULT NULL,
+  `fax` varchar(150) DEFAULT NULL,
   `latitude` decimal(13,9) NOT NULL,
   `longitude` decimal(13,9) NOT NULL,
   `date_established` datetime DEFAULT NULL,
@@ -311,8 +311,8 @@ CREATE TABLE `service` (
 
 CREATE TABLE `serviceimages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `service_id` varchar(60) NOT NULL,
-  `image_id` varchar(60) NOT NULL,
+  `service_id` varchar(100) NOT NULL,
+  `image_id` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
