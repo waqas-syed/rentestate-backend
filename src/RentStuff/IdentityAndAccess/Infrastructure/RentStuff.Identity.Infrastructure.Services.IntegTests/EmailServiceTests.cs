@@ -3,7 +3,6 @@ using System.Net.Mail;
 using System.Threading;
 using NUnit.Framework;
 using RentStuff.Identity.Infrastructure.Services.Email;
-using Spring.Context.Support;
 
 namespace RentStuff.Identity.Infrastructure.Services.IntegTests
 {

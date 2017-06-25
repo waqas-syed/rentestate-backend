@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Security.Claims;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -8,15 +7,18 @@ using log4net.Appender;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using Newtonsoft.Json;
+using Ninject;
 using NUnit.Framework;
 using RentStuff.Common;
+using RentStuff.Common.Ninject.Modules;
+using RentStuff.Common.Utilities;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
+using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Domain.Model.HouseAggregate;
-using RentStuff.Property.Domain.Model.Services;
-using RentStuff.Property.Infrastructure.Services.DbDecipherServices;
+using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
+using RentStuff.Property.Ports.Adapter.Rest.Ninject.Modules;
 using RentStuff.Property.Ports.Adapter.Rest.Resources;
-using Spring.Context.Support;
 
 namespace RentStuff.Property.Ports.Tests
 {
@@ -27,16 +29,23 @@ namespace RentStuff.Property.Ports.Tests
         // that we are not exhausting resources by unknowingly running such tests
         private bool _runTests = true;
         private DatabaseUtility _databaseUtility;
+        private StandardKernel _kernel;
 
         [SetUp]
         public void Setup()
         {
             var connection = StringCipher.DecipheredConnectionString;
             _databaseUtility = new DatabaseUtility(connection);
-            _databaseUtility.Create();            
+            _databaseUtility.Create();
+
+            _kernel = new StandardKernel();
+            _kernel.Load<PropertyPersistenceNinjectModule>();
+            _kernel.Load<CommonNinjectModule>();
+            _kernel.Load<PropertyApplicationNinjectModule>();
+            _kernel.Load<PropertyPortsNinjectModule>();
             //_databaseUtility.Populate();
-            ShowNhibernateLogging();
-            NhConnectionDecipherService.SetupDecipheredConnectionString();
+            //ShowNhibernateLogging();
+            //NhConnectionDecipherService.SetupDecipheredConnectionString();
         }
 
         [TearDown]
@@ -62,7 +71,7 @@ namespace RentStuff.Property.Ports.Tests
         {
             if (_runTests)
             {
-                HouseController houseController = (HouseController) ContextRegistry.GetContext()["HouseController"];
+                HouseController houseController = _kernel.Get<HouseController>();
                 Assert.NotNull(houseController);
 
                 string title = "House For Rent";
@@ -83,7 +92,7 @@ namespace RentStuff.Property.Ports.Tests
                 bool cableTvAvailable = true;
                 bool garageAvailable = true;
                 bool smokingAllowed = true;
-                string propertyType = PropertyType.Apartment.ToString();
+                string propertyType = "Apartment";
                 string area = "Pindora, Rawalpindi, Pakistan";
                 //string area = "Pindora, Rawalpindi, Pakistan";
                 string dimensionType = DimensionType.Kanal.ToString();
@@ -139,7 +148,7 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house.GenderRestriction, retreivedHouse.GenderRestriction);
 
                 // Get the coordinates to verify we have stored the correct ones
-                IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+                RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
                 var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(area);
                 Assert.AreEqual(coordinatesFromAddress.Item1, retreivedHouse.Latitude);
                 Assert.AreEqual(coordinatesFromAddress.Item2, retreivedHouse.Longitude);
@@ -168,7 +177,7 @@ namespace RentStuff.Property.Ports.Tests
                 bool updatedCableTvAvailable = true;
                 bool updatedGarageAvailable = true;
                 bool updatedSmokingAllowed = true;
-                string updatedPropertyType = PropertyType.Apartment.ToString();
+                string updatedPropertyType = "Apartment";
                 string updatedArea = "Saddar, Rawalpindi, Pakistan";
                 //string area = "Pindora, Rawalpindi, Pakistan";
                 string updatedDimensionType = DimensionType.Kanal.ToString();
@@ -214,7 +223,7 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(updateHouseCommand.GenderRestriction, retreivedHouse.GenderRestriction);
 
                 // Get the coordinates to verify we have stored the correct ones
-                geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+                geocodingService = _kernel.Get< RentStuff.Common.Services.LocationServices.IGeocodingService> ();
                 coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(updatedArea);
                 Assert.AreEqual(coordinatesFromAddress.Item1, retreivedHouse.Latitude);
                 Assert.AreEqual(coordinatesFromAddress.Item2, retreivedHouse.Longitude);
@@ -256,7 +265,7 @@ namespace RentStuff.Property.Ports.Tests
             // searched while the other has a different property type
             if (_runTests)
             {
-                HouseController houseController = (HouseController)ContextRegistry.GetContext()["HouseController"];
+                HouseController houseController = _kernel.Get<HouseController>();
                 Assert.NotNull(houseController);
 
                 // Saving House # 1 - SET 1: Should appear in search results
@@ -278,7 +287,7 @@ namespace RentStuff.Property.Ports.Tests
                 bool cableTvAvailable = true;
                 bool garageAvailable = true;
                 bool smokingAllowed = true;
-                string propertyType = PropertyType.House.ToString();                
+                string propertyType = "House";
                 string area = "Pindora, Rawalpindi, Pakistan";
                 string dimensionType = DimensionType.Kanal.ToString();
                 string dimensionString = "1";
@@ -321,7 +330,7 @@ namespace RentStuff.Property.Ports.Tests
                 bool cableTvAvailable2 = true;
                 bool garageAvailable2 = true;
                 bool smokingAllowed2 = true;
-                string propertyType2 = PropertyType.House.ToString();
+                string propertyType2 = "House";
                 string area2 = "I-9, Islamabad, Pakistan";
                 string dimensionType2 = DimensionType.Kanal.ToString();
                 string dimensionString2 = "2";
@@ -364,7 +373,7 @@ namespace RentStuff.Property.Ports.Tests
                 bool cableTvAvailable3 = true;
                 bool garageAvailable3 = true;
                 bool smokingAllowed3 = true;
-                string propertyType3 = PropertyType.Apartment.ToString();
+                string propertyType3 = "Apartment";
                 string area3 = "Saddar, Rawalpindi, Pakistan";
                 string dimensionType3 = DimensionType.Kanal.ToString();
                 string dimensionString3 = "3";
@@ -409,8 +418,8 @@ namespace RentStuff.Property.Ports.Tests
                 bool cableTvAvailable4 = true;
                 bool garageAvailable4 = true;
                 bool smokingAllowed4 = true;
-                string propertyType4 = PropertyType.House.ToString();
-                string area4 = "Saddar, Rawalpindi, Punjab, Pakistan";
+                string propertyType4 = "House";
+                string area4 = "Kahuta, Pakistan";
                 string dimensionType4 = DimensionType.Kanal.ToString();
                 string dimensionString4 = "4";
                 decimal dimensionDecimal4 = 0;
@@ -453,7 +462,7 @@ namespace RentStuff.Property.Ports.Tests
                 bool cableTvAvailable5 = true;
                 bool garageAvailable5 = true;
                 bool smokingAllowed5 = true;
-                string propertyType5 = PropertyType.Apartment.ToString();
+                string propertyType5 = "Apartment";
                 string area5 = "Islamabad Railway Station, Islamabad, Pakistan";
                 string dimensionType5 = DimensionType.Kanal.ToString();
                 string dimensionString5 = "5";
@@ -547,7 +556,7 @@ namespace RentStuff.Property.Ports.Tests
         public void
             SearchHousesByPropertyTypeOnly_TestsThatHouseIsSavedAndRetreivedAsExpected_VerfiesThroughInstanceValue()
         {
-            HouseController houseController = (HouseController) ContextRegistry.GetContext()["HouseController"];
+            HouseController houseController = _kernel.Get<HouseController>();
             Assert.NotNull(houseController);
 
             // Saving House # 1: Should appear in search results with PropertyType = Apartment
@@ -569,7 +578,7 @@ namespace RentStuff.Property.Ports.Tests
             bool cableTvAvailable = true;
             bool garageAvailable = true;
             bool smokingAllowed = true;
-            string propertyType = PropertyType.Apartment.ToString();
+            string propertyType = "Apartment";
             string area = "Pindora, Rawalpindi, Pakistan";
             string dimensionType = DimensionType.Kanal.ToString();
             string dimensionString = "1";
@@ -614,7 +623,7 @@ namespace RentStuff.Property.Ports.Tests
             bool cableTvAvailable2 = true;
             bool garageAvailable2 = true;
             bool smokingAllowed2 = true;
-            string propertyType2 = PropertyType.House.ToString();
+            string propertyType2 = "House";
             string area2 = "I-9, Islamabad, Pakistan";
             string dimensionType2 = DimensionType.Kanal.ToString();
             string dimensionString2 = "2";
@@ -659,7 +668,7 @@ namespace RentStuff.Property.Ports.Tests
             bool cableTvAvailable3 = true;
             bool garageAvailable3 = true;
             bool smokingAllowed3 = true;
-            string propertyType3 = PropertyType.Apartment.ToString();
+            string propertyType3 = "Apartment";
             string area3 = "Saddar, Rawalpindi, Pakistan";
             string dimensionType3 = DimensionType.Kanal.ToString();
             string dimensionString3 = "3";
@@ -756,7 +765,7 @@ namespace RentStuff.Property.Ports.Tests
         public void
             SearchHousesByAreaOnly_TestsThatHouseIsSavedAndRetreivedAsExpected_VerfiesThroughInstanceValue()
         {
-            HouseController houseController = (HouseController)ContextRegistry.GetContext()["HouseController"];
+            HouseController houseController = _kernel.Get<HouseController>();
             Assert.NotNull(houseController);
 
             // Saving House # 1: Should appear in search results with area = Pindora (near I-9, Islamabad)
@@ -778,7 +787,7 @@ namespace RentStuff.Property.Ports.Tests
             bool cableTvAvailable = true;
             bool garageAvailable = true;
             bool smokingAllowed = true;
-            string propertyType = PropertyType.Apartment.ToString();
+            string propertyType = "Apartment";
             string area = "Pindora, Rawalpindi, Pakistan";
             string dimensionType = DimensionType.Kanal.ToString();
             string dimensionString = "1";
@@ -823,7 +832,7 @@ namespace RentStuff.Property.Ports.Tests
             bool cableTvAvailable2 = true;
             bool garageAvailable2 = true;
             bool smokingAllowed2 = true;
-            string propertyType2 = PropertyType.House.ToString();
+            string propertyType2 = "House";
             string area2 = "I-9, Islamabad, Pakistan";
             string dimensionType2 = DimensionType.Kanal.ToString();
             string dimensionString2 = "2";
@@ -869,8 +878,8 @@ namespace RentStuff.Property.Ports.Tests
             bool cableTvAvailable3 = true;
             bool garageAvailable3 = true;
             bool smokingAllowed3 = true;
-            string propertyType3 = PropertyType.Apartment.ToString();
-            string area3 = "Saddar, Rawalpindi, Pakistan";
+            string propertyType3 = "Apartment";
+            string area3 = "Kahuta, Pakistan";
             string dimensionType3 = DimensionType.Kanal.ToString();
             string dimensionString3 = "3";
             decimal dimensionDecimal3 = 0;

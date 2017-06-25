@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RentStuff.Common;
+using RentStuff.Common.Utilities;
 
 namespace RentStuff.Identity.Infrastructure.Services.Email
 {

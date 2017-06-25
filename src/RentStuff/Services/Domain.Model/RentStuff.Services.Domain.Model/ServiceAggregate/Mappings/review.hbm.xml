@@ -1,0 +1,14 @@
+﻿<?xml version="1.0"?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+assembly="RentStuff.Services.Domain.Model" namespace="RentStuff.Services.Domain.Model.ServiceAggregate">
+  <class name="Review" table="review" lazy="false">
+    <id name="Id">
+      <column name="id"/>
+      <generator class="assigned" />
+    </id>
+    <property name="AuthorName" column="author_name"/>
+    <property name="AuthorEmail" column="author_email"/>
+    <property name="ReviewDescription" column="review_description"/>
+    <many-to-one not-null="true" name="Service" column="service_id"/>
+  </class>
+</hibernate-mapping>

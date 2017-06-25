@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Configuration;
-using System.Runtime.Remoting;
 using Microsoft.AspNet.Identity;
+using Ninject;
 using NUnit.Framework;
-using RentStuff.Common;
+using RentStuff.Common.Utilities;
+using RentStuff.Identity.Infrastructure.Persistence.Ninject.Modules;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
-using RentStuff.Identity.Infrastructure.Services.Email;
 using RentStuff.Identity.Infrastructure.Services.Identity;
-using Spring.Context.Support;
 
 namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
 {
@@ -31,11 +29,21 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
             _databaseUtility.Create();
         }
 
+        /// <summary>
+        /// Loads the instances that will be used in the production environment. No Mocks or fakes
+        /// </summary>
+        private IKernel InitializeNinjectLiveDependencies()
+        {
+            var kernel = new StandardKernel();
+            kernel.Load<IdentityAccessPersistenceNinjectModule>();
+            return kernel;
+        }
+
         [Test]
         public void RegisterUserTest_TestsIfTheUserIsSavedAsExpectedWhenRegisterMethodIsCalled_VerifiesThroughTheRetruendValueUponRetreival()
         {
-            IAccountRepository accountRepository = (IAccountRepository)ContextRegistry.GetContext()["AccountRepository"];
-            Assert.NotNull(accountRepository);
+            var kernel = InitializeNinjectLiveDependencies();
+            IAccountRepository accountRepository = kernel.Get<IAccountRepository>();
             
             string name = "Thorin";
             // Email is used as both Email and username
@@ -58,7 +66,8 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
         [Test]
         public void UpdateUserTest_TestsWhetherTheUserGetsUpdatedAsExpected_VerifiesThroughDatabaseRetreival()
         {
-            IAccountRepository accountRepository = (IAccountRepository)ContextRegistry.GetContext()["AccountRepository"];
+            var kernel = InitializeNinjectLiveDependencies();
+            IAccountRepository accountRepository = kernel.Get<IAccountRepository>();
             Assert.NotNull(accountRepository);
 
             string name = "Thorin";
@@ -94,7 +103,8 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
         [Test]
         public void RegisterActivateAndPasswordResetSuccessfulTest_ChecksThatThePasswordIsResetSuccessfully_VerifiesThroughTheReturnedValue()
         {
-            IAccountRepository accountRepository = (IAccountRepository)ContextRegistry.GetContext()["AccountRepository"];
+            var kernel = InitializeNinjectLiveDependencies();
+            IAccountRepository accountRepository = kernel.Get<IAccountRepository>();
             Assert.NotNull(accountRepository);
 
             string name = "Thorin";
@@ -138,7 +148,8 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
         [ExpectedException(typeof(InvalidOperationException))]
         public void EmailActivationFailTest_ChecksThatAccountIsNotActivatedIfTheEmailTokenIsInvalid_VerifiesThroughTheReturnedValue()
         {
-            IAccountRepository accountRepository = (IAccountRepository)ContextRegistry.GetContext()["AccountRepository"];
+            var kernel = InitializeNinjectLiveDependencies();
+            IAccountRepository accountRepository = kernel.Get<IAccountRepository>();
             Assert.NotNull(accountRepository);
 
             string name = "Thorin";
@@ -163,7 +174,8 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
         [ExpectedException(typeof(InvalidOperationException))]
         public void PasswordResetFailTest_ChecksThatThePasswordIsNotResetWhenTheTokenIsIncorrect_VerifiesThroughTheReturnedValue()
         {
-            IAccountRepository accountRepository = (IAccountRepository)ContextRegistry.GetContext()["AccountRepository"];
+            var kernel = InitializeNinjectLiveDependencies();
+            IAccountRepository accountRepository = kernel.Get<IAccountRepository>();
             Assert.NotNull(accountRepository);
 
             string name = "Thorin";

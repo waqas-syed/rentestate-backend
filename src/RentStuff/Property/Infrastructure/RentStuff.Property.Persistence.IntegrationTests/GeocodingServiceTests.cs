@@ -1,18 +1,28 @@
 ﻿using System;
-using System.Threading;
+using Ninject;
 using NUnit.Framework;
-using RentStuff.Property.Domain.Model.Services;
-using Spring.Context.Support;
+using RentStuff.Common.Ninject.Modules;
+using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 
 namespace RentStuff.Property.Persistence.IntegrationTests
 {
     [TestFixture]
     class GeocodingServiceTests
     {
+        private IKernel _kernel;
+
+        [SetUp]
+        public void Setup()
+        {
+            _kernel = new StandardKernel();
+            _kernel.Load<PropertyPersistenceNinjectModule>();
+            _kernel.Load<CommonNinjectModule>();
+        }
+
         [Test]
         public void GetGeocodingCoordinatesFromAddressTest_TestsIfTheCoordinatesAreReturnedGivenTheAddressAsExpected_VerifiesThroughTheReturnVariables()
         {
-            IGeocodingService geocodingService = (IGeocodingService)ContextRegistry.GetContext()["GeocodingService"];
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
             Tuple<decimal,decimal> coordinates = geocodingService.GetCoordinatesFromAddress("Pindora, Rawalpindi, Pakistan");
             Assert.IsNotNull(coordinates);
             Assert.AreEqual(33.6497937, coordinates.Item1);

@@ -8,7 +8,7 @@ using RentStuff.Identity.Application.Account.Representations;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
 using RentStuff.Identity.Infrastructure.Services.Email;
 using RentStuff.Identity.Infrastructure.Services.Identity;
-using Constants = RentStuff.Common.Constants;
+using Constants = RentStuff.Common.Utilities.Constants;
 
 namespace RentStuff.Identity.Application.Account
 {
@@ -17,14 +17,12 @@ namespace RentStuff.Identity.Application.Account
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private ICustomEmailService _emailService;
         private IAccountRepository _accountRepository;
-        private IUserTokenProvider<CustomIdentityUser,string> _userTokenService;
 
-        public AccountApplicationService(IAccountRepository accountRepository, ICustomEmailService customEmailService,
-            IUserTokenProvider<CustomIdentityUser, string> userTokenProviderService)
+        public AccountApplicationService(IAccountRepository accountRepository, 
+            ICustomEmailService customEmailService)
         {
             _accountRepository = accountRepository;
             _emailService = customEmailService;
-            _userTokenService = userTokenProviderService;
         }
         
         public string Register(CreateUserCommand userModel)
@@ -155,6 +153,10 @@ namespace RentStuff.Identity.Application.Account
         /// <param name="forgotPasswordCommand"></param>
         public void ForgotPassword(ForgotPasswordCommand forgotPasswordCommand)
         {
+            if (string.IsNullOrWhiteSpace(forgotPasswordCommand.Email))
+            {
+                throw new NullReferenceException("Email for ForgotPassword is empty");
+            }
             var user = _accountRepository.GetUserByEmail(forgotPasswordCommand.Email);
             if (user == null)
             {

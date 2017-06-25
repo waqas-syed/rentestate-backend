@@ -11,6 +11,14 @@ namespace RentStuff.Identity.Infrastructure.Services.PasswordReset
     public class UserTokenProviderService : IUserTokenProvider<CustomIdentityUser, string>
     {
         /// <summary>
+        /// Default Constructor
+        /// </summary>
+        public UserTokenProviderService()
+        {
+            
+        }
+
+        /// <summary>
         ///     Generate a token for a user with a specific purpose
         /// </summary>
         /// <param name="purpose"></param>

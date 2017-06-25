@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Mail;
 using NLog;
-using RentStuff.Common;
+using RentStuff.Common.Utilities;
 
 namespace RentStuff.Identity.Infrastructure.Services.Email
 {
