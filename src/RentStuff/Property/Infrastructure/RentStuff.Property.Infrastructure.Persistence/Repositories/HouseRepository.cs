@@ -6,9 +6,6 @@ using System.Linq;
 using RentStuff.Common.NHibernate.Wrappers;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 
-//using Spring.Transaction;
-//using Spring.Transaction.Interceptor;
-
 namespace RentStuff.Property.Infrastructure.Persistence.Repositories
 {
     /// <summary>
@@ -19,7 +16,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         // The radius in kilometers from the location that was searched. We search within this radius for results
         // The formula is given here: https://developers.google.com/maps/articles/phpsqlsearch_v3
         // http://stackoverflow.com/questions/9686309/list-of-surrounding-towns-within-a-given-radius
-        private readonly int _radius = 10;
+        private readonly int _radius = 40;
         private readonly int _resultsPerPage = 10;
         private INhibernateSessionWrapper _session;
 
@@ -121,7 +118,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="pageNo"></param>
         /// <returns></returns>
         //[Transaction]
-        public IList<House> SearchHousesByPropertyType(PropertyType propertyType, int pageNo = 0)
+        public IList<House> SearchHousesByPropertyType(string propertyType, int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
@@ -174,7 +171,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         //[Transaction]
         public IList<House> SearchHousesByCoordinatesAndPropertyType(decimal latitude, decimal longitude,
-            PropertyType propertyType, int pageNo = 0)
+            string propertyType, int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
@@ -220,7 +217,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// </summary>
         /// <returns></returns>
         //[Transaction]
-        public Tuple<int, int> GetRecordCountByPropertyType(PropertyType propertyType)
+        public Tuple<int, int> GetRecordCountByPropertyType(string propertyType)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
@@ -285,7 +282,8 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="propertyType"></param>
         /// <returns></returns>
         //[Transaction]
-        public Tuple<int, int> GetRecordCountByLocationAndPropertyType(decimal latitude, decimal longitude, PropertyType propertyType)
+        public Tuple<int, int> GetRecordCountByLocationAndPropertyType(decimal latitude, decimal longitude, 
+            string propertyType)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {

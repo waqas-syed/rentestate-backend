@@ -23,9 +23,6 @@ using RentStuff.Identity.Ports.Adapter.Rest.Ninject.Modules;
 using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 using RentStuff.Property.Ports.Adapter.Rest.Ninject.Modules;
-using RentStuff.Services.Application.Ninject.Modules;
-using RentStuff.Services.Infrastructure.Persistence.Ninject.Modules;
-using RentStuff.Services.Ports.Adapter.Rest.Ninject.Modules;
 
 [assembly: OwinStartup(typeof(RentStuff.Common.WebHost.Startup))]
 namespace RentStuff.Common.WebHost
@@ -91,10 +88,6 @@ namespace RentStuff.Common.WebHost
             kernel.Load<PropertyPersistenceNinjectModule>();
             kernel.Load<PropertyApplicationNinjectModule>();
             kernel.Load<PropertyPortsNinjectModule>();
-            // Services
-            kernel.Load<ServicePersistenceNinjectModule>();
-            kernel.Load<ServiceApplicationNinjectModule>();
-            kernel.Load<ServicePortsNinjectModule>();
 
             // Apply Ninject as the dependency resolver
             GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);

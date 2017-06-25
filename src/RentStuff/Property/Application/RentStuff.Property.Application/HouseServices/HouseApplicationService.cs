@@ -54,11 +54,6 @@ namespace RentStuff.Property.Application.HouseServices
                 throw new InvalidDataException($"Could not find coordinates from the given address." +
                                                $" Address: {createHouseCommand.Area} | OwnerEmail: {createHouseCommand.OwnerEmail}");
             }
-            PropertyType propertyType = default(PropertyType);
-            if (!string.IsNullOrEmpty(createHouseCommand.PropertyType))
-            {
-                Enum.TryParse(createHouseCommand.PropertyType, out propertyType);
-            }
             GenderRestriction genderRestriction = default(GenderRestriction);
             if (!string.IsNullOrWhiteSpace(createHouseCommand.GenderRestriction))
             {
@@ -80,7 +75,7 @@ namespace RentStuff.Property.Application.HouseServices
                 .OwnerPhoneNumber(createHouseCommand.OwnerPhoneNumber)
                 .SmokingAllowed(createHouseCommand.SmokingAllowed)
                 .WithInternetAvailable(createHouseCommand.InternetAvailable)
-                .PropertyType(propertyType)
+                .PropertyType(createHouseCommand.PropertyType)
                 .Latitude(coordinates.Item1)
                 .Longitude(coordinates.Item2)
                 .HouseNo(createHouseCommand.HouseNo)
@@ -139,7 +134,7 @@ namespace RentStuff.Property.Application.HouseServices
                 throw new InvalidDataException(
                     $"Could not find coordinates from the given address: {updateHouseCommand.Area}");
             }
-            PropertyType propertyType = (PropertyType) Enum.Parse(typeof(PropertyType), updateHouseCommand.PropertyType);
+            
             GenderRestriction genderRestriction =
                 (GenderRestriction) Enum.Parse(typeof(GenderRestriction), updateHouseCommand.GenderRestriction);
 
@@ -151,7 +146,8 @@ namespace RentStuff.Property.Application.HouseServices
                 updateHouseCommand.InternetAvailable,
                 updateHouseCommand.LandlinePhoneAvailable, updateHouseCommand.CableTvAvailable, dimension,
                 updateHouseCommand.GarageAvailable,
-                updateHouseCommand.SmokingAllowed, propertyType, updateHouseCommand.OwnerEmail,
+                updateHouseCommand.SmokingAllowed, updateHouseCommand.PropertyType, 
+                updateHouseCommand.OwnerEmail,
                 updateHouseCommand.OwnerPhoneNumber,
                 updateHouseCommand.HouseNo, updateHouseCommand.StreetNo, updateHouseCommand.Area,
                 updateHouseCommand.OwnerName,
@@ -242,8 +238,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         public IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType, int pageNo = 0)
         {
-            var convertedPropertyType = (PropertyType) Enum.Parse(typeof(PropertyType), propertyType);
-            IList<House> houses = _houseRepository.SearchHousesByPropertyType(convertedPropertyType, pageNo);
+            IList<House> houses = _houseRepository.SearchHousesByPropertyType(propertyType, pageNo);
             return ConvertHouseToRepresentation(houses);
         }
 
@@ -254,14 +249,14 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public IList<HousePartialRepresentation> SearchHousesByAreaAndPropertyType(string address, string propertyType,
-            int pageNo = 0)
+        public IList<HousePartialRepresentation> SearchHousesByAreaAndPropertyType(string address, 
+            string propertyType, int pageNo = 0)
         {
             // Get the coordinates for the location using the Geocoding API service
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
             // Get 20 coordinates within the range of around 30 kilometers radius
             IList<House> houses = _houseRepository.SearchHousesByCoordinatesAndPropertyType(coordinates.Item1,
-                coordinates.Item2, (PropertyType) Enum.Parse(typeof(PropertyType), propertyType), pageNo);
+                coordinates.Item2, propertyType, pageNo);
             return ConvertHouseToRepresentation(houses);
         }
 
@@ -283,10 +278,9 @@ namespace RentStuff.Property.Application.HouseServices
                 // And property type is also not null
                 if (!string.IsNullOrWhiteSpace(propertyType))
                 {
-                    var propertyTypeEnum = (PropertyType) Enum.Parse(typeof(PropertyType), propertyType);
                     recordCount = _houseRepository.GetRecordCountByLocationAndPropertyType(coordinates.Item1,
                         coordinates.Item2,
-                        propertyTypeEnum);
+                        propertyType);
                     return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
                 }
                 // otherwise just get the count for houses given the coordinates
@@ -298,8 +292,7 @@ namespace RentStuff.Property.Application.HouseServices
             }
             if (!string.IsNullOrWhiteSpace(propertyType))
             {
-                var propertyTypeEnum = (PropertyType) Enum.Parse(typeof(PropertyType), propertyType);
-                recordCount = _houseRepository.GetRecordCountByPropertyType(propertyTypeEnum);
+                recordCount = _houseRepository.GetRecordCountByPropertyType(propertyType);
                 return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
             }
             if (!string.IsNullOrWhiteSpace(email))
@@ -328,8 +321,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         public IList<string> GetPropertyTypes()
         {
-            IList<string> propertyTypeList = Enum.GetNames(typeof(PropertyType)).ToList();
-            return propertyTypeList;
+            return House.AllPropertyTypes();
         }
 
         /// <summary>

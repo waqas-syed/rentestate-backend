@@ -27,7 +27,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             bool garage = true;
             decimal latitude = 25.43M;
             decimal longitude = 73.41M;
-            PropertyType propertyType = PropertyType.Apartment;
+            string propertyType = "Apartment";
             GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
             string area = "Pindora, Rawalpindi, Pakistan";
             long monthlyRent = 90000;
@@ -80,6 +80,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string email = "w@12344321.com";
             string name = "OwnerName";
             string phoneNumber = "03455138018";
+            string propertyType = "Apartment";
 
             // No Latitude is given. So the house instance should not be created
             int numberOfBedrooms = 3;
@@ -91,7 +92,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).MonthlyRent(monthlyRent).Longitude(73.41M)
+                .PropertyType(propertyType).MonthlyRent(monthlyRent).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").Build();
         }
 
@@ -106,12 +107,13 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
             long monthlyRent = 90000;
+            string propertyType = "Apartment";
 
             House house = new House.HouseBuilder().OwnerEmail(email)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).MonthlyRent(monthlyRent).Latitude(73.41M)
+                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").Build();
         }
 
@@ -129,12 +131,13 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
             long monthlyRent = 90000;
+            string propertyType = "Apartment";
 
             House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).MonthlyRent(monthlyRent).Latitude(73.41M)
+                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").Build();
         }
 
@@ -146,6 +149,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string email = "w@12344321.com";
             string name = "OwnerName";
             string phoneNumber = "03455138018";
+            string propertyType = "Apartment";
 
             // No Rent is given. So the house instance should not be created
             int numberOfBedrooms = 3;
@@ -156,7 +160,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).Latitude(23.45M).Longitude(73.41M)
+                .PropertyType(propertyType).Latitude(23.45M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").Build();
         }
 
@@ -168,7 +172,8 @@ namespace RentStuff.Property.Domain.Model.Tests
             string title = "Title No 1";
             string email = "w@12344321.com";
             string phoneNumber = "03455138018";
-            
+            string propertyType = "Apartment";
+
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
@@ -178,7 +183,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).MonthlyRent(130000).Latitude(23.65M).Longitude(73.41M)
+                .PropertyType(propertyType).MonthlyRent(130000).Latitude(23.65M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").OwnerPhoneNumber(phoneNumber).Build();
         }
 
@@ -195,12 +200,13 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
             long monthlyRent = 1000001;
+            string propertyType = "Apartment";
 
             House house = new House.HouseBuilder().Title(title).MonthlyRent(monthlyRent).OwnerEmail(email)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).MonthlyRent(130000).Latitude(23.65M).Longitude(73.41M)
+                .PropertyType(propertyType).MonthlyRent(130000).Latitude(23.65M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").OwnerName(name).Build();
         }
 
@@ -217,12 +223,13 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
             long monthlyRent = 1000001;
+            string propertyType = "Apartment";
 
             House house = new House.HouseBuilder().Title(title).MonthlyRent(monthlyRent)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).MonthlyRent(130000).Latitude(23.65M).Longitude(73.41M)
+                .PropertyType(propertyType).MonthlyRent(130000).Latitude(23.65M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").OwnerPhoneNumber(phoneNumber).OwnerName(name).Build();
         }
 
@@ -240,12 +247,13 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
+            string propertyType = "Apartment";
 
             House house = new House.HouseBuilder().OwnerEmail(email).MonthlyRent(monthlyRent)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(PropertyType.Apartment).MonthlyRent(130000).Latitude(23.65M).Longitude(73.41M)
+                .PropertyType(propertyType).MonthlyRent(130000).Latitude(23.65M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").OwnerPhoneNumber(phoneNumber).OwnerName(name).Build();
         }
 
@@ -262,7 +270,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             
             decimal latitude = 25.43M;
             decimal longitude = 73.41M;
-            PropertyType propertyType = PropertyType.Apartment;
+            string propertyType = "Apartment";
             GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
             string area = "Pindora, Rawalpindi, Pakistan";
             long monthlyRent = 90000;
@@ -290,7 +298,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             decimal latitude = 25.43M;
             decimal longitude = 73.41M;
-            PropertyType propertyType = PropertyType.Apartment;
+            string propertyType = "Apartment";
             GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
             string area = "Pindora, Rawalpindi, Pakistan";
             long monthlyRent = 90000;
@@ -318,7 +326,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             decimal latitude = 25.43M;
             decimal longitude = 73.41M;
-            PropertyType propertyType = PropertyType.Apartment;
+            string propertyType = "Apartment";
             GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
             string area = "Pindora, Rawalpindi, Pakistan";
             long monthlyRent = 90000;
@@ -346,7 +354,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             decimal latitude = 25.43M;
             decimal longitude = 73.41M;
-            PropertyType propertyType = PropertyType.Apartment;
+            string propertyType = "Apartment";
             GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
             string area = "Pindora, Rawalpindi, Pakistan";
             long monthlyRent = 90000;

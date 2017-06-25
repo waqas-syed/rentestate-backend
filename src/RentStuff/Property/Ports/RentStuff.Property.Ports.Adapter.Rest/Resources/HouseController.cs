@@ -324,7 +324,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
         }
         
-        [Route("property-types")]
+        [Route("property-type")]
         [HttpGet]
         [Obsolete]
         public IHttpActionResult GetPropertyTypes()

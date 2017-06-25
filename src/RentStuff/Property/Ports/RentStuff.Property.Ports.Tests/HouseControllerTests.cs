@@ -92,7 +92,7 @@ namespace RentStuff.Property.Ports.Tests
                 bool cableTvAvailable = true;
                 bool garageAvailable = true;
                 bool smokingAllowed = true;
-                string propertyType = PropertyType.Apartment.ToString();
+                string propertyType = "Apartment";
                 string area = "Pindora, Rawalpindi, Pakistan";
                 //string area = "Pindora, Rawalpindi, Pakistan";
                 string dimensionType = DimensionType.Kanal.ToString();
@@ -177,7 +177,7 @@ namespace RentStuff.Property.Ports.Tests
                 bool updatedCableTvAvailable = true;
                 bool updatedGarageAvailable = true;
                 bool updatedSmokingAllowed = true;
-                string updatedPropertyType = PropertyType.Apartment.ToString();
+                string updatedPropertyType = "Apartment";
                 string updatedArea = "Saddar, Rawalpindi, Pakistan";
                 //string area = "Pindora, Rawalpindi, Pakistan";
                 string updatedDimensionType = DimensionType.Kanal.ToString();
@@ -287,7 +287,7 @@ namespace RentStuff.Property.Ports.Tests
                 bool cableTvAvailable = true;
                 bool garageAvailable = true;
                 bool smokingAllowed = true;
-                string propertyType = PropertyType.House.ToString();                
+                string propertyType = "House";
                 string area = "Pindora, Rawalpindi, Pakistan";
                 string dimensionType = DimensionType.Kanal.ToString();
                 string dimensionString = "1";
@@ -330,7 +330,7 @@ namespace RentStuff.Property.Ports.Tests
                 bool cableTvAvailable2 = true;
                 bool garageAvailable2 = true;
                 bool smokingAllowed2 = true;
-                string propertyType2 = PropertyType.House.ToString();
+                string propertyType2 = "House";
                 string area2 = "I-9, Islamabad, Pakistan";
                 string dimensionType2 = DimensionType.Kanal.ToString();
                 string dimensionString2 = "2";
@@ -373,7 +373,7 @@ namespace RentStuff.Property.Ports.Tests
                 bool cableTvAvailable3 = true;
                 bool garageAvailable3 = true;
                 bool smokingAllowed3 = true;
-                string propertyType3 = PropertyType.Apartment.ToString();
+                string propertyType3 = "Apartment";
                 string area3 = "Saddar, Rawalpindi, Pakistan";
                 string dimensionType3 = DimensionType.Kanal.ToString();
                 string dimensionString3 = "3";
@@ -418,7 +418,7 @@ namespace RentStuff.Property.Ports.Tests
                 bool cableTvAvailable4 = true;
                 bool garageAvailable4 = true;
                 bool smokingAllowed4 = true;
-                string propertyType4 = PropertyType.House.ToString();
+                string propertyType4 = "House";
                 string area4 = "Kahuta, Pakistan";
                 string dimensionType4 = DimensionType.Kanal.ToString();
                 string dimensionString4 = "4";
@@ -462,7 +462,7 @@ namespace RentStuff.Property.Ports.Tests
                 bool cableTvAvailable5 = true;
                 bool garageAvailable5 = true;
                 bool smokingAllowed5 = true;
-                string propertyType5 = PropertyType.Apartment.ToString();
+                string propertyType5 = "Apartment";
                 string area5 = "Islamabad Railway Station, Islamabad, Pakistan";
                 string dimensionType5 = DimensionType.Kanal.ToString();
                 string dimensionString5 = "5";
@@ -578,7 +578,7 @@ namespace RentStuff.Property.Ports.Tests
             bool cableTvAvailable = true;
             bool garageAvailable = true;
             bool smokingAllowed = true;
-            string propertyType = PropertyType.Apartment.ToString();
+            string propertyType = "Apartment";
             string area = "Pindora, Rawalpindi, Pakistan";
             string dimensionType = DimensionType.Kanal.ToString();
             string dimensionString = "1";
@@ -623,7 +623,7 @@ namespace RentStuff.Property.Ports.Tests
             bool cableTvAvailable2 = true;
             bool garageAvailable2 = true;
             bool smokingAllowed2 = true;
-            string propertyType2 = PropertyType.House.ToString();
+            string propertyType2 = "House";
             string area2 = "I-9, Islamabad, Pakistan";
             string dimensionType2 = DimensionType.Kanal.ToString();
             string dimensionString2 = "2";
@@ -668,7 +668,7 @@ namespace RentStuff.Property.Ports.Tests
             bool cableTvAvailable3 = true;
             bool garageAvailable3 = true;
             bool smokingAllowed3 = true;
-            string propertyType3 = PropertyType.Apartment.ToString();
+            string propertyType3 = "Apartment";
             string area3 = "Saddar, Rawalpindi, Pakistan";
             string dimensionType3 = DimensionType.Kanal.ToString();
             string dimensionString3 = "3";
@@ -787,7 +787,7 @@ namespace RentStuff.Property.Ports.Tests
             bool cableTvAvailable = true;
             bool garageAvailable = true;
             bool smokingAllowed = true;
-            string propertyType = PropertyType.Apartment.ToString();
+            string propertyType = "Apartment";
             string area = "Pindora, Rawalpindi, Pakistan";
             string dimensionType = DimensionType.Kanal.ToString();
             string dimensionString = "1";
@@ -832,7 +832,7 @@ namespace RentStuff.Property.Ports.Tests
             bool cableTvAvailable2 = true;
             bool garageAvailable2 = true;
             bool smokingAllowed2 = true;
-            string propertyType2 = PropertyType.House.ToString();
+            string propertyType2 = "House";
             string area2 = "I-9, Islamabad, Pakistan";
             string dimensionType2 = DimensionType.Kanal.ToString();
             string dimensionString2 = "2";
@@ -878,7 +878,7 @@ namespace RentStuff.Property.Ports.Tests
             bool cableTvAvailable3 = true;
             bool garageAvailable3 = true;
             bool smokingAllowed3 = true;
-            string propertyType3 = PropertyType.Apartment.ToString();
+            string propertyType3 = "Apartment";
             string area3 = "Kahuta, Pakistan";
             string dimensionType3 = DimensionType.Kanal.ToString();
             string dimensionString3 = "3";

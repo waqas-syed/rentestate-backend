@@ -49,7 +49,6 @@
     <Compile Include="HouseAggregate\Location.cs" />
     <Compile Include="HouseAggregate\House.cs" />
     <Compile Include="HouseAggregate\IHouseRepository.cs" />
-    <Compile Include="HouseAggregate\PropertyType.cs" />
     <Compile Include="HouseAggregate\Dimension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

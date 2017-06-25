@@ -256,18 +256,6 @@
       <Project>{f5927692-6840-4b54-a8aa-ec37152112df}</Project>
       <Name>RentStuff.Property.Ports.Adapter.Rest</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Services\Application\RentStuff.Services.Application\RentStuff.Services.Application.csproj">
-      <Project>{12cf33b6-eca8-4119-9f90-c7f7792b1d47}</Project>
-      <Name>RentStuff.Services.Application</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\Infrastructure\RentStuff.Services.Infrastructure.Persistence\RentStuff.Services.Infrastructure.Persistence.csproj">
-      <Project>{1d08f074-7310-4bfe-87ee-1f51bdda6dc7}</Project>
-      <Name>RentStuff.Services.Infrastructure.Persistence</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Services\Ports\RentStuff.Services.Ports.Adapter.Rest\RentStuff.Services.Ports.Adapter.Rest.csproj">
-      <Project>{d0f4d1e2-f6b7-4000-bef2-59e5dc428224}</Project>
-      <Name>RentStuff.Services.Ports.Adapter.Rest</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RentStuff.Common\RentStuff.Common.csproj">
       <Project>{85EED18F-3C13-49EF-9C12-48FDB2661896}</Project>
       <Name>RentStuff.Common</Name>
