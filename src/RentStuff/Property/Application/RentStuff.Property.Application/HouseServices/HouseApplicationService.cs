@@ -8,10 +8,10 @@ using System.Management.Instrumentation;
 using System.Web.Hosting;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
-using RentStuff.Property.Domain.Model.Services;
 using System.Linq;
 using NLog;
 using RentStuff.Common;
+using RentStuff.Common.Utilities;
 using RentStuff.Property.Application.HouseServices.Representation;
 using ConfigurationManager = System.Configuration.ConfigurationManager;
 
@@ -24,14 +24,15 @@ namespace RentStuff.Property.Application.HouseServices
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         private IHouseRepository _houseRepository;
-        private IGeocodingService _geocodingService;
-        private IPhotoStorageService _photoStorageService;
+        private RentStuff.Common.Services.LocationServices.IGeocodingService _geocodingService;
+        private RentStuff.Common.Services.GoogleStorageServices.IPhotoStorageService _photoStorageService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public HouseApplicationService(IHouseRepository houseRepository, IGeocodingService geocodingService,
-            IPhotoStorageService photoStorageService)
+        public HouseApplicationService(IHouseRepository houseRepository,
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService,
+            RentStuff.Common.Services.GoogleStorageServices.IPhotoStorageService photoStorageService)
         {
             _houseRepository = houseRepository;
             _geocodingService = geocodingService;
@@ -52,11 +53,6 @@ namespace RentStuff.Property.Application.HouseServices
                     createHouseCommand.Area, createHouseCommand.OwnerEmail);
                 throw new InvalidDataException($"Could not find coordinates from the given address." +
                                                $" Address: {createHouseCommand.Area} | OwnerEmail: {createHouseCommand.OwnerEmail}");
-            }
-            PropertyType propertyType = default(PropertyType);
-            if (!string.IsNullOrEmpty(createHouseCommand.PropertyType))
-            {
-                Enum.TryParse(createHouseCommand.PropertyType, out propertyType);
             }
             GenderRestriction genderRestriction = default(GenderRestriction);
             if (!string.IsNullOrWhiteSpace(createHouseCommand.GenderRestriction))
@@ -79,7 +75,7 @@ namespace RentStuff.Property.Application.HouseServices
                 .OwnerPhoneNumber(createHouseCommand.OwnerPhoneNumber)
                 .SmokingAllowed(createHouseCommand.SmokingAllowed)
                 .WithInternetAvailable(createHouseCommand.InternetAvailable)
-                .PropertyType(propertyType)
+                .PropertyType(createHouseCommand.PropertyType)
                 .Latitude(coordinates.Item1)
                 .Longitude(coordinates.Item2)
                 .HouseNo(createHouseCommand.HouseNo)
@@ -138,7 +134,7 @@ namespace RentStuff.Property.Application.HouseServices
                 throw new InvalidDataException(
                     $"Could not find coordinates from the given address: {updateHouseCommand.Area}");
             }
-            PropertyType propertyType = (PropertyType) Enum.Parse(typeof(PropertyType), updateHouseCommand.PropertyType);
+            
             GenderRestriction genderRestriction =
                 (GenderRestriction) Enum.Parse(typeof(GenderRestriction), updateHouseCommand.GenderRestriction);
 
@@ -150,7 +146,8 @@ namespace RentStuff.Property.Application.HouseServices
                 updateHouseCommand.InternetAvailable,
                 updateHouseCommand.LandlinePhoneAvailable, updateHouseCommand.CableTvAvailable, dimension,
                 updateHouseCommand.GarageAvailable,
-                updateHouseCommand.SmokingAllowed, propertyType, updateHouseCommand.OwnerEmail,
+                updateHouseCommand.SmokingAllowed, updateHouseCommand.PropertyType, 
+                updateHouseCommand.OwnerEmail,
                 updateHouseCommand.OwnerPhoneNumber,
                 updateHouseCommand.HouseNo, updateHouseCommand.StreetNo, updateHouseCommand.Area,
                 updateHouseCommand.OwnerName,
@@ -227,7 +224,7 @@ namespace RentStuff.Property.Application.HouseServices
         {
             // Get the coordinates for the location using the Geocoding API service
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
-            // Get 20 coordinates within the range of around 30 kilometers radius
+            // Get houses around the given coordinates
             IList<House> houses = _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2,
                 pageNo);
             return ConvertHouseToRepresentation(houses);
@@ -241,8 +238,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         public IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType, int pageNo = 0)
         {
-            var convertedPropertyType = (PropertyType) Enum.Parse(typeof(PropertyType), propertyType);
-            IList<House> houses = _houseRepository.SearchHousesByPropertyType(convertedPropertyType, pageNo);
+            IList<House> houses = _houseRepository.SearchHousesByPropertyType(propertyType, pageNo);
             return ConvertHouseToRepresentation(houses);
         }
 
@@ -253,14 +249,14 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public IList<HousePartialRepresentation> SearchHousesByAreaAndPropertyType(string address, string propertyType,
-            int pageNo = 0)
+        public IList<HousePartialRepresentation> SearchHousesByAreaAndPropertyType(string address, 
+            string propertyType, int pageNo = 0)
         {
             // Get the coordinates for the location using the Geocoding API service
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
             // Get 20 coordinates within the range of around 30 kilometers radius
             IList<House> houses = _houseRepository.SearchHousesByCoordinatesAndPropertyType(coordinates.Item1,
-                coordinates.Item2, (PropertyType) Enum.Parse(typeof(PropertyType), propertyType), pageNo);
+                coordinates.Item2, propertyType, pageNo);
             return ConvertHouseToRepresentation(houses);
         }
 
@@ -282,10 +278,9 @@ namespace RentStuff.Property.Application.HouseServices
                 // And property type is also not null
                 if (!string.IsNullOrWhiteSpace(propertyType))
                 {
-                    var propertyTypeEnum = (PropertyType) Enum.Parse(typeof(PropertyType), propertyType);
                     recordCount = _houseRepository.GetRecordCountByLocationAndPropertyType(coordinates.Item1,
                         coordinates.Item2,
-                        propertyTypeEnum);
+                        propertyType);
                     return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
                 }
                 // otherwise just get the count for houses given the coordinates
@@ -297,8 +292,7 @@ namespace RentStuff.Property.Application.HouseServices
             }
             if (!string.IsNullOrWhiteSpace(propertyType))
             {
-                var propertyTypeEnum = (PropertyType) Enum.Parse(typeof(PropertyType), propertyType);
-                recordCount = _houseRepository.GetRecordCountByPropertyType(propertyTypeEnum);
+                recordCount = _houseRepository.GetRecordCountByPropertyType(propertyType);
                 return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
             }
             if (!string.IsNullOrWhiteSpace(email))
@@ -327,8 +321,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         public IList<string> GetPropertyTypes()
         {
-            IList<string> propertyTypeList = Enum.GetNames(typeof(PropertyType)).ToList();
-            return propertyTypeList;
+            return House.AllPropertyTypes();
         }
 
         /// <summary>
@@ -348,11 +341,11 @@ namespace RentStuff.Property.Application.HouseServices
                     // Create a name for this image
                     string imageId = "IMG_" + Guid.NewGuid().ToString();
                     // Add extension to the file name
-                    String fileName = imageId + ImageFormatProvider.GetImageExtension();
+                    String fileName = imageId + ImageFurnace.GetImageExtension();
                     // Resize the image to the size that we will be using as default
-                    var finalImage = ResizeImage(image, 830, 500);
+                    var finalImage = ImageFurnace.ResizeImage(image, 830, 500);
                     // Get the stream of the image
-                    var httpPostedStream = ToStream(finalImage);
+                    var httpPostedStream = ImageFurnace.ToStream(finalImage);
                     _photoStorageService.UploadPhoto(fileName, httpPostedStream);
                     // Get the url of the bucket and append with it the name of the file. This will be the public 
                     // url for this image and ready to view
@@ -401,7 +394,13 @@ namespace RentStuff.Property.Application.HouseServices
             }
         }
 
-        public bool HouseOwnershipEmailCheck(string houseId, string requesterEmail)
+        /// <summary>
+        /// Check that the given email is the same as the owner of the given house id
+        /// </summary>
+        /// <param name="houseId"></param>
+        /// <param name="requesterEmail"></param>
+        /// <returns></returns>
+        public bool HouseOwnershipCheck(string houseId, string requesterEmail)
         {
             var house = _houseRepository.GetHouseById(houseId);
             if (house == null)
@@ -452,85 +451,14 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 using (MemoryStream m = new MemoryStream())
                 {
-                    image.Save(m, ImageFormatProvider.GetImageFormat());
+                    image.Save(m, ImageFurnace.GetImageFormat());
                     byte[] imageBytes = m.ToArray();
 
                     // Convert byte[] to Base64 String
                     //return Convert.ToBase64String(imageBytes);
-                    return new ImageRepresentation(imageId, ImageFormatProvider.GetImageFormat().ToString(), Convert.ToBase64String(imageBytes));
+                    return new ImageRepresentation(imageId, ImageFurnace.GetImageFormat().ToString(), Convert.ToBase64String(imageBytes));
                 }
             }
-        }
-
-        /// <summary>
-        /// Resize the image to the specified width and height.
-        /// </summary>
-        /// <param name="image">The image to resize.</param>
-        /// <param name="width">The width to resize to.</param>
-        /// <param name="height">The height to resize to.</param>
-        /// <returns>The resized image.</returns>
-        public static Bitmap ResizeImage(Image image, int width, int height)
-        {
-            var destRect = new Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height);
-
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            using (var graphics = Graphics.FromImage(destImage))
-            {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
-            }
-
-            return destImage;
-        }
-
-        public Stream ToStream(Image image)
-        {
-            // We support inly JPEG file format
-            ImageCodecInfo encoder = GetEncoder(ImageFormatProvider.GetImageFormat());
-
-            // Create an Encoder object based on the GUID  
-            // for the Quality parameter category.  
-            System.Drawing.Imaging.Encoder myEncoder =
-                System.Drawing.Imaging.Encoder.Quality;
-
-            // Create an EncoderParameters object.  
-            // An EncoderParameters object has an array of EncoderParameter  
-            // objects. In this case, there is only one  
-            // EncoderParameter object in the array.  
-            EncoderParameters myEncoderParameters = new EncoderParameters(1);
-
-            EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 90L);
-            myEncoderParameters.Param[0] = myEncoderParameter;
-
-            var stream = new System.IO.MemoryStream();
-            //image.Save(stream, format);
-            image.Save(stream, encoder, myEncoderParameters);
-            stream.Position = 0;
-            return stream;
-        }
-
-        private ImageCodecInfo GetEncoder(ImageFormat format)
-        {
-            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
-            foreach (ImageCodecInfo codec in codecs)
-            {
-                if (codec.FormatID == format.Guid)
-                {
-                    return codec;
-                }
-            }
-            return null;
         }
     }
 }

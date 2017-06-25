@@ -1,10 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
-using Spring.Context.Support;
-using System.Xml.Linq;
-using RentStuff.Property.Infrastructure.Persistence;
-using RentStuff.Property.Infrastructure.Services.DbDecipherServices;
+﻿using System.Web.Http;
+//using Spring.Context.Support;
 
 namespace RentStuff.Common.WebHost
 {
@@ -26,9 +21,9 @@ namespace RentStuff.Common.WebHost
             json.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.None;
             config.Formatters.Remove(config.Formatters.XmlFormatter);
 
-            config.DependencyResolver = new SpringDependencyResolver(ContextRegistry.GetContext());
+            //config.DependencyResolver = new SpringDependencyResolver(ContextRegistry.GetContext());
             // Decipher password for the connection string and update it for using NHibernate.
-            NhConnectionDecipherService.SetupDecipheredConnectionString();
+            //NhConnectionDecipherService.SetupDecipheredConnectionString();
         }
     }
 }

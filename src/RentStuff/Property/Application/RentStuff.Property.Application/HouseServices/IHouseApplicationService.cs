@@ -111,6 +111,6 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="houseId"></param>
         /// <param name="requesterEmail"></param>
         /// <returns></returns>
-        bool HouseOwnershipEmailCheck(string houseId, string requesterEmail);
+        bool HouseOwnershipCheck(string houseId, string requesterEmail);
     }
 }

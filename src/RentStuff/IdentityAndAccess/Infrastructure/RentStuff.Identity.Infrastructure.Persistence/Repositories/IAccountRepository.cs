@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using RentStuff.Identity.Infrastructure.Services.Identity;
@@ -7,6 +8,12 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
 {
     public interface IAccountRepository : IDisposable
     {
+        /// <summary>
+        /// Creates the DbConnection required for the AuthContext
+        /// </summary>
+        /// <returns></returns>
+        DbConnection CreateDbConnection();
+
         string GetEmailActivationToken(string userId);
 
         bool ConfirmEmail(string userId, string token);
@@ -21,6 +28,11 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
         /// <returns></returns>
         IdentityResult RegisterUser(string name, string email, string password);
 
+        /// <summary>
+        /// Get user by email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         CustomIdentityUser GetUserByEmail(string email);
 
         CustomIdentityUser GetUserByPassword(string userName, string password);

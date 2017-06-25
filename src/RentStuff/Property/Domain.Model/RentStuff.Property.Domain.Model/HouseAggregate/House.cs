@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 using RentStuff.Common.Domain.Model;
 
 namespace RentStuff.Property.Domain.Model.HouseAggregate
@@ -24,7 +21,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         private Dimension _dimension;
         private bool _garageAvailable;
         private bool _smokingAllowed;
-        private PropertyType _propertyType;
+        private string _propertyType;
         private string _ownerEmail;
         private string _ownerPhoneNumber;
         private decimal _latitude;
@@ -48,7 +45,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public House(string title, long monthlyRent, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension, 
-            bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail, string ownerPhoneNumber,
+            bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
             decimal latitude, decimal longitude, string houseNo, string streetNo, string area, string ownerName, string description, 
             GenderRestriction genderRestriction)
         {
@@ -104,7 +101,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public void UpdateHouse(string title, long monthlyRent, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension,
-            bool garageAvailable, bool smokingAllowed, PropertyType propertyType, string ownerEmail, string ownerPhoneNumber,
+            bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
             string houseNo, string streetNo, string area, string ownerName, string description, GenderRestriction genderRestriction,
             decimal latitude, decimal longitude)
         {
@@ -232,13 +229,36 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             set { _smokingAllowed = value; }
         }
 
-        public PropertyType PropertyType
+        public string PropertyType
         {
             get { return _propertyType; }
             set
             {
-                _propertyType = value;
+                Assertion.AssertStringNotNullorEmpty(value);
+                if (AllPropertyTypes().Contains(value))
+                {
+                    _propertyType = value;
+                }
+                else
+                {
+                    throw new InvalidOperationException("The provided Property Type is not supported");
+                }
             }
+        }
+
+        /// <summary>
+        /// Returns a lsit of all supported property types
+        /// </summary>
+        /// <returns></returns>
+        public static IList<string> AllPropertyTypes()
+        {
+            return new List<string>()
+            {
+                "Hostel",
+                "Shared",
+                "House",
+                "Apartment"
+            };
         }
 
         /// <summary>
@@ -250,6 +270,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             set
             {
                 Assertion.AssertStringNotNullorEmpty(value);
+                Assertion.IsEmailValid(value);
                 _ownerEmail = value;
             }
         }
@@ -264,12 +285,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             set
             {
                 Assertion.AssertStringNotNullorEmpty(value);
-                Regex regex = new Regex(@"^\d{11}$");
-                Match match = regex.Match(value);
-                if (!match.Success)
-                {
-                    throw new InvalidOperationException("Invalid phone number");
-                }
+                Assertion.IsPhoneNumberValid(value);
                 _ownerPhoneNumber = value;
             }
         }
@@ -367,7 +383,6 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         {
             private string _title;
             private string _description;
-            private Location _location;
             private long _monthlyRent;
             private int _numberOfBedrooms;
             private int _numberOfKitchens;
@@ -378,7 +393,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private Dimension _dimension;
             private bool _garageAvailable;
             private bool _smokingAllowed;
-            private PropertyType _propertyType;
+            private string _propertyType;
             private string _ownerEmail;
             private string _ownerPhoneNumber;
             private decimal _latitude;
@@ -461,7 +476,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
 
-            public HouseBuilder PropertyType(PropertyType propertyType)
+            public HouseBuilder PropertyType(string propertyType)
             {
                 _propertyType = propertyType;
                 return this;
@@ -530,8 +545,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return new House(_title, _monthlyRent, _numberOfBedrooms, _numberOfKitchens,
                                  _numberOfBathrooms, _internetAvailable,
                                  _landlinePhoneAvailable, _cableTvAvailable, _dimension, _garageAvailable,
-                                 _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber, _latitude, _longitude,
-                                 _houseNo, _streetNo, _area, _ownerName, _description, _genderRestriction);
+                                 _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber, _latitude, 
+                                 _longitude, _houseNo, _streetNo, _area, _ownerName, _description, 
+                                 _genderRestriction);
             }
         }
     }
