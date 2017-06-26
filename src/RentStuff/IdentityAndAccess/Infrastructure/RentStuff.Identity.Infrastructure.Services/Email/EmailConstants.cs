@@ -17,7 +17,6 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
         {
             return $"Dear {name},<br/><br/>" +
                    $"Thank you for registering at {Constants.CompanyName}. To complete the last step of the registration process, just click <a href=\"{activationLink}\">here</a> to activate your account. <br/><br/>" +
-                   $"Or copy & paste this url in your browser: <br/> {activationLink} <br/><br/><br/>" +
                    $"Have a great day, <br/> Your friends at {Constants.CompanyName}";
         }
 
