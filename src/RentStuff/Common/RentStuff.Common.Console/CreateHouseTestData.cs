@@ -60,7 +60,7 @@ namespace RentStuff.Common.Console
                 bool cableTvAvailable = false;
                 bool garageAvailable = false;
                 bool smokingAllowed = false;
-                string propertyType = PropertyType.House.ToString();
+                string propertyType = "House";
                 //string area = "Pindora, Rawalpindi, Pakistan";
                 string dimensionType = DimensionType.Kanal.ToString();
                 string dimensionString = i.ToString();
