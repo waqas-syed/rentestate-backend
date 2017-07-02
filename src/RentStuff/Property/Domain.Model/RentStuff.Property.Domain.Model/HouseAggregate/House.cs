@@ -255,9 +255,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             return new List<string>()
             {
                 "Hostel",
-                "Shared",
                 "House",
-                "Apartment"
+                "Apartment",
+                "Hotel"
             };
         }
 
