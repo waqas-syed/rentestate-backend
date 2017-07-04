@@ -189,7 +189,7 @@ CREATE TABLE `dimension` (
 CREATE TABLE `house` (
   `id` varchar(100) NOT NULL,
   `db_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) NOT NULL,
+  `title` varchar(200) NOT NULL,
   `description` varchar(1500) DEFAULT NULL,
   `owner_email` varchar(100) NOT NULL,
   `monthly_rent` bigint(20) NOT NULL,
