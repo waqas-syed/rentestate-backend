@@ -60,6 +60,7 @@ namespace RentStuff.Common.Console
                 bool cableTvAvailable = false;
                 bool garageAvailable = false;
                 bool smokingAllowed = false;
+                bool isShared = false;
                 string propertyType = "House";
                 //string area = "Pindora, Rawalpindi, Pakistan";
                 string dimensionType = DimensionType.Kanal.ToString();
@@ -80,12 +81,14 @@ namespace RentStuff.Common.Console
                     cableTvAvailable = true;
                     garageAvailable = true;
                     smokingAllowed = true;
+                    isShared = true;
                 }
 
                 CreateHouseCommand house = new CreateHouseCommand(title, rent, numberOfBedrooms, numberOfKitchens,
                     numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
-                    houseNo, streetNo, areas[i], dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction);
+                    houseNo, streetNo, areas[i], dimensionType, dimensionString, dimensionDecimal, ownerName, description, 
+                    genderRestriction, isShared);
                 //JsonConvert.SerializeObject(house);
                 HttpResponseMessage response = await _httpClient.PostAsJsonAsync("v1/house", house);
                 response.EnsureSuccessStatusCode();

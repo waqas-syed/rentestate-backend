@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.9, for Win32 (AMD64)
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: localhost    Database: rentstuff-identity
+-- Host: localhost    Database: rentstuff
 -- ------------------------------------------------------
--- Server version	5.7.10-log
+-- Server version	5.7.18-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -15,63 +15,13 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- DROP ALL TABLES FIRST
-DROP TABLE IF EXISTS `__migrationhistory`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-
-DROP TABLE IF EXISTS `AspNetRoles`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-
-DROP TABLE IF EXISTS `AspNetUserClaims`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-
-DROP TABLE IF EXISTS `AspNetUserLogins`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-
-DROP TABLE IF EXISTS `AspNetUserRoles`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-
-DROP TABLE IF EXISTS `AspNetUsers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-
-DROP TABLE IF EXISTS `Dimension`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-
-DROP TABLE IF EXISTS `House`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-
-DROP TABLE IF EXISTS `HouseImages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-
-DROP TABLE IF EXISTS `ratings`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-
-DROP TABLE IF EXISTS `review`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-
-DROP TABLE IF EXISTS `service`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-
-DROP TABLE IF EXISTS `serviceimages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-
 --
 -- Table structure for table `__migrationhistory`
 --
 
+DROP TABLE IF EXISTS `__migrationhistory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `__migrationhistory` (
   `MigrationId` varchar(100) NOT NULL,
   `ContextKey` varchar(200) NOT NULL,
@@ -85,7 +35,10 @@ CREATE TABLE `__migrationhistory` (
 -- Table structure for table `aspnetroles`
 --
 
-CREATE TABLE `AspNetRoles` (
+DROP TABLE IF EXISTS `aspnetroles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aspnetroles` (
   `Id` varchar(128) NOT NULL,
   `Name` varchar(256) NOT NULL,
   PRIMARY KEY (`Id`)
@@ -95,7 +48,11 @@ CREATE TABLE `AspNetRoles` (
 --
 -- Table structure for table `aspnetuserclaims`
 --
-CREATE TABLE `AspNetUserClaims` (
+
+DROP TABLE IF EXISTS `aspnetuserclaims`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aspnetuserclaims` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `UserId` varchar(128) NOT NULL,
   `ClaimType` longtext,
@@ -111,7 +68,10 @@ CREATE TABLE `AspNetUserClaims` (
 -- Table structure for table `aspnetuserlogins`
 --
 
-CREATE TABLE `AspNetUserLogins` (
+DROP TABLE IF EXISTS `aspnetuserlogins`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aspnetuserlogins` (
   `LoginProvider` varchar(128) NOT NULL,
   `ProviderKey` varchar(128) NOT NULL,
   `UserId` varchar(128) NOT NULL,
@@ -125,7 +85,10 @@ CREATE TABLE `AspNetUserLogins` (
 -- Table structure for table `aspnetuserroles`
 --
 
-CREATE TABLE `AspNetUserRoles` (
+DROP TABLE IF EXISTS `aspnetuserroles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aspnetuserroles` (
   `UserId` varchar(128) NOT NULL,
   `RoleId` varchar(128) NOT NULL,
   PRIMARY KEY (`UserId`,`RoleId`),
@@ -139,7 +102,10 @@ CREATE TABLE `AspNetUserRoles` (
 -- Table structure for table `aspnetusers`
 --
 
-CREATE TABLE `AspNetUsers` (
+DROP TABLE IF EXISTS `aspnetusers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aspnetusers` (
   `Id` varchar(128) NOT NULL,
   `Email` varchar(256) DEFAULT NULL,
   `FullName` varchar(19) DEFAULT NULL,
@@ -158,20 +124,14 @@ CREATE TABLE `AspNetUsers` (
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 --
 -- Table structure for table `dimension`
 --
 
+DROP TABLE IF EXISTS `dimension`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dimension` (
   `id` varchar(100) NOT NULL,
   `dimension_type` varchar(100) NOT NULL,
@@ -186,6 +146,9 @@ CREATE TABLE `dimension` (
 -- Table structure for table `house`
 --
 
+DROP TABLE IF EXISTS `house`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `house` (
   `id` varchar(100) NOT NULL,
   `db_id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -209,20 +172,24 @@ CREATE TABLE `house` (
   `house_no` varchar(100) DEFAULT NULL,
   `street_no` varchar(100) DEFAULT NULL,
   `area` varchar(100) DEFAULT NULL,
-  `dimension_id` varchar(100) DEFAULT NULL,  
+  `dimension_id` varchar(100) DEFAULT NULL,
   `owner_name` varchar(100) NOT NULL,
+  `is_shared` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `dimension_id_fk_idx` (`dimension_id`),
   CONSTRAINT `dimension_id_fk` FOREIGN KEY (`dimension_id`) REFERENCES `dimension` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `houseimages`
 --
 
+DROP TABLE IF EXISTS `houseimages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `houseimages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `house_id` varchar(100) NOT NULL,
@@ -240,4 +207,4 @@ CREATE TABLE `houseimages` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-02-24 10:32:53
+-- Dump completed on 2017-07-05 18:58:46
