@@ -9,6 +9,7 @@ src/RentStuff/Common/RentStuff_Logs.txt
 *.user
 *.userosscache
 *.sln.docstates
+applicationhost.config
 
 # Build results
 [Dd]ebug/
