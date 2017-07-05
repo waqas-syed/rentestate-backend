@@ -62,6 +62,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string ownerName = "Owner Name 1";
             string propertyType = "Apartment";
             GenderRestriction genderRestriction = GenderRestriction.FamiliesOnly;
+            bool isShared = true;
 
             House house = new House.HouseBuilder().Title(title).OwnerEmail(email).OwnerPhoneNumber(phoneNumber)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
@@ -69,7 +70,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
                 .PropertyType(propertyType).MonthlyRent(price).Latitude(latitude).Longitude(longitude)
                 .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description)
-                .GenderRestriction(genderRestriction).Build();
+                .GenderRestriction(genderRestriction).IsShared(isShared).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, null, 5, house);
             house.Dimension = dimension;
             houseRepository.SaveorUpdateDimension(dimension);
@@ -131,6 +132,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int rent = 50000;
             string ownerName = "Owner Name 1";
             string propertyType = "Apartment";
+            bool isShared = false;
             GenderRestriction genderRestriction = GenderRestriction.FamiliesOnly;
             House house = new House.HouseBuilder().Title(title).OwnerEmail(email)
             .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
@@ -138,7 +140,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
             .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2).GenderRestriction(genderRestriction)
-            .HouseNo(houseNo).Area(area).OwnerName(ownerName).StreetNo(streetNo).Description(description).Build();
+            .HouseNo(houseNo).Area(area).OwnerName(ownerName).StreetNo(streetNo).Description(description)
+            .IsShared(isShared).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "5", 0, house);
             house.Dimension = dimension;
             houseRepository.SaveorUpdateDimension(dimension);
@@ -156,6 +159,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int rent2 = 100000;
             string ownerName2 = "Owner Name 2";
             string propertyType2 = "House";
+            bool isShared2 = true;
             GenderRestriction genderRestriction2 = GenderRestriction.FamiliesOnly;
             House house2 = new House.HouseBuilder().Title(title).OwnerEmail(email2)
             .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
@@ -163,7 +167,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
             .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2).GenderRestriction(genderRestriction2)
-            .HouseNo(houseNo2).Area(area).OwnerName(ownerName2).StreetNo(streetNo2).Description(description2).Build();
+            .HouseNo(houseNo2).Area(area).OwnerName(ownerName2).StreetNo(streetNo2).Description(description2).IsShared(isShared2)
+            .Build();
             Dimension dimension2 = new Dimension(DimensionType.Marla, "20", 0, house2);
             house2.Dimension = dimension2;
             houseRepository.SaveorUpdateDimension(dimension2);
@@ -374,7 +379,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdate(house2);
 
             // Saving House # 3: Should NOT be in the search results, outside bounds of search location
-            string area3 = "Kahuta, Pakistan";
+            string area3 = "Nara, Punjab, Pakistan";
             var coordinatesFromAddress3 = geocodingService.GetCoordinatesFromAddress(area3);
             string title3 = "Title # 3";
             string description3 = "It was a Hobbit Hole 3. Which means it had good food and a warm hearth.";
@@ -432,7 +437,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdate(house4);
 
             // Saving House # 5: Should NOT be in the search results, outside bounds of search location
-            string area5 = "Khajut, Pakistan";
+            string area5 = "Qurtaba City, Punjab, Pakistan";
             var coordinatesFromAddress5 = geocodingService.GetCoordinatesFromAddress(area5);
             string title5 = "Title # 5";
             string description5 = "It was a Hobbit Hole 5. Which means it had good food and a warm hearth.";
@@ -771,7 +776,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdate(house2);
 
             // Saving House # 3: Outside the bounds of the search location, should not be in the search results
-            string area3 = "Kahuta, Pakistan";
+            string area3 = "Nara, Punjab, Pakistan";
             var coordinatesFromAddress3 = geocodingService.GetCoordinatesFromAddress(area3);
             string title3 = "Title # 3";
             string email3 = "special2@spsp123456-3.com";
@@ -825,7 +830,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdate(house4);
 
             // Saving House # 5: Should NOT be in the search results
-            string area5 = "Khajut, Pakistan";
+            string area5 = "Qurtaba City, Punjab, Pakistan";
             var coordinatesFromAddress5 = geocodingService.GetCoordinatesFromAddress(area5);
             string title5 = "Title # 5";
             string email5 = "special2@spsp123456-5.com";
@@ -859,7 +864,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Console.WriteLine("Total Time Taken: " + timeTaken);
 
             // Verification of House # 1
-            /*Assert.AreEqual(title, retreivedHouses[0].Title);
+            Assert.AreEqual(title, retreivedHouses[0].Title);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
@@ -926,7 +931,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(dimension4.DimensionType, retreivedHouses[2].Dimension.DimensionType);
             Assert.AreEqual(dimension4.DecimalValue, retreivedHouses[2].Dimension.DecimalValue);
             Assert.AreEqual(dimension4.StringValue, retreivedHouses[2].Dimension.StringValue);
-            Assert.AreEqual(house4.OwnerName, retreivedHouses[2].OwnerName);*/
+            Assert.AreEqual(house4.OwnerName, retreivedHouses[2].OwnerName);
         }
         
         #endregion Save and Search Houses By Area Only

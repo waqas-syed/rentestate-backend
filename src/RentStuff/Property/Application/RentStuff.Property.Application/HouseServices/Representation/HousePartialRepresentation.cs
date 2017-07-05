@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 
@@ -11,7 +10,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
     {
         public HousePartialRepresentation(string houseId, string title, string area, long rent, string propertyType, 
             Dimension dimension, int numberOfBedrooms, int numberOfBathrooms, int numberOfKitchens,
-            string ownerEmail, string ownerPhoneNumber, string image, string ownerName, string description)
+            string ownerEmail, string ownerPhoneNumber, string image, string ownerName, string description, bool isShared)
         {
             HouseId = houseId;
             Title = title;
@@ -37,6 +36,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
             Image = image;
             OwnerName = ownerName;
             Description = description;
+            IsShared = isShared;
         }
 
         [DataMember]
@@ -80,5 +80,8 @@ namespace RentStuff.Property.Application.HouseServices.Representation
 
         [DataMember]
         public string OwnerName { get; set; }
+
+        [DataMember]
+        public bool IsShared { get; set; }
     }
 }

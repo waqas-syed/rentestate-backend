@@ -31,7 +31,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         private string _area;
         private IList<string> _houseImages = new List<string>();
         private string _ownerName;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
@@ -47,7 +47,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension, 
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
             decimal latitude, decimal longitude, string houseNo, string streetNo, string area, string ownerName, string description, 
-            GenderRestriction genderRestriction)
+            GenderRestriction genderRestriction, bool isShared)
         {
             Title = title;
             MonthlyRent = monthlyRent;
@@ -71,6 +71,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             OwnerName = ownerName;
             Description = description;
             GenderRestriction = genderRestriction;
+            IsShared = isShared;
         }
 
         /// <summary>
@@ -98,12 +99,13 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <param name="genderRestriction"></param>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
+        /// <param name="isShared"></param>
         public void UpdateHouse(string title, long monthlyRent, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension,
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
             string houseNo, string streetNo, string area, string ownerName, string description, GenderRestriction genderRestriction,
-            decimal latitude, decimal longitude)
+            decimal latitude, decimal longitude, bool isShared)
         {
             Title = title;
             MonthlyRent = monthlyRent;
@@ -127,6 +129,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             GenderRestriction = genderRestriction;
             Latitude = latitude;
             Longitude = longitude;
+            IsShared = isShared;
         }
 
         /// <summary>
@@ -377,6 +380,11 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         public GenderRestriction GenderRestriction { get; set; }
 
         /// <summary>
+        /// Is this property shared
+        /// </summary>
+        public bool IsShared { get; set; }
+
+        /// <summary>
         /// House Builder
         /// </summary>
         public class HouseBuilder
@@ -403,6 +411,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private string _area;
             private string _ownerName;
             private GenderRestriction _genderRestriction;
+            private bool _isShared;
 
             public HouseBuilder Title(string title)
             {
@@ -536,6 +545,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
 
+            public HouseBuilder IsShared(bool isShared)
+            {
+                _isShared = isShared;
+                return this;
+            }
+
             /// <summary>
             /// Build a new instance of House
             /// </summary>
@@ -547,7 +562,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                                  _landlinePhoneAvailable, _cableTvAvailable, _dimension, _garageAvailable,
                                  _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber, _latitude, 
                                  _longitude, _houseNo, _streetNo, _area, _ownerName, _description, 
-                                 _genderRestriction);
+                                 _genderRestriction, _isShared);
             }
         }
     }

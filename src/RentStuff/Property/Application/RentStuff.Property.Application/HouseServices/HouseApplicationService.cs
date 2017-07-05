@@ -82,7 +82,9 @@ namespace RentStuff.Property.Application.HouseServices
                 .StreetNo(createHouseCommand.StreetNo)
                 .Area(createHouseCommand.Area)
                 .OwnerName(createHouseCommand.OwnerName)
-                .GenderRestriction(genderRestriction).Build();
+                .GenderRestriction(genderRestriction)
+                .IsShared(createHouseCommand.IsShared)
+                .Build();
 
             house.Dimension = CreateDimensionInstance(createHouseCommand.DimensionType,
                 createHouseCommand.DimensionStringValue,
@@ -140,18 +142,27 @@ namespace RentStuff.Property.Application.HouseServices
 
             Dimension dimension = CreateDimensionInstance(updateHouseCommand.DimensionType,
                 updateHouseCommand.DimensionStringValue, updateHouseCommand.DimensionIntValue, house);
-            house.UpdateHouse(updateHouseCommand.Title, updateHouseCommand.MonthlyRent,
+            house.UpdateHouse(updateHouseCommand.Title, 
+                updateHouseCommand.MonthlyRent,
                 updateHouseCommand.NumberOfBedrooms,
-                updateHouseCommand.NumberOfKitchens, updateHouseCommand.NumberOfBathrooms,
+                updateHouseCommand.NumberOfKitchens, 
+                updateHouseCommand.NumberOfBathrooms,
                 updateHouseCommand.InternetAvailable,
-                updateHouseCommand.LandlinePhoneAvailable, updateHouseCommand.CableTvAvailable, dimension,
+                updateHouseCommand.LandlinePhoneAvailable, 
+                updateHouseCommand.CableTvAvailable, dimension,
                 updateHouseCommand.GarageAvailable,
-                updateHouseCommand.SmokingAllowed, updateHouseCommand.PropertyType, 
+                updateHouseCommand.SmokingAllowed, 
+                updateHouseCommand.PropertyType, 
                 updateHouseCommand.OwnerEmail,
                 updateHouseCommand.OwnerPhoneNumber,
-                updateHouseCommand.HouseNo, updateHouseCommand.StreetNo, updateHouseCommand.Area,
+                updateHouseCommand.HouseNo, 
+                updateHouseCommand.StreetNo, 
+                updateHouseCommand.Area,
                 updateHouseCommand.OwnerName,
-                updateHouseCommand.Description, genderRestriction, coordinates.Item1, coordinates.Item2);
+                updateHouseCommand.Description, 
+                genderRestriction, coordinates.Item1, 
+                coordinates.Item2, 
+                updateHouseCommand.IsShared);
 
             _houseRepository.SaveorUpdate(house);
             _logger.Info("Updated House successfully: {0}", house);
@@ -211,7 +222,7 @@ namespace RentStuff.Property.Application.HouseServices
                 house.PropertyType.ToString(),
                 house.OwnerEmail, house.OwnerPhoneNumber, house.Latitude, house.Longitude, house.HouseNo, house.StreetNo,
                 house.Area,
-                house.GetImageList(), house.OwnerName, house.Description, house.GenderRestriction.ToString());
+                house.GetImageList(), house.OwnerName, house.Description, house.GenderRestriction.ToString(), house.IsShared);
         }
 
         /// <summary>
@@ -432,7 +443,7 @@ namespace RentStuff.Property.Application.HouseServices
                     HousePartialRepresentation houseRepresentation = new HousePartialRepresentation(house.Id, house.Title, house.Area, 
                         house.MonthlyRent, house.PropertyType.ToString(), house.Dimension, house.NumberOfBedrooms, 
                         house.NumberOfBathrooms, house.NumberOfKitchens, house.OwnerEmail, house.OwnerPhoneNumber,
-                        firstImage, house.OwnerName, house.Description);
+                        firstImage, house.OwnerName, house.Description, house.IsShared);
                     
                     houseRepresentations.Add(houseRepresentation);
                 }

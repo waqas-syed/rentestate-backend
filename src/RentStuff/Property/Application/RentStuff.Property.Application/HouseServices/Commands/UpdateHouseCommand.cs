@@ -11,37 +11,12 @@ namespace RentStuff.Property.Application.HouseServices.Commands
     [DataContract]
     public class UpdateHouseCommand
     {
-        private string _id;
-        private long _monthlyRent;
-        private int _numberOfBedrooms;
-        private int _numberOfKitchens;
-        private int _numberOfBathrooms;
-        private bool _familiesOnly;
-        private bool _boysOnly;
-        private bool _girlsOnly;
-        private bool _internetAvailable;
-        private bool _landlinePhoneAvailable;
-        private bool _cableTvAvailable;
-        private bool _garageAvailable;
-        private bool _smokingAllowed;
-        private string _propertyType;
-        private string _ownerEmail;
-        private string _ownerPhoneNumber;
-        private string _houseNo;
-        private string _streetNo;
-        private string _area;
-        private string _dimensionType;
-        private string _dimensionStringValue;
-        private int _dimensionIntValue;
-        private decimal _latitude;
-        private decimal _longitude;
-
         public UpdateHouseCommand(string id, string title, long monthlyRent, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable,
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
             string houseNo, string streetNo, string area, string dimensionType, string dimensionStringValue,
-            decimal dimensionIntValue, string ownerName, string description, string genderRestriction)
+            decimal dimensionIntValue, string ownerName, string description, string genderRestriction, bool isShared)
         {
             Id = id;
             Title = title;
@@ -66,6 +41,7 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             OwnerName = ownerName;
             Description = description;
             GenderRestriction = genderRestriction;
+            IsShared = isShared;
         }
 
         [DataMember]
@@ -145,5 +121,8 @@ namespace RentStuff.Property.Application.HouseServices.Commands
 
         [DataMember]
         public string GenderRestriction { get; private set; }
+
+        [DataMember]
+        public bool IsShared { get; private set; }
     }
 }
