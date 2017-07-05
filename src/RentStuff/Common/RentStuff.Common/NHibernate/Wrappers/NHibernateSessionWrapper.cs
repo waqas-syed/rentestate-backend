@@ -16,7 +16,10 @@ namespace RentStuff.Common.NHibernate.Wrappers
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose()
         {
-            _session.Dispose();
+            if (_session != null)
+            {
+                _session.Dispose();
+            }
         }
         
         /// <summary>
