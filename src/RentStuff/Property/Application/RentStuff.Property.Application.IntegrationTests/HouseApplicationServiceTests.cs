@@ -149,7 +149,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.Description, retreivedHouse.Description);
             Assert.AreEqual(house.DimensionStringValue + " " + house.DimensionType, retreivedHouse.Dimension);
             Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
-            Assert.AreEqual(isShared, retreivedHouse.IsShared);
+            Assert.AreEqual(house.IsShared, retreivedHouse.IsShared);
+            Assert.AreEqual(house.GenderRestriction.ToString(), retreivedHouse.GenderRestriction);
         }
 
         [Test]
@@ -249,6 +250,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house2.DimensionStringValue + " " + house2.DimensionType, retreivedHouse.Dimension);
             Assert.AreEqual(house2.OwnerName, retreivedHouse.OwnerName);
             Assert.AreEqual(house2.IsShared, retreivedHouse.IsShared);
+            Assert.AreEqual(house2.GenderRestriction.ToString(), retreivedHouse.GenderRestriction);
 
             // Verification of House No. 3
             HousePartialRepresentation retreivedHouse2 = houses[1];
@@ -263,7 +265,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house3.Description, retreivedHouse2.Description);
             Assert.AreEqual(house3.DimensionStringValue + " " + house3.DimensionType, retreivedHouse2.Dimension);
             Assert.AreEqual(house3.OwnerName, retreivedHouse2.OwnerName);
-            Assert.AreEqual(house3.IsShared, retreivedHouse.IsShared);
+            Assert.AreEqual(house3.IsShared, retreivedHouse2.IsShared);
+            Assert.AreEqual(house3.GenderRestriction.ToString(), retreivedHouse2.GenderRestriction);
         }
 
         [Test]
@@ -363,6 +366,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house2.DimensionStringValue + " " + house2.DimensionType, retreivedHouse.Dimension);
             Assert.AreEqual(house2.OwnerName, retreivedHouse.OwnerName);
             Assert.AreEqual(house2.IsShared, retreivedHouse.IsShared);
+            Assert.AreEqual(house2.GenderRestriction, retreivedHouse.GenderRestriction);
         }
 
         [Test]
@@ -466,6 +470,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.OwnerEmail, retreivedHouse1.OwnerEmail);
             Assert.AreEqual(house.OwnerPhoneNumber, retreivedHouse1.OwnerPhoneNumber);
             Assert.AreEqual(house.IsShared, retreivedHouse1.IsShared);
+            Assert.AreEqual(house.GenderRestriction, retreivedHouse1.GenderRestriction);
 
             // Verification of House No. 3
             HousePartialRepresentation retreivedHouse2 = houses[1];
@@ -485,6 +490,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house3.OwnerEmail, retreivedHouse2.OwnerEmail);
             Assert.AreEqual(house3.OwnerPhoneNumber, retreivedHouse2.OwnerPhoneNumber);
             Assert.AreEqual(house3.IsShared, retreivedHouse2.IsShared);
+            Assert.AreEqual(house3.GenderRestriction, retreivedHouse2.GenderRestriction);
         }
 
         [Test]
@@ -540,6 +546,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
             Assert.AreEqual(house.GenderRestriction, retreivedHouse.GenderRestriction);
             Assert.AreEqual(house.IsShared, retreivedHouse.IsShared);
+            Assert.AreEqual(house.GenderRestriction, retreivedHouse.GenderRestriction);
         }
 
         [Test]
@@ -590,6 +597,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.Description, retreivedHouse.Description);
             Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
             Assert.AreEqual(house.IsShared, retreivedHouse.IsShared);
+            Assert.AreEqual(house.GenderRestriction, retreivedHouse.GenderRestriction);
         }
 
         [Test]

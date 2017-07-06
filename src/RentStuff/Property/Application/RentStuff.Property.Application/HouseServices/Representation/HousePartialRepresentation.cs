@@ -10,7 +10,8 @@ namespace RentStuff.Property.Application.HouseServices.Representation
     {
         public HousePartialRepresentation(string houseId, string title, string area, long rent, string propertyType, 
             Dimension dimension, int numberOfBedrooms, int numberOfBathrooms, int numberOfKitchens,
-            string ownerEmail, string ownerPhoneNumber, string image, string ownerName, string description, bool isShared)
+            string ownerEmail, string ownerPhoneNumber, string image, string ownerName, string description, bool isShared,
+            string genderRestriction)
         {
             HouseId = houseId;
             Title = title;
@@ -37,6 +38,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
             OwnerName = ownerName;
             Description = description;
             IsShared = isShared;
+            GenderRestriction = genderRestriction;
         }
 
         [DataMember]
@@ -58,30 +60,33 @@ namespace RentStuff.Property.Application.HouseServices.Representation
         public string PropertyType { get; private set; }
 
         [DataMember]
-        public string Dimension { get; set; }
+        public string Dimension { get; private set; }
 
         [DataMember]
-        public int NumberOfBedrooms { get; set; }
+        public int NumberOfBedrooms { get; private set; }
 
         [DataMember]
-        public int NumberOfBathrooms { get; set; }
+        public int NumberOfBathrooms { get; private set; }
 
         [DataMember]
-        public int NumberOfKitchens { get; set; }
+        public int NumberOfKitchens { get; private set; }
 
         [DataMember]
-        public string OwnerEmail { get; set; }
+        public string OwnerEmail { get; private set; }
 
         [DataMember]
-        public string OwnerPhoneNumber { get; set; }
+        public string OwnerPhoneNumber { get; private set; }
 
         [DataMember]
-        public string Image { get; set; }
+        public string Image { get; private set; }
 
         [DataMember]
-        public string OwnerName { get; set; }
+        public string OwnerName { get; private set; }
 
         [DataMember]
-        public bool IsShared { get; set; }
+        public bool IsShared { get; private set; }
+
+        [DataMember]
+        public string GenderRestriction { get; private set; }
     }
 }

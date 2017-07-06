@@ -532,6 +532,8 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house.OwnerPhoneNumber, retreivedHouses[0].OwnerPhoneNumber);
                 Assert.AreEqual(ownerName, retreivedHouses[0].OwnerName);
                 Assert.AreEqual(house.OwnerName, retreivedHouses[0].OwnerName);
+                Assert.AreEqual(house.IsShared, retreivedHouses[0].IsShared);
+                Assert.AreEqual(house.GenderRestriction.ToString(), retreivedHouses[0].GenderRestriction);
 
 
                 // Verification of House No 2
@@ -561,6 +563,8 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house2.OwnerPhoneNumber, retreivedHouses[1].OwnerPhoneNumber);
                 Assert.AreEqual(ownerName2, retreivedHouses[1].OwnerName);
                 Assert.AreEqual(house2.OwnerName, retreivedHouses[1].OwnerName);
+                Assert.AreEqual(house2.IsShared, retreivedHouses[1].IsShared);
+                Assert.AreEqual(house2.GenderRestriction.ToString(), retreivedHouses[1].GenderRestriction);
             }
         }
 
@@ -746,6 +750,8 @@ namespace RentStuff.Property.Ports.Tests
             Assert.AreEqual(house.OwnerPhoneNumber, retreivedHouses[0].OwnerPhoneNumber);
             Assert.AreEqual(ownerName, retreivedHouses[0].OwnerName);
             Assert.AreEqual(house.OwnerName, retreivedHouses[0].OwnerName);
+            Assert.AreEqual(house.IsShared, retreivedHouses[0].IsShared);
+            Assert.AreEqual(house.GenderRestriction.ToString(), retreivedHouses[0].GenderRestriction);
 
 
             // Verification of House No 3 (in order of saving houses above)
@@ -775,6 +781,8 @@ namespace RentStuff.Property.Ports.Tests
             Assert.AreEqual(house3.OwnerPhoneNumber, retreivedHouses[1].OwnerPhoneNumber);
             Assert.AreEqual(ownerName3, retreivedHouses[1].OwnerName);
             Assert.AreEqual(house3.OwnerName, retreivedHouses[1].OwnerName);
+            Assert.AreEqual(house3.IsShared, retreivedHouses[1].IsShared);
+            Assert.AreEqual(house3.GenderRestriction.ToString(), retreivedHouses[1].GenderRestriction);
         }
 
         [Category("Integration")]
@@ -961,7 +969,10 @@ namespace RentStuff.Property.Ports.Tests
             Assert.AreEqual(house2.OwnerPhoneNumber, retreivedHouses[0].OwnerPhoneNumber);
             Assert.AreEqual(ownerName2, retreivedHouses[0].OwnerName);
             Assert.AreEqual(house2.OwnerName, retreivedHouses[0].OwnerName);
-            
+            Assert.AreEqual(house2.IsShared, retreivedHouses[0].IsShared);
+            Assert.AreEqual(house2.GenderRestriction.ToString(), retreivedHouses[0].GenderRestriction);
+
+
             // Verification of House No 2 (in order of saving houses above)
             Assert.AreEqual(houseId, retreivedHouses[1].HouseId);
             Assert.AreEqual(title, retreivedHouses[1].Title);
@@ -989,6 +1000,8 @@ namespace RentStuff.Property.Ports.Tests
             Assert.AreEqual(house.OwnerPhoneNumber, retreivedHouses[1].OwnerPhoneNumber);
             Assert.AreEqual(ownerName, retreivedHouses[1].OwnerName);
             Assert.AreEqual(house.OwnerName, retreivedHouses[1].OwnerName);
+            Assert.AreEqual(house.IsShared, retreivedHouses[1].IsShared);
+            Assert.AreEqual(house.GenderRestriction, retreivedHouses[1].GenderRestriction);
         }
     }
 }

@@ -443,7 +443,7 @@ namespace RentStuff.Property.Application.HouseServices
                     HousePartialRepresentation houseRepresentation = new HousePartialRepresentation(house.Id, house.Title, house.Area, 
                         house.MonthlyRent, house.PropertyType.ToString(), house.Dimension, house.NumberOfBedrooms, 
                         house.NumberOfBathrooms, house.NumberOfKitchens, house.OwnerEmail, house.OwnerPhoneNumber,
-                        firstImage, house.OwnerName, house.Description, house.IsShared);
+                        firstImage, house.OwnerName, house.Description, house.IsShared, house.GenderRestriction.ToString());
                     
                     houseRepresentations.Add(houseRepresentation);
                 }
