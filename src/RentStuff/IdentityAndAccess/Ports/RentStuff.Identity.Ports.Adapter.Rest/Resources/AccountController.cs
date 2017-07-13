@@ -115,7 +115,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Resources
                     _logger.Error("RegisterExternal's model state is invalid");
                     return BadRequest(ModelState);
                 }
-                _logger.Debug("RegisterExternal user request recieved: Email = {0} | FullName = {1} | ExternalAccessToken = {2} | " +
+                _logger.Info("RegisterExternal user request recieved: Email = {0} | FullName = {1} | ExternalAccessToken = {2} | " +
                               "Provider = {3}", registerExternalUserCommand.Email, registerExternalUserCommand.FullName, 
                               registerExternalUserCommand.ExternalAccessToken, registerExternalUserCommand.Provider);
                 var accessToken = _accountApplicationService.RegisterExternalUser(registerExternalUserCommand);

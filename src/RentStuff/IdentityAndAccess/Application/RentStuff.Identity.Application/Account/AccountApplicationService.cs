@@ -60,7 +60,7 @@ namespace RentStuff.Identity.Application.Account
             {
                 throw new ArgumentException("Password and confirm password are not the same");
             }
-            _logger.Info("Registering user: Email = {0} | FullName = {1}");
+            _logger.Info("Registering user: Email = {0} | FullName = {1}", userModel.Email, userModel.FullName);
             // Register the User
             IdentityResult registrationResult = _accountRepository.RegisterUser(userModel.FullName, userModel.Email, 
                                                                                 userModel.Password, isExternalUser);
@@ -161,6 +161,8 @@ namespace RentStuff.Identity.Application.Account
         /// <returns></returns>
         public InternalLoginDataRepresentation RegisterExternalUser(RegisterExternalUserCommand registerExternalUserCommand)
         {
+            _logger.Info("RegisterExternal Application Layer: Email = {0} | FullName = {1}",
+                registerExternalUserCommand.Email, registerExternalUserCommand.FullName);
             // Verify that the External is legit and is providing us correct external access token
             var verifiedAccessToken = VerifyExternalAccessToken(registerExternalUserCommand.Provider, registerExternalUserCommand.ExternalAccessToken);
             if (verifiedAccessToken == null)
