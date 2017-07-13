@@ -179,6 +179,7 @@ namespace RentStuff.Identity.Application.Account
             CreateUserCommand createUserCommand = new CreateUserCommand(registerExternalUserCommand.FullName, 
                 registerExternalUserCommand.Email, null, null);
             var registeredUserId = Register(createUserCommand, true);
+            _logger.Info("External User registered successfuly");
             if (string.IsNullOrEmpty(registeredUserId))
             {
                 throw new SystemException("An error occured while registering external user");
@@ -194,6 +195,10 @@ namespace RentStuff.Identity.Application.Account
             
             //generate access token response
             var localAccessToken = GenerateLocalAccessTokenResponse(registerExternalUserCommand.Email);
+            if (!string.IsNullOrWhiteSpace(localAccessToken))
+            {
+                _logger.Info("RegisterExternal: LocalAccessToken craeted successfully");
+            }
 
             return new InternalLoginDataRepresentation(registerExternalUserCommand.FullName, registerExternalUserCommand.Email, 
                 localAccessToken);
@@ -229,6 +234,10 @@ namespace RentStuff.Identity.Application.Account
 
             // Generate access token response
             var localAccessToken = GenerateLocalAccessTokenResponse(user.Email);
+            if (!string.IsNullOrWhiteSpace(localAccessToken))
+            {
+                _logger.Info("RegisterExternal: LocalAccessToken craeted successfully");
+            }
             return new InternalLoginDataRepresentation(user.FullName, user.Email, localAccessToken);
         }
 
