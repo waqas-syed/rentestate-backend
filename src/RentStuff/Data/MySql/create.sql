@@ -175,6 +175,7 @@ CREATE TABLE `house` (
   `dimension_id` varchar(100) DEFAULT NULL,
   `owner_name` varchar(100) NOT NULL,
   `is_shared` tinyint(1) NOT NULL DEFAULT '0',
+  `rent_unit` varchar(50) DEFAULT 'Month',
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
@@ -207,4 +208,4 @@ CREATE TABLE `houseimages` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-05 18:58:46
+-- Dump completed on 2017-07-13 16:19:36

@@ -15,7 +15,8 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, 
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber, 
             string houseNo, string streetNo, string area, string dimensionType, string dimensionStringValue, 
-            decimal dimensionIntValue, string ownerName, string description, string genderRestriction, bool isShared)
+            decimal dimensionIntValue, string ownerName, string description, string genderRestriction, bool isShared,
+            string rentUnit)
         {
             Title = title;
             MonthlyRent = monthlyRent;
@@ -40,6 +41,7 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             Description = description;
             GenderRestriction = genderRestriction;
             IsShared = isShared;
+            RentUnit = rentUnit;
         }
 
         [DataMember]
@@ -110,5 +112,8 @@ namespace RentStuff.Property.Application.HouseServices.Commands
 
         [DataMember]
         public bool IsShared { get; private set; }
+
+        [DataMember]
+        public string RentUnit { get; private set; }
     }
 }

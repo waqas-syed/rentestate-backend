@@ -84,6 +84,7 @@ namespace RentStuff.Property.Application.HouseServices
                 .OwnerName(createHouseCommand.OwnerName)
                 .GenderRestriction(genderRestriction)
                 .IsShared(createHouseCommand.IsShared)
+                .RentUnit(createHouseCommand.RentUnit)
                 .Build();
 
             house.Dimension = CreateDimensionInstance(createHouseCommand.DimensionType,
@@ -162,7 +163,8 @@ namespace RentStuff.Property.Application.HouseServices
                 updateHouseCommand.Description, 
                 genderRestriction, coordinates.Item1, 
                 coordinates.Item2, 
-                updateHouseCommand.IsShared);
+                updateHouseCommand.IsShared,
+                updateHouseCommand.RentUnit);
 
             _houseRepository.SaveorUpdate(house);
             _logger.Info("Updated House successfully: {0}", house);
@@ -199,7 +201,7 @@ namespace RentStuff.Property.Application.HouseServices
         public IList<HousePartialRepresentation> GetHouseByEmail(string email, int pageNo = 0)
         {
             IList<House> houses = _houseRepository.GetHouseByOwnerEmail(email, pageNo);
-            return ConvertHouseToRepresentation(houses);
+            return ConvertHousesToPartialRepresentations(houses);
         }
 
         /// <summary>
@@ -222,7 +224,8 @@ namespace RentStuff.Property.Application.HouseServices
                 house.PropertyType.ToString(),
                 house.OwnerEmail, house.OwnerPhoneNumber, house.Latitude, house.Longitude, house.HouseNo, house.StreetNo,
                 house.Area,
-                house.GetImageList(), house.OwnerName, house.Description, house.GenderRestriction.ToString(), house.IsShared);
+                house.GetImageList(), house.OwnerName, house.Description, house.GenderRestriction.ToString(), house.IsShared,
+                house.RentUnit);
         }
 
         /// <summary>
@@ -238,7 +241,7 @@ namespace RentStuff.Property.Application.HouseServices
             // Get houses around the given coordinates
             IList<House> houses = _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2,
                 pageNo);
-            return ConvertHouseToRepresentation(houses);
+            return ConvertHousesToPartialRepresentations(houses);
         }
 
         /// <summary>
@@ -250,7 +253,7 @@ namespace RentStuff.Property.Application.HouseServices
         public IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType, int pageNo = 0)
         {
             IList<House> houses = _houseRepository.SearchHousesByPropertyType(propertyType, pageNo);
-            return ConvertHouseToRepresentation(houses);
+            return ConvertHousesToPartialRepresentations(houses);
         }
 
         /// <summary>
@@ -268,7 +271,7 @@ namespace RentStuff.Property.Application.HouseServices
             // Get 20 coordinates within the range of around 30 kilometers radius
             IList<House> houses = _houseRepository.SearchHousesByCoordinatesAndPropertyType(coordinates.Item1,
                 coordinates.Item2, propertyType, pageNo);
-            return ConvertHouseToRepresentation(houses);
+            return ConvertHousesToPartialRepresentations(houses);
         }
 
         /// <summary>
@@ -323,7 +326,7 @@ namespace RentStuff.Property.Application.HouseServices
         public IList<HousePartialRepresentation> GetAllHouses(int pageNo = 0)
         {
             IList<House> houses = _houseRepository.GetAllHouses(pageNo);
-            return ConvertHouseToRepresentation(houses);
+            return ConvertHousesToPartialRepresentations(houses);
         }
 
         /// <summary>
@@ -332,7 +335,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         public IList<string> GetPropertyTypes()
         {
-            return House.AllPropertyTypes();
+            return House.GetAllPropertyTypes();
         }
 
         /// <summary>
@@ -428,7 +431,21 @@ namespace RentStuff.Property.Application.HouseServices
             }
         }
 
-        private IList<HousePartialRepresentation> ConvertHouseToRepresentation(IList<House> houses)
+        /// <summary>
+        /// Get the lsit of Rent Units
+        /// </summary>
+        /// <returns></returns>
+        public IList<string> GetAllRentUnits()
+        {
+            return House.GetAllRentUnits();
+        }
+
+        /// <summary>
+        /// Converts the list of houses to a list of PartialHouseRepresentations
+        /// </summary>
+        /// <param name="houses"></param>
+        /// <returns></returns>
+        private IList<HousePartialRepresentation> ConvertHousesToPartialRepresentations(IList<House> houses)
         {
             IList<HousePartialRepresentation> houseRepresentations = new List<HousePartialRepresentation>();
             if (houses != null && houses.Count > 0)
@@ -443,33 +460,13 @@ namespace RentStuff.Property.Application.HouseServices
                     HousePartialRepresentation houseRepresentation = new HousePartialRepresentation(house.Id, house.Title, house.Area, 
                         house.MonthlyRent, house.PropertyType.ToString(), house.Dimension, house.NumberOfBedrooms, 
                         house.NumberOfBathrooms, house.NumberOfKitchens, house.OwnerEmail, house.OwnerPhoneNumber,
-                        firstImage, house.OwnerName, house.Description, house.IsShared, house.GenderRestriction.ToString());
+                        firstImage, house.OwnerName, house.Description, house.IsShared, house.GenderRestriction.ToString(),
+                        house.RentUnit);
                     
                     houseRepresentations.Add(houseRepresentation);
                 }
             }
             return houseRepresentations;
-        }
-        
-        /// <summary>
-        /// Converts the given ImageId to base64String
-        /// </summary>
-        /// <param name="imageId"></param>
-        /// <returns></returns>
-        private ImageRepresentation ConvertImageToBase64Representation(string imageId)
-        {
-            using (Image image = Image.FromFile(HostingEnvironment.MapPath("~/Images/" + imageId)))
-            {
-                using (MemoryStream m = new MemoryStream())
-                {
-                    image.Save(m, ImageFurnace.GetImageFormat());
-                    byte[] imageBytes = m.ToArray();
-
-                    // Convert byte[] to Base64 String
-                    //return Convert.ToBase64String(imageBytes);
-                    return new ImageRepresentation(imageId, ImageFurnace.GetImageFormat().ToString(), Convert.ToBase64String(imageBytes));
-                }
-            }
         }
     }
 }
