@@ -60,6 +60,7 @@ namespace RentStuff.Identity.Application.Account
             {
                 throw new ArgumentException("Password and confirm password are not the same");
             }
+            _logger.Info("Registering user: Email = {0} | FullName = {1}");
             // Register the User
             IdentityResult registrationResult = _accountRepository.RegisterUser(userModel.FullName, userModel.Email, 
                                                                                 userModel.Password, isExternalUser);
@@ -178,6 +179,8 @@ namespace RentStuff.Identity.Application.Account
             // Register the user in our database
             CreateUserCommand createUserCommand = new CreateUserCommand(registerExternalUserCommand.FullName, 
                 registerExternalUserCommand.Email, null, null);
+            _logger.Info("RegisterExternal sending request to register user: Email = {0} | FullName = {1}", 
+                createUserCommand.Email, createUserCommand.FullName);
             var registeredUserId = Register(createUserCommand, true);
             _logger.Info("External User registered successfuly");
             if (string.IsNullOrEmpty(registeredUserId))

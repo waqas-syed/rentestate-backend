@@ -18,3 +18,7 @@
 - Google Cloud Storage - For uploading Photos
 	- We have created Service account credentials on Google Cloud Console and downloaded a json file. Get this file from the project lead and place it somewhere on your computer.
 	- Create a new environment variable called GOOGLE_APPLICATION_CREDENTIALS and point it's vaue to the json file.
+
+- Facebook Login:
+	- For OWIN pipeline in ASP.NET, the redirect url that we provide to Facebook is https://ourdomain.com/signin-facebook. So in our case it is https://api.zarqoon.com/signin-facebook.
+	- We need to add this url to 'Valid OAuth Redirect Uri field' in the Facebook Developers' 'Facebook Login' product page: https://developers.facebook.com/apps/114619729160977/fb-login/
