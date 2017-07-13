@@ -46,6 +46,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Resources
         {
             try
             {
+                _logger.Info("External Login Request Recieved for provider: {0}", provider);
                 string redirectUri = string.Empty;
 
                 if (error != null)
@@ -66,6 +67,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Resources
 
                 if (externalLogin == null)
                 {
+                    _logger.Error("External Login could not be processed");
                     return InternalServerError();
                 }
 
@@ -74,7 +76,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Resources
                     Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
                     return new ChallengeResult(provider, this);
                 }
-
+                
                 bool hasRegistered = _accountApplicationService.UserExistsByUserLoginInfo(new UserLoginInfo(externalLogin.LoginProvider,
                         externalLogin.ProviderKey));
 
@@ -86,6 +88,7 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Resources
                     hasRegistered.ToString(),
                     externalLogin.FullName,
                     externalLogin.Email);
+                _logger.Info("FacebookRedirectUri = {0}", redirectUri);
                 
                 return Redirect(redirectUri);
             }
