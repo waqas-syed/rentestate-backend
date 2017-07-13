@@ -2,6 +2,8 @@
 using System.Data.Common;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using RentStuff.Identity.Domain.Model.Entities;
 using RentStuff.Identity.Infrastructure.Services.Identity;
 
 namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
@@ -25,8 +27,16 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
         /// <param name="name"></param>
         /// <param name="email"></param>
         /// <param name="password"></param>
+        /// <param name="isExternalUser"></param>
         /// <returns></returns>
-        IdentityResult RegisterUser(string name, string email, string password);
+        IdentityResult RegisterUser(string name, string email, string password, bool isExternalUser = false);
+
+        /// <summary>
+        /// Get user by UserLoginInfo
+        /// </summary>
+        /// <param name="loginInfo"></param>
+        /// <returns></returns>
+        CustomIdentityUser GetUserByUserLoginInfo(UserLoginInfo loginInfo);
 
         /// <summary>
         /// Get user by email
@@ -36,6 +46,8 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
         CustomIdentityUser GetUserByEmail(string email);
 
         CustomIdentityUser GetUserByPassword(string userName, string password);
+        
+        IdentityResult AddLogin(string userId, UserLoginInfo userLoginInfo);
 
         IdentityResult UpdateUser(CustomIdentityUser customerIdentityUser);
 

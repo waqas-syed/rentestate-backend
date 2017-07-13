@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using NLog;
 using RentStuff.Common.Utilities;
+using RentStuff.Identity.Domain.Model.Entities;
 using RentStuff.Identity.Infrastructure.Services.Hashers;
 using RentStuff.Identity.Infrastructure.Services.Identity;
 using RentStuff.Identity.Infrastructure.Services.PasswordReset;
@@ -44,7 +45,7 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
             return connection;
         }
 
-        public IdentityResult RegisterUser(string name, string email, string password)
+        public IdentityResult RegisterUser(string name, string email, string password, bool isExternalUser = false)
         {
             // Assign email to the uername property, as we will use email in place of username
             CustomIdentityUser user = new CustomIdentityUser
@@ -53,11 +54,29 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
                 Email = email,
                 FullName = name
             };
-            var result = _userManager.Create(user, password);
-            
+            IdentityResult result;
+            if (!isExternalUser)
+            {
+                result = _userManager.Create(user, password);
+            }
+            else
+            {
+                result = _userManager.Create(user);
+            }
+
             return result;
         }
-        
+
+        /// <summary>
+        /// get user by UserLoginInfo
+        /// </summary>
+        /// <param name="loginInfo"></param>
+        /// <returns></returns>
+        public CustomIdentityUser GetUserByUserLoginInfo(UserLoginInfo loginInfo)
+        {
+            return _userManager.Find(loginInfo);
+        }
+
         public CustomIdentityUser GetUserByEmail(string email)
         {
             return _userManager.FindByEmail(email);
@@ -66,6 +85,13 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
         public CustomIdentityUser GetUserByPassword(string userName, string password)
         {
             return _userManager.Find(userName, password);
+        }
+        
+        public IdentityResult AddLogin(string userId, UserLoginInfo userLoginInfo)
+        {
+            var result =  _userManager.AddLogin(userId, userLoginInfo);
+
+            return result;
         }
 
         public IdentityResult UpdateUser(CustomIdentityUser customerIdentityUser)
@@ -95,7 +121,7 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
             {
                 return true;
             }
-            return false;
+            throw new ArgumentException($"Could not confirm user email. UserId: {userId}");
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Cors;
 using System.Web.Http;
@@ -20,6 +19,7 @@ using RentStuff.Identity.Application.Ninject.Modules;
 using RentStuff.Identity.Infrastructure.Persistence.Ninject.Modules;
 using RentStuff.Identity.Infrastructure.Services.Ninject.Modules;
 using RentStuff.Identity.Ports.Adapter.Rest.Ninject.Modules;
+using RentStuff.Identity.Ports.Adapter.Rest.Resources;
 using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 using RentStuff.Property.Ports.Adapter.Rest.Ninject.Modules;
@@ -41,7 +41,7 @@ namespace RentStuff.Common.WebHost
     public class Startup
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-
+        
         public void Configuration(IAppBuilder app)
         {
             app.CreatePerOwinContext(() => new AppBuilderProvider(app));
@@ -70,7 +70,7 @@ namespace RentStuff.Common.WebHost
             WebApiConfig.Register(config);
             //app.UseWebApi(config);
             app.UseNinjectMiddleware(CreateKernel).UseNinjectWebApi(config);
-
+            
             _logger.Info("ASP.NET and OWIN pipeline established");
         }
 
@@ -96,7 +96,9 @@ namespace RentStuff.Common.WebHost
 
         private void ConfigureOAuth(IAppBuilder app)
         {
-            OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
+            app.UseExternalSignInCookie(Microsoft.AspNet.Identity.DefaultAuthenticationTypes.ExternalCookie);
+            
+            OAuthAuthorizationServerOptions oAuthServerOptions = new OAuthAuthorizationServerOptions()
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
@@ -105,8 +107,11 @@ namespace RentStuff.Common.WebHost
             };
 
             // Token Generation
-            app.UseOAuthAuthorizationServer(OAuthServerOptions);
-            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+            app.UseOAuthAuthorizationServer(oAuthServerOptions);
+            app.UseOAuthBearerAuthentication(AccountController.OAuthBearerAuthenticationOptions);
+
+            // Facebook Authentication
+            app.UseFacebookAuthentication(AccountController.FacebookAuthenticationOptions);
         }
 
         internal static IDataProtectionProvider DataProtectionProvider { get; private set; }

@@ -1,6 +1,9 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.Owin.Security.OAuth;
+using RentStuff.Identity.Domain.Model.Entities;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
 using RentStuff.Identity.Infrastructure.Services.Identity;
 

@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using RentStuff.Identity.Domain.Model.Entities;
 using RentStuff.Identity.Infrastructure.Services.Identity;
 
 namespace RentStuff.Identity.Infrastructure.Persistence

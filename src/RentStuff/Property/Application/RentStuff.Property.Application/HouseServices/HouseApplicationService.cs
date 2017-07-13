@@ -385,7 +385,7 @@ namespace RentStuff.Property.Application.HouseServices
         public void DeleteImagesFromHouse(string houseId, IList<string> imagesList)
         {
             var house = _houseRepository.GetHouseById(houseId);
-            if (house != null)
+            if (house != null && imagesList.Count > 0)
             {
                 foreach (var imageId in imagesList)
                 {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Newtonsoft.Json;
@@ -100,7 +102,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         private void CheckOwnerEmailIntegrity(string houseOwnerEmail)
         {
             // Check if the current caller is using his own email in the CreateHouseCommand to upload a new house
-            var currentUserEmail = User.Identity.Name;
+            var currentUserEmail = GetEmailFromClaims(User.Identity);
             if (!currentUserEmail.Equals(houseOwnerEmail))
             {
                 _logger.Error(
@@ -123,7 +125,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             bool imageUploaded = false;
             String[] headerValues = (String[]) Request.Headers.GetValues("HouseId");
             string houseId = headerValues[0];
-            var userEmail = User.Identity.Name;
+            var userEmail = GetEmailFromClaims(User.Identity);
             bool allowedToEditHouse = _houseApplicationService.HouseOwnershipCheck(houseId, userEmail);
             try
             {
@@ -180,7 +182,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         [Authorize]
         public IHttpActionResult ImageDelete([FromBody] DeleteImageCommand deleteImageCommand)
         {
-            var userEmail = User.Identity.Name;
+            var userEmail = GetEmailFromClaims(User.Identity);
             bool allowedToEditHouse = _houseApplicationService.HouseOwnershipCheck(deleteImageCommand.HouseId,
                 userEmail);
 
@@ -256,9 +258,10 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 }
                 else if (email != null)
                 {
-                    if (!string.IsNullOrWhiteSpace(User.Identity?.Name))
+                    var emailFromClaims = GetEmailFromClaims(User.Identity);
+                    if (!string.IsNullOrWhiteSpace(emailFromClaims))
                     {
-                        if (email.Equals(User.Identity.Name))
+                        if (email.Equals(emailFromClaims))
                         {
                             _logger.Info("Get House by Email {0}", email);
                             return Ok(_houseApplicationService.GetHouseByEmail(email, pageNo));
@@ -300,7 +303,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var userEmail = User.Identity.Name;
+                    var userEmail = GetEmailFromClaims(User.Identity);
                     bool allowedToEditHouse = _houseApplicationService.HouseOwnershipCheck(id, userEmail);
                     if (allowedToEditHouse)
                     {
@@ -336,6 +339,32 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             catch (Exception exception)
             {
                 return InternalServerError(exception);
+            }
+        }
+
+        /// <summary>
+        /// Get the email address, either from Identity.Name or ClaimsIdentity's email address
+        /// </summary>
+        /// <param name="identity"></param>
+        /// <returns></returns>
+        private string GetEmailFromClaims(IIdentity identity)
+        {
+            if (!string.IsNullOrWhiteSpace(User.Identity?.Name))
+            {
+                return User.Identity.Name;
+            }
+            else
+            {
+                var claimsIdentity = identity as ClaimsIdentity;
+                if (claimsIdentity != null)
+                {
+                    var email = claimsIdentity.FindFirst(ClaimTypes.Email).Value;
+                    if (!string.IsNullOrWhiteSpace(email))
+                    {
+                        return email;
+                    }
+                }
+                return null;
             }
         }
     }
