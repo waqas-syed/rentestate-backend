@@ -64,12 +64,15 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Resources
                 
                 ExternalLoginDataRepresentation externalLogin = 
                     AccountApplicationService.ExternalLoginRepresentationFromIdentity(User.Identity as ClaimsIdentity);
-
+                
                 if (externalLogin == null)
                 {
                     _logger.Error("External Login could not be processed");
                     return InternalServerError();
                 }
+
+                _logger.Info("ExternalLogin request properties: Email = {0} | FullName = {1} | ExternalAccessToken = {2}",
+                    externalLogin.Email, externalLogin.FullName, externalLogin.ExternalAccessToken);
 
                 if (externalLogin.LoginProvider != provider)
                 {

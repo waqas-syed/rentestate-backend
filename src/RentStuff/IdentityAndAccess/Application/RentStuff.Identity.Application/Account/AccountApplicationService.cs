@@ -192,12 +192,14 @@ namespace RentStuff.Identity.Application.Account
             };
 
             this.AddLogin(registeredUserId, info.Login);
+            _logger.Error("ExternalLoginInfo saved to database successfully. UserId = {0} | ExternalId = {1} | Email = {2}", 
+                registeredUserId, verifiedAccessToken.UserId, registerExternalUserCommand.Email);
             
             //generate access token response
             var localAccessToken = GenerateLocalAccessTokenResponse(registerExternalUserCommand.Email);
             if (!string.IsNullOrWhiteSpace(localAccessToken))
             {
-                _logger.Info("RegisterExternal: LocalAccessToken craeted successfully");
+                _logger.Info("RegisterExternal: LocalAccessToken created successfully");
             }
 
             return new InternalLoginDataRepresentation(registerExternalUserCommand.FullName, registerExternalUserCommand.Email, 
@@ -236,7 +238,7 @@ namespace RentStuff.Identity.Application.Account
             var localAccessToken = GenerateLocalAccessTokenResponse(user.Email);
             if (!string.IsNullOrWhiteSpace(localAccessToken))
             {
-                _logger.Info("RegisterExternal: LocalAccessToken craeted successfully");
+                _logger.Info("RegisterExternal: LocalAccessToken created successfully");
             }
             return new InternalLoginDataRepresentation(user.FullName, user.Email, localAccessToken);
         }
