@@ -84,13 +84,13 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Resources
                         externalLogin.ProviderKey));
 
                 redirectUri = string.Format(
-                    "{0}?external_access_token={1}&provider={2}&haslocalaccount={3}&full_name={4}&email={5}",
+                    "{0}?external_access_token={1}&provider={2}&haslocalaccount={3}&email={4}&full_name={5}",
                     RentStuff.Common.Utilities.Constants.FacebookRedirectUri,
                     externalLogin.ExternalAccessToken,
                     externalLogin.LoginProvider,
                     hasRegistered.ToString(),
-                    externalLogin.FullName,
-                    externalLogin.Email);
+                    externalLogin.Email,
+                    externalLogin.FullName);
                 _logger.Info("FacebookRedirectUri = {0}", redirectUri);
                 
                 return Redirect(redirectUri);
