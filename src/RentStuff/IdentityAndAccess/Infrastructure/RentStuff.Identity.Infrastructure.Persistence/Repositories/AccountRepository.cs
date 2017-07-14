@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Linq;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using NLog;
@@ -43,6 +44,38 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
             }
             connection.ConnectionString = StringCipher.DecipheredConnectionString;
             return connection;
+        }
+
+        /// <summary>
+        /// Saves an ExternalAccessTokenIdentifier to the database
+        /// </summary>
+        /// <param name="externalAccessTokenIdentifier"></param>
+        public ExternalAccessTokenIdentifier SaveExternalAccessTokenIdentifier(ExternalAccessTokenIdentifier externalAccessTokenIdentifier)
+        {
+            var accessTokenIdentifier = _ctx.ExternalAccessExternalTokenIdentifiers.Add(externalAccessTokenIdentifier);
+            _ctx.SaveChanges();
+            return accessTokenIdentifier;
+        }
+
+        public void DeleteExternalAccessTokenIdentifier(ExternalAccessTokenIdentifier externalAccessTokenIdentifier)
+        {
+            _ctx.ExternalAccessExternalTokenIdentifiers.Remove(externalAccessTokenIdentifier);
+            _ctx.SaveChanges();
+        }
+
+        /// <summary>
+        /// Finds the ExtenralAccessTokenIdentifier given the InternalIdentifier
+        /// </summary>
+        /// <param name="internalIdentifier"></param>
+        /// <returns></returns>
+        public ExternalAccessTokenIdentifier GetExternalAccessIdentifierByInternalId(string internalIdentifier)
+        {
+            return _ctx.ExternalAccessExternalTokenIdentifiers.Find(internalIdentifier);
+        }
+
+        public ExternalAccessTokenIdentifier GetExternalAccessIdentifierByToken(string externalAccessToken)
+        {
+            return _ctx.ExternalAccessExternalTokenIdentifiers.SingleOrDefault(tokenInstance => tokenInstance.ExternalAccessToken == externalAccessToken);
         }
 
         public IdentityResult RegisterUser(string name, string email, string password, bool isExternalUser = false)

@@ -56,5 +56,22 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
         string GetPasswordResetToken(string userId);
 
         bool ResetPassword(string userId, string token, string newPassword);
+
+        /// <summary>
+        /// Saves an ExternalAccessTokenIdentifier to the database
+        /// </summary>
+        /// <param name="externalAccessTokenIdentifier"></param>
+        ExternalAccessTokenIdentifier SaveExternalAccessTokenIdentifier(ExternalAccessTokenIdentifier externalAccessTokenIdentifier);
+
+        void DeleteExternalAccessTokenIdentifier(ExternalAccessTokenIdentifier externalAccessTokenIdentifier);
+
+        /// <summary>
+        /// Finds the ExternalAccessTokenIdentifier given the InternalIdentifier
+        /// </summary>
+        /// <param name="internalIdentifier"></param>
+        /// <returns></returns>
+        ExternalAccessTokenIdentifier GetExternalAccessIdentifierByInternalId(string internalIdentifier);
+
+        ExternalAccessTokenIdentifier GetExternalAccessIdentifierByToken(string externalAccessToken);
     }
 }

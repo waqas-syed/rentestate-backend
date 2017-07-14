@@ -154,7 +154,7 @@ namespace RentStuff.Identity.Application.Account
             }
             throw new InvalidOperationException("Invalid token");*/
         }
-
+        
         /// <summary>
         /// Saves user who registers using Facebook or other third party account
         /// </summary>
@@ -163,12 +163,8 @@ namespace RentStuff.Identity.Application.Account
         {
             _logger.Info("RegisterExternal Application Layer: Email = {0} | FullName = {1}",
                 registerExternalUserCommand.Email, registerExternalUserCommand.FullName);
-            // Verify that the External is legit and is providing us correct external access token
-            var verifiedAccessToken = VerifyExternalAccessToken(registerExternalUserCommand.Provider, registerExternalUserCommand.ExternalAccessToken);
-            if (verifiedAccessToken == null)
-            {
-                throw new InvalidOperationException("Invalid Provider or External Access Token");
-            }
+
+            var verifiedAccessToken = ProcessExternalAccessToken(registerExternalUserCommand.Provider, registerExternalUserCommand.ExternalAccessToken);
 
             // Check if the user is not already registered with our app
             var hasRegistered = this.UserExistsByUserLoginInfo(new UserLoginInfo(registerExternalUserCommand.Provider, verifiedAccessToken.UserId));
@@ -215,21 +211,16 @@ namespace RentStuff.Identity.Application.Account
         /// Provides external access token to retrieve a local token, by which this backend API can be accessed
         /// </summary>
         /// <param name="provider"></param>
-        /// <param name="externalAccessToken"></param>
+        /// <param name="internalId"></param>
         /// <returns></returns>
-        public InternalLoginDataRepresentation ObtainAccessToken(string provider, string externalAccessToken)
+        public InternalLoginDataRepresentation ObtainAccessToken(string provider, string internalId)
         {
-            if (string.IsNullOrWhiteSpace(provider) || string.IsNullOrWhiteSpace(externalAccessToken))
+            if (string.IsNullOrWhiteSpace(provider) || string.IsNullOrWhiteSpace(internalId))
             {
                 throw new NullReferenceException("Provider or external access token is not sent");
             }
 
-            // Verify that the External is legit and is providing us correct external access token
-            var verifiedAccessToken = VerifyExternalAccessToken(provider, externalAccessToken);
-            if (verifiedAccessToken == null)
-            {
-                throw new InvalidOperationException("Invalid Provider or External Access Token");
-            }
+            var verifiedAccessToken = ProcessExternalAccessToken(provider, internalId);
 
             // Check that this user exists in our database
             var user = this.GetUserByUserLoginInfoRepresentation(new UserLoginInfo(provider, verifiedAccessToken.UserId));
@@ -246,6 +237,30 @@ namespace RentStuff.Identity.Application.Account
                 _logger.Info("RegisterExternal: LocalAccessToken created successfully");
             }
             return new InternalLoginDataRepresentation(user.FullName, user.Email, localAccessToken);
+        }
+
+        /// <summary>
+        /// Gets ExternalAccessToken using the Internal Id, verifies the ExternalAccessToken, deletes the ExternalAccessTokenIdentifier
+        /// and returns the VerifiedAccessToken
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="internalId"></param>
+        /// <returns></returns>
+        private ParsedExternalAccessTokenRepresentation ProcessExternalAccessToken(string provider, string internalId)
+        {
+            // Now get the ExternalAccessToken using the InternalId that we passed to the frontend
+            var externalAccessTokenIdentifier = this.GetExternalAccessTokenIdentifier(internalId);
+            // Verify that the External is legit and is providing us correct external access token
+            var verifiedAccessToken = VerifyExternalAccessToken(provider, externalAccessTokenIdentifier.ExternalAccessToken);
+            if (verifiedAccessToken == null)
+            {
+                throw new InvalidOperationException("Invalid Provider or External Access Token");
+            }
+
+            // Now Delete the ExternalAccessToken <--> InternalId Mapping
+            _accountRepository.DeleteExternalAccessTokenIdentifier(externalAccessTokenIdentifier);
+
+            return verifiedAccessToken;
         }
 
         public UserRepresentation GetUserByEmail(string email)
@@ -402,6 +417,44 @@ namespace RentStuff.Identity.Application.Account
             throw new ArgumentException("Could not save UserLoginInfo");
         }
 
+        /// <summary>
+        /// Maps the ExternalAccessToken to an internal Id generated, well, internally. This way we never expose the ExternalAccessToken
+        /// to the outside world
+        /// </summary>
+        /// <param name="externalAccessToken"></param>
+        /// <returns>InternalId that maps to the ExternalAccessToken</returns>
+        public string MapExternalAccessTokenToInternalId(string externalAccessToken)
+        {
+            var externalAccessTokenIdentifier = _accountRepository.SaveExternalAccessTokenIdentifier(
+                new ExternalAccessTokenIdentifier(externalAccessToken));
+            if (externalAccessTokenIdentifier != null)
+            {
+                return externalAccessTokenIdentifier.InternalId;
+            }
+            else
+            {
+                throw new NullReferenceException(string.Format("Error while saving the ExternalAccessTokenIdentifier. ExternalAccessToken: {0}", externalAccessToken));
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the ExternalAccessToken for an existing ExternalAccessTokenIdentifier instance by providing the InternalId
+        /// </summary>
+        /// <param name="internalId"></param>
+        /// <returns>ExternalAccessToken</returns>
+        public ExternalAccessTokenIdentifier GetExternalAccessTokenIdentifier(string internalId)
+        {
+            var externalAccessTokenIdentifier = _accountRepository.GetExternalAccessIdentifierByInternalId(internalId);
+            if (externalAccessTokenIdentifier != null)
+            {
+                return externalAccessTokenIdentifier;
+            }
+            else
+            {
+                throw new NullReferenceException("Error while retrieving ExternalAccessTokenidentifier. InternalId: " + internalId);
+            }
+        }
+        
         public void Dispose()
         {
             _accountRepository.Dispose();

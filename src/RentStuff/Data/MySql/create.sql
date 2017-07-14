@@ -126,6 +126,20 @@ CREATE TABLE `aspnetusers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `ExternalAccessTokenIdentifiers`
+--
+
+DROP TABLE IF EXISTS `externalaccesstokenidentifiers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `externalaccesstokenidentifiers` (
+  `InternalId` varchar(255) NOT NULL,
+  `ExternalAccessToken` varchar(255) NOT NULL,
+  PRIMARY KEY (`InternalId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `dimension`
 --
 

@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using Ninject;
 using NUnit.Framework;
 using RentStuff.Common.Utilities;
+using RentStuff.Identity.Domain.Model.Entities;
 using RentStuff.Identity.Infrastructure.Persistence.Ninject.Modules;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
 using RentStuff.Identity.Infrastructure.Services.Identity;
@@ -200,6 +201,64 @@ namespace RentStuff.Identity.Infrastructure.Persist.IntegTests
             // Reset the password. Provide an invalid token so that it fails
             // EXCEPTION IS EXPECTED HERE
             var resetPasswordResponse = accountRepository.ResetPassword(customIdentityuser.Id, passwordResetToken + "1", newPassword);
+        }
+
+        [Test]
+        public void SaveExternalAccessTokenIdentifierTest_ChecksThatTheInstanceIsSavedAsExpected_VerifiedThroughDatabaseRetrieval()
+        {
+            var kernel = InitializeNinjectLiveDependencies();
+            IAccountRepository accountRepository = kernel.Get<IAccountRepository>();
+            
+            string externalAccessToken =
+                "EAABoPvw9qxEBAEvqgthtu5ht4958u49t8y9ty59tyh49rf34u0u850y9hbjbjmkmx8g75yov9d6s5AFF46gqprtoyu783ht71a0s764jk3d7c6buigHU8UIui872lp01aznv5dv3ferw6thy87jgbvfdca5sx38t809poOe83P912dZDZD";
+
+            var savedInstance = accountRepository.SaveExternalAccessTokenIdentifier(new ExternalAccessTokenIdentifier(externalAccessToken));
+            Assert.IsNotNull(savedInstance);
+
+            var resultingInstance = accountRepository.GetExternalAccessIdentifierByInternalId(savedInstance.InternalId);
+            Assert.IsNotNull(resultingInstance);
+            Assert.AreEqual(savedInstance.InternalId, resultingInstance.InternalId);
+            Assert.AreEqual(externalAccessToken, resultingInstance.ExternalAccessToken);
+        }
+
+        [Test]
+        public void GetExternalAccessTokenIdentifierByExternalTokenTest_ChecksThatTheInstanceIsRetrievedAsExpected_VerifiedThroughDatabaseRetrieval()
+        {
+            var kernel = InitializeNinjectLiveDependencies();
+            IAccountRepository accountRepository = kernel.Get<IAccountRepository>();
+
+            string externalAccessToken =
+                "EAABoPvw9qxEBAEvqgthtu5ht4958u49t8y9ty59tyh49rf34u0u850y9hbjbjmkmx8g75yov9d6s5AFF46gqprtoyu783ht71a0s764jk3d7c6buigHU8UIui872lp01aznv5dv3ferw6thy87jgbvfdca5sx38t809poOe83P912dZDZD";
+
+            var savedInstance = accountRepository.SaveExternalAccessTokenIdentifier(new ExternalAccessTokenIdentifier(externalAccessToken));
+            Assert.IsNotNull(savedInstance);
+
+            var resultingInstance = accountRepository.GetExternalAccessIdentifierByToken(externalAccessToken);
+            Assert.IsNotNull(resultingInstance);
+            Assert.AreEqual(savedInstance.InternalId, resultingInstance.InternalId);
+            Assert.AreEqual(externalAccessToken, resultingInstance.ExternalAccessToken);
+        }
+
+        [Test] public void DeleteExternalAccessTokenIdentifierByExternalTokenTest_ChecksThatTheInstanceIsDeletedAsExpected_VerifiedThroughDatabaseRetrieval()
+        {
+            var kernel = InitializeNinjectLiveDependencies();
+            IAccountRepository accountRepository = kernel.Get<IAccountRepository>();
+
+            string externalAccessToken =
+                "EAABoPvw9qxEBAEvqgthtu5ht4958u49t8y9ty59tyh49rf34u0u850y9hbjbjmkmx8g75yov9d6s5AFF46gqprtoyu783ht71a0s764jk3d7c6buigHU8UIui872lp01aznv5dv3ferw6thy87jgbvfdca5sx38t809poOe83P912dZDZD";
+
+            var savedInstance = accountRepository.SaveExternalAccessTokenIdentifier(new ExternalAccessTokenIdentifier(externalAccessToken));
+            Assert.IsNotNull(savedInstance);
+
+            var resultingInstance = accountRepository.GetExternalAccessIdentifierByInternalId(savedInstance.InternalId);
+            Assert.IsNotNull(resultingInstance);
+            Assert.AreEqual(savedInstance.InternalId, resultingInstance.InternalId);
+            Assert.AreEqual(externalAccessToken, resultingInstance.ExternalAccessToken);
+
+            accountRepository.DeleteExternalAccessTokenIdentifier(resultingInstance);
+
+            var resultingInstance2 = accountRepository.GetExternalAccessIdentifierByInternalId(savedInstance.InternalId);
+            Assert.IsNull(resultingInstance2);
         }
     }
 }

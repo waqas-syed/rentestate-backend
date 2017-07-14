@@ -83,10 +83,12 @@ namespace RentStuff.Identity.Ports.Adapter.Rest.Resources
                 bool hasRegistered = _accountApplicationService.UserExistsByUserLoginInfo(new UserLoginInfo(externalLogin.LoginProvider,
                         externalLogin.ProviderKey));
 
+                string internalIdForExternalAccessToken = _accountApplicationService.MapExternalAccessTokenToInternalId(externalLogin.ExternalAccessToken);
+                
                 redirectUri = string.Format(
                     "{0}?external_access_token={1}&provider={2}&haslocalaccount={3}&email={4}&full_name={5}",
                     RentStuff.Common.Utilities.Constants.FacebookRedirectUri,
-                    externalLogin.ExternalAccessToken,
+                    internalIdForExternalAccessToken,
                     externalLogin.LoginProvider,
                     hasRegistered.ToString(),
                     externalLogin.Email,

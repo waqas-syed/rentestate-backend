@@ -33,6 +33,21 @@ namespace RentStuff.Identity.Application.Account
 
         bool AddLogin(string userId, UserLoginInfo userLoginInfo);
 
+        /// <summary>
+        /// Maps the ExternalAccessToken to an internal Id and return the InternalId. This way we never expose the ExternalAccessToken
+        /// to the outside world
+        /// </summary>
+        /// <param name="externalAccessToken"></param>
+        /// <returns></returns>
+        string MapExternalAccessTokenToInternalId(string externalAccessToken);
+
+        /// <summary>
+        /// Retrieves the ExternalAccessToken for an existing ExternalAccessTokenIdentifier instance by providing the InternalId
+        /// </summary>
+        /// <param name="internalId"></param>
+        /// <returns>ExternalAccessToken</returns>
+        ExternalAccessTokenIdentifier GetExternalAccessTokenIdentifier(string internalId);
+        
         void Dispose();
     }
 }
