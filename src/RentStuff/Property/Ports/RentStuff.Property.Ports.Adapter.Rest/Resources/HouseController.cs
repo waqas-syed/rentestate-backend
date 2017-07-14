@@ -329,12 +329,25 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         
         [Route("property-type")]
         [HttpGet]
-        [Obsolete]
         public IHttpActionResult GetPropertyTypes()
         {
             try
             {
                 return Ok(_houseApplicationService.GetPropertyTypes());
+            }
+            catch (Exception exception)
+            {
+                return InternalServerError(exception);
+            }
+        }
+
+        [Route("rent-unit")]
+        [HttpGet]
+        public IHttpActionResult GetRentUnits()
+        {
+            try
+            {
+                return Ok(_houseApplicationService.GetAllRentUnits());
             }
             catch (Exception exception)
             {

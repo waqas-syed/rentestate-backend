@@ -8,15 +8,15 @@ namespace RentStuff.Property.Application.HouseServices.Representation
     [DataContract]
     public class HousePartialRepresentation
     {
-        public HousePartialRepresentation(string houseId, string title, string area, long rent, string propertyType, 
+        public HousePartialRepresentation(string houseId, string title, string area, long rentPrice, string propertyType, 
             Dimension dimension, int numberOfBedrooms, int numberOfBathrooms, int numberOfKitchens,
             string ownerEmail, string ownerPhoneNumber, string image, string ownerName, string description, bool isShared,
-            string genderRestriction)
+            string genderRestriction, string rentUnit)
         {
             HouseId = houseId;
             Title = title;
             Area = area;
-            Rent = rent;
+            RentPrice = rentPrice;
             PropertyType = propertyType;
             if (dimension != null)
             {
@@ -39,6 +39,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
             Description = description;
             IsShared = isShared;
             GenderRestriction = genderRestriction;
+            RentUnit = rentUnit;
         }
 
         [DataMember]
@@ -54,7 +55,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
         public string Area { get; private set; }
 
         [DataMember]
-        public long Rent { get; private set; }
+        public long RentPrice { get; private set; }
 
         [DataMember]
         public string PropertyType { get; private set; }
@@ -88,5 +89,8 @@ namespace RentStuff.Property.Application.HouseServices.Representation
 
         [DataMember]
         public string GenderRestriction { get; private set; }
+
+        [DataMember]
+        public string RentUnit { get; private set; }
     }
 }

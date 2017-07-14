@@ -11,16 +11,16 @@ namespace RentStuff.Property.Application.HouseServices.Representation
     [DataContract]
     public class HouseFullRepresentation
     {
-        public HouseFullRepresentation(string id, string title, long monthlyRent, int numberOfBedrooms, int numberOfKitchens, 
+        public HouseFullRepresentation(string id, string title, long rentPrice, int numberOfBedrooms, int numberOfKitchens, 
             int numberOfBathrooms, bool internetAvailable, 
             bool landlinePhoneAvailable, bool cableTvAvailable, string dimension, bool garageAvailable, bool smokingAllowed, 
             string propertyType, string ownerEmail, string ownerPhoneNumber, decimal latitude, decimal longitude, string houseNo, 
             string streetNo, string area, IList<string> houseImages, string ownerName, string description,
-            string genderRestriction, bool isShared)
+            string genderRestriction, bool isShared, string rentUnit)
         {
             Id = id;
             Title = title;
-            MonthlyRent = monthlyRent;
+            RentPrice = rentPrice;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
@@ -43,6 +43,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
             Description = description;
             GenderRestriction = genderRestriction;
             IsShared = isShared;
+            RentUnit = rentUnit;
         }
 
         [DataMember]
@@ -55,7 +56,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
         public string Description { get; private set; }
 
         [DataMember]
-        public long MonthlyRent
+        public long RentPrice
         {
             get; private set;
         }
@@ -182,6 +183,12 @@ namespace RentStuff.Property.Application.HouseServices.Representation
 
         [DataMember]
         public bool IsShared
+        {
+            get; private set;
+        }
+
+        [DataMember]
+        public string RentUnit
         {
             get; private set;
         }

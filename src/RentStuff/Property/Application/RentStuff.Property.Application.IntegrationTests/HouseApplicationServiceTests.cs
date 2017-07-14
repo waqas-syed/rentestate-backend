@@ -69,9 +69,10 @@ namespace RentStuff.Property.Application.IntegrationTests
             bool internet = true;
             bool garage = true;
             bool isShared = true;
+            string rentUnit = "Hour";
             var createNewHouseCommand = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 internet, landline, cableTv, garage, smokingAllowed, propertyType, email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared);
+                dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared, rentUnit);
             string houseCreated = houseApplicationService.SaveNewHouseOffer(createNewHouseCommand);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
             Assert.AreEqual(email, createNewHouseCommand.OwnerEmail);
@@ -89,7 +90,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(numberOfBedrooms, createNewHouseCommand.NumberOfBedrooms);
             Assert.AreEqual(numberOfKitchens, createNewHouseCommand.NumberOfKitchens);
             Assert.AreEqual(propertyType, createNewHouseCommand.PropertyType);
-            Assert.AreEqual(monthlyRent, createNewHouseCommand.MonthlyRent);
+            Assert.AreEqual(monthlyRent, createNewHouseCommand.RentPrice);
             Assert.AreEqual(numberofBathrooms, createNewHouseCommand.NumberOfBathrooms);
             Assert.AreEqual(genderRestriction, createNewHouseCommand.GenderRestriction);
             Assert.AreEqual(internet, createNewHouseCommand.InternetAvailable);
@@ -98,6 +99,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(cableTv, createNewHouseCommand.CableTvAvailable);
             Assert.AreEqual(smokingAllowed, createNewHouseCommand.SmokingAllowed);
             Assert.AreEqual(isShared, createNewHouseCommand.IsShared);
+            Assert.AreEqual(rentUnit, createNewHouseCommand.RentUnit);
         }
 
         [Test]
@@ -122,6 +124,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             string propertyType = "Apartment";
             string genderRestriction = GenderRestriction.GirlsOnly.ToString();
             bool isShared = false;
+            // Null value should never be assigned, defalt value i going to be assigned instead. So pass NULL deliberately
+            string rentUnit = null;
 
             RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
             Tuple<decimal, decimal> coordinates = geocodingService.GetCoordinatesFromAddress(area);
@@ -131,7 +135,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             decimal longitude = coordinates.Item2;
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0, ownerName, description, genderRestriction,isShared);
+                dimensionType, dimensionString, 0, ownerName, description, genderRestriction,isShared, rentUnit);
             string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
@@ -144,13 +148,15 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
             Assert.AreEqual(house.Area, retreivedHouse.Area);
-            Assert.AreEqual(house.MonthlyRent, retreivedHouse.Rent);
+            Assert.AreEqual(house.RentPrice, retreivedHouse.RentPrice);
             Assert.AreEqual(house.Title, retreivedHouse.Title);
             Assert.AreEqual(house.Description, retreivedHouse.Description);
             Assert.AreEqual(house.DimensionStringValue + " " + house.DimensionType, retreivedHouse.Dimension);
             Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
             Assert.AreEqual(house.IsShared, retreivedHouse.IsShared);
             Assert.AreEqual(house.GenderRestriction.ToString(), retreivedHouse.GenderRestriction);
+            // "Month" is the default value and should be assigned automatically as we provided a Null value
+            Assert.AreEqual("Month", retreivedHouse.RentUnit);
         }
 
         [Test]
@@ -176,10 +182,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string propertyType1 = "Apartment";
             string genderRestriction = GenderRestriction.BoysOnly.ToString();
             bool isShared = true;
+            string rentUnit = House.GetAllRentUnits()[0];
 
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 true, true, true, true, true, propertyType1, email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared);
+                dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared, rentUnit);
             string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
@@ -201,10 +208,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string propertyType2 = "House";
             string genderRestriction2 = GenderRestriction.GirlsOnly.ToString();
             bool isShared2 = false;
+            string rentUnit2 = House.GetAllRentUnits()[1];
 
             var house2 = new CreateHouseCommand(title2, monthlyRent2, numberOfBedrooms2, numberOfKitchens2, numberofBathrooms2,
                 true, true, true, true, true, propertyType2, email2, phoneNumber2, houseNo2, streetNo2, area2,
-                dimensionType2, dimensionString2, 0, ownerName2, description2, genderRestriction2, isShared2);
+                dimensionType2, dimensionString2, 0, ownerName2, description2, genderRestriction2, isShared2, rentUnit2);
             string houseCreated2 = houseApplicationService.SaveNewHouseOffer(house2);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated2));
 
@@ -226,10 +234,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string propertyType3 = "House";
             string genderRestriction3 = GenderRestriction.GirlsOnly.ToString();
             bool isShared3 = false;
+            string rentUnit3 = House.GetAllRentUnits()[2];
 
             var house3 = new CreateHouseCommand(title3, monthlyRent3, numberOfBedrooms3, numberOfKitchens3, numberofBathrooms3,
                 true, true, true, true, true, propertyType3, email3, phoneNumber3, houseNo3, streetNo3, area3,
-                dimensionType3, dimensionString3, 0, ownerName3, description3, genderRestriction3, isShared3);
+                dimensionType3, dimensionString3, 0, ownerName3, description3, genderRestriction3, isShared3, rentUnit3);
             string houseCreated3 = houseApplicationService.SaveNewHouseOffer(house3);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated3));
 
@@ -244,13 +253,14 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house2.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house2.PropertyType, retreivedHouse.PropertyType);
             Assert.AreEqual(house2.Area, retreivedHouse.Area);
-            Assert.AreEqual(house2.MonthlyRent, retreivedHouse.Rent);
+            Assert.AreEqual(house2.RentPrice, retreivedHouse.RentPrice);
             Assert.AreEqual(house2.Title, retreivedHouse.Title);
             Assert.AreEqual(house2.Description, retreivedHouse.Description);
             Assert.AreEqual(house2.DimensionStringValue + " " + house2.DimensionType, retreivedHouse.Dimension);
             Assert.AreEqual(house2.OwnerName, retreivedHouse.OwnerName);
             Assert.AreEqual(house2.IsShared, retreivedHouse.IsShared);
             Assert.AreEqual(house2.GenderRestriction.ToString(), retreivedHouse.GenderRestriction);
+            Assert.AreEqual(house2.RentUnit, retreivedHouse.RentUnit);
 
             // Verification of House No. 3
             HousePartialRepresentation retreivedHouse2 = houses[1];
@@ -260,13 +270,14 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house3.NumberOfBedrooms, retreivedHouse2.NumberOfBedrooms);
             Assert.AreEqual(house3.PropertyType, retreivedHouse2.PropertyType);
             Assert.AreEqual(house3.Area, retreivedHouse2.Area);
-            Assert.AreEqual(house3.MonthlyRent, retreivedHouse2.Rent);
+            Assert.AreEqual(house3.RentPrice, retreivedHouse2.RentPrice);
             Assert.AreEqual(house3.Title, retreivedHouse2.Title);
             Assert.AreEqual(house3.Description, retreivedHouse2.Description);
             Assert.AreEqual(house3.DimensionStringValue + " " + house3.DimensionType, retreivedHouse2.Dimension);
             Assert.AreEqual(house3.OwnerName, retreivedHouse2.OwnerName);
             Assert.AreEqual(house3.IsShared, retreivedHouse2.IsShared);
             Assert.AreEqual(house3.GenderRestriction.ToString(), retreivedHouse2.GenderRestriction);
+            Assert.AreEqual(house3.RentUnit, retreivedHouse2.RentUnit);
         }
 
         [Test]
@@ -292,10 +303,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string propertyType1 = "Apartment";
             string genderRestriction1 = GenderRestriction.GirlsOnly.ToString();
             bool isShared = true;
+            string rentUnit = House.GetAllRentUnits()[3];
 
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 true, true, true, true, true, propertyType1, email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0, ownerName, description, genderRestriction1, isShared);
+                dimensionType, dimensionString, 0, ownerName, description, genderRestriction1, isShared, rentUnit);
             string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
@@ -317,10 +329,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string propertyType2 = "House";
             string genderRestriction2 = GenderRestriction.NoRestriction.ToString();
             bool isShared2 = true;
+            string rentUnit2 = House.GetAllRentUnits()[0];
 
             var house2 = new CreateHouseCommand(title2, monthlyRent2, numberOfBedrooms2, numberOfKitchens2, numberofBathrooms2,
                 true, true, true, true, true, propertyType2, email2, phoneNumber2, houseNo2, streetNo2, area2,
-                dimensionType2, dimensionString2, 0, ownerName2, description2, genderRestriction2, isShared2);
+                dimensionType2, dimensionString2, 0, ownerName2, description2, genderRestriction2, isShared2, rentUnit2);
             string houseCreated2 = houseApplicationService.SaveNewHouseOffer(house2);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated2));
 
@@ -342,10 +355,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string propertyType3 = "Hostel";
             string genderRestriction3 = GenderRestriction.GirlsOnly.ToString();
             bool isShared3 = true;
+            string rentUnit3 = House.GetAllRentUnits()[1];
 
             var house3 = new CreateHouseCommand(title3, monthlyRent3, numberOfBedrooms3, numberOfKitchens3, numberofBathrooms3,
                 true, true, true, true, true, propertyType3, email3, phoneNumber3, houseNo3, streetNo3, area3,
-                dimensionType3, dimensionString3, 0, ownerName3, description3, genderRestriction3, isShared3);
+                dimensionType3, dimensionString3, 0, ownerName3, description3, genderRestriction3, isShared3, rentUnit3);
             string houseCreated3 = houseApplicationService.SaveNewHouseOffer(house3);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated3));
 
@@ -360,13 +374,14 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house2.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house2.PropertyType, retreivedHouse.PropertyType);
             Assert.AreEqual(house2.Area, retreivedHouse.Area);
-            Assert.AreEqual(house2.MonthlyRent, retreivedHouse.Rent);
+            Assert.AreEqual(house2.RentPrice, retreivedHouse.RentPrice);
             Assert.AreEqual(house2.Title, retreivedHouse.Title);
             Assert.AreEqual(house2.Description, retreivedHouse.Description);
             Assert.AreEqual(house2.DimensionStringValue + " " + house2.DimensionType, retreivedHouse.Dimension);
             Assert.AreEqual(house2.OwnerName, retreivedHouse.OwnerName);
             Assert.AreEqual(house2.IsShared, retreivedHouse.IsShared);
             Assert.AreEqual(house2.GenderRestriction, retreivedHouse.GenderRestriction);
+            Assert.AreEqual(house2.RentUnit, retreivedHouse.RentUnit);
         }
 
         [Test]
@@ -392,10 +407,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string propertyType1 = "House";
             string genderRestriction1 = GenderRestriction.GirlsOnly.ToString();
             bool isShared = true;
+            string rentUnit = House.GetAllRentUnits()[2];
 
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 true, true, true, true, true, propertyType1, email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0, ownerName, description, genderRestriction1, isShared);
+                dimensionType, dimensionString, 0, ownerName, description, genderRestriction1, isShared, rentUnit);
             string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
@@ -417,10 +433,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string propertyType2 = "House";
             string genderRestriction2 = GenderRestriction.GirlsOnly.ToString();
             bool isShared2 = true;
+            string rentUnit2 = House.GetAllRentUnits()[0];
 
             var house2 = new CreateHouseCommand(title2, monthlyRent2, numberOfBedrooms2, numberOfKitchens2, numberofBathrooms2,
                 true, true, true, true, true, propertyType2, email2, phoneNumber2, houseNo2, streetNo2, area2,
-                dimensionType2, dimensionString2, 0, ownerName2, description2, genderRestriction2, isShared2);
+                dimensionType2, dimensionString2, 0, ownerName2, description2, genderRestriction2, isShared2, rentUnit2);
             string houseCreated2 = houseApplicationService.SaveNewHouseOffer(house2);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated2));
 
@@ -442,10 +459,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string propertyType3 = "House";
             string genderRestriction3 = GenderRestriction.NoRestriction.ToString();
             bool isShared3 = true;
+            string rentUnit3 = House.GetAllRentUnits()[1];
 
             var house3 = new CreateHouseCommand(title3, monthlyRent3, numberOfBedrooms3, numberOfKitchens3, numberofBathrooms3,
                 true, true, true, true, true, propertyType3, email3, phoneNumber3, houseNo3, streetNo3, area3,
-                dimensionType3, dimensionString3, 0, ownerName3, description3, genderRestriction3, isShared3);
+                dimensionType3, dimensionString3, 0, ownerName3, description3, genderRestriction3, isShared3, rentUnit3);
             string houseCreated3 = houseApplicationService.SaveNewHouseOffer(house3);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated3));
 
@@ -462,7 +480,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouse1.NumberOfKitchens);
             Assert.AreEqual(house.PropertyType, retreivedHouse1.PropertyType);
             Assert.AreEqual(house.Area, retreivedHouse1.Area);
-            Assert.AreEqual(house.MonthlyRent, retreivedHouse1.Rent);
+            Assert.AreEqual(house.RentPrice, retreivedHouse1.RentPrice);
             Assert.AreEqual(house.Title, retreivedHouse1.Title);
             Assert.AreEqual(house.Description, retreivedHouse1.Description);
             Assert.AreEqual(house.DimensionStringValue + " " + house2.DimensionType, retreivedHouse1.Dimension);
@@ -471,6 +489,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.OwnerPhoneNumber, retreivedHouse1.OwnerPhoneNumber);
             Assert.AreEqual(house.IsShared, retreivedHouse1.IsShared);
             Assert.AreEqual(house.GenderRestriction, retreivedHouse1.GenderRestriction);
+            Assert.AreEqual(house.RentUnit, retreivedHouse1.RentUnit);
 
             // Verification of House No. 3
             HousePartialRepresentation retreivedHouse2 = houses[1];
@@ -482,7 +501,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house3.NumberOfKitchens, retreivedHouse2.NumberOfKitchens);
             Assert.AreEqual(house3.PropertyType, retreivedHouse1.PropertyType);
             Assert.AreEqual(house3.Area, retreivedHouse2.Area);
-            Assert.AreEqual(house3.MonthlyRent, retreivedHouse2.Rent);
+            Assert.AreEqual(house3.RentPrice, retreivedHouse2.RentPrice);
             Assert.AreEqual(house3.Title, retreivedHouse2.Title);
             Assert.AreEqual(house3.Description, retreivedHouse2.Description);
             Assert.AreEqual(house3.DimensionStringValue + " " + house3.DimensionType, retreivedHouse2.Dimension);
@@ -491,6 +510,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house3.OwnerPhoneNumber, retreivedHouse2.OwnerPhoneNumber);
             Assert.AreEqual(house3.IsShared, retreivedHouse2.IsShared);
             Assert.AreEqual(house3.GenderRestriction, retreivedHouse2.GenderRestriction);
+            Assert.AreEqual(house3.RentUnit, retreivedHouse2.RentUnit);
         }
 
         [Test]
@@ -513,6 +533,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionString = "50";
             string ownerName = "Owner Name 1";
             string genderRestriction1 = GenderRestriction.GirlsOnly.ToString();
+            string rentUnit = House.GetAllRentUnits()[0];
 
             RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
             Tuple<decimal, decimal> coordinates = geocodingService.GetCoordinatesFromAddress(area);
@@ -521,7 +542,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             bool isShared = true;
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
-                dimensionType, dimensionString, 0, ownerName, description, genderRestriction1, isShared);
+                dimensionType, dimensionString, 0, ownerName, description, genderRestriction1, isShared, rentUnit);
             string houseId = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
 
@@ -547,6 +568,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.GenderRestriction, retreivedHouse.GenderRestriction);
             Assert.AreEqual(house.IsShared, retreivedHouse.IsShared);
             Assert.AreEqual(house.GenderRestriction, retreivedHouse.GenderRestriction);
+            Assert.AreEqual(house.RentUnit, retreivedHouse.RentUnit);
         }
 
         [Test]
@@ -571,10 +593,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string ownerName = "Owner Name 1";
             string genderRestriction = GenderRestriction.BoysOnly.ToString();
             bool isShared = false;
+            string rentUnit = House.GetAllRentUnits()[0];
 
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
             true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area, 
-            dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared);
+            dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared, rentUnit);
             var houseCreated = houseApplicationService.SaveNewHouseOffer(house);
 
             RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
@@ -592,12 +615,13 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
             Assert.AreEqual(house.Area, retreivedHouse.Area);
-            Assert.AreEqual(house.MonthlyRent, retreivedHouse.Rent);
+            Assert.AreEqual(house.RentPrice, retreivedHouse.RentPrice);
             Assert.AreEqual(house.Title, retreivedHouse.Title);
             Assert.AreEqual(house.Description, retreivedHouse.Description);
             Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
             Assert.AreEqual(house.IsShared, retreivedHouse.IsShared);
             Assert.AreEqual(house.GenderRestriction, retreivedHouse.GenderRestriction);
+            Assert.AreEqual(house.RentUnit, retreivedHouse.RentUnit);
         }
 
         [Test]
@@ -623,10 +647,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             string ownerName = "Owner Name 1";
             string genderRestriction = GenderRestriction.BoysOnly.ToString();
             bool isShared = true;
+            string rentUnit = House.GetAllRentUnits()[1];
 
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
             true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area, 
-            dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared);
+            dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared, rentUnit);
             houseApplicationService.SaveNewHouseOffer(house);
 
             RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();

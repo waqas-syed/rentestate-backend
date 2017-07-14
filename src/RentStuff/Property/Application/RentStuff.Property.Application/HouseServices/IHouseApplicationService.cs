@@ -112,5 +112,11 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="requesterEmail"></param>
         /// <returns></returns>
         bool HouseOwnershipCheck(string houseId, string requesterEmail);
+
+        /// <summary>
+        /// Get all the Rent Units, i.e., Month, Week, Day, Hour
+        /// </summary>
+        /// <returns></returns>
+        IList<string> GetAllRentUnits();
     }
 }

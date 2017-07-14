@@ -11,7 +11,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
     {
         private string _title;
         private string _description;
-        private long _monthlyRent;
+        private long _rentPrice;
         private int _numberOfBedrooms;
         private int _numberOfKitchens;
         private int _numberOfBathrooms;
@@ -31,6 +31,24 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         private string _area;
         private IList<string> _houseImages = new List<string>();
         private string _ownerName;
+        private string _rentUnit;
+
+        private static readonly IList<string> _allPropertyTypes = new List<string>()
+        {
+            "Hostel",
+            "House",
+            "Apartment",
+            "Hotel",
+            "Guest House"
+        };
+
+        private static readonly IList<string> _allRentUnits = new List<string>()
+        {
+            "Month",
+            "Week",
+            "Day",
+            "Hour"
+        };
         
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
@@ -42,15 +60,15 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public House(string title, long monthlyRent, int numberOfBedrooms,
+        public House(string title, long rentPrice, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension, 
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
             decimal latitude, decimal longitude, string houseNo, string streetNo, string area, string ownerName, string description, 
-            GenderRestriction genderRestriction, bool isShared)
+            GenderRestriction genderRestriction, bool isShared, string rentUnit)
         {
             Title = title;
-            MonthlyRent = monthlyRent;
+            RentPrice = rentPrice;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
@@ -72,13 +90,14 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             Description = description;
             GenderRestriction = genderRestriction;
             IsShared = isShared;
+            RentUnit = rentUnit;
         }
 
         /// <summary>
         /// House instance updates itself with the given values
         /// </summary>
         /// <param name="title"></param>
-        /// <param name="monthlyRent"></param>
+        /// <param name="rentPrice"></param>
         /// <param name="numberOfBedrooms"></param>
         /// <param name="numberOfKitchens"></param>
         /// <param name="numberOfBathrooms"></param>
@@ -100,15 +119,15 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <param name="isShared"></param>
-        public void UpdateHouse(string title, long monthlyRent, int numberOfBedrooms,
+        public void UpdateHouse(string title, long rentPrice, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension,
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
             string houseNo, string streetNo, string area, string ownerName, string description, GenderRestriction genderRestriction,
-            decimal latitude, decimal longitude, bool isShared)
+            decimal latitude, decimal longitude, bool isShared, string rentUnit)
         {
             Title = title;
-            MonthlyRent = monthlyRent;
+            RentPrice = rentPrice;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
@@ -130,6 +149,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             Latitude = latitude;
             Longitude = longitude;
             IsShared = isShared;
+            RentUnit = rentUnit;
         }
 
         /// <summary>
@@ -166,15 +186,15 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         }
 
         /// <summary>
-        /// Monthly Rent
+        /// Rent
         /// </summary>
-        public long MonthlyRent
+        public long RentPrice
         {
-            get { return _monthlyRent; }
+            get { return _rentPrice; }
             set
             {
                 Assertion.AssertNumberNotZero(value);
-                _monthlyRent = value;
+                _rentPrice = value;
             }
         }
 
@@ -237,8 +257,13 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             get { return _propertyType; }
             set
             {
-                Assertion.AssertStringNotNullorEmpty(value);
-                if (AllPropertyTypes().Contains(value))
+                //Assertion.AssertStringNotNullorEmpty(value);
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    // If the value is null, just assign House.
+                    value = _allPropertyTypes[1];
+                }
+                if (GetAllPropertyTypes().Contains(value))
                 {
                     _propertyType = value;
                 }
@@ -253,15 +278,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// Returns a lsit of all supported property types
         /// </summary>
         /// <returns></returns>
-        public static IList<string> AllPropertyTypes()
+        public static IList<string> GetAllPropertyTypes()
         {
-            return new List<string>()
-            {
-                "Hostel",
-                "House",
-                "Apartment",
-                "Hotel"
-            };
+            return _allPropertyTypes;
         }
 
         /// <summary>
@@ -376,13 +395,36 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 _ownerName = value;
             }
         }
-
+        
         public GenderRestriction GenderRestriction { get; set; }
 
         /// <summary>
         /// Is this property shared
         /// </summary>
         public bool IsShared { get; set; }
+
+        public string RentUnit
+        {
+            get { return _rentUnit; }
+            set
+            {
+                //Assertion.AssertStringNotNullorEmpty(value);
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    value = _allRentUnits[0];
+                }
+                if (!_allRentUnits.Contains(value))
+                {
+                    throw new InvalidOperationException("RentUnit value is not supported");
+                }
+                _rentUnit = value;
+            }
+        }
+
+        public static IList<string> GetAllRentUnits()
+        {
+            return _allRentUnits;
+        }
 
         /// <summary>
         /// House Builder
@@ -391,7 +433,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         {
             private string _title;
             private string _description;
-            private long _monthlyRent;
+            private long _rentPrice;
             private int _numberOfBedrooms;
             private int _numberOfKitchens;
             private int _numberOfBathrooms;
@@ -412,6 +454,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private string _ownerName;
             private GenderRestriction _genderRestriction;
             private bool _isShared;
+            private string _rentUnit;
 
             public HouseBuilder Title(string title)
             {
@@ -425,9 +468,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
 
-            public HouseBuilder MonthlyRent(long monthlyRent)
+            public HouseBuilder RentPrice(long rentPrice)
             {
-                _monthlyRent = monthlyRent;
+                _rentPrice = rentPrice;
                 return this;
             }
 
@@ -551,18 +594,24 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
 
+            public HouseBuilder RentUnit(string rentUnit)
+            {
+                _rentUnit = rentUnit;
+                return this;
+            }
+
             /// <summary>
             /// Build a new instance of House
             /// </summary>
             /// <returns></returns>
             public House Build()
             {
-                return new House(_title, _monthlyRent, _numberOfBedrooms, _numberOfKitchens,
+                return new House(_title, _rentPrice, _numberOfBedrooms, _numberOfKitchens,
                                  _numberOfBathrooms, _internetAvailable,
                                  _landlinePhoneAvailable, _cableTvAvailable, _dimension, _garageAvailable,
                                  _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber, _latitude, 
                                  _longitude, _houseNo, _streetNo, _area, _ownerName, _description, 
-                                 _genderRestriction, _isShared);
+                                 _genderRestriction, _isShared, _rentUnit);
             }
         }
     }
