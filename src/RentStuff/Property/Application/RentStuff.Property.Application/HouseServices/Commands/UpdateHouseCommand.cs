@@ -11,7 +11,7 @@ namespace RentStuff.Property.Application.HouseServices.Commands
     [DataContract]
     public class UpdateHouseCommand
     {
-        public UpdateHouseCommand(string id, string title, long monthlyRent, int numberOfBedrooms,
+        public UpdateHouseCommand(string id, string title, long rentPrice, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable,
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
@@ -21,7 +21,7 @@ namespace RentStuff.Property.Application.HouseServices.Commands
         {
             Id = id;
             Title = title;
-            MonthlyRent = monthlyRent;
+            RentPrice = rentPrice;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
@@ -56,7 +56,7 @@ namespace RentStuff.Property.Application.HouseServices.Commands
         public string Description { get; private set; }
 
         [DataMember]
-        public long MonthlyRent { get; private set; }
+        public long RentPrice { get; private set; }
 
         [DataMember]
         public int NumberOfBedrooms { get; private set; }

@@ -40,7 +40,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(cableTv)
                 .GarageAvailable(garage).LandlinePhoneAvailable(landline).SmokingAllowed(smokingAllowed).WithInternetAvailable(internet)
-                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit).IsShared(isShared)
                 .Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
@@ -66,7 +66,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(propertyType, house.PropertyType);
             Assert.AreEqual(genderRestriction, house.GenderRestriction);
             Assert.AreEqual(area, house.Area);
-            Assert.AreEqual(monthlyRent, house.MonthlyRent);
+            Assert.AreEqual(monthlyRent, house.RentPrice);
             
             Assert.AreEqual(dimension.DimensionType, house.Dimension.DimensionType);
             Assert.AreEqual(dimension.StringValue, house.Dimension.StringValue);
@@ -113,7 +113,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(cableTv)
                 .GarageAvailable(garage).LandlinePhoneAvailable(landline).SmokingAllowed(smokingAllowed).WithInternetAvailable(internet)
-                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit).IsShared(isShared)
                 .Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
@@ -139,7 +139,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(propertyType, house.PropertyType);
             Assert.AreEqual(genderRestriction, house.GenderRestriction);
             Assert.AreEqual(area, house.Area);
-            Assert.AreEqual(monthlyRent, house.MonthlyRent);
+            Assert.AreEqual(monthlyRent, house.RentPrice);
 
             Assert.AreEqual(dimension.DimensionType, house.Dimension.DimensionType);
             Assert.AreEqual(dimension.StringValue, house.Dimension.StringValue);
@@ -200,7 +200,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(propertyType2, house.PropertyType);
             Assert.AreEqual(genderRestriction2, house.GenderRestriction);
             Assert.AreEqual(area2, house.Area);
-            Assert.AreEqual(monthlyRent2, house.MonthlyRent);
+            Assert.AreEqual(monthlyRent2, house.RentPrice);
 
             Assert.AreEqual(dimension2.DimensionType, house.Dimension.DimensionType);
             Assert.AreEqual(dimension2.StringValue, house.Dimension.StringValue);
@@ -241,7 +241,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(cableTv)
                 .GarageAvailable(garage).LandlinePhoneAvailable(landline).SmokingAllowed(smokingAllowed).WithInternetAvailable(internet)
-                .MonthlyRent(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
             house.Dimension = dimension;
@@ -278,7 +278,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(propertyType).MonthlyRent(monthlyRent).Longitude(73.41M)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").Build();
         }
 
@@ -299,7 +299,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(73.41M)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").Build();
         }
 
@@ -323,7 +323,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(73.41M)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").Build();
         }
 
@@ -365,11 +365,11 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberOfKitchens = 1;
             long monthlyRent = 1000001;
 
-            House house = new House.HouseBuilder().Title(title).MonthlyRent(monthlyRent).OwnerEmail(email)
+            House house = new House.HouseBuilder().Title(title).RentPrice(monthlyRent).OwnerEmail(email)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(propertyType).MonthlyRent(130000).Latitude(23.65M).Longitude(73.41M)
+                .PropertyType(propertyType).RentPrice(130000).Latitude(23.65M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").OwnerPhoneNumber(phoneNumber).Build();
         }
 
@@ -388,11 +388,11 @@ namespace RentStuff.Property.Domain.Model.Tests
             long monthlyRent = 1000001;
             string propertyType = "Apartment";
 
-            House house = new House.HouseBuilder().Title(title).MonthlyRent(monthlyRent).OwnerEmail(email)
+            House house = new House.HouseBuilder().Title(title).RentPrice(monthlyRent).OwnerEmail(email)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(propertyType).MonthlyRent(130000).Latitude(23.65M).Longitude(73.41M)
+                .PropertyType(propertyType).RentPrice(130000).Latitude(23.65M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").OwnerName(name).Build();
         }
 
@@ -411,11 +411,11 @@ namespace RentStuff.Property.Domain.Model.Tests
             long monthlyRent = 1000001;
             string propertyType = "Apartment";
 
-            House house = new House.HouseBuilder().Title(title).MonthlyRent(monthlyRent)
+            House house = new House.HouseBuilder().Title(title).RentPrice(monthlyRent)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(propertyType).MonthlyRent(130000).Latitude(23.65M).Longitude(73.41M)
+                .PropertyType(propertyType).RentPrice(130000).Latitude(23.65M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").OwnerPhoneNumber(phoneNumber).OwnerName(name).Build();
         }
 
@@ -435,11 +435,11 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberOfKitchens = 1;
             string propertyType = "Apartment";
 
-            House house = new House.HouseBuilder().OwnerEmail(email).MonthlyRent(monthlyRent)
+            House house = new House.HouseBuilder().OwnerEmail(email).RentPrice(monthlyRent)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(propertyType).MonthlyRent(130000).Latitude(23.65M).Longitude(73.41M)
+                .PropertyType(propertyType).RentPrice(130000).Latitude(23.65M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").OwnerPhoneNumber(phoneNumber).OwnerName(name).Build();
         }
 
@@ -462,7 +462,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             long monthlyRent = 90000;
             
             House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
-                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
             house.Dimension = dimension;
@@ -490,7 +490,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             long monthlyRent = 90000;
 
             House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
-                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
             house.Dimension = dimension;
@@ -518,7 +518,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             long monthlyRent = 90000;
 
             House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
-                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
             house.Dimension = dimension;
@@ -546,7 +546,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             long monthlyRent = 90000;
 
             House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
-                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
             house.Dimension = dimension;
@@ -587,7 +587,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(cableTv)
                 .GarageAvailable(garage).LandlinePhoneAvailable(landline).SmokingAllowed(smokingAllowed).WithInternetAvailable(internet)
-                .PropertyType(propertyType).MonthlyRent(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit).Build();
         }
     }

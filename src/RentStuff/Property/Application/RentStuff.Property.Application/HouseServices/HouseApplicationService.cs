@@ -67,7 +67,7 @@ namespace RentStuff.Property.Application.HouseServices
                 .CableTvAvailable(createHouseCommand.CableTvAvailable)
                 .GarageAvailable(createHouseCommand.GarageAvailable)
                 .LandlinePhoneAvailable(createHouseCommand.LandlinePhoneAvailable)
-                .MonthlyRent(createHouseCommand.MonthlyRent)
+                .RentPrice(createHouseCommand.RentPrice)
                 .NumberOfBathrooms(createHouseCommand.NumberOfBathrooms)
                 .NumberOfBedrooms(createHouseCommand.NumberOfBedrooms)
                 .NumberOfKitchens(createHouseCommand.NumberOfKitchens)
@@ -144,7 +144,7 @@ namespace RentStuff.Property.Application.HouseServices
             Dimension dimension = CreateDimensionInstance(updateHouseCommand.DimensionType,
                 updateHouseCommand.DimensionStringValue, updateHouseCommand.DimensionIntValue, house);
             house.UpdateHouse(updateHouseCommand.Title, 
-                updateHouseCommand.MonthlyRent,
+                updateHouseCommand.RentPrice,
                 updateHouseCommand.NumberOfBedrooms,
                 updateHouseCommand.NumberOfKitchens, 
                 updateHouseCommand.NumberOfBathrooms,
@@ -218,7 +218,7 @@ namespace RentStuff.Property.Application.HouseServices
                 dimension = house.Dimension.StringValue + " " + house.Dimension.DimensionType;
             }
 
-            return new HouseFullRepresentation(house.Id, house.Title, house.MonthlyRent, house.NumberOfBedrooms,
+            return new HouseFullRepresentation(house.Id, house.Title, house.RentPrice, house.NumberOfBedrooms,
                 house.NumberOfKitchens, house.NumberOfBathrooms, house.InternetAvailable, house.LandlinePhoneAvailable,
                 house.CableTvAvailable, dimension, house.GarageAvailable, house.SmokingAllowed,
                 house.PropertyType.ToString(),
@@ -458,7 +458,7 @@ namespace RentStuff.Property.Application.HouseServices
                        firstImage =  house.GetImageList()[0];
                     }
                     HousePartialRepresentation houseRepresentation = new HousePartialRepresentation(house.Id, house.Title, house.Area, 
-                        house.MonthlyRent, house.PropertyType.ToString(), house.Dimension, house.NumberOfBedrooms, 
+                        house.RentPrice, house.PropertyType.ToString(), house.Dimension, house.NumberOfBedrooms, 
                         house.NumberOfBathrooms, house.NumberOfKitchens, house.OwnerEmail, house.OwnerPhoneNumber,
                         firstImage, house.OwnerName, house.Description, house.IsShared, house.GenderRestriction.ToString(),
                         house.RentUnit);

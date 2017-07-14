@@ -11,7 +11,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
     {
         private string _title;
         private string _description;
-        private long _monthlyRent;
+        private long _rentPrice;
         private int _numberOfBedrooms;
         private int _numberOfKitchens;
         private int _numberOfBathrooms;
@@ -60,7 +60,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public House(string title, long monthlyRent, int numberOfBedrooms,
+        public House(string title, long rentPrice, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension, 
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
@@ -68,7 +68,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             GenderRestriction genderRestriction, bool isShared, string rentUnit)
         {
             Title = title;
-            MonthlyRent = monthlyRent;
+            RentPrice = rentPrice;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
@@ -97,7 +97,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// House instance updates itself with the given values
         /// </summary>
         /// <param name="title"></param>
-        /// <param name="monthlyRent"></param>
+        /// <param name="rentPrice"></param>
         /// <param name="numberOfBedrooms"></param>
         /// <param name="numberOfKitchens"></param>
         /// <param name="numberOfBathrooms"></param>
@@ -119,7 +119,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <param name="isShared"></param>
-        public void UpdateHouse(string title, long monthlyRent, int numberOfBedrooms,
+        public void UpdateHouse(string title, long rentPrice, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension,
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
@@ -127,7 +127,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             decimal latitude, decimal longitude, bool isShared, string rentUnit)
         {
             Title = title;
-            MonthlyRent = monthlyRent;
+            RentPrice = rentPrice;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
@@ -186,15 +186,15 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         }
 
         /// <summary>
-        /// Monthly Rent
+        /// Rent
         /// </summary>
-        public long MonthlyRent
+        public long RentPrice
         {
-            get { return _monthlyRent; }
+            get { return _rentPrice; }
             set
             {
                 Assertion.AssertNumberNotZero(value);
-                _monthlyRent = value;
+                _rentPrice = value;
             }
         }
 
@@ -433,7 +433,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         {
             private string _title;
             private string _description;
-            private long _monthlyRent;
+            private long _rentPrice;
             private int _numberOfBedrooms;
             private int _numberOfKitchens;
             private int _numberOfBathrooms;
@@ -468,9 +468,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
 
-            public HouseBuilder MonthlyRent(long monthlyRent)
+            public HouseBuilder RentPrice(long rentPrice)
             {
-                _monthlyRent = monthlyRent;
+                _rentPrice = rentPrice;
                 return this;
             }
 
@@ -606,7 +606,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             /// <returns></returns>
             public House Build()
             {
-                return new House(_title, _monthlyRent, _numberOfBedrooms, _numberOfKitchens,
+                return new House(_title, _rentPrice, _numberOfBedrooms, _numberOfKitchens,
                                  _numberOfBathrooms, _internetAvailable,
                                  _landlinePhoneAvailable, _cableTvAvailable, _dimension, _garageAvailable,
                                  _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber, _latitude, 

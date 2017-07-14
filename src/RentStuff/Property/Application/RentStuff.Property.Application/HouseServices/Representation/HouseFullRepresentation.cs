@@ -11,7 +11,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
     [DataContract]
     public class HouseFullRepresentation
     {
-        public HouseFullRepresentation(string id, string title, long rent, int numberOfBedrooms, int numberOfKitchens, 
+        public HouseFullRepresentation(string id, string title, long rentPrice, int numberOfBedrooms, int numberOfKitchens, 
             int numberOfBathrooms, bool internetAvailable, 
             bool landlinePhoneAvailable, bool cableTvAvailable, string dimension, bool garageAvailable, bool smokingAllowed, 
             string propertyType, string ownerEmail, string ownerPhoneNumber, decimal latitude, decimal longitude, string houseNo, 
@@ -20,7 +20,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
         {
             Id = id;
             Title = title;
-            Rent = rent;
+            RentPrice = rentPrice;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
@@ -56,7 +56,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
         public string Description { get; private set; }
 
         [DataMember]
-        public long Rent
+        public long RentPrice
         {
             get; private set;
         }

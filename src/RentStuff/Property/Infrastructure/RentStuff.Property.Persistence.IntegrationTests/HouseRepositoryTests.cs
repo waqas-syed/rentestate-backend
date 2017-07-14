@@ -67,7 +67,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(propertyType).MonthlyRent(price).Latitude(latitude).Longitude(longitude)
+                .PropertyType(propertyType).RentPrice(price).Latitude(latitude).Longitude(longitude)
                 .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description)
                 .GenderRestriction(genderRestriction).IsShared(isShared).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, null, 5, house);
@@ -131,7 +131,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(propertyType).MonthlyRent(price).Latitude(latitude).Longitude(longitude)
+                .PropertyType(propertyType).RentPrice(price).Latitude(latitude).Longitude(longitude)
                 .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description)
                 .GenderRestriction(genderRestriction).IsShared(isShared).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, null, 5, house);
@@ -217,7 +217,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(propertyType2, house.PropertyType);
             Assert.AreEqual(genderRestriction2, house.GenderRestriction);
             Assert.AreEqual(area2, house.Area);
-            Assert.AreEqual(monthlyRent2, house.MonthlyRent);
+            Assert.AreEqual(monthlyRent2, house.RentPrice);
 
             Assert.AreEqual(dimension2.DimensionType, house.Dimension.DimensionType);
             Assert.AreEqual(dimension2.StringValue, house.Dimension.StringValue);
@@ -265,7 +265,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
             .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
-            .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
+            .PropertyType(propertyType).RentPrice(rent).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2).GenderRestriction(genderRestriction)
             .HouseNo(houseNo).Area(area).OwnerName(ownerName).StreetNo(streetNo).Description(description)
             .IsShared(isShared).RentUnit(rentUnit).Build();
@@ -293,7 +293,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
             .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress.Item1)
+            .PropertyType(propertyType2).RentPrice(rent2).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2).GenderRestriction(genderRestriction2)
             .HouseNo(houseNo2).Area(area).OwnerName(ownerName2).StreetNo(streetNo2).Description(description2).IsShared(isShared2)
             .RentUnit(rentUnit2)
@@ -373,7 +373,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
             .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
-            .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
+            .PropertyType(propertyType).RentPrice(rent).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2).GenderRestriction(genderRestriction)
             .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description).RentUnit(rentUnit).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "5", 0, house);
@@ -400,7 +400,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
             .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress.Item1)
+            .PropertyType(propertyType2).RentPrice(rent2).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2).GenderRestriction(genderRestriction2)
             .HouseNo(houseNo2).Area(area).StreetNo(streetNo2).OwnerName(ownerName2).Description(description2).RentUnit(rentUnit2).Build();
             Dimension dimension2 = new Dimension(DimensionType.Marla, "20", 0, house2);
@@ -475,7 +475,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
             .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
-            .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
+            .PropertyType(propertyType).RentPrice(rent).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2).GenderRestriction(genderRestriction)
             .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description).RentUnit(rentUnit).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "1", 0, house);
@@ -505,7 +505,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
             .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress2.Item1)
+            .PropertyType(propertyType2).RentPrice(rent2).Latitude(coordinatesFromAddress2.Item1)
             .Longitude(coordinatesFromAddress2.Item2).GenderRestriction(genderRestriction2)
             .HouseNo(houseNo2).Area(area2).StreetNo(streetNo2).OwnerName(ownerName2).Description(description2).RentUnit(rentUnit2)
             .Build();
@@ -536,7 +536,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms3).NumberOfBathrooms(numberOfBathrooms3).OwnerPhoneNumber(phoneNumber3)
             .NumberOfKitchens(numberOfKitchens3).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType3).MonthlyRent(rent3).Latitude(coordinatesFromAddress3.Item1)
+            .PropertyType(propertyType3).RentPrice(rent3).Latitude(coordinatesFromAddress3.Item1)
             .Longitude(coordinatesFromAddress3.Item2).GenderRestriction(genderRestriction3)
             .HouseNo(houseNo3).Area(area3).StreetNo(streetNo3).OwnerName(ownerName3).Description(description3)
             .RentUnit(rentUnit3).Build();
@@ -567,7 +567,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms4).NumberOfBathrooms(numberOfBathrooms4).OwnerPhoneNumber(phoneNumber4)
             .NumberOfKitchens(numberOfKitchens4).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType4).MonthlyRent(rent4).Latitude(coordinatesFromAddress4.Item1)
+            .PropertyType(propertyType4).RentPrice(rent4).Latitude(coordinatesFromAddress4.Item1)
             .Longitude(coordinatesFromAddress4.Item2).GenderRestriction(genderRestriction4)
             .HouseNo(houseNo4).Area(area4).StreetNo(streetNo4).OwnerName(ownerName4).Description(description4).RentUnit(rentUnit4)
             .Build();
@@ -598,7 +598,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms5).NumberOfBathrooms(numberOfBathrooms5).OwnerPhoneNumber(phoneNumber5)
             .NumberOfKitchens(numberOfKitchens5).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType5).MonthlyRent(rent5).Latitude(coordinatesFromAddress5.Item1)
+            .PropertyType(propertyType5).RentPrice(rent5).Latitude(coordinatesFromAddress5.Item1)
             .Longitude(coordinatesFromAddress5.Item2).GenderRestriction(genderRestriction5)
             .HouseNo(houseNo5).Area(area5).StreetNo(streetNo5).OwnerName(ownerName5).Description(description5).RentUnit(rentUnit5)
             .Build();
@@ -723,7 +723,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
             .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
-            .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
+            .PropertyType(propertyType).RentPrice(rent).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2)
             .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).RentUnit(rentUnit).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "5", 0, house);
@@ -748,7 +748,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
             .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress.Item1)
+            .PropertyType(propertyType2).RentPrice(rent2).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2)
             .HouseNo(houseNo2).Area(area).StreetNo(streetNo2).OwnerName(ownerName2).RentUnit(rentUnit2).IsShared(isShared2)
             .Build();
@@ -776,7 +776,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms3).NumberOfBathrooms(numberOfBathrooms3).OwnerPhoneNumber(phoneNumber3)
             .NumberOfKitchens(numberOfKitchens3).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType3).MonthlyRent(rent3).Latitude(coordinatesFromAddress2.Item1)
+            .PropertyType(propertyType3).RentPrice(rent3).Latitude(coordinatesFromAddress2.Item1)
             .Longitude(coordinatesFromAddress2.Item2)
             .HouseNo(houseNo3).Area(area).StreetNo(streetNo3).OwnerName(ownerName3).IsShared(isShared3).RentUnit(rentUnit3).Build();
             Dimension dimension3 = new Dimension(DimensionType.Acre, "2", 0, house3);
@@ -898,7 +898,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
             .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
-            .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
+            .PropertyType(propertyType).RentPrice(rent).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2)
             .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).IsShared(isShared).RentUnit(rentUnit)
             .Build();
@@ -928,7 +928,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
             .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress2.Item1)
+            .PropertyType(propertyType2).RentPrice(rent2).Latitude(coordinatesFromAddress2.Item1)
             .Longitude(coordinatesFromAddress2.Item2)
             .HouseNo(houseNo2).Area(area2).StreetNo(streetNo2).OwnerName(ownerName2).IsShared(isShared2).RentUnit(rentUnit2).Build();
             Dimension dimension2 = new Dimension(DimensionType.Kanal, "2", 0, house2);
@@ -957,7 +957,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms3).NumberOfBathrooms(numberOfBathrooms3).OwnerPhoneNumber(phoneNumber3)
             .NumberOfKitchens(numberOfKitchens3).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType3).MonthlyRent(rent3).Latitude(coordinatesFromAddress3.Item1)
+            .PropertyType(propertyType3).RentPrice(rent3).Latitude(coordinatesFromAddress3.Item1)
             .Longitude(coordinatesFromAddress3.Item2)
             .HouseNo(houseNo3).Area(area3).StreetNo(streetNo3).OwnerName(ownerName3).IsShared(isShared3).RentUnit(rentUnit3).Build();
             Dimension dimension3 = new Dimension(DimensionType.Kanal, "3", 0, house3);
@@ -986,7 +986,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms4).NumberOfBathrooms(numberOfBathrooms4).OwnerPhoneNumber(phoneNumber4)
             .NumberOfKitchens(numberOfKitchens4).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType4).MonthlyRent(rent4).Latitude(coordinatesFromAddress4.Item1)
+            .PropertyType(propertyType4).RentPrice(rent4).Latitude(coordinatesFromAddress4.Item1)
             .Longitude(coordinatesFromAddress4.Item2)
             .HouseNo(houseNo4).Area(area4).StreetNo(streetNo4).OwnerName(ownerName4).IsShared(isShared4).RentUnit(rentUnit4)
             .Build();
@@ -1016,7 +1016,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms5).NumberOfBathrooms(numberOfBathrooms5).OwnerPhoneNumber(phoneNumber5)
             .NumberOfKitchens(numberOfKitchens5).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType5).MonthlyRent(rent5).Latitude(coordinatesFromAddress5.Item1)
+            .PropertyType(propertyType5).RentPrice(rent5).Latitude(coordinatesFromAddress5.Item1)
             .Longitude(coordinatesFromAddress5.Item2)
             .HouseNo(houseNo5).Area(area5).StreetNo(streetNo5).OwnerName(ownerName5).IsShared(isShared5).RentUnit(rentUnit5)
             .Build();
@@ -1144,7 +1144,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberOfBathrooms).OwnerPhoneNumber(phoneNumber)
             .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
             .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
-            .PropertyType(propertyType).MonthlyRent(rent).Latitude(coordinatesFromAddress.Item1)
+            .PropertyType(propertyType).RentPrice(rent).Latitude(coordinatesFromAddress.Item1)
             .Longitude(coordinatesFromAddress.Item2)
             .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "1", 0, house);
@@ -1172,7 +1172,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms2).NumberOfBathrooms(numberOfBathrooms2).OwnerPhoneNumber(phoneNumber2)
             .NumberOfKitchens(numberOfKitchens2).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType2).MonthlyRent(rent2).Latitude(coordinatesFromAddress2.Item1)
+            .PropertyType(propertyType2).RentPrice(rent2).Latitude(coordinatesFromAddress2.Item1)
             .Longitude(coordinatesFromAddress2.Item2)
             .HouseNo(houseNo2).Area(area2).StreetNo(streetNo2).OwnerName(ownerName2).Description(description2).Build();
             Dimension dimension2 = new Dimension(DimensionType.Kanal, "2", 0, house2);
@@ -1202,7 +1202,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms3).NumberOfBathrooms(numberOfBathrooms3).OwnerPhoneNumber(phoneNumber3)
             .NumberOfKitchens(numberOfKitchens3).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType3).MonthlyRent(rent3).Latitude(coordinatesFromAddress3.Item1)
+            .PropertyType(propertyType3).RentPrice(rent3).Latitude(coordinatesFromAddress3.Item1)
             .Longitude(coordinatesFromAddress3.Item2)
             .HouseNo(houseNo3).Area(area3).StreetNo(streetNo3).OwnerName(ownerName3).Description(description3).Build();
             Dimension dimension3 = new Dimension(DimensionType.Kanal, "3", 0, house3);
@@ -1230,7 +1230,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms4).NumberOfBathrooms(numberOfBathrooms4).OwnerPhoneNumber(phoneNumber4)
             .NumberOfKitchens(numberOfKitchens4).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType4).MonthlyRent(rent4).Latitude(coordinatesFromAddress4.Item1)
+            .PropertyType(propertyType4).RentPrice(rent4).Latitude(coordinatesFromAddress4.Item1)
             .Longitude(coordinatesFromAddress4.Item2)
             .HouseNo(houseNo4).Area(area4).StreetNo(streetNo4).OwnerName(ownerName4).Description(description4).Build();
             Dimension dimension4 = new Dimension(DimensionType.Kanal, "4", 0, house4);
@@ -1258,7 +1258,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             .NumberOfBedrooms(numberOfBedrooms5).NumberOfBathrooms(numberOfBathrooms5).OwnerPhoneNumber(phoneNumber5)
             .NumberOfKitchens(numberOfKitchens5).CableTvAvailable(false)
             .GarageAvailable(false).LandlinePhoneAvailable(false).SmokingAllowed(false).WithInternetAvailable(false)
-            .PropertyType(propertyType5).MonthlyRent(rent5).Latitude(coordinatesFromAddress5.Item1)
+            .PropertyType(propertyType5).RentPrice(rent5).Latitude(coordinatesFromAddress5.Item1)
             .Longitude(coordinatesFromAddress5.Item2)
             .HouseNo(houseNo5).Area(area5).StreetNo(streetNo5).OwnerName(ownerName5).Description(description5).Build();
             Dimension dimension5 = new Dimension(DimensionType.Kanal, "5", 0, house5);
@@ -1387,7 +1387,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(propertyType).MonthlyRent(price).Latitude(33.29M).Longitude(73.41M)
+                .PropertyType(propertyType).RentPrice(price).Latitude(33.29M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").OwnerName(ownerName).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "50", 0, house);
             house.Dimension = dimension;
@@ -1445,7 +1445,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(propertyType).MonthlyRent(price).Latitude(33.29M).Longitude(73.41M)
+                .PropertyType(propertyType).RentPrice(price).Latitude(33.29M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").OwnerName(ownerName).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, null, 5, house);
             house.Dimension = dimension;
@@ -1530,7 +1530,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                     .OwnerPhoneNumber(phoneNumber)
                     .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                     .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
-                    .PropertyType(propertyType).MonthlyRent(rent).Latitude(i + 1)
+                    .PropertyType(propertyType).RentPrice(rent).Latitude(i + 1)
                     .Longitude(i + 1)
                     .HouseNo(houseNo)
                     .Area(area)
@@ -1591,7 +1591,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                     .PropertyType(propertyType)
                     .Latitude(initialLatitude)
                     .Longitude(initialLongitude)
-                    .MonthlyRent(rentPrice)
+                    .RentPrice(rentPrice)
                     .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName)
                     .Description(description).Build();
                 Dimension dimension = new Dimension(dimensionType, i.ToString(), 0, house);

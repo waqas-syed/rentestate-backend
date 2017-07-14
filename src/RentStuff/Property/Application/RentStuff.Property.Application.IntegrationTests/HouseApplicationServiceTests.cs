@@ -90,7 +90,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(numberOfBedrooms, createNewHouseCommand.NumberOfBedrooms);
             Assert.AreEqual(numberOfKitchens, createNewHouseCommand.NumberOfKitchens);
             Assert.AreEqual(propertyType, createNewHouseCommand.PropertyType);
-            Assert.AreEqual(monthlyRent, createNewHouseCommand.MonthlyRent);
+            Assert.AreEqual(monthlyRent, createNewHouseCommand.RentPrice);
             Assert.AreEqual(numberofBathrooms, createNewHouseCommand.NumberOfBathrooms);
             Assert.AreEqual(genderRestriction, createNewHouseCommand.GenderRestriction);
             Assert.AreEqual(internet, createNewHouseCommand.InternetAvailable);
@@ -148,7 +148,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
             Assert.AreEqual(house.Area, retreivedHouse.Area);
-            Assert.AreEqual(house.MonthlyRent, retreivedHouse.Rent);
+            Assert.AreEqual(house.RentPrice, retreivedHouse.RentPrice);
             Assert.AreEqual(house.Title, retreivedHouse.Title);
             Assert.AreEqual(house.Description, retreivedHouse.Description);
             Assert.AreEqual(house.DimensionStringValue + " " + house.DimensionType, retreivedHouse.Dimension);
@@ -253,7 +253,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house2.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house2.PropertyType, retreivedHouse.PropertyType);
             Assert.AreEqual(house2.Area, retreivedHouse.Area);
-            Assert.AreEqual(house2.MonthlyRent, retreivedHouse.Rent);
+            Assert.AreEqual(house2.RentPrice, retreivedHouse.RentPrice);
             Assert.AreEqual(house2.Title, retreivedHouse.Title);
             Assert.AreEqual(house2.Description, retreivedHouse.Description);
             Assert.AreEqual(house2.DimensionStringValue + " " + house2.DimensionType, retreivedHouse.Dimension);
@@ -270,7 +270,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house3.NumberOfBedrooms, retreivedHouse2.NumberOfBedrooms);
             Assert.AreEqual(house3.PropertyType, retreivedHouse2.PropertyType);
             Assert.AreEqual(house3.Area, retreivedHouse2.Area);
-            Assert.AreEqual(house3.MonthlyRent, retreivedHouse2.Rent);
+            Assert.AreEqual(house3.RentPrice, retreivedHouse2.RentPrice);
             Assert.AreEqual(house3.Title, retreivedHouse2.Title);
             Assert.AreEqual(house3.Description, retreivedHouse2.Description);
             Assert.AreEqual(house3.DimensionStringValue + " " + house3.DimensionType, retreivedHouse2.Dimension);
@@ -374,7 +374,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house2.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house2.PropertyType, retreivedHouse.PropertyType);
             Assert.AreEqual(house2.Area, retreivedHouse.Area);
-            Assert.AreEqual(house2.MonthlyRent, retreivedHouse.Rent);
+            Assert.AreEqual(house2.RentPrice, retreivedHouse.RentPrice);
             Assert.AreEqual(house2.Title, retreivedHouse.Title);
             Assert.AreEqual(house2.Description, retreivedHouse.Description);
             Assert.AreEqual(house2.DimensionStringValue + " " + house2.DimensionType, retreivedHouse.Dimension);
@@ -480,7 +480,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouse1.NumberOfKitchens);
             Assert.AreEqual(house.PropertyType, retreivedHouse1.PropertyType);
             Assert.AreEqual(house.Area, retreivedHouse1.Area);
-            Assert.AreEqual(house.MonthlyRent, retreivedHouse1.Rent);
+            Assert.AreEqual(house.RentPrice, retreivedHouse1.RentPrice);
             Assert.AreEqual(house.Title, retreivedHouse1.Title);
             Assert.AreEqual(house.Description, retreivedHouse1.Description);
             Assert.AreEqual(house.DimensionStringValue + " " + house2.DimensionType, retreivedHouse1.Dimension);
@@ -501,7 +501,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house3.NumberOfKitchens, retreivedHouse2.NumberOfKitchens);
             Assert.AreEqual(house3.PropertyType, retreivedHouse1.PropertyType);
             Assert.AreEqual(house3.Area, retreivedHouse2.Area);
-            Assert.AreEqual(house3.MonthlyRent, retreivedHouse2.Rent);
+            Assert.AreEqual(house3.RentPrice, retreivedHouse2.RentPrice);
             Assert.AreEqual(house3.Title, retreivedHouse2.Title);
             Assert.AreEqual(house3.Description, retreivedHouse2.Description);
             Assert.AreEqual(house3.DimensionStringValue + " " + house3.DimensionType, retreivedHouse2.Dimension);
@@ -615,7 +615,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
             Assert.AreEqual(house.Area, retreivedHouse.Area);
-            Assert.AreEqual(house.MonthlyRent, retreivedHouse.Rent);
+            Assert.AreEqual(house.RentPrice, retreivedHouse.RentPrice);
             Assert.AreEqual(house.Title, retreivedHouse.Title);
             Assert.AreEqual(house.Description, retreivedHouse.Description);
             Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);

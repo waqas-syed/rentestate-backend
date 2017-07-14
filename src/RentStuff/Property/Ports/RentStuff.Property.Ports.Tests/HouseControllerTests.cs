@@ -127,8 +127,8 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house.Title, retreivedHouse.Title);
                 Assert.AreEqual(description, retreivedHouse.Description);
                 Assert.AreEqual(house.Description, retreivedHouse.Description);
-                Assert.AreEqual(rent, retreivedHouse.Rent);
-                Assert.AreEqual(house.MonthlyRent, retreivedHouse.Rent);
+                Assert.AreEqual(rent, retreivedHouse.RentPrice);
+                Assert.AreEqual(house.RentPrice, retreivedHouse.RentPrice);
                 Assert.AreEqual(numberOfBathrooms, retreivedHouse.NumberOfBathrooms);
                 Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
                 Assert.AreEqual(numberOfBedrooms, retreivedHouse.NumberOfBedrooms);
@@ -209,8 +209,8 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(updateHouseCommand.Title, retreivedHouse.Title);
                 Assert.AreEqual(updatedDescription, retreivedHouse.Description);
                 Assert.AreEqual(updateHouseCommand.Description, retreivedHouse.Description);
-                Assert.AreEqual(updatedRent, retreivedHouse.Rent);
-                Assert.AreEqual(updateHouseCommand.MonthlyRent, retreivedHouse.Rent);
+                Assert.AreEqual(updatedRent, retreivedHouse.RentPrice);
+                Assert.AreEqual(updateHouseCommand.RentPrice, retreivedHouse.RentPrice);
                 Assert.AreEqual(updatedNumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
                 Assert.AreEqual(updateHouseCommand.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
                 Assert.AreEqual(updatedNumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
@@ -522,8 +522,8 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house.Title, retreivedHouses[0].Title);
                 Assert.AreEqual(description, retreivedHouses[0].Description);
                 Assert.AreEqual(house.Description, retreivedHouses[0].Description);
-                Assert.AreEqual(rent, retreivedHouses[0].Rent);
-                Assert.AreEqual(house.MonthlyRent, retreivedHouses[0].Rent);
+                Assert.AreEqual(rent, retreivedHouses[0].RentPrice);
+                Assert.AreEqual(house.RentPrice, retreivedHouses[0].RentPrice);
                 Assert.AreEqual(numberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
                 Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
                 Assert.AreEqual(numberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
@@ -556,8 +556,8 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(house2.Title, retreivedHouses[1].Title);
                 Assert.AreEqual(description2, retreivedHouses[1].Description);
                 Assert.AreEqual(house2.Description, retreivedHouses[1].Description);
-                Assert.AreEqual(rent2, retreivedHouses[1].Rent);
-                Assert.AreEqual(house2.MonthlyRent, retreivedHouses[1].Rent);
+                Assert.AreEqual(rent2, retreivedHouses[1].RentPrice);
+                Assert.AreEqual(house2.RentPrice, retreivedHouses[1].RentPrice);
                 Assert.AreEqual(numberOfBathrooms2, retreivedHouses[1].NumberOfBathrooms);
                 Assert.AreEqual(house2.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
                 Assert.AreEqual(numberOfBedrooms2, retreivedHouses[1].NumberOfBedrooms);
@@ -750,8 +750,8 @@ namespace RentStuff.Property.Ports.Tests
             Assert.AreEqual(house.Title, retreivedHouses[0].Title);
             Assert.AreEqual(description, retreivedHouses[0].Description);
             Assert.AreEqual(house.Description, retreivedHouses[0].Description);
-            Assert.AreEqual(rent, retreivedHouses[0].Rent);
-            Assert.AreEqual(house.MonthlyRent, retreivedHouses[0].Rent);
+            Assert.AreEqual(rent, retreivedHouses[0].RentPrice);
+            Assert.AreEqual(house.RentPrice, retreivedHouses[0].RentPrice);
             Assert.AreEqual(numberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(numberOfBedrooms, retreivedHouses[0].NumberOfBedrooms);
@@ -782,8 +782,8 @@ namespace RentStuff.Property.Ports.Tests
             Assert.AreEqual(house3.Title, retreivedHouses[1].Title);
             Assert.AreEqual(description3, retreivedHouses[1].Description);
             Assert.AreEqual(house3.Description, retreivedHouses[1].Description);
-            Assert.AreEqual(rent3, retreivedHouses[1].Rent);
-            Assert.AreEqual(house3.MonthlyRent, retreivedHouses[1].Rent);
+            Assert.AreEqual(rent3, retreivedHouses[1].RentPrice);
+            Assert.AreEqual(house3.RentPrice, retreivedHouses[1].RentPrice);
             Assert.AreEqual(numberOfBathrooms3, retreivedHouses[1].NumberOfBathrooms);
             Assert.AreEqual(house3.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
             Assert.AreEqual(numberOfBedrooms3, retreivedHouses[1].NumberOfBedrooms);
@@ -974,8 +974,8 @@ namespace RentStuff.Property.Ports.Tests
             Assert.AreEqual(house2.Title, retreivedHouses[0].Title);
             Assert.AreEqual(description2, retreivedHouses[0].Description);
             Assert.AreEqual(house2.Description, retreivedHouses[0].Description);
-            Assert.AreEqual(rent2, retreivedHouses[0].Rent);
-            Assert.AreEqual(house2.MonthlyRent, retreivedHouses[0].Rent);
+            Assert.AreEqual(rent2, retreivedHouses[0].RentPrice);
+            Assert.AreEqual(house2.RentPrice, retreivedHouses[0].RentPrice);
             Assert.AreEqual(numberOfBathrooms2, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(house2.NumberOfBathrooms, retreivedHouses[0].NumberOfBathrooms);
             Assert.AreEqual(numberOfBedrooms2, retreivedHouses[0].NumberOfBedrooms);
@@ -1005,8 +1005,8 @@ namespace RentStuff.Property.Ports.Tests
             Assert.AreEqual(house.Title, retreivedHouses[1].Title);
             Assert.AreEqual(description, retreivedHouses[1].Description);
             Assert.AreEqual(house.Description, retreivedHouses[1].Description);
-            Assert.AreEqual(rent, retreivedHouses[1].Rent);
-            Assert.AreEqual(house.MonthlyRent, retreivedHouses[1].Rent);
+            Assert.AreEqual(rent, retreivedHouses[1].RentPrice);
+            Assert.AreEqual(house.RentPrice, retreivedHouses[1].RentPrice);
             Assert.AreEqual(numberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouses[1].NumberOfBathrooms);
             Assert.AreEqual(numberOfBedrooms, retreivedHouses[1].NumberOfBedrooms);
