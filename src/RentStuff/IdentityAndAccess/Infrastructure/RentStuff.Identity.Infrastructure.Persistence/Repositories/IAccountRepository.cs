@@ -71,7 +71,5 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
         /// <param name="internalIdentifier"></param>
         /// <returns></returns>
         ExternalAccessTokenIdentifier GetExternalAccessIdentifierByInternalId(string internalIdentifier);
-
-        ExternalAccessTokenIdentifier GetExternalAccessIdentifierByToken(string externalAccessToken);
     }
 }

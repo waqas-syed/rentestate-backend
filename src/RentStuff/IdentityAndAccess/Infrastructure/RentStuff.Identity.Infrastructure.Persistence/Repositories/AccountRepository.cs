@@ -72,12 +72,7 @@ namespace RentStuff.Identity.Infrastructure.Persistence.Repositories
         {
             return _ctx.ExternalAccessExternalTokenIdentifiers.Find(internalIdentifier);
         }
-
-        public ExternalAccessTokenIdentifier GetExternalAccessIdentifierByToken(string externalAccessToken)
-        {
-            return _ctx.ExternalAccessExternalTokenIdentifiers.SingleOrDefault(tokenInstance => tokenInstance.ExternalAccessToken == externalAccessToken);
-        }
-
+        
         public IdentityResult RegisterUser(string name, string email, string password, bool isExternalUser = false)
         {
             // Assign email to the uername property, as we will use email in place of username
