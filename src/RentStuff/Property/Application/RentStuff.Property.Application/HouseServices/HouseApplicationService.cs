@@ -345,37 +345,34 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="photoStream"></param>
         public void AddSingleImageToHouse(string houseId, Stream photoStream)
         {
-            using (var image = Image.FromStream(photoStream))
+            // Get the house from the repository
+            House house = _houseRepository.GetHouseById(houseId);
+            // If we find a hosue with the given ID
+            if (house != null)
             {
-                // Get the house from the repository
-                House house = _houseRepository.GetHouseById(houseId);
-                // If we find a hosue with the given ID
-                if (house != null)
-                {
-                    // Create a name for this image
-                    string imageId = "IMG_" + Guid.NewGuid().ToString();
-                    // Add extension to the file name
-                    String fileName = imageId + ImageFurnace.GetImageExtension();
-                    // Resize the image to the size that we will be using as default
-                    var finalImage = ImageFurnace.ResizeImage(image, 830, 500);
-                    // Get the stream of the image
-                    var httpPostedStream = ImageFurnace.ToStream(finalImage);
-                    _photoStorageService.UploadPhoto(fileName, httpPostedStream);
-                    // Get the url of the bucket and append with it the name of the file. This will be the public 
-                    // url for this image and ready to view
-                    fileName = ConfigurationManager.AppSettings["GoogleCloudStoragePhotoBucketUrl"] + fileName;
-                    // Add the image link to the list of images this house owns
-                    house.AddImage(fileName);
-                    // Save the updated house in the repository
-                    _houseRepository.SaveorUpdate(house);
-                    // Log the info
-                    _logger.Info("Added images to house successfully. HouseId: {0}", house.Id);
-                }
-                // Otherwise throw an exception
-                else
-                {
-                    throw new NullReferenceException("No house found with the given ID");
-                }
+                // Create a name for this image
+                string imageId = "IMG_" + Guid.NewGuid().ToString();
+                // Add extension to the file name
+                String fileName = imageId + ImageFurnace.GetImageExtension();
+                // Resize the image to the size that we will be using as default
+                //var finalImage = ImageFurnace.ResizeImage(image, 830, 500);
+                // Get the stream of the image
+                //var httpPostedStream = ImageFurnace.ToStream(finalImage);
+                _photoStorageService.UploadPhoto(fileName, photoStream);
+                // Get the url of the bucket and append with it the name of the file. This will be the public 
+                // url for this image and ready to view
+                fileName = ConfigurationManager.AppSettings["GoogleCloudStoragePhotoBucketUrl"] + fileName;
+                // Add the image link to the list of images this house owns
+                house.AddImage(fileName);
+                // Save the updated house in the repository
+                _houseRepository.SaveorUpdate(house);
+                // Log the info
+                _logger.Info("Added images to house successfully. HouseId: {0}", house.Id);
+            }
+            // Otherwise throw an exception
+            else
+            {
+                throw new NullReferenceException("No house found with the given ID");
             }
         }
 
