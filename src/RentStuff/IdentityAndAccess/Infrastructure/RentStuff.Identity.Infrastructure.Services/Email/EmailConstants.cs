@@ -25,7 +25,7 @@ namespace RentStuff.Identity.Infrastructure.Services.Email
             return $"Dear {name},<br/><br/>" +
                 "We heard from you that you have forgotten your password. " +
                 "It's alright, you can reset it right away by clicking on the following link: <br/><br/>" +
-                $"{passwordResetLink} <br/><br/>" + 
+                $"<a href=\"{passwordResetLink}\">here</a> <br/><br/>" + 
                 $"This link will expire in 24 hours <br/> <br/>" +
                 $"Have a nice day, <br/> Your friends at {Constants.CompanyName}";
         }
