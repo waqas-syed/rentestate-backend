@@ -22,7 +22,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         private IHouseApplicationService _houseApplicationService;
         
         /// <summary>
-        /// Default Constructor
+        /// Initialize with House's application service
         /// </summary>
         /// <param name="houseApplicationService"></param>
         public HouseController(IHouseApplicationService houseApplicationService)
@@ -32,7 +32,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 
         /// <summary>
         /// Save the House instance.
-        /// After saving the house, the images for that House need to be uploaded using another POSt call to 
+        /// After saving the house, the images for that House need to be uploaded using another PoSt call to 
         /// 'HouseImageUplaod' method
         /// </summary>
         /// <param name="house"></param>
@@ -44,6 +44,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         {
             try
             {
+                // Nul reference check
                 if (house != null)
                 {
                     var jsonString = house.ToString();
@@ -51,7 +52,9 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     CreateHouseCommand houseReborn = null;
                     // First try to convert it to CreateHouseCommand
                     houseReborn = JsonConvert.DeserializeObject<CreateHouseCommand>(jsonString);
+                    // Check if the house's owner email is the same as the one the current user is logged in with
                     CheckOwnerEmailIntegrity(houseReborn.OwnerEmail);
+                    // Save the new house
                     return Ok(_houseApplicationService.SaveNewHouseOffer(houseReborn));
                 }
             }
@@ -76,7 +79,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     var jsonString = house.ToString();
 
                     UpdateHouseCommand refurbishedHouse = null;
-                    // If above fails, then try to convert it to UpdateHouseCommand
+                    // Try to convert the JSON into a domain model object
                     refurbishedHouse = JsonConvert.DeserializeObject<UpdateHouseCommand>(jsonString);
                     // First check that the request initiator has the same email as the uploader of the house
                     CheckOwnerEmailIntegrity(refurbishedHouse.OwnerEmail);
@@ -123,14 +126,18 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         public IHttpActionResult PostImageUpload()
         {
             bool imageUploaded = false;
+            // Get the HouseId from the header
             String[] headerValues = (String[]) Request.Headers.GetValues("HouseId");
             string houseId = headerValues[0];
+            // Get the email from the claims identity
             var userEmail = GetEmailFromClaims(User.Identity);
+            // Make sure that this house belongs to this logged in user
             bool allowedToEditHouse = _houseApplicationService.HouseOwnershipCheck(houseId, userEmail);
             try
             {
                 if (allowedToEditHouse)
                 {
+                    // We need a multipart message in order for it to contains pictures
                     if (Request.Content.IsMimeMultipartContent())
                     {
                         // Load the HTTP request content into buffer asynchronously
@@ -144,8 +151,10 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         // For each file, do the processing
                         foreach (HttpContent content in provider.Contents)
                         {
+                            // Fetch as stream
                             using (Stream stream = content.ReadAsStreamAsync().Result)
                             {
+                                // Add the image to the house
                                 _houseApplicationService.AddSingleImageToHouse(houseId, stream);
                                 // Let the client know that the upload was successful
                                 imageUploaded = true;
@@ -177,12 +186,19 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
         }
         
+        /// <summary>
+        ///  Delete the given image from the house
+        /// </summary>
+        /// <param name="deleteImageCommand"></param>
+        /// <returns></returns>
         [Route("houseimageupload")]
         [HttpPut]
         [Authorize]
         public IHttpActionResult ImageDelete([FromBody] DeleteImageCommand deleteImageCommand)
         {
+            // Get the email from the claims identity
             var userEmail = GetEmailFromClaims(User.Identity);
+            // Make sure the logged in user is the owner of the house
             bool allowedToEditHouse = _houseApplicationService.HouseOwnershipCheck(deleteImageCommand.HouseId,
                 userEmail);
 
@@ -190,13 +206,14 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             {
                 if (allowedToEditHouse)
                 {
-                    //Task.Run(() => _houseApplicationService.DeleteImageFromHouse(deleteImageCommand.HouseId, deleteImageCommand.ImagesList)).Wait(2000);
+                    // Delete the images from the house using the application service
                     _houseApplicationService.DeleteImagesFromHouse(deleteImageCommand.HouseId,
                         deleteImageCommand.ImagesList);
                     return Ok();
                 }
                 else
                 {
+                    // Otherwise someone tried to misuse our service. Send back error
                     _logger.Error("Someone tried to upload an image for another user. HouseId:{0} | UserEmail:{1}",
                         deleteImageCommand.HouseId, userEmail);
                     return
@@ -211,6 +228,13 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
         }
 
+        /// <summary>
+        /// Get the total number of houses in the database for the given criteria
+        /// </summary>
+        /// <param name="propertyType"></param>
+        /// <param name="area"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [Route("house-count")]
         [HttpGet]
         public IHttpActionResult GetHouseCount(string propertyType = null, string area = null, string email = null)
@@ -227,6 +251,15 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
         }
 
+        /// <summary>
+        /// Get the house(s) by the given criteria. Can be one or multiple
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="area"></param>
+        /// <param name="propertyType"></param>
+        /// <param name="houseId"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
         [Route("house")]
         [HttpGet]
         public IHttpActionResult GetHouse(string email = null, string area = null, string propertyType = null, 
@@ -241,26 +274,33 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     pageNo = pageNo - 1;
                 }
                 _logger.Info("Get House request received");
+                // If both area and property type are given
                 if (area != null && propertyType != null)
                 {
                     _logger.Info("Get House by Area {0} and Property Type {1}", area, propertyType);
                     return Ok(_houseApplicationService.SearchHousesByAreaAndPropertyType(area, propertyType, pageNo));
                 }
+                // If only area is given
                 else if (area != null)
                 {
                     _logger.Info("Get House by Area {0}", area);
                     return Ok(_houseApplicationService.SearchHousesByArea(area, pageNo));
                 }
+                // If only property type is given
                 else if (propertyType != null)
                 {
                     _logger.Info("Get House by Property Type {0}", propertyType);
                     return Ok(_houseApplicationService.SearchHousesByPropertyType(propertyType, pageNo));
                 }
+                // If only email is given
                 else if (email != null)
                 {
+                    // Get the email from the identity
                     var emailFromClaims = GetEmailFromClaims(User.Identity);
                     if (!string.IsNullOrWhiteSpace(emailFromClaims))
                     {
+                        // If the requested house's owner email is the same as the logged in user's email, move 
+                        // forward, otherwise return an error.
                         if (email.Equals(emailFromClaims))
                         {
                             _logger.Info("Get House by Email {0}", email);
@@ -274,7 +314,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     }
                     else
                     {
-                        //throw new NullReferenceException("User must be logged in for this request");
+                        // The user is not authorized to access this information
                         return Unauthorized();
                     }
                 }
@@ -295,6 +335,11 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
         }
         
+        /// <summary>
+        /// Delete the house with the given ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Route("house/{id}")]
         [HttpDelete]
         public IHttpActionResult Delete(string id)
@@ -303,8 +348,11 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             {
                 if (!string.IsNullOrEmpty(id))
                 {
+                    // Get email
                     var userEmail = GetEmailFromClaims(User.Identity);
+                    // Check if its the same user who owns this house
                     bool allowedToEditHouse = _houseApplicationService.HouseOwnershipCheck(id, userEmail);
+                    // If so, proceed
                     if (allowedToEditHouse)
                     {
                         _houseApplicationService.DeleteHouse(id);
@@ -327,6 +375,10 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
         }
         
+        /// <summary>
+        /// Get the property types that we support, like house, apartment etc
+        /// </summary>
+        /// <returns></returns>
         [Route("property-type")]
         [HttpGet]
         public IHttpActionResult GetPropertyTypes()
@@ -341,6 +393,10 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
         }
 
+        /// <summary>
+        /// Get all the rent units we support, like per hour, per day etc.
+        /// </summary>
+        /// <returns></returns>
         [Route("rent-unit")]
         [HttpGet]
         public IHttpActionResult GetRentUnits()

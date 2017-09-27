@@ -1,6 +1,4 @@
-﻿
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 
 namespace RentStuff.Property.Domain.Model.HouseAggregate
@@ -16,6 +14,10 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <param name="house"></param>
         void SaveorUpdate(House house);
 
+        /// <summary>
+        /// Save or update dimension
+        /// </summary>
+        /// <param name="dimension"></param>
         void SaveorUpdateDimension(Dimension dimension);
 
         /// <summary>
@@ -116,5 +118,11 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         /// <returns></returns>
         Tuple<int, int> GetTotalRecordCount();
+
+        /// <summary>
+        /// Get all the houses who were posted long enough ago to become stale
+        /// </summary>
+        /// <returns></returns>
+        IList<House> GetAllStaleProperties();
     }
 }

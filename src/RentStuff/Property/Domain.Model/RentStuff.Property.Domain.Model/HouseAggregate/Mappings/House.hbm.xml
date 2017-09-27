@@ -29,6 +29,8 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
     <property name="OwnerName" column="owner_name"/>
     <property name="IsShared" column="is_shared"/>
     <property name="RentUnit" column="rent_unit"/>
+    <property name="DateCreated" column="date_created"/>
+    <property name="LastModified" column="last_modified"/>
     <many-to-one name="Dimension" unique="true" column="dimension_id" cascade="all">
     </many-to-one>
     <idbag name="HouseImages" table="houseimages" lazy="false">

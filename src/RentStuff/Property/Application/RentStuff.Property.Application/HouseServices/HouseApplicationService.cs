@@ -1,18 +1,12 @@
-﻿using System;
+﻿using NLog;
+using RentStuff.Common.Utilities;
+using RentStuff.Property.Application.HouseServices.Commands;
+using RentStuff.Property.Application.HouseServices.Representation;
+using RentStuff.Property.Domain.Model.HouseAggregate;
+using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Management.Instrumentation;
-using System.Web.Hosting;
-using RentStuff.Property.Application.HouseServices.Commands;
-using RentStuff.Property.Domain.Model.HouseAggregate;
-using System.Linq;
-using NLog;
-using RentStuff.Common;
-using RentStuff.Common.Utilities;
-using RentStuff.Property.Application.HouseServices.Representation;
 using ConfigurationManager = System.Configuration.ConfigurationManager;
 
 namespace RentStuff.Property.Application.HouseServices
@@ -435,6 +429,18 @@ namespace RentStuff.Property.Application.HouseServices
         public IList<string> GetAllRentUnits()
         {
             return House.GetAllRentUnits();
+        }
+
+        /// <summary>
+        /// Delete the house that was posted long enough to have become stale
+        /// </summary>
+        public void DeleteOutdatedHouses()
+        {
+            var allStaleHouses = _houseRepository.GetAllStaleProperties();
+            foreach (var house in allStaleHouses)
+            {
+                _houseRepository.Delete(house);
+            }
         }
 
         /// <summary>

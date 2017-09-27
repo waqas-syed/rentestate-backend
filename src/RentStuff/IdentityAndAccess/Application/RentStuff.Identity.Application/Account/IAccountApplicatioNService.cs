@@ -7,14 +7,49 @@ using RentStuff.Identity.Domain.Model.Entities;
 
 namespace RentStuff.Identity.Application.Account
 {
+    /// <summary>
+    /// Acount's Application service
+    /// </summary>
     public interface IAccountApplicationService
     {
+        /// <summary>
+        /// Register a new user
+        /// </summary>
+        /// <param name="createUserCommand"></param>
+        /// <param name="isExternalUser"></param>
+        /// <returns></returns>
         string Register(CreateUserCommand createUserCommand, bool isExternalUser = false);
+        
+        /// <summary>
+        /// Activate the account
+        /// </summary>
+        /// <param name="activateAccountCommand"></param>
+        /// <returns></returns>
         bool Activate(ActivateAccountCommand activateAccountCommand);
+
+        /// <summary>
+        /// Register the external user
+        /// </summary>
+        /// <param name="registerExternalUserCommand"></param>
+        /// <returns></returns>
         InternalLoginDataRepresentation RegisterExternalUser(RegisterExternalUserCommand registerExternalUserCommand);
+
+        /// <summary>
+        /// Obtain the access token
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="externalAccessToken"></param>
+        /// <returns></returns>
         InternalLoginDataRepresentation ObtainAccessToken(string provider, string externalAccessToken);
+
+        /// <summary>
+        /// Get the user by email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         UserRepresentation GetUserByEmail(string email);
         bool UserExistsByUserLoginInfo(UserLoginInfo userLoginInfo);
+
 
         UserRepresentation GetUserByUserLoginInfoRepresentation(UserLoginInfo userLoginInfo);
         

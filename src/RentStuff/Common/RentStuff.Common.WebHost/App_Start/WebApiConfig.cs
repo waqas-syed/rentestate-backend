@@ -3,8 +3,15 @@
 
 namespace RentStuff.Common.WebHost
 {
+    /// <summary>
+    /// Configuration for Web Api
+    /// </summary>
     public static class WebApiConfig
     {
+        /// <summary>
+        /// Register the configuration for Web Api
+        /// </summary>
+        /// <param name="config"></param>
         public static void Register(HttpConfiguration config)
         {
             //config.EnableCors(new EnableCorsAttribute(Constants.DOMAINURL, "*", "*") { SupportsCredentials = true });
@@ -17,6 +24,7 @@ namespace RentStuff.Common.WebHost
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            // Setting up the Json Formatter
             var json = config.Formatters.JsonFormatter;
             json.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.None;
             config.Formatters.Remove(config.Formatters.XmlFormatter);

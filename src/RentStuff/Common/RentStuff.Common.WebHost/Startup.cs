@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.Caching;
 using System.Web.Cors;
 using System.Web.Http;
 using Microsoft.Owin;
@@ -20,13 +22,18 @@ using RentStuff.Identity.Infrastructure.Persistence.Ninject.Modules;
 using RentStuff.Identity.Infrastructure.Services.Ninject.Modules;
 using RentStuff.Identity.Ports.Adapter.Rest.Ninject.Modules;
 using RentStuff.Identity.Ports.Adapter.Rest.Resources;
+using RentStuff.Property.Application.HouseServices;
 using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 using RentStuff.Property.Ports.Adapter.Rest.Ninject.Modules;
 
+// Specify the startup point for OWIN, which is this Startup class
 [assembly: OwinStartup(typeof(RentStuff.Common.WebHost.Startup))]
 namespace RentStuff.Common.WebHost
 {
+    /// <summary>
+    /// App Builder 
+    /// </summary>
     public class AppBuilderProvider : IDisposable
     {
         private IAppBuilder _app;
@@ -38,16 +45,26 @@ namespace RentStuff.Common.WebHost
         public void Dispose() { }
     }
 
+    /// <summary>
+    /// Fires up the app
+    /// </summary>
     public class Startup
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
         
+        /// <summary>
+        /// Specify the OWIN pipeline and other configurations
+        /// </summary>
+        /// <param name="app"></param>
         public void Configuration(IAppBuilder app)
         {
+            // Create context for OWIN
             app.CreatePerOwinContext(() => new AppBuilderProvider(app));
             
+            // Initialize HTTP configuration
             HttpConfiguration config = new HttpConfiguration();
             
+            // Cross-origin policy
             var policy = new CorsPolicy()
             {
                 AllowAnyHeader = true,
@@ -56,7 +73,8 @@ namespace RentStuff.Common.WebHost
             };
 
             policy.Origins.Add(Constants.FrontEndUrl);
-            //policy.Origins.Add("http://localhost:11803/");
+
+            // Specify that we want to use Cors
             app.UseCors(new CorsOptions
             {
                 PolicyProvider = new CorsPolicyProvider
@@ -64,36 +82,67 @@ namespace RentStuff.Common.WebHost
                     PolicyResolver = context => Task.FromResult(policy)
                 }
             });
-
-            //app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+            
+            // Configure OAuth for this application
             ConfigureOAuth(app);
+
+            // Register Web Api
             WebApiConfig.Register(config);
-            //app.UseWebApi(config);
+            
+            // Configure and load Ninject dependencies and specify to use it as with Web Api
             app.UseNinjectMiddleware(CreateKernel).UseNinjectWebApi(config);
             
+            AddTask("DeleteOutdatedProperties", 30);
             _logger.Info("ASP.NET and OWIN pipeline established");
         }
 
-        private static StandardKernel CreateKernel()
-        {
-            var kernel = new StandardKernel();
-            // Common
-            kernel.Load<CommonNinjectModule>();
-            //Identity & Access
-            kernel.Load<IdentityAccessServicesNinjectModule>();
-            kernel.Load<IdentityAccessPersistenceNinjectModule>();
-            kernel.Load<IdentityAccessApplicationNinjectModule>();
-            kernel.Load<IdentityAccessPortsNinjectModule>();
-            // Property
-            kernel.Load<PropertyPersistenceNinjectModule>();
-            kernel.Load<PropertyApplicationNinjectModule>();
-            kernel.Load<PropertyPortsNinjectModule>();
+        private static CacheItemRemovedCallback OnCacheRemove = null;
 
-            // Apply Ninject as the dependency resolver
-            GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
-            return kernel;
+        private void AddTask(string name, int seconds)
+        {
+            OnCacheRemove = new CacheItemRemovedCallback(CacheItemRemoved);
+            HttpRuntime.Cache.Insert(name, seconds, null,
+                DateTime.Now.AddSeconds(seconds), Cache.NoSlidingExpiration,
+                CacheItemPriority.NotRemovable, OnCacheRemove);
         }
 
+        private static StandardKernel _kernel;
+
+        public void CacheItemRemoved(string k, object v, CacheItemRemovedReason r)
+        {
+            var houseApplicationService = _kernel.Get<IHouseApplicationService>();
+            houseApplicationService.DeleteOutdatedHouses();
+        }
+        
+        /// <summary>
+        /// Create the Kernel for Ninject
+        /// </summary>
+        /// <returns></returns>
+        private static StandardKernel CreateKernel()
+        {
+            _kernel = new StandardKernel();
+            // Common
+            _kernel.Load<CommonNinjectModule>();
+            //Identity & Access
+            _kernel.Load<IdentityAccessServicesNinjectModule>();
+            _kernel.Load<IdentityAccessPersistenceNinjectModule>();
+            _kernel.Load<IdentityAccessApplicationNinjectModule>();
+            _kernel.Load<IdentityAccessPortsNinjectModule>();
+            // Property
+            _kernel.Load<PropertyPersistenceNinjectModule>();
+            _kernel.Load<PropertyApplicationNinjectModule>();
+            _kernel.Load<PropertyPortsNinjectModule>();
+
+            // Apply Ninject as the dependency resolver
+            GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(_kernel);
+            
+            return _kernel;
+        }
+
+        /// <summary>
+        /// Configure OAuth for the app
+        /// </summary>
+        /// <param name="app"></param>
         private void ConfigureOAuth(IAppBuilder app)
         {
             app.UseExternalSignInCookie(Microsoft.AspNet.Identity.DefaultAuthenticationTypes.ExternalCookie);

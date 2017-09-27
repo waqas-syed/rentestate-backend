@@ -29,7 +29,6 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// Saves new House or updates existing house
         /// </summary>
         /// <param name="house"></param>
-        //[Transaction(TransactionPropagation.Required, ReadOnly = false)]
         public void SaveorUpdate(House house)
         {
             using (var transaction = _session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
@@ -39,7 +38,10 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
             }
         }
 
-        //[Transaction(TransactionPropagation.Required, ReadOnly = false)]
+        /// <summary>
+        /// Save or update the Dimension instance, which resides within the aggregate limits of the House Entity
+        /// </summary>
+        /// <param name="dimension"></param>
         public void SaveorUpdateDimension(Dimension dimension)
         {
             using (var transaction = _session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
@@ -49,8 +51,11 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
             }
             
         }
-
-       // [Transaction(TransactionPropagation.Required, ReadOnly = false)]
+        
+        /// <summary>
+        /// Delete the house entity
+        /// </summary>
+        /// <param name="house"></param>
         public void Delete(House house)
         {
             using (var transaction = _session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
@@ -305,12 +310,27 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// Item 2: Items Per Page
         /// </summary>
         /// <returns></returns>
-        //[Transaction]
         public Tuple<int, int> GetTotalRecordCount()
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 return new Tuple<int, int>(_session.Session.QueryOver<House>().RowCount(), _resultsPerPage);
+            }
+        }
+
+        /// <summary>
+        /// Get all the Houses and Apartments who were posted long enough ago to become stale
+        /// </summary>
+        /// <returns></returns>
+        public IList<House> GetAllStaleProperties()
+        {
+            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return _session.Session.QueryOver<House>().Where(x => 
+                // If the property was created at a date that is considered stale
+                x.DateCreated != null && x.DateCreated < DateTime.Now.AddMonths(-2) &&
+                // And the property is of type House or Apartment
+                (x.PropertyType == "House" || x.PropertyType == "Apartment")).List();
             }
         }
     }

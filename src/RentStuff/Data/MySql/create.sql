@@ -126,20 +126,6 @@ CREATE TABLE `aspnetusers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `ExternalAccessTokenIdentifiers`
---
-
-DROP TABLE IF EXISTS `externalaccesstokenidentifiers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `externalaccesstokenidentifiers` (
-  `InternalId` varchar(255) NOT NULL,
-  `ExternalAccessToken` varchar(255) NOT NULL,
-  PRIMARY KEY (`InternalId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `dimension`
 --
 
@@ -153,6 +139,20 @@ CREATE TABLE `dimension` (
   `decimal_value` decimal(6,4) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `externalaccesstokenidentifiers`
+--
+
+DROP TABLE IF EXISTS `externalaccesstokenidentifiers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `externalaccesstokenidentifiers` (
+  `InternalId` varchar(255) NOT NULL,
+  `ExternalAccessToken` varchar(255) NOT NULL,
+  PRIMARY KEY (`InternalId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -189,13 +189,15 @@ CREATE TABLE `house` (
   `dimension_id` varchar(100) DEFAULT NULL,
   `owner_name` varchar(100) NOT NULL,
   `is_shared` tinyint(1) NOT NULL DEFAULT '0',
-  `rent_unit` varchar(50) DEFAULT 'Month',
+  `rent_unit` varchar(50) NOT NULL DEFAULT 'Month',
+  `date_created` datetime DEFAULT NULL,
+  `last_modified` datetime DEFAULT NULL,
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `dimension_id_fk_idx` (`dimension_id`),
   CONSTRAINT `dimension_id_fk` FOREIGN KEY (`dimension_id`) REFERENCES `dimension` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=363 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -210,7 +212,7 @@ CREATE TABLE `houseimages` (
   `house_id` varchar(100) NOT NULL,
   `image_id` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -222,4 +224,4 @@ CREATE TABLE `houseimages` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-14 11:13:31
+-- Dump completed on 2017-09-27 22:13:14
