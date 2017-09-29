@@ -118,11 +118,5 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         /// <returns></returns>
         Tuple<int, int> GetTotalRecordCount();
-
-        /// <summary>
-        /// Get all the houses who were posted long enough ago to become stale
-        /// </summary>
-        /// <returns></returns>
-        IList<House> GetAllStaleProperties();
     }
 }

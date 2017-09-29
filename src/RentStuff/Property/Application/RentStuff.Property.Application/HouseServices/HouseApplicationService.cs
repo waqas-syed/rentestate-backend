@@ -430,19 +430,7 @@ namespace RentStuff.Property.Application.HouseServices
         {
             return House.GetAllRentUnits();
         }
-
-        /// <summary>
-        /// Delete the house that was posted long enough to have become stale
-        /// </summary>
-        public void DeleteOutdatedHouses()
-        {
-            var allStaleHouses = _houseRepository.GetAllStaleProperties();
-            foreach (var house in allStaleHouses)
-            {
-                _houseRepository.Delete(house);
-            }
-        }
-
+        
         /// <summary>
         /// Converts the list of houses to a list of PartialHouseRepresentations
         /// </summary>

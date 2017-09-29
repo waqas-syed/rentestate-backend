@@ -118,10 +118,5 @@ namespace RentStuff.Property.Application.HouseServices
         /// </summary>
         /// <returns></returns>
         IList<string> GetAllRentUnits();
-
-        /// <summary>
-        /// Delete the houses that were posted long enough to have become stale by now
-        /// </summary>
-        void DeleteOutdatedHouses();
     }
 }

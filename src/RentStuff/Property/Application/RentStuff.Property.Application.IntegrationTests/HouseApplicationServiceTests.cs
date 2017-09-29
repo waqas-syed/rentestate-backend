@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using Ninject;
+﻿using Ninject;
 using NUnit.Framework;
-using RentStuff.Common;
 using RentStuff.Common.Ninject.Modules;
 using RentStuff.Common.Utilities;
 using RentStuff.Property.Application.HouseServices;
@@ -12,6 +8,8 @@ using RentStuff.Property.Application.HouseServices.Representation;
 using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
+using System;
+using System.Collections.Generic;
 
 namespace RentStuff.Property.Application.IntegrationTests
 {

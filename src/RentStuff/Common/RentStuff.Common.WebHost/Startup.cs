@@ -1,10 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Caching;
-using System.Web.Cors;
-using System.Web.Http;
-using Microsoft.Owin;
+﻿using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security.DataProtection;
 using Microsoft.Owin.Security.OAuth;
@@ -22,10 +16,13 @@ using RentStuff.Identity.Infrastructure.Persistence.Ninject.Modules;
 using RentStuff.Identity.Infrastructure.Services.Ninject.Modules;
 using RentStuff.Identity.Ports.Adapter.Rest.Ninject.Modules;
 using RentStuff.Identity.Ports.Adapter.Rest.Resources;
-using RentStuff.Property.Application.HouseServices;
 using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 using RentStuff.Property.Ports.Adapter.Rest.Ninject.Modules;
+using System;
+using System.Threading.Tasks;
+using System.Web.Cors;
+using System.Web.Http;
 
 // Specify the startup point for OWIN, which is this Startup class
 [assembly: OwinStartup(typeof(RentStuff.Common.WebHost.Startup))]
@@ -92,28 +89,11 @@ namespace RentStuff.Common.WebHost
             // Configure and load Ninject dependencies and specify to use it as with Web Api
             app.UseNinjectMiddleware(CreateKernel).UseNinjectWebApi(config);
             
-            AddTask("DeleteOutdatedProperties", 30);
             _logger.Info("ASP.NET and OWIN pipeline established");
-        }
-
-        private static CacheItemRemovedCallback OnCacheRemove = null;
-
-        private void AddTask(string name, int seconds)
-        {
-            OnCacheRemove = new CacheItemRemovedCallback(CacheItemRemoved);
-            HttpRuntime.Cache.Insert(name, seconds, null,
-                DateTime.Now.AddSeconds(seconds), Cache.NoSlidingExpiration,
-                CacheItemPriority.NotRemovable, OnCacheRemove);
         }
 
         private static StandardKernel _kernel;
 
-        public void CacheItemRemoved(string k, object v, CacheItemRemovedReason r)
-        {
-            var houseApplicationService = _kernel.Get<IHouseApplicationService>();
-            houseApplicationService.DeleteOutdatedHouses();
-        }
-        
         /// <summary>
         /// Create the Kernel for Ninject
         /// </summary>
@@ -164,5 +144,23 @@ namespace RentStuff.Common.WebHost
         }
 
         internal static IDataProtectionProvider DataProtectionProvider { get; private set; }
+
+        /* This code can be used at startup to invoke a recurring task that fires up at the specified intervals.
+         Can be used later.
+        private static CacheItemRemovedCallback OnCacheRemove = null;
+
+        private void AddTask(string name, int seconds)
+        {
+            OnCacheRemove = new CacheItemRemovedCallback(CacheItemRemoved);
+            HttpRuntime.Cache.Insert(name, seconds, null,
+                DateTime.Now.AddSeconds(seconds), Cache.NoSlidingExpiration,
+                CacheItemPriority.NotRemovable, OnCacheRemove);
+        }
+        
+        public void CacheItemRemoved(string k, object v, CacheItemRemovedReason r)
+        {
+            var houseApplicationService = _kernel.Get<IHouseApplicationService>();
+            houseApplicationService.DeleteOutdatedHouses();
+        }*/
     }
 }

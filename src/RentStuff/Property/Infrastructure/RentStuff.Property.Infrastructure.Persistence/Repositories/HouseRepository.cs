@@ -317,21 +317,5 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
                 return new Tuple<int, int>(_session.Session.QueryOver<House>().RowCount(), _resultsPerPage);
             }
         }
-
-        /// <summary>
-        /// Get all the Houses and Apartments who were posted long enough ago to become stale
-        /// </summary>
-        /// <returns></returns>
-        public IList<House> GetAllStaleProperties()
-        {
-            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
-            {
-                return _session.Session.QueryOver<House>().Where(x => 
-                // If the property was created at a date that is considered stale
-                x.DateCreated != null && x.DateCreated < DateTime.Now.AddMonths(-2) &&
-                // And the property is of type House or Apartment
-                (x.PropertyType == "House" || x.PropertyType == "Apartment")).List();
-            }
-        }
     }
 }
