@@ -65,7 +65,7 @@ namespace RentStuff.Property.Application.HouseServices
                 .NumberOfBathrooms(createHouseCommand.NumberOfBathrooms)
                 .NumberOfBedrooms(createHouseCommand.NumberOfBedrooms)
                 .NumberOfKitchens(createHouseCommand.NumberOfKitchens)
-                .OwnerEmail(createHouseCommand.OwnerEmail)
+                .OwnerEmail(createHouseCommand.OwnerEmail.ToLower())
                 .OwnerPhoneNumber(createHouseCommand.OwnerPhoneNumber)
                 .SmokingAllowed(createHouseCommand.SmokingAllowed)
                 .WithInternetAvailable(createHouseCommand.InternetAvailable)
@@ -148,7 +148,7 @@ namespace RentStuff.Property.Application.HouseServices
                 updateHouseCommand.GarageAvailable,
                 updateHouseCommand.SmokingAllowed, 
                 updateHouseCommand.PropertyType, 
-                updateHouseCommand.OwnerEmail,
+                updateHouseCommand.OwnerEmail.ToLower(),
                 updateHouseCommand.OwnerPhoneNumber,
                 updateHouseCommand.HouseNo, 
                 updateHouseCommand.StreetNo, 
@@ -194,7 +194,11 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         public IList<HousePartialRepresentation> GetHouseByEmail(string email, int pageNo = 0)
         {
-            IList<House> houses = _houseRepository.GetHouseByOwnerEmail(email, pageNo);
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new NullReferenceException("Email cannot be null");
+            }
+            IList<House> houses = _houseRepository.GetHouseByOwnerEmail(email.ToLower(), pageNo);
             return ConvertHousesToPartialRepresentations(houses);
         }
 
@@ -412,7 +416,7 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 throw new NullReferenceException($"No house found for the given HouseId: {houseId}");
             }
-            if (house.OwnerEmail.Equals(requesterEmail))
+            if (house.OwnerEmail.Equals(requesterEmail, StringComparison.CurrentCultureIgnoreCase))
             {
                 return true;
             }

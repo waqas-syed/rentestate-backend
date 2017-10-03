@@ -78,7 +78,7 @@ namespace RentStuff.Identity.Application.Account
             _logger.Info("Registering user: Email = {0} | FullName = {1}", userModel.Email, userModel.FullName);
             
             // Register the User in the repository
-            IdentityResult registrationResult = _accountRepository.RegisterUser(userModel.FullName, userModel.Email, 
+            IdentityResult registrationResult = _accountRepository.RegisterUser(userModel.FullName, userModel.Email.ToLower(), 
                                                                                 userModel.Password, isExternalUser);
 
             // If the registration response is null, throw error
@@ -93,7 +93,7 @@ namespace RentStuff.Identity.Application.Account
             }
             _logger.Info("Registered User Successfuly. Email: {0}  FullName: {1}", userModel.Email, userModel.FullName);
             // Get the User instance to have her Id
-            var retreivedUser = _accountRepository.GetUserByEmail(userModel.Email);
+            var retreivedUser = _accountRepository.GetUserByEmail(userModel.Email.ToLower());
 
             // Generate the token for this user using email and user Id
             var emailVerificationToken = _accountRepository.GetEmailActivationToken(retreivedUser.Id);
@@ -111,7 +111,7 @@ namespace RentStuff.Identity.Application.Account
             {
                 // Send email to the user
                 #pragma warning disable 4014
-                Task.Run(() => SendActivationEmail(retreivedUser.Email, retreivedUser.FullName,
+                Task.Run(() => SendActivationEmail(retreivedUser.Email.ToLower(), retreivedUser.FullName,
                     emailVerificationToken));
                 #pragma warning restore 4014
             }
@@ -133,7 +133,7 @@ namespace RentStuff.Identity.Application.Account
         {
             var activationLink = Constants.FrontEndUrl + "/" + Constants.AccountActivationUrlLocation + "?email=" + email +
                                  "&activationcode=" + activationCode;
-            _emailService.SendEmail(email, EmailConstants.ActivationEmailSubject, EmailConstants.ActivationEmailMessage(fullName, activationLink));
+            _emailService.SendEmail(email.ToLower(), EmailConstants.ActivationEmailSubject, EmailConstants.ActivationEmailMessage(fullName, activationLink));
         }
         
         /// <summary>
@@ -155,7 +155,7 @@ namespace RentStuff.Identity.Application.Account
             }
             
             // Get the user from the database so that we have the userId which we need to verify the token
-            var user = _accountRepository.GetUserByEmail(activateAccountCommand.Email);
+            var user = _accountRepository.GetUserByEmail(activateAccountCommand.Email.ToLower());
             if (user == null)
             {
                 _logger.Error("User not found for the given email: {0}", activateAccountCommand.Email);
@@ -193,7 +193,7 @@ namespace RentStuff.Identity.Application.Account
             }
             
             CreateUserCommand createUserCommand = new CreateUserCommand(registerExternalUserCommand.FullName, 
-                registerExternalUserCommand.Email, null, null);
+                registerExternalUserCommand.Email.ToLower(), null, null);
             _logger.Info("RegisterExternal sending request to register user: Email = {0} | FullName = {1}", 
                 createUserCommand.Email, createUserCommand.FullName);
 
@@ -207,7 +207,7 @@ namespace RentStuff.Identity.Application.Account
             // Add the external user's details related to the external account which they are using to register in our system
             var info = new ExternalLoginInfo()
             {
-                DefaultUserName = registerExternalUserCommand.Email,
+                DefaultUserName = registerExternalUserCommand.Email.ToLower(),
                 Login = new UserLoginInfo(registerExternalUserCommand.Provider, verifiedAccessToken.UserId)
             };
 
@@ -218,7 +218,7 @@ namespace RentStuff.Identity.Application.Account
                 registeredUserId, verifiedAccessToken.UserId, registerExternalUserCommand.Email);
             
             // Generate access token response
-            var localAccessToken = GenerateLocalAccessTokenResponse(registerExternalUserCommand.Email);
+            var localAccessToken = GenerateLocalAccessTokenResponse(registerExternalUserCommand.Email.ToLower());
             if (!string.IsNullOrWhiteSpace(localAccessToken))
             {
                 _logger.Info("RegisterExternal: LocalAccessToken created successfully");
@@ -227,7 +227,7 @@ namespace RentStuff.Identity.Application.Account
             // Return control to controller, passing the access token used for registering users using third party
             // platforms. This token will be used to provide this user with a token to login in our app. This 
             // procedure is required in order to complete the third-party login confirmation window loop.
-            return new InternalLoginDataRepresentation(registerExternalUserCommand.FullName, registerExternalUserCommand.Email, 
+            return new InternalLoginDataRepresentation(registerExternalUserCommand.FullName, registerExternalUserCommand.Email.ToLower(), 
                 localAccessToken);
         }
 
@@ -256,13 +256,13 @@ namespace RentStuff.Identity.Application.Account
             }
 
             // Generate access token response that the user will use to login in subsequent login requests.
-            var localAccessToken = GenerateLocalAccessTokenResponse(user.Email);
+            var localAccessToken = GenerateLocalAccessTokenResponse(user.Email.ToLower());
             if (!string.IsNullOrWhiteSpace(localAccessToken))
             {
                 _logger.Info("RegisterExternal: LocalAccessToken created successfully");
             }
             // Represent the token that will now provide the user with access to our application
-            return new InternalLoginDataRepresentation(user.FullName, user.Email, localAccessToken);
+            return new InternalLoginDataRepresentation(user.FullName, user.Email.ToLower(), localAccessToken);
         }
 
         /// <summary>
@@ -291,10 +291,14 @@ namespace RentStuff.Identity.Application.Account
 
         public UserRepresentation GetUserByEmail(string email)
         {
-            CustomIdentityUser customIdentityUser = _accountRepository.GetUserByEmail(email);
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new NullReferenceException("Email cannot be empty");
+            }
+            CustomIdentityUser customIdentityUser = _accountRepository.GetUserByEmail(email.ToLower());
             if (customIdentityUser != null)
             {
-                return new UserRepresentation(customIdentityUser.FullName, customIdentityUser.Email, customIdentityUser.EmailConfirmed);
+                return new UserRepresentation(customIdentityUser.FullName, customIdentityUser.Email.ToLower(), customIdentityUser.EmailConfirmed);
             }
             throw new NullReferenceException("Could not find the user for the given email");
         }
@@ -324,7 +328,7 @@ namespace RentStuff.Identity.Application.Account
             CustomIdentityUser customIdentityUser = _accountRepository.GetUserByUserLoginInfo(userLoginInfo);
             if (customIdentityUser != null)
             {
-                return new UserRepresentation(customIdentityUser.FullName, customIdentityUser.Email, customIdentityUser.EmailConfirmed);
+                return new UserRepresentation(customIdentityUser.FullName, customIdentityUser.Email.ToLower(), customIdentityUser.EmailConfirmed);
             }
             throw new NullReferenceException("No user found with the given UserLoginInfo");
         }
@@ -339,7 +343,7 @@ namespace RentStuff.Identity.Application.Account
             {
                 throw new NullReferenceException("Email for ForgotPassword is empty");
             }
-            var user = _accountRepository.GetUserByEmail(forgotPasswordCommand.Email);
+            var user = _accountRepository.GetUserByEmail(forgotPasswordCommand.Email.ToLower());
             if (user == null)
             {
                 throw new NullReferenceException("Email not found");
@@ -349,7 +353,7 @@ namespace RentStuff.Identity.Application.Account
                 // Generate the token
                 var resetPasswordToken = _accountRepository.GetPasswordResetToken(user.Id);
                 
-                Task.Run(() => SendPasswordResetEmail(user.Email, resetPasswordToken, user.FullName));
+                Task.Run(() => SendPasswordResetEmail(user.Email.ToLower(), resetPasswordToken, user.FullName));
                 // Update the password reset settings
                 user.IsPasswordResetRequested = true;
                 user.PasswordResetExpiryDate = DateTime.Now.AddHours(24);
@@ -407,7 +411,7 @@ namespace RentStuff.Identity.Application.Account
             }
             
             // Get the user
-            var user = _accountRepository.GetUserByEmail(resetPasswordCommand.Email);
+            var user = _accountRepository.GetUserByEmail(resetPasswordCommand.Email.ToLower());
             if (user == null)
             {
                 throw new NullReferenceException("User could not be found");
