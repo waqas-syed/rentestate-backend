@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
+using RentStuff.Property.Domain.Model.PropertyAggregate;
 
 namespace RentStuff.Common.Console
 {

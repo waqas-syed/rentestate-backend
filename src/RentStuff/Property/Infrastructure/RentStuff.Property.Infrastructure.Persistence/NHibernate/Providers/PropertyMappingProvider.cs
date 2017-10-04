@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NHibernate.Cfg;
 using RentStuff.Common.NHibernate.Providers;
 using RentStuff.Property.Domain.Model.HouseAggregate;
+using RentStuff.Property.Domain.Model.PropertyAggregate;
 
 namespace RentStuff.Property.Infrastructure.Persistence.NHibernate.Providers
 {

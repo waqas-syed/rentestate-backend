@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using RentStuff.Common.Domain.Model;
+﻿using RentStuff.Property.Domain.Model.PropertyAggregate;
 
 namespace RentStuff.Property.Domain.Model.HouseAggregate
 {
     /// <summary>
     /// House Aggregate. A house that can be put on rent or sale
     /// </summary>
-    public class House : Entity
+    public class House : PropertyAggregate.Property
     {
-        private string _title;
-        private string _description;
-        private long _rentPrice;
         private int _numberOfBedrooms;
         private int _numberOfKitchens;
         private int _numberOfBathrooms;
@@ -21,18 +16,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         private Dimension _dimension;
         private bool _garageAvailable;
         private bool _smokingAllowed;
-        private string _propertyType;
-        private string _ownerEmail;
-        private string _ownerPhoneNumber;
-        private decimal _latitude;
-        private decimal _longitude;
         private string _houseNo;
         private string _streetNo;
-        private string _area;
-        private IList<string> _houseImages = new List<string>();
-        private string _ownerName;
-        private string _rentUnit;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
@@ -48,10 +34,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension, 
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
             decimal latitude, decimal longitude, string houseNo, string streetNo, string area, string ownerName, string description, 
-            GenderRestriction genderRestriction, bool isShared, string rentUnit)
+            GenderRestriction genderRestriction, bool isShared, string rentUnit) 
+            // Initiate the parent Property class as well
+            : base(title, rentPrice, ownerEmail,
+                ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
+                rentUnit)
         {
-            Title = title;
-            RentPrice = rentPrice;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
@@ -62,20 +50,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             GarageAvailable = garageAvailable;
             SmokingAllowed = smokingAllowed;
             PropertyType = propertyType;
-            OwnerEmail = ownerEmail;
-            OwnerPhoneNumber = ownerPhoneNumber;
-            Latitude = latitude;
-            Longitude = longitude;
             HouseNo = houseNo;
             StreetNo = streetNo;
-            Area = area;
-            OwnerName = ownerName;
-            Description = description;
-            GenderRestriction = genderRestriction;
-            IsShared = isShared;
-            RentUnit = rentUnit;
-            DateCreated = DateTime.Now;
-            LastModified = DateTime.Now;
         }
 
         /// <summary>
@@ -104,6 +80,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <param name="isShared"></param>
+        /// <param name="rentUnit"></param>
         public void UpdateHouse(string title, long rentPrice, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension,
@@ -111,8 +88,6 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             string houseNo, string streetNo, string area, string ownerName, string description, GenderRestriction genderRestriction,
             decimal latitude, decimal longitude, bool isShared, string rentUnit)
         {
-            Title = title;
-            RentPrice = rentPrice;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
@@ -123,73 +98,13 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             GarageAvailable = garageAvailable;
             SmokingAllowed = smokingAllowed;
             PropertyType = propertyType;
-            OwnerEmail = ownerEmail;
-            OwnerPhoneNumber = ownerPhoneNumber;
             HouseNo = houseNo;
             StreetNo = streetNo;
-            Area = area;
-            OwnerName = ownerName;
-            Description = description;
-            GenderRestriction = genderRestriction;
-            Latitude = latitude;
-            Longitude = longitude;
-            IsShared = isShared;
-            RentUnit = rentUnit;
-            LastModified = DateTime.Now;
+            // Update the parent property class
+            base.UpdateHouse(title, rentPrice, ownerEmail.ToLower(), ownerPhoneNumber, area, ownerName, description,
+                genderRestriction, latitude, longitude, isShared, rentUnit);
         }
-
-        /// <summary>
-        /// Add Image's ID to this House
-        /// </summary>
-        public void AddImage(string id)
-        {
-            _houseImages.Add(id);
-        }
-
-        /// <summary>
-        /// Get the list of Images for this House
-        /// </summary>
-        /// <returns></returns>
-        public IList<string> GetImageList()
-        {
-            return _houseImages;
-        }
-
-        /// <summary>
-        /// Title of the house
-        /// </summary>
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                Assertion.AssertStringNotNullorEmpty(value);
-                _title = value;
-            }
-        }
-
-        /// <summary>
-        /// Description of the house
-        /// </summary>
-        public string Description
-        {
-            get { return _description; }
-            set { _description = value; }
-        }
-
-        /// <summary>
-        /// Rent
-        /// </summary>
-        public long RentPrice
-        {
-            get { return _rentPrice; }
-            set
-            {
-                Assertion.AssertNumberNotZero(value);
-                _rentPrice = value;
-            }
-        }
-
+        
         /// <summary>
         /// Number of bedrooms
         /// </summary>
@@ -270,111 +185,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             get { return _smokingAllowed; }
             set { _smokingAllowed = value; }
         }
-
-        /// <summary>
-        /// The types of property we provide
-        /// Not using enum so these values can be used directly on the frontend clients without any parsing
-        /// Saving the values in-memory instead of saving in database as to reduce the overhead caused by DB 
-        /// operations
-        /// </summary>
-        private static readonly IList<string> _allPropertyTypes = new List<string>()
-        {
-            "Hostel",
-            "House",
-            "Apartment",
-            "Hotel",
-            "Guest House"
-        };
         
-        /// <summary>
-        /// Type of property
-        /// </summary>
-        public string PropertyType
-        {
-            get { return _propertyType; }
-            set
-            {
-                //Assertion.AssertStringNotNullorEmpty(value);
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    // If the value is null, just assign House.
-                    value = _allPropertyTypes[1];
-                }
-                if (GetAllPropertyTypes().Contains(value))
-                {
-                    _propertyType = value;
-                }
-                else
-                {
-                    throw new InvalidOperationException("The provided Property Type is not supported");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Returns a lsit of all supported property types
-        /// </summary>
-        /// <returns></returns>
-        public static IList<string> GetAllPropertyTypes()
-        {
-            return _allPropertyTypes;
-        }
-
-        /// <summary>
-        /// Email of the owner of the posted submission
-        /// </summary>
-        public string OwnerEmail
-        {
-            get { return _ownerEmail; }
-            set
-            {
-                Assertion.AssertStringNotNullorEmpty(value);
-                Assertion.IsEmailValid(value);
-                _ownerEmail = value;
-            }
-        }
-
-        /// <summary>
-        /// Phone number of the owner of the posted submission
-        /// </summary>
-        //[RegularExpression(@"^\d{1,11}$", ErrorMessage = "Invalid Phone Number")]
-        public string OwnerPhoneNumber
-        {
-            get { return _ownerPhoneNumber; }
-            set
-            {
-                Assertion.AssertStringNotNullorEmpty(value);
-                Assertion.IsPhoneNumberValid(value);
-                _ownerPhoneNumber = value;
-            }
-        }
-
-        /// <summary>
-        /// Latitude
-        /// </summary>
-        public decimal Latitude
-        {
-            get { return _latitude; }
-            private set
-            {
-                Assertion.AssertDecimalNotZero(value);
-                _latitude = value;
-            }
-        }
-
-        /// <summary>
-        /// Longitude
-        /// </summary>
-        public decimal Longitude
-        {
-            get { return _longitude; }
-            private set
-            {
-                Assertion.AssertDecimalNotZero(value);
-                _longitude = value;
-            }
-        }
-
         /// <summary>
         /// House Number
         /// </summary>
@@ -400,131 +211,23 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 _streetNo = value;
             }
         }
-
-        /// <summary>
-        /// Area that contains Town, State, City and Country
-        /// </summary>
-        public string Area
-        {
-            get { return _area; }
-            set
-            {
-                Assertion.AssertStringNotNullorEmpty(value);
-                _area = value;
-            }
-        }
-
-        /// <summary>
-        /// Images IDs for this house
-        /// </summary>
-        public IList<string> HouseImages
-        {
-            get { return _houseImages; }
-            set { _houseImages = value; }
-        }
-
-        /// <summary>
-        /// Name of the owner
-        /// </summary>
-        public string OwnerName
-        {
-            get { return _ownerName; }
-            set
-            {
-                Assertion.AssertStringNotNullorEmpty(value);
-                _ownerName = value;
-            }
-        }
         
-        /// <summary>
-        /// Is it for boys only, girls only or for families only
-        /// </summary>
-        public GenderRestriction GenderRestriction { get; set; }
-
-        /// <summary>
-        /// The types of rent units we provide
-        /// Not using enum so these values can be used directly on the frontend clients without any parsing
-        /// Saving the values in-memory instead of saving in database as to reduce the overhead caused by DB 
-        /// operations
-        /// </summary>
-        private static readonly IList<string> _allRentUnits = new List<string>()
-        {
-            "Month",
-            "Week",
-            "Day",
-            "Hour"
-        };
-
-        /// <summary>
-        /// Is this property shared
-        /// </summary>
-        public bool IsShared { get; set; }
-
-        /// <summary>
-        /// Rent unit
-        /// </summary>
-        public string RentUnit
-        {
-            get { return _rentUnit; }
-            set
-            {
-                //Assertion.AssertStringNotNullorEmpty(value);
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    value = _allRentUnits[0];
-                }
-                if (!_allRentUnits.Contains(value))
-                {
-                    throw new InvalidOperationException("RentUnit value is not supported");
-                }
-                _rentUnit = value;
-            }
-        }
-
-        /// <summary>
-        /// Get all the rent units
-        /// </summary>
-        /// <returns></returns>
-        public static IList<string> GetAllRentUnits()
-        {
-            return _allRentUnits;
-        }
-
-        /// <summary>
-        /// The time this instance was created
-        /// </summary>
-        public DateTime? DateCreated { get; private set; }
-
-        /// <summary>
-        /// The time this instance was last modified
-        /// </summary>
-        public DateTime? LastModified { get; private set; }
-
         /// <summary>
         /// House Builder, using the builder pattern that allows easy refactoring of the references and usages of
         /// the initialization of the House entity
         /// </summary>
         public class HouseBuilder
         {
+            #region Generic Property attributes
+
             private string _title;
             private string _description;
             private long _rentPrice;
-            private int _numberOfBedrooms;
-            private int _numberOfKitchens;
-            private int _numberOfBathrooms;
-            private bool _internetAvailable;
-            private bool _landlinePhoneAvailable;
-            private bool _cableTvAvailable;
-            private Dimension _dimension;
-            private bool _garageAvailable;
-            private bool _smokingAllowed;
             private string _propertyType;
             private string _ownerEmail;
             private string _ownerPhoneNumber;
             private decimal _latitude;
             private decimal _longitude;
-            private string _houseNo;
-            private string _streetNo;
             private string _area;
             private string _ownerName;
             private GenderRestriction _genderRestriction;
@@ -563,6 +266,132 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 _rentPrice = rentPrice;
                 return this;
             }
+
+            /// <summary>
+            /// Property type
+            /// </summary>
+            /// <param name="propertyType"></param>
+            /// <returns></returns>
+            public HouseBuilder PropertyType(string propertyType)
+            {
+                _propertyType = propertyType;
+                return this;
+            }
+
+            /// <summary>
+            /// Owner email
+            /// </summary>
+            /// <param name="ownerEmail"></param>
+            /// <returns></returns>
+            public HouseBuilder OwnerEmail(string ownerEmail)
+            {
+                _ownerEmail = ownerEmail;
+                return this;
+            }
+
+            /// <summary>
+            /// Owner phone number
+            /// </summary>
+            /// <param name="ownerPhoneNumber"></param>
+            /// <returns></returns>
+            public HouseBuilder OwnerPhoneNumber(string ownerPhoneNumber)
+            {
+                _ownerPhoneNumber = ownerPhoneNumber;
+                return this;
+            }
+
+            /// <summary>
+            /// Latitude
+            /// </summary>
+            /// <param name="latitude"></param>
+            /// <returns></returns>
+            public HouseBuilder Latitude(decimal latitude)
+            {
+                _latitude = latitude;
+                return this;
+            }
+
+            /// <summary>
+            /// Longitude
+            /// </summary>
+            /// <param name="longitude"></param>
+            /// <returns></returns>
+            public HouseBuilder Longitude(decimal longitude)
+            {
+                _longitude = longitude;
+                return this;
+            }
+
+            /// <summary>
+            /// Area
+            /// </summary>
+            /// <param name="area"></param>
+            /// <returns></returns>
+            public HouseBuilder Area(string area)
+            {
+                _area = area;
+                return this;
+            }
+
+            /// <summary>
+            /// Owner name
+            /// </summary>
+            /// <param name="ownerName"></param>
+            /// <returns></returns>
+            public HouseBuilder OwnerName(string ownerName)
+            {
+                _ownerName = ownerName;
+                return this;
+            }
+
+            /// <summary>
+            /// Gender restrictions
+            /// </summary>
+            /// <param name="genderRestriction"></param>
+            /// <returns></returns>
+            public HouseBuilder GenderRestriction(GenderRestriction genderRestriction)
+            {
+                _genderRestriction = genderRestriction;
+                return this;
+            }
+
+            /// <summary>
+            /// Is this property shared
+            /// </summary>
+            /// <param name="isShared"></param>
+            /// <returns></returns>
+            public HouseBuilder IsShared(bool isShared)
+            {
+                _isShared = isShared;
+                return this;
+            }
+
+            /// <summary>
+            /// What is the unit of rent payment
+            /// </summary>
+            /// <param name="rentUnit"></param>
+            /// <returns></returns>
+            public HouseBuilder RentUnit(string rentUnit)
+            {
+                _rentUnit = rentUnit;
+                return this;
+            }
+
+            #endregion Generic Property attributes
+
+            #region House Specific Properties 
+
+            private int _numberOfBedrooms;
+            private int _numberOfKitchens;
+            private int _numberOfBathrooms;
+            private bool _internetAvailable;
+            private bool _landlinePhoneAvailable;
+            private bool _cableTvAvailable;
+            private Dimension _dimension;
+            private bool _garageAvailable;
+            private bool _smokingAllowed;
+            private string _houseNo;
+            private string _streetNo;
 
             /// <summary>
             /// Number of Bedrooms
@@ -662,62 +491,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 _smokingAllowed = smokingAllowed;
                 return this;
             }
-
-            /// <summary>
-            /// Property type
-            /// </summary>
-            /// <param name="propertyType"></param>
-            /// <returns></returns>
-            public HouseBuilder PropertyType(string propertyType)
-            {
-                _propertyType = propertyType;
-                return this;
-            }
-
-            /// <summary>
-            /// Owner email
-            /// </summary>
-            /// <param name="ownerEmail"></param>
-            /// <returns></returns>
-            public HouseBuilder OwnerEmail(string ownerEmail)
-            {
-                _ownerEmail = ownerEmail;
-                return this;
-            }
-
-            /// <summary>
-            /// Owner phone number
-            /// </summary>
-            /// <param name="ownerPhoneNumber"></param>
-            /// <returns></returns>
-            public HouseBuilder OwnerPhoneNumber(string ownerPhoneNumber)
-            {
-                _ownerPhoneNumber = ownerPhoneNumber;
-                return this;
-            }
-
-            /// <summary>
-            /// Latitude
-            /// </summary>
-            /// <param name="latitude"></param>
-            /// <returns></returns>
-            public HouseBuilder Latitude(decimal latitude)
-            {
-                _latitude = latitude;
-                return this;
-            }
-
-            /// <summary>
-            /// Longitude
-            /// </summary>
-            /// <param name="longitude"></param>
-            /// <returns></returns>
-            public HouseBuilder Longitude(decimal longitude)
-            {
-                _longitude = longitude;
-                return this;
-            }
-
+            
             /// <summary>
             /// House No
             /// </summary>
@@ -740,60 +514,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
 
-            /// <summary>
-            /// Area
-            /// </summary>
-            /// <param name="area"></param>
-            /// <returns></returns>
-            public HouseBuilder Area(string area)
-            {
-                _area = area;
-                return this;
-            }
-
-            /// <summary>
-            /// Owner name
-            /// </summary>
-            /// <param name="ownerName"></param>
-            /// <returns></returns>
-            public HouseBuilder OwnerName(string ownerName)
-            {
-                _ownerName = ownerName;
-                return this;
-            }
-
-            /// <summary>
-            /// Gender restrictions
-            /// </summary>
-            /// <param name="genderRestriction"></param>
-            /// <returns></returns>
-            public HouseBuilder GenderRestriction(GenderRestriction genderRestriction)
-            {
-                _genderRestriction = genderRestriction;
-                return this;
-            }
-
-            /// <summary>
-            /// Is this property shared
-            /// </summary>
-            /// <param name="isShared"></param>
-            /// <returns></returns>
-            public HouseBuilder IsShared(bool isShared)
-            {
-                _isShared = isShared;
-                return this;
-            }
-
-            /// <summary>
-            /// What is the unit of rent payment
-            /// </summary>
-            /// <param name="rentUnit"></param>
-            /// <returns></returns>
-            public HouseBuilder RentUnit(string rentUnit)
-            {
-                _rentUnit = rentUnit;
-                return this;
-            }
+            #endregion House Specific Properties 
 
             /// <summary>
             /// Build a new instance of House

@@ -2,11 +2,12 @@
 using RentStuff.Common.Utilities;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
-using RentStuff.Property.Domain.Model.HouseAggregate;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Management.Instrumentation;
+using RentStuff.Property.Domain.Model.HouseAggregate;
+using RentStuff.Property.Domain.Model.PropertyAggregate;
 using ConfigurationManager = System.Configuration.ConfigurationManager;
 
 namespace RentStuff.Property.Application.HouseServices

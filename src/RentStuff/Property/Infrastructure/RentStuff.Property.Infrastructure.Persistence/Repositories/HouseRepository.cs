@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using RentStuff.Common.NHibernate.Wrappers;
 using RentStuff.Property.Domain.Model.HouseAggregate;
+using RentStuff.Property.Domain.Model.PropertyAggregate;
 
 namespace RentStuff.Property.Infrastructure.Persistence.Repositories
 {

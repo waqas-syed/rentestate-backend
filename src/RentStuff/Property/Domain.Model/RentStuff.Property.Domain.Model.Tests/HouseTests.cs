@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using RentStuff.Property.Domain.Model.HouseAggregate;
+using RentStuff.Property.Domain.Model.PropertyAggregate;
 
 namespace RentStuff.Property.Domain.Model.Tests
 {

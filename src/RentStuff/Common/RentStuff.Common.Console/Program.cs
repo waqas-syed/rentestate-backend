@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using RentStuff.Identity.Infrastructure.Persistence.Repositories;
 using RentStuff.Identity.Infrastructure.Services.Hashers;
 using RentStuff.Property.Application.HouseServices.Commands;
-using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Infrastructure.Persistence.Repositories;
 
 namespace RentStuff.Common.Console

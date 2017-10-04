@@ -1,6 +1,7 @@
 ﻿using Ninject.Modules;
 using RentStuff.Common.NHibernate.Providers;
 using RentStuff.Property.Domain.Model.HouseAggregate;
+using RentStuff.Property.Domain.Model.PropertyAggregate;
 using RentStuff.Property.Infrastructure.Persistence.NHibernate.Providers;
 using RentStuff.Property.Infrastructure.Persistence.Repositories;
 

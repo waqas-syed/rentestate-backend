@@ -16,6 +16,7 @@ using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
 using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Domain.Model.HouseAggregate;
+using RentStuff.Property.Domain.Model.PropertyAggregate;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 using RentStuff.Property.Ports.Adapter.Rest.Ninject.Modules;
 using RentStuff.Property.Ports.Adapter.Rest.Resources;

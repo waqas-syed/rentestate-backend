@@ -2,7 +2,6 @@
 using System.IO;
 using RentStuff.Property.Application.HouseServices.Commands;
 using RentStuff.Property.Application.HouseServices.Representation;
-using RentStuff.Property.Domain.Model.HouseAggregate;
 
 namespace RentStuff.Property.Application.HouseServices
 {
