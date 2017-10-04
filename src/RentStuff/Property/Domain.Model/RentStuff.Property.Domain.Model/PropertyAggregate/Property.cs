@@ -20,7 +20,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         private string _ownerName;
         private string _rentUnit;
         private string _propertyType;
-        private IList<string> _houseImages = new List<string>();
+        private IList<string> _images = new List<string>();
 
         /// <summary>
         /// The types of rent units we provide
@@ -64,7 +64,8 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// </summary>
         public Property(string title, long rentPrice, string ownerEmail, string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName, string description,
-            GenderRestriction genderRestriction, bool isShared, string rentUnit)
+            GenderRestriction genderRestriction, bool isShared, string rentUnit, bool internetAvailable, 
+            bool cableTvAvailable, bool garageAvailable)
         {
             Title = title;
             RentPrice = rentPrice;
@@ -78,10 +79,13 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             GenderRestriction = genderRestriction;
             IsShared = isShared;
             RentUnit = rentUnit;
+            InternetAvailable = internetAvailable;
+            CableTvAvailable = cableTvAvailable;
+            GarageAvailable = garageAvailable;
             DateCreated = DateTime.Now;
             LastModified = DateTime.Now;
         }
-        
+
         /// <summary>
         /// Update the property with the new values
         /// </summary>
@@ -97,9 +101,13 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="longitude"></param>
         /// <param name="isShared"></param>
         /// <param name="rentUnit"></param>
-        public void UpdateHouse(string title, long rentPrice, string ownerEmail, string ownerPhoneNumber,
+        /// <param name="internetAvailable"></param>
+        /// <param name="cableTvAvailable"></param>
+        /// <param name="garageAvailable"></param>
+        public void Update(string title, long rentPrice, string ownerEmail, string ownerPhoneNumber,
             string area, string ownerName, string description, GenderRestriction genderRestriction,
-            decimal latitude, decimal longitude, bool isShared, string rentUnit)
+            decimal latitude, decimal longitude, bool isShared, string rentUnit, bool internetAvailable,
+            bool cableTvAvailable, bool garageAvailable)
         {
             Title = title;
             RentPrice = rentPrice;
@@ -113,6 +121,9 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             GenderRestriction = genderRestriction;
             IsShared = isShared;
             RentUnit = rentUnit;
+            InternetAvailable = internetAvailable;
+            CableTvAvailable = cableTvAvailable;
+            GarageAvailable = garageAvailable;
             LastModified = DateTime.Now;
         }
 
@@ -126,20 +137,29 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         }
 
         /// <summary>
-        /// Add Image's ID to this House
+        /// Add Image's ID to this Property
         /// </summary>
         public void AddImage(string id)
         {
-            _houseImages.Add(id);
+            _images.Add(id);
         }
 
         /// <summary>
-        /// Get the list of Images for this House
+        /// Get the list of Images for this Property
         /// </summary>
         /// <returns></returns>
         public IList<string> GetImageList()
         {
-            return _houseImages;
+            return _images;
+        }
+
+        /// <summary>
+        /// Images IDs for this Property
+        /// </summary>
+        public IList<string> Images
+        {
+            get { return _images; }
+            private set { _images = value; }
         }
 
         /// <summary>
@@ -244,16 +264,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
                 _area = value;
             }
         }
-
-        /// <summary>
-        /// Images IDs for this house
-        /// </summary>
-        public IList<string> HouseImages
-        {
-            get { return _houseImages; }
-            private set { _houseImages = value; }
-        }
-
+        
         /// <summary>
         /// Name of the owner
         /// </summary>
@@ -331,6 +342,33 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// Is this property shared
         /// </summary>
         public bool IsShared { get; private set; }
+
+        /// <summary>
+        /// Internet available
+        /// </summary>
+        public bool InternetAvailable
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Cable TV available
+        /// </summary>
+        public bool CableTvAvailable
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Garage available
+        /// </summary>
+        public bool GarageAvailable
+        {
+            get;
+            private set;
+        }
 
         /// <summary>
         /// The time this instance was created

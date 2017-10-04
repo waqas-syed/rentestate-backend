@@ -73,8 +73,8 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(dimension.StringValue, house.Dimension.StringValue);
             Assert.AreEqual(dimension.DecimalValue, house.Dimension.DecimalValue);
 
-            Assert.AreEqual(image1, house.HouseImages[0]);
-            Assert.AreEqual(image2, house.HouseImages[1]);
+            Assert.AreEqual(image1, house.Images[0]);
+            Assert.AreEqual(image2, house.Images[1]);
 
             Assert.AreEqual(isShared, house.IsShared);
             Assert.AreEqual(rentUnit, house.RentUnit);
@@ -146,8 +146,8 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(dimension.StringValue, house.Dimension.StringValue);
             Assert.AreEqual(dimension.DecimalValue, house.Dimension.DecimalValue);
 
-            Assert.AreEqual(image1, house.HouseImages[0]);
-            Assert.AreEqual(image2, house.HouseImages[1]);
+            Assert.AreEqual(image1, house.Images[0]);
+            Assert.AreEqual(image2, house.Images[1]);
 
             Assert.AreEqual(isShared, house.IsShared);
             Assert.AreEqual(rentUnit, house.RentUnit);

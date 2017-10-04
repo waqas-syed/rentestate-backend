@@ -5,16 +5,13 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
     /// <summary>
     /// House Aggregate. A house that can be put on rent or sale
     /// </summary>
-    public class House : PropertyAggregate.Property
+    public class House : PropertyAggregate.ResidentialProperty
     {
         private int _numberOfBedrooms;
         private int _numberOfKitchens;
         private int _numberOfBathrooms;
-        private bool _internetAvailable;
         private bool _landlinePhoneAvailable;
-        private bool _cableTvAvailable;
         private Dimension _dimension;
-        private bool _garageAvailable;
         private bool _smokingAllowed;
         private string _houseNo;
         private string _streetNo;
@@ -38,16 +35,13 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             // Initiate the parent Property class as well
             : base(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
-                rentUnit)
+                rentUnit, internetAvailable, cableTvAvailable, garageAvailable)
         {
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
-            InternetAvailable = internetAvailable;
             LandlinePhoneAvailable = landlinePhoneAvailable;
-            CableTvAvailable = cableTvAvailable;
             Dimension = dimension;
-            GarageAvailable = garageAvailable;
             SmokingAllowed = smokingAllowed;
             PropertyType = propertyType;
             HouseNo = houseNo;
@@ -91,18 +85,16 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
-            InternetAvailable = internetAvailable;
             LandlinePhoneAvailable = landlinePhoneAvailable;
-            CableTvAvailable = cableTvAvailable;
             Dimension = dimension;
-            GarageAvailable = garageAvailable;
             SmokingAllowed = smokingAllowed;
             PropertyType = propertyType;
             HouseNo = houseNo;
             StreetNo = streetNo;
             // Update the parent property class
-            base.UpdateHouse(title, rentPrice, ownerEmail.ToLower(), ownerPhoneNumber, area, ownerName, description,
-                genderRestriction, latitude, longitude, isShared, rentUnit);
+            base.Update(title, rentPrice, ownerEmail, ownerPhoneNumber, area, ownerName, description,
+                genderRestriction, latitude, longitude, isShared, rentUnit, internetAvailable, cableTvAvailable,
+                garageAvailable);
         }
         
         /// <summary>
@@ -133,15 +125,6 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         }
         
         /// <summary>
-        /// Internet available
-        /// </summary>
-        public bool InternetAvailable
-        {
-            get { return _internetAvailable; }
-            set { _internetAvailable = value; }
-        }
-
-        /// <summary>
         /// Landline phone number
         /// </summary>
         public bool LandlinePhoneAvailable
@@ -149,16 +132,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             get { return _landlinePhoneAvailable; }
             set { _landlinePhoneAvailable = value; }
         }
-
-        /// <summary>
-        /// Cable TV available
-        /// </summary>
-        public bool CableTvAvailable
-        {
-            get { return _cableTvAvailable; }
-            set { _cableTvAvailable = value; }
-        }
-
+        
         /// <summary>
         /// Dimension
         /// </summary>
@@ -167,16 +141,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             get { return _dimension; } 
             set { _dimension = value; }
         }
-
-        /// <summary>
-        /// Garage available
-        /// </summary>
-        public bool GarageAvailable
-        {
-            get { return _garageAvailable; }
-            set { _garageAvailable = value; }
-        }
-
+        
         /// <summary>
         /// Is Smoking allowed
         /// </summary>
@@ -233,6 +198,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private GenderRestriction _genderRestriction;
             private bool _isShared;
             private string _rentUnit;
+            private bool _cableTvAvailable;
+            private bool _garageAvailable;
+            private bool _internetAvailable;
 
             /// <summary>
             /// Title
@@ -377,6 +345,39 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
 
+            /// <summary>
+            /// Is internet available
+            /// </summary>
+            /// <param name="internetAvailable"></param>
+            /// <returns></returns>
+            public HouseBuilder WithInternetAvailable(bool internetAvailable)
+            {
+                _internetAvailable = internetAvailable;
+                return this;
+            }
+
+            /// <summary>
+            /// Is landline phone available
+            /// </summary>
+            /// <param name="landlinePhoneAvailable"></param>
+            /// <returns></returns>
+            public HouseBuilder LandlinePhoneAvailable(bool landlinePhoneAvailable)
+            {
+                _landlinePhoneAvailable = landlinePhoneAvailable;
+                return this;
+            }
+
+            /// <summary>
+            /// is cable tv available
+            /// </summary>
+            /// <param name="cableTvAvailable"></param>
+            /// <returns></returns>
+            public HouseBuilder CableTvAvailable(bool cableTvAvailable)
+            {
+                _cableTvAvailable = cableTvAvailable;
+                return this;
+            }
+
             #endregion Generic Property attributes
 
             #region House Specific Properties 
@@ -384,12 +385,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private int _numberOfBedrooms;
             private int _numberOfKitchens;
             private int _numberOfBathrooms;
-            private bool _internetAvailable;
-            private bool _landlinePhoneAvailable;
-            private bool _cableTvAvailable;
             private Dimension _dimension;
-            private bool _garageAvailable;
             private bool _smokingAllowed;
+            private bool _landlinePhoneAvailable;
             private string _houseNo;
             private string _streetNo;
 
@@ -426,39 +424,6 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
             
-            /// <summary>
-            /// Is internet available
-            /// </summary>
-            /// <param name="internetAvailable"></param>
-            /// <returns></returns>
-            public HouseBuilder WithInternetAvailable(bool internetAvailable)
-            {
-                _internetAvailable = internetAvailable;
-                return this;
-            }
-
-            /// <summary>
-            /// Is landline phone available
-            /// </summary>
-            /// <param name="landlinePhoneAvailable"></param>
-            /// <returns></returns>
-            public HouseBuilder LandlinePhoneAvailable(bool landlinePhoneAvailable)
-            {
-                _landlinePhoneAvailable = landlinePhoneAvailable;
-                return this;
-            }
-
-            /// <summary>
-            /// is cable tv available
-            /// </summary>
-            /// <param name="cableTvAvailable"></param>
-            /// <returns></returns>
-            public HouseBuilder CableTvAvailable(bool cableTvAvailable)
-            {
-                _cableTvAvailable = cableTvAvailable;
-                return this;
-            }
-
             /// <summary>
             /// Dimension
             /// </summary>

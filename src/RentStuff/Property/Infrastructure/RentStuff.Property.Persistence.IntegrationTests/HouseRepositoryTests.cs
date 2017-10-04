@@ -1483,7 +1483,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             House retreivedHouse = houseRepository.GetHouseById(house.Id);
             Assert.IsNotNull(retreivedHouse);
-            Assert.AreEqual(3, retreivedHouse.HouseImages.Count);
+            Assert.AreEqual(3, retreivedHouse.Images.Count);
 
             Assert.AreEqual(title, retreivedHouse.Title);
             Assert.AreEqual(phoneNumber, retreivedHouse.OwnerPhoneNumber);
@@ -1508,9 +1508,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.IsShared, retreivedHouse.IsShared);
             Assert.AreEqual(house.RentUnit, retreivedHouse.RentUnit);
 
-            Assert.AreEqual(image1, retreivedHouse.HouseImages[0]);
-            Assert.AreEqual(image2, retreivedHouse.HouseImages[1]);
-            Assert.AreEqual(image3, retreivedHouse.HouseImages[2]);
+            Assert.AreEqual(image1, retreivedHouse.Images[0]);
+            Assert.AreEqual(image2, retreivedHouse.Images[1]);
+            Assert.AreEqual(image3, retreivedHouse.Images[2]);
 
             IList<House> allHouses = houseRepository.GetAllHouses();
             Assert.IsNotNull(allHouses);

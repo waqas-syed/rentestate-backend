@@ -176,7 +176,7 @@ namespace RentStuff.Property.Application.HouseServices
             if (house != null)
             {
                 // Delete all the images from the Google cloud storage photo bucket
-                foreach (var image in house.HouseImages)
+                foreach (var image in house.Images)
                 {
                     _photoStorageService.DeletePhoto(image);
                 }
@@ -388,7 +388,7 @@ namespace RentStuff.Property.Application.HouseServices
             {
                 foreach (var imageId in imagesList)
                 {
-                    house.HouseImages.Remove(imageId);
+                    house.Images.Remove(imageId);
                     try
                     {
                         _photoStorageService.DeletePhoto(imageId);
