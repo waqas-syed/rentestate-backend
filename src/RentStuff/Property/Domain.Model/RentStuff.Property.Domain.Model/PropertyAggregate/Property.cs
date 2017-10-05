@@ -239,7 +239,11 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             get { return _ownerPhoneNumber; }
             private set
             {
-                _ownerPhoneNumber = value;
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    Assertion.IsPhoneNumberValid(value);
+                    _ownerPhoneNumber = value;
+                }
             }
         }
 

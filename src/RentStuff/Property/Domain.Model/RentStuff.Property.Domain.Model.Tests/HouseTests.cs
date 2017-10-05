@@ -176,7 +176,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             bool garage2 = false;
             decimal latitude2 = 25.13M;
             decimal longitude2 = 73.11M;
-            string propertyType2 = "Hostel";
+            string propertyType2 = "House";
             GenderRestriction genderRestriction2 = GenderRestriction.BoysOnly;
             string area2 = "Pindora, Rawalpindi, Pakistan";
             long monthlyRent2 = 199000;
@@ -219,14 +219,13 @@ namespace RentStuff.Property.Domain.Model.Tests
         [Test]
         public void RentUnitPropertyTypeAndIsSharedDefaultValueTest_TestsThatAHouseInstanceIsCreatedEvenIfValueIsnotProvidedForTheseProperties_VerifiesByTheReturnValue()
         {
-            // If we dont provide RentUnit, PropertyType and IsShared, then the default value should be provided
+            // If we dont provide RentUnit and IsShared, then the default value should be provided
             string title = "Title No 1";
             string description = "Description of house";
             string email = "w@12344321.com";
             string name = "OwnerName";
             string phoneNumber = "03455138018";
-
-            // No Latitude is given. So the house instance should not be created
+            
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
@@ -237,6 +236,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             bool garage = true;
             decimal latitude = 25.43M;
             decimal longitude = 73.41M;
+            string propertyType = "House";
             GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
             string area = "Pindora, Rawalpindi, Pakistan";
             long monthlyRent = 90000;
@@ -248,7 +248,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(cableTv)
                 .GarageAvailable(garage).LandlinePhoneAvailable(landline).SmokingAllowed(smokingAllowed).WithInternetAvailable(internet)
                 .RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
-                .Area(area).GenderRestriction(genderRestriction).Description(description).Build();
+                .Area(area).GenderRestriction(genderRestriction).Description(description).PropertyType(propertyType).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
             house.Dimension = dimension;
             house.AddImage(image1);
@@ -257,7 +257,6 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             // Check that the default valuesa are used
             string rentUnit = House.GetAllRentUnits()[0];
-            string propertyType = "House";
             bool isShared = false;
             Assert.AreEqual(rentUnit, house.RentUnit);
             Assert.AreEqual(propertyType, house.PropertyType);
@@ -463,6 +462,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;
             long monthlyRent = 90000;
+            string mobileNumber = "03990000000";
             string propertyType = "Apartment";
 
             House house = new House.HouseBuilder().OwnerEmail(email)
@@ -470,7 +470,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(73.41M)
-                .HouseNo("123").Area("Pindora").StreetNo("13").Build();
+                .HouseNo("123").Area("Pindora").StreetNo("13").OwnerPhoneNumber(mobileNumber).Build();
         }
 
         [Test]
@@ -542,30 +542,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .PropertyType(propertyType).RentPrice(130000).Latitude(23.65M).Longitude(73.41M)
                 .HouseNo("123").Area("Pindora").StreetNo("13").OwnerPhoneNumber(phoneNumber).Build();
         }
-
-        [Test]
-        [ExpectedException(typeof(NullReferenceException))]
-        public void SaveHouseFailTest6_VerifiesThatTheHouseInstanceCreationFailsWhenInputIsNotSuitable_VerifiesThroughDatabaseQuery()
-        {
-            // No OwnerPhoneNumber provided, so exception should be raised
-            string title = "Title No 1";
-            string email = "w@12344321.com";
-            string name = "OwnerName";
-            
-            int numberOfBedrooms = 3;
-            int numberofBathrooms = 1;
-            int numberOfKitchens = 1;
-            long monthlyRent = 1000001;
-            string propertyType = "Apartment";
-
-            House house = new House.HouseBuilder().Title(title).RentPrice(monthlyRent).OwnerEmail(email)
-                .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
-                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
-                .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
-                .PropertyType(propertyType).RentPrice(130000).Latitude(23.65M).Longitude(73.41M)
-                .HouseNo("123").Area("Pindora").StreetNo("13").OwnerName(name).Build();
-        }
-
+        
         [Test]
         [ExpectedException(typeof(NullReferenceException))]
         public void SaveHouseFailTest7_VerifiesThatTheHouseInstanceCreationFailsWhenInputIsNotSuitable_VerifiesThroughDatabaseQuery()

@@ -38,6 +38,10 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
                 rentUnit, internetAvailable, cableTvAvailable, garageAvailable, propertyType, landlineNumber, fax)
         {
+            if (string.IsNullOrWhiteSpace(propertyType))
+            {
+                throw new NullReferenceException("PropertyType is required");
+            }
             if (!propertyType.Equals("House") && !propertyType.Equals("Apartment"))
             {
                 throw new InvalidOperationException("House/Apartment instance can only be created with type House/Apartment");
