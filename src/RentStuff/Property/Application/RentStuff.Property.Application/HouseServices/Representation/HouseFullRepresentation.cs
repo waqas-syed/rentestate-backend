@@ -16,7 +16,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
             bool landlinePhoneAvailable, bool cableTvAvailable, string dimension, bool garageAvailable, bool smokingAllowed, 
             string propertyType, string ownerEmail, string ownerPhoneNumber, decimal latitude, decimal longitude, string houseNo, 
             string streetNo, string area, IList<string> houseImages, string ownerName, string description,
-            string genderRestriction, bool isShared, string rentUnit)
+            string genderRestriction, bool isShared, string rentUnit, string landlineNumber, string fax)
         {
             Id = id;
             Title = title;
@@ -44,6 +44,8 @@ namespace RentStuff.Property.Application.HouseServices.Representation
             GenderRestriction = genderRestriction;
             IsShared = isShared;
             RentUnit = rentUnit;
+            LandlineNumber = landlineNumber;
+            Fax = fax;
         }
 
         [DataMember]
@@ -129,6 +131,18 @@ namespace RentStuff.Property.Application.HouseServices.Representation
 
         [DataMember]
         public string OwnerPhoneNumber
+        {
+            get; private set;
+        }
+
+        [DataMember]
+        public string LandlineNumber
+        {
+            get; private set;
+        }
+
+        [DataMember]
+        public string Fax
         {
             get; private set;
         }

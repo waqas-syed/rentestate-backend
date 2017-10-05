@@ -17,6 +17,8 @@
     <property name="GenderRestriction" column="gender_restriction"/>
     <property name="OwnerEmail" column="owner_email"/>
     <property name="OwnerPhoneNumber" column="owner_phone_number"/>
+    <property name="LandlineNumber" column="landline_number"/>
+    <property name="Fax" column="fax"/>
     <property name="Latitude" column="latitude"/>
     <property name="Longitude" column="longitude"/>
     <property name="DateCreated" column="date_created"/>

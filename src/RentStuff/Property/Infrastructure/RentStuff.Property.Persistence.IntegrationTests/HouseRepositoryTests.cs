@@ -132,6 +132,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string propertyType = "Apartment";
             GenderRestriction genderRestriction = GenderRestriction.FamiliesOnly;
             bool isShared = true;
+            string landlineNumber = "0510000000";
+            string fax = "0510000000";
 
             House house = new House.HouseBuilder().Title(title).OwnerEmail(email).OwnerPhoneNumber(phoneNumber)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
@@ -139,7 +141,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
                 .PropertyType(propertyType).RentPrice(price).Latitude(latitude).Longitude(longitude)
                 .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description)
-                .GenderRestriction(genderRestriction).IsShared(isShared).Build();
+                .GenderRestriction(genderRestriction).IsShared(isShared).LandlineNumber(landlineNumber).Fax(fax)
+                .Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, null, 5, house);
             house.Dimension = dimension;
             //houseRepository.SaveorUpdateDimension(dimension);
@@ -205,11 +208,13 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             long monthlyRent2 = 199000;
             string rentUnit2 = "Day";
             bool isShared2 = false;
+            string landlineNumber2 = "0510000001";
+            string fax2 = "0510000001";
 
             Dimension dimension2 = new Dimension(DimensionType.Marla, "20", 0, house);
             house.UpdateHouse(title2, monthlyRent2, numberOfBedrooms2, numberOfKitchens2, numberofBathrooms2, internet2, landline2,
                 cableTv2, dimension2, garage2, smokingAllowed2, propertyType2, email2, phoneNumber2, null, null, area2, name2,
-                description2, genderRestriction2, latitude2, longitude2, isShared2, rentUnit2);
+                description2, genderRestriction2, latitude2, longitude2, isShared2, rentUnit2, landlineNumber2, fax2);
             houseRepository.SaveorUpdate(house);
             House retreivedHouse2 = houseRepository.GetHouseById(house.Id);
 

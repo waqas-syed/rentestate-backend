@@ -20,6 +20,8 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         private string _ownerName;
         private string _rentUnit;
         private string _propertyType;
+        private string _landlineNumber;
+        private string _fax;
         private IList<string> _images = new List<string>();
 
         /// <summary>
@@ -65,12 +67,18 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         public Property(string title, long rentPrice, string ownerEmail, string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName, string description,
             GenderRestriction genderRestriction, bool isShared, string rentUnit, bool internetAvailable, 
-            bool cableTvAvailable, bool garageAvailable, string propertyType)
+            bool cableTvAvailable, bool garageAvailable, string propertyType, string landlineNumber, string fax)
         {
+            if (string.IsNullOrWhiteSpace(ownerPhoneNumber) && string.IsNullOrWhiteSpace(landlineNumber))
+            {
+                throw new InvalidOperationException("Atleast one of Mobile or Landline number is required");
+            }
             Title = title;
             RentPrice = rentPrice;
             OwnerEmail = ownerEmail.ToLower();
             OwnerPhoneNumber = ownerPhoneNumber;
+            LandlineNumber = landlineNumber;
+            Fax = fax;
             Latitude = latitude;
             Longitude = longitude;
             Area = area;
@@ -106,15 +114,23 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="cableTvAvailable"></param>
         /// <param name="garageAvailable"></param>
         /// <param name="propertyType"></param>
+        /// <param name="landlineNumber"></param>
+        /// <param name="fax"></param>
         public void Update(string title, long rentPrice, string ownerEmail, string ownerPhoneNumber,
             string area, string ownerName, string description, GenderRestriction genderRestriction,
             decimal latitude, decimal longitude, bool isShared, string rentUnit, bool internetAvailable,
-            bool cableTvAvailable, bool garageAvailable, string propertyType)
+            bool cableTvAvailable, bool garageAvailable, string propertyType, string landlineNumber, string fax)
         {
+            if (string.IsNullOrWhiteSpace(ownerPhoneNumber) && string.IsNullOrWhiteSpace(landlineNumber))
+            {
+                throw new InvalidOperationException("Atleast one of Mobile or Landline number is required");
+            }
             Title = title;
             RentPrice = rentPrice;
             OwnerEmail = ownerEmail.ToLower();
             OwnerPhoneNumber = ownerPhoneNumber;
+            LandlineNumber = landlineNumber;
+            Fax = fax;
             Latitude = latitude;
             Longitude = longitude;
             Area = area;
@@ -223,9 +239,31 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             get { return _ownerPhoneNumber; }
             private set
             {
-                Assertion.AssertStringNotNullorEmpty(value);
-                Assertion.IsPhoneNumberValid(value);
                 _ownerPhoneNumber = value;
+            }
+        }
+
+        /// <summary>
+        /// Landline number that can be reached
+        /// </summary>
+        public string LandlineNumber
+        {
+            get { return _landlineNumber; }
+            private set
+            {
+                _landlineNumber = value;
+            }
+        }
+
+        /// <summary>
+        /// Fax
+        /// </summary>
+        public string Fax
+        {
+            get { return _fax; }
+            private set
+            {
+                _fax = value;
             }
         }
 

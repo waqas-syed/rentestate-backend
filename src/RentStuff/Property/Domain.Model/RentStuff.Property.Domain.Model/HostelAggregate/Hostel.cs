@@ -20,14 +20,19 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac,
             bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
             bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating, bool meals, 
-            bool picknDrop, int numberOfSeats)
+            bool picknDrop, int numberOfSeats, string landlineNumber, string fax)
             // Initiate the parent GuerstPropertyAbstraction class as well
             : base(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
                 rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, propertyType, laundry, ac, geyser,
                 fitnessCentre,
-                attachedBathroom, ironing, balcony, lawn, cctvCameras, backupElectricity, heating)
+                attachedBathroom, ironing, balcony, lawn, cctvCameras, backupElectricity, heating, landlineNumber, 
+                fax)
         {
+            if (!propertyType.Equals("Hostel"))
+            {
+                throw new InvalidOperationException("Hostel instance can only be created with type Hostel");
+            }
             Meals = meals;
             PicknDrop = picknDrop;
             NumberOfSeats = numberOfSeats;
@@ -66,6 +71,8 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
         /// <param name="picknDrop"></param>
         /// <param name="numberOfSeats"></param>
         /// <param name="heating"></param>
+        /// <param name="landlineNumber"></param>
+        /// <param name="fax"></param>
         public void Update(string title, long rentPrice, string ownerEmail,
             string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName,
@@ -74,15 +81,20 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac,
             bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
             bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool meals, bool picknDrop,
-            int numberOfSeats, bool heating)
+            int numberOfSeats, bool heating, string landlineNumber, string fax)
         {
+            if (!propertyType.Equals("Hostel"))
+            {
+                throw new InvalidOperationException("Hostel instance can only be created with type Hostel");
+            }
             Meals = meals;
             PicknDrop = picknDrop;
             NumberOfSeats = numberOfSeats;
             base.UpdateGuestProperty(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
                 rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, propertyType, laundry, ac, geyser, fitnessCentre,
-                attachedBathroom, ironing, balcony, lawn, cctvCameras, backupElectricity, heating);
+                attachedBathroom, ironing, balcony, lawn, cctvCameras, backupElectricity, heating, landlineNumber,
+                fax);
         }
 
         /// <summary>
@@ -124,7 +136,9 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             private bool _internetAvailable;
             private bool _cableTvAvailable;
             private bool _parking;
-
+            private string _landlineNumber;
+            private string _fax;
+            
             /// <summary>
             /// Title
             /// </summary>
@@ -301,6 +315,28 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
                 return this;
             }
 
+            /// <summary>
+            /// Landline Number
+            /// </summary>
+            /// <param name="landlineNumber"></param>
+            /// <returns></returns>
+            public HostelBuilder LandlineNumber(string landlineNumber)
+            {
+                _landlineNumber = landlineNumber;
+                return this;
+            }
+
+            /// <summary>
+            /// Fax
+            /// </summary>
+            /// <param name="fax"></param>
+            /// <returns></returns>
+            public HostelBuilder Fax(string fax)
+            {
+                _fax = fax;
+                return this;
+            }
+
             #endregion Generic Property attributes
 
             #region Hostel Specific Properties 
@@ -416,7 +452,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
                     _area, _ownerName, _description, _genderRestriction, _isShared, _rentUnit, _internetAvailable,
                     _cableTvAvailable, _parking, _propertyType, _laundry, _ac, _geyser, _fitnessCentre, _attachedBathroom,
                     _ironing, _balcony, _lawn, _cctvCameras, _backupElectricity, _heating, _meals, _picknDrop, 
-                    _numberOfSeats);
+                    _numberOfSeats, _landlineNumber, _fax);
             }
         }
     }

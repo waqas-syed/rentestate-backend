@@ -90,7 +90,7 @@ namespace RentStuff.Common.Console
                     numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
                     houseNo, streetNo, areas[i], dimensionType, dimensionString, dimensionDecimal, ownerName, description, 
-                    genderRestriction, isShared, rentUnit);
+                    genderRestriction, isShared, rentUnit, null, null);
                 //JsonConvert.SerializeObject(house);
                 HttpResponseMessage response = await _httpClient.PostAsJsonAsync("v1/house", house);
                 response.EnsureSuccessStatusCode();

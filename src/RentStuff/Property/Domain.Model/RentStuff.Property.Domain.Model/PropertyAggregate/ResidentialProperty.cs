@@ -40,11 +40,11 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         public ResidentialProperty(string title, long rentPrice, string ownerEmail, string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName, string description,
             GenderRestriction genderRestriction, bool isShared, string rentUnit, bool internetAvailable,
-            bool cableTvAvailable, bool garageAvailable, string propertytype)
+            bool cableTvAvailable, bool garageAvailable, string propertytype, string landlineNumber, string fax)
             // Initiate the parent Property class as well
             : base(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
-                rentUnit, internetAvailable, cableTvAvailable, garageAvailable, propertytype)
+                rentUnit, internetAvailable, cableTvAvailable, garageAvailable, propertytype, landlineNumber, fax)
         {
             
         }

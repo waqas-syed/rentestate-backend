@@ -35,13 +35,16 @@ namespace RentStuff.Property.Domain.Model.Tests
             string image2 = "Image2.png";
             string rentUnit = "Hour";
             bool isShared = true;
+            string landlineNumber = "0510000000";
+            string fax = "0510000000";
             
             House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(cableTv)
                 .GarageAvailable(garage).LandlinePhoneAvailable(landline).SmokingAllowed(smokingAllowed).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
-                .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit).IsShared(isShared)
+                .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
+                .IsShared(isShared).LandlineNumber(landlineNumber).Fax(fax)
                 .Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
             house.Dimension = dimension;
@@ -77,6 +80,8 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Assert.AreEqual(isShared, house.IsShared);
             Assert.AreEqual(rentUnit, house.RentUnit);
+            Assert.AreEqual(landlineNumber, house.LandlineNumber);
+            Assert.AreEqual(fax, house.Fax);
         }
 
         [Test]
@@ -114,7 +119,8 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(cableTv)
                 .GarageAvailable(garage).LandlinePhoneAvailable(landline).SmokingAllowed(smokingAllowed).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
-                .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit).IsShared(isShared)
+                .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
+                .IsShared(isShared).LandlineNumber(null).Fax(null)
                 .Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
             house.Dimension = dimension;
@@ -180,7 +186,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             Dimension dimension2 = new Dimension(DimensionType.Marla, "20", 0, house);
             house.UpdateHouse(title2,monthlyRent2, numberOfBedrooms2, numberOfKitchens2, numberofBathrooms2, internet2, landline2,
                 cableTv2, dimension2, garage2, smokingAllowed2, propertyType2, email2, phoneNumber2, null, null, area2, name2, 
-                description2, genderRestriction2, latitude2, longitude2, isShared2, rentUnit2);
+                description2, genderRestriction2, latitude2, longitude2, isShared2, rentUnit2, null, null);
             
             Assert.AreEqual(title2, house.Title);
             Assert.AreEqual(description2, house.Description);
@@ -256,6 +262,170 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(rentUnit, house.RentUnit);
             Assert.AreEqual(propertyType, house.PropertyType);
             Assert.AreEqual(isShared, house.IsShared);
+        }
+
+        // Both Mobile Number and Landline Phone number have not been given, wso raise and exception
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void CreateHouseInstanceFailTest_TestsThatBothMobileAndLandlineNumbersAreRequired_VerifiesByTheReturnValue()
+        {
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            bool smokingAllowed = false;
+            bool landline = true;
+            bool cableTv = false;
+            bool internet = true;
+            bool garage = true;
+            decimal latitude = 25.43M;
+            decimal longitude = 73.41M;
+            string propertyType = "Apartment";
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+            string image1 = "Image1.jpg";
+            string image2 = "Image2.png";
+            string rentUnit = "Hour";
+            bool isShared = true;
+
+            House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(null).Title(title).OwnerName(name)
+                .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
+                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(cableTv)
+                .GarageAvailable(garage).LandlinePhoneAvailable(landline).SmokingAllowed(smokingAllowed).WithInternetAvailable(internet)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
+                .IsShared(isShared)
+                .Build();
+        }
+
+        // Checks that House instance can be created with only a Landline Number provided
+        [Test]
+        public void CreateHouseInstanceWithLandlineNumberTest_TestsThatInstanceGetsCreatedWithJustTheLanslineNumber_VerifiesByTheReturnValue()
+        {
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            bool smokingAllowed = false;
+            bool landline = true;
+            bool cableTv = false;
+            bool internet = true;
+            bool garage = true;
+            decimal latitude = 25.43M;
+            decimal longitude = 73.41M;
+            string propertyType = "Apartment";
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+            string image1 = "Image1.jpg";
+            string image2 = "Image2.png";
+            string rentUnit = "Hour";
+            bool isShared = true;
+            string landlineNumber = "0510000000";
+
+            House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(null).Title(title).OwnerName(name)
+                .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
+                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(cableTv)
+                .GarageAvailable(garage).LandlinePhoneAvailable(landline).SmokingAllowed(smokingAllowed).WithInternetAvailable(internet)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
+                .IsShared(isShared).LandlineNumber(landlineNumber)
+                .Build();
+            Assert.IsNotNull(house);
+            Assert.AreEqual(landlineNumber, house.LandlineNumber);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(house.OwnerPhoneNumber));
+        }
+
+        // Checks that House instance can be created with only a Mobile Number provided without a landline number
+        [Test]
+        public void CreateHouseInstanceWithMobileNumberTest_TestsThatInstanceGetsCreatedWithJustTheLanslineNumber_VerifiesByTheReturnValue()
+        {
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            bool smokingAllowed = false;
+            bool landline = true;
+            bool cableTv = false;
+            bool internet = true;
+            bool garage = true;
+            decimal latitude = 25.43M;
+            decimal longitude = 73.41M;
+            string propertyType = "Apartment";
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+            string image1 = "Image1.jpg";
+            string image2 = "Image2.png";
+            string rentUnit = "Hour";
+            bool isShared = true;
+            string mobileNumber = "03990000000";
+
+            House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(null).Title(title).OwnerName(name)
+                .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
+                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(cableTv)
+                .GarageAvailable(garage).LandlinePhoneAvailable(landline).SmokingAllowed(smokingAllowed).WithInternetAvailable(internet)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
+                .IsShared(isShared).OwnerPhoneNumber(mobileNumber)
+                .Build();
+            Assert.IsNotNull(house);
+            Assert.AreEqual(mobileNumber, house.OwnerPhoneNumber);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(house.LandlineNumber));
+        }
+
+        // Checks that House instance will not be created if the PropertyType is anything other than House or 
+        // Apartment
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void CreateHouseFailForPropertyTypeTest_TestsThatInstanceWillNotGetCreatedWhenAnyOtherPropertyTypeisProvided_VerifiesByTheReturnValue()
+        {
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            bool smokingAllowed = false;
+            bool landline = true;
+            bool cableTv = false;
+            bool internet = true;
+            bool garage = true;
+            decimal latitude = 25.43M;
+            decimal longitude = 73.41M;
+            string propertyType = "Hostel";
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+            string image1 = "Image1.jpg";
+            string image2 = "Image2.png";
+            string rentUnit = "Hour";
+            bool isShared = true;
+            string mobileNumber = "03990000000";
+
+            House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(null).Title(title).OwnerName(name)
+                .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
+                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(cableTv)
+                .GarageAvailable(garage).LandlinePhoneAvailable(landline).SmokingAllowed(smokingAllowed).WithInternetAvailable(internet)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
+                .IsShared(isShared).OwnerPhoneNumber(mobileNumber)
+                .Build();
         }
 
         [Test]

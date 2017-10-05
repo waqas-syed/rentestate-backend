@@ -16,7 +16,7 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber, 
             string houseNo, string streetNo, string area, string dimensionType, string dimensionStringValue, 
             decimal dimensionIntValue, string ownerName, string description, string genderRestriction, bool isShared,
-            string rentUnit)
+            string rentUnit, string landlineNumber, string fax)
         {
             Title = title;
             RentPrice = rentPrice;
@@ -42,6 +42,8 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             GenderRestriction = genderRestriction;
             IsShared = isShared;
             RentUnit = rentUnit;
+            LandlineNumber = landlineNumber;
+            Fax = fax;
         }
 
         [DataMember]
@@ -85,6 +87,12 @@ namespace RentStuff.Property.Application.HouseServices.Commands
 
         [DataMember]
         public string OwnerPhoneNumber { get; private set; }
+
+        [DataMember]
+        public string LandlineNumber { get; private set; }
+
+        [DataMember]
+        public string Fax { get; private set; }
 
         [DataMember]
         public string HouseNo { get; private set; }

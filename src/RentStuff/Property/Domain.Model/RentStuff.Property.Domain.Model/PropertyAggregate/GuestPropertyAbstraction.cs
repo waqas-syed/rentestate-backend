@@ -48,11 +48,12 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
                 GenderRestriction genderRestriction, bool isShared, string rentUnit, bool internetAvailable,
                 bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac, 
                 bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
-                bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating)
+                bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating, 
+                string landlineNumber, string fax)
             // Initiate the parent Property class as well
             : base(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
-                rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, propertyType)
+                rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, propertyType, landlineNumber, fax)
         {
             Laundry = laundry;
             AC = ac;
@@ -103,7 +104,8 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             GenderRestriction genderRestriction, bool isShared, string rentUnit, bool internetAvailable,
             bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac,
             bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
-            bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating)
+            bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating,
+            string landlineNumber, string fax)
         {
             Laundry = laundry;
             AC = ac;
@@ -118,7 +120,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             Heating = heating;
             base.Update(title, rentPrice, ownerEmail, ownerPhoneNumber, area, ownerName, description, 
                 genderRestriction, latitude, longitude, isShared, rentUnit, internetAvailable, cableTvAvailable, 
-                parkingAvailable, propertyType);
+                parkingAvailable, propertyType, landlineNumber, fax);
         }
 
         /// <summary>

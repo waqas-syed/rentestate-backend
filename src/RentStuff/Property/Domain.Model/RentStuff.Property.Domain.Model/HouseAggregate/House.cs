@@ -1,4 +1,5 @@
-﻿using RentStuff.Property.Domain.Model.PropertyAggregate;
+﻿using System;
+using RentStuff.Property.Domain.Model.PropertyAggregate;
 
 namespace RentStuff.Property.Domain.Model.HouseAggregate
 {
@@ -31,12 +32,16 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension, 
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
             decimal latitude, decimal longitude, string houseNo, string streetNo, string area, string ownerName, string description, 
-            GenderRestriction genderRestriction, bool isShared, string rentUnit) 
+            GenderRestriction genderRestriction, bool isShared, string rentUnit, string landlineNumber, string fax) 
             // Initiate the parent Property class as well
             : base(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
-                rentUnit, internetAvailable, cableTvAvailable, garageAvailable, propertyType)
+                rentUnit, internetAvailable, cableTvAvailable, garageAvailable, propertyType, landlineNumber, fax)
         {
+            if (!propertyType.Equals("House") && !propertyType.Equals("Apartment"))
+            {
+                throw new InvalidOperationException("House/Apartment instance can only be created with type House/Apartment");
+            }
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
@@ -80,8 +85,12 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension,
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
             string houseNo, string streetNo, string area, string ownerName, string description, GenderRestriction genderRestriction,
-            decimal latitude, decimal longitude, bool isShared, string rentUnit)
+            decimal latitude, decimal longitude, bool isShared, string rentUnit, string landlineNumber, string fax)
         {
+            if (!propertyType.Equals("House") && !propertyType.Equals("Apartment"))
+            {
+                throw new InvalidOperationException("House/Apartment instance can only be created with type House/Apartment");
+            }
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
@@ -94,7 +103,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             // Update the parent property class
             base.Update(title, rentPrice, ownerEmail, ownerPhoneNumber, area, ownerName, description,
                 genderRestriction, latitude, longitude, isShared, rentUnit, internetAvailable, cableTvAvailable,
-                garageAvailable, propertyType);
+                garageAvailable, propertyType, landlineNumber, fax);
         }
         
         /// <summary>
@@ -201,7 +210,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private bool _cableTvAvailable;
             private bool _garageAvailable;
             private bool _internetAvailable;
-
+            private string _landlineNumber;
+            private string _fax;
+            
             /// <summary>
             /// Title
             /// </summary>
@@ -378,6 +389,28 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
 
+            /// <summary>
+            /// Landline Number
+            /// </summary>
+            /// <param name="landlineNumber"></param>
+            /// <returns></returns>
+            public HouseBuilder LandlineNumber(string landlineNumber)
+            {
+                _landlineNumber = landlineNumber;
+                return this;
+            }
+
+            /// <summary>
+            /// Fax
+            /// </summary>
+            /// <param name="fax"></param>
+            /// <returns></returns>
+            public HouseBuilder Fax(string fax)
+            {
+                _fax = fax;
+                return this;
+            }
+
             #endregion Generic Property attributes
 
             #region House Specific Properties 
@@ -492,7 +525,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                                  _landlinePhoneAvailable, _cableTvAvailable, _dimension, _garageAvailable,
                                  _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber, _latitude, 
                                  _longitude, _houseNo, _streetNo, _area, _ownerName, _description, 
-                                 _genderRestriction, _isShared, _rentUnit);
+                                 _genderRestriction, _isShared, _rentUnit, _landlineNumber, _fax);
             }
         }
     }

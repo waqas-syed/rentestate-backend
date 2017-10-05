@@ -159,7 +159,9 @@ namespace RentStuff.Property.Application.HouseServices
                 genderRestriction, coordinates.Item1, 
                 coordinates.Item2, 
                 updateHouseCommand.IsShared,
-                updateHouseCommand.RentUnit);
+                updateHouseCommand.RentUnit, 
+                updateHouseCommand.LandlineNumber,
+                updateHouseCommand.Fax);
 
             _houseRepository.SaveorUpdate(house);
             _logger.Info("Updated House successfully: {0}", house);
@@ -224,7 +226,7 @@ namespace RentStuff.Property.Application.HouseServices
                 house.OwnerEmail, house.OwnerPhoneNumber, house.Latitude, house.Longitude, house.HouseNo, house.StreetNo,
                 house.Area,
                 house.GetImageList(), house.OwnerName, house.Description, house.GenderRestriction.ToString(), house.IsShared,
-                house.RentUnit);
+                house.RentUnit, house.LandlineNumber, house.Fax);
         }
 
         /// <summary>
