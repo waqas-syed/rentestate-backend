@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RentStuff.Property.Domain.Model.PropertyAggregate;
+﻿using RentStuff.Property.Domain.Model.PropertyAggregate;
+using System;
 
 namespace RentStuff.Property.Domain.Model.HostelAggregate
 {

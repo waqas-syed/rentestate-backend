@@ -258,5 +258,249 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(image1, hostel.Images[0]);
             Assert.AreEqual(image2, hostel.Images[1]);
         }
+
+        // Only Hostel Property type should be able to get a Hostel instance created
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void CreateHouseFailTest_HostelInstanceShouldNotGetCreatedWhenOtherTypeIsProvided_VerifiesByTheReturnValue()
+        {
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+            string phoneNumber = "03455138018";
+            decimal latitude = 25.43M;
+            decimal longitude = 73.41M;
+            string propertyType = "House";
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+            bool cableTv = false;
+            bool internet = true;
+            bool parking = true;
+            string image1 = "Image1.jpg";
+            string image2 = "Image2.png";
+            string rentUnit = "Hour";
+            bool isShared = true;
+            bool laundry = true;
+            bool ac = true;
+            bool geyser = true;
+            bool attachedBathroom = true;
+            bool fitnessCentre = false;
+            bool balcony = false;
+            bool lawn = true;
+            bool heating = false;
+            bool meals = true;
+            bool picknDrop = false;
+            bool ironing = false;
+            bool cctvCameras = true;
+            bool backupElectricity = true;
+            int numberOfSeats = 3;
+
+            Hostel hostel = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
+                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
+                .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
+                .FitnessCentre(fitnessCentre).Balcony(balcony).Lawn(lawn).Heating(heating).Meals(meals)
+                .PicknDrop(picknDrop).NumberOfSeats(numberOfSeats).Ironing(ironing).CctvCameras(cctvCameras)
+                .BackupElectricity(backupElectricity)
+                .Build();
+        }
+
+        // Only landline number is provided, without mobile phone number
+        [Test]
+        public void CreateHouseWithLandlineNumberTest_HostelInstanceShouldGetCreatedWhenOnlyLandlineNumbersProvided_VerifiesByTheReturnValue()
+        {
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+            string landlineNumber = "0510000000";
+            decimal latitude = 25.43M;
+            decimal longitude = 73.41M;
+            string propertyType = "Hostel";
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+            bool cableTv = false;
+            bool internet = true;
+            bool parking = true;
+            string image1 = "Image1.jpg";
+            string image2 = "Image2.png";
+            string rentUnit = "Hour";
+            bool isShared = true;
+            bool laundry = true;
+            bool ac = true;
+            bool geyser = true;
+            bool attachedBathroom = true;
+            bool fitnessCentre = false;
+            bool balcony = false;
+            bool lawn = true;
+            bool heating = false;
+            bool meals = true;
+            bool picknDrop = false;
+            bool ironing = false;
+            bool cctvCameras = true;
+            bool backupElectricity = true;
+            int numberOfSeats = 3;
+
+            Hostel hostel = new Hostel.HostelBuilder().OwnerEmail(email).LandlineNumber(landlineNumber).Title(title)
+                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
+                .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
+                .FitnessCentre(fitnessCentre).Balcony(balcony).Lawn(lawn).Heating(heating).Meals(meals)
+                .PicknDrop(picknDrop).NumberOfSeats(numberOfSeats).Ironing(ironing).CctvCameras(cctvCameras)
+                .BackupElectricity(backupElectricity)
+                .Build();
+            Assert.IsNotNull(hostel);
+            Assert.AreEqual(landlineNumber, hostel.LandlineNumber);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(hostel.OwnerPhoneNumber));
+        }
+
+        [Test]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void SaveHostelFailTest1_VerifiesThatTheHouseInstanceCreationFailsWhenInputIsNotSuitable_VerifiesThroughDatabaseQuery()
+        {
+            string title = "Title No 1";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+            string phoneNumber = "03455138018";
+            string propertyType = "Apartment";
+
+            // No Latitude is given. So the house instance should not be created
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            long monthlyRent = 90000;
+            decimal longitude = 73.41M;
+
+            Hostel house = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
+                .CableTvAvailable(true)
+                .Parking(true).WithInternetAvailable(true)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Longitude(longitude)
+                .Area("Pindora").Build();
+        }
+
+        [Test]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void SaveHouseFailTest2_VerifiesThatTheHouseInstanceCreationFailsWhenInputIsNotSuitable_VerifiesThroughDatabaseQuery()
+        {
+            string title = "Title No 1";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+            string phoneNumber = "03455138018";
+            string propertyType = "Apartment";
+
+            // No Latitude is given. So the house instance should not be created
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            long monthlyRent = 90000;
+            decimal latitude = 73.41M;
+
+            Hostel house = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
+                .CableTvAvailable(true)
+                .Parking(true).WithInternetAvailable(true)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude)
+                .Area("Pindora").Build();
+        }
+        
+        [Test]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void SaveHouseFailTest4_VerifiesThatTheHouseInstanceCreationFailsWhenInputIsNotSuitable_VerifiesThroughDatabaseQuery()
+        {
+            string title = "Title No 1";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+            string phoneNumber = "03455138018";
+            string propertyType = "Apartment";
+
+            // No Rent is given. So the house instance should not be created
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            decimal latitude = 34.51M;
+            decimal longitude = 73.41M;
+
+            Hostel house = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
+                .CableTvAvailable(true)
+                .Parking(true).WithInternetAvailable(true)
+                .PropertyType(propertyType).Latitude(latitude).Longitude(longitude)
+                .Area("Pindora").Build();
+        }
+
+        // No Owner Name is given. So the house instance should not be created
+        [Test]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void SaveHouseFailTest5_VerifiesThatTheHouseInstanceCreationFailsWhenInputIsNotSuitable_VerifiesThroughDatabaseQuery()
+        {
+            string title = "Title No 1";
+            string email = "w@12344321.com";
+            string phoneNumber = "03455138018";
+            string propertyType = "Apartment";
+            
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            long rentPrice = 80000;
+            decimal latitude = 34.51M;
+            decimal longitude = 73.41M;
+
+            Hostel house = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
+                .CableTvAvailable(true)
+                .Parking(true).WithInternetAvailable(true)
+                .PropertyType(propertyType).Latitude(latitude).Longitude(longitude).RentPrice(rentPrice)
+                .Area("Pindora").Build();
+        }
+
+        // No OwnerEmail provided, so exception should be raised
+        [Test]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void SaveHouseFailTest7_VerifiesThatTheHouseInstanceCreationFailsWhenInputIsNotSuitable_VerifiesThroughDatabaseQuery()
+        {
+            string title = "Title No 1";
+            string name = "Townsend";
+            string phoneNumber = "03455138018";
+            string propertyType = "Apartment";
+
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            long rentPrice = 80000;
+            decimal latitude = 34.51M;
+            decimal longitude = 73.41M;
+
+            Hostel house = new Hostel.HostelBuilder().OwnerName(name).OwnerPhoneNumber(phoneNumber).Title(title)
+                .CableTvAvailable(true)
+                .Parking(true).WithInternetAvailable(true)
+                .PropertyType(propertyType).Latitude(latitude).Longitude(longitude).RentPrice(rentPrice)
+                .Area("Pindora").Build();
+        }
+
+        [Test]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void SaveHouseFailTest8_VerifiesThatTheHouseInstanceCreationFailsWhenInputIsNotSuitable_VerifiesThroughDatabaseQuery()
+        {
+            // No Title is provided, so exception should be raised
+            string email = "w@12344321.com";
+            string name = "Townsend";
+            string phoneNumber = "03455138018";
+            string propertyType = "Apartment";
+
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            long rentPrice = 80000;
+            decimal latitude = 34.51M;
+            decimal longitude = 73.41M;
+
+            Hostel house = new Hostel.HostelBuilder().OwnerName(name).OwnerPhoneNumber(phoneNumber).OwnerEmail(email)
+                .CableTvAvailable(true)
+                .Parking(true).WithInternetAvailable(true)
+                .PropertyType(propertyType).Latitude(latitude).Longitude(longitude).RentPrice(rentPrice)
+                .Area("Pindora").Build();
+        }
     }
 }
