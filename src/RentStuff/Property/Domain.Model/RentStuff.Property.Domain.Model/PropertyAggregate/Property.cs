@@ -65,7 +65,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         public Property(string title, long rentPrice, string ownerEmail, string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName, string description,
             GenderRestriction genderRestriction, bool isShared, string rentUnit, bool internetAvailable, 
-            bool cableTvAvailable, bool garageAvailable)
+            bool cableTvAvailable, bool garageAvailable, string propertyType)
         {
             Title = title;
             RentPrice = rentPrice;
@@ -82,6 +82,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             InternetAvailable = internetAvailable;
             CableTvAvailable = cableTvAvailable;
             GarageAvailable = garageAvailable;
+            PropertyType = propertyType;
             DateCreated = DateTime.Now;
             LastModified = DateTime.Now;
         }
@@ -104,10 +105,11 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="internetAvailable"></param>
         /// <param name="cableTvAvailable"></param>
         /// <param name="garageAvailable"></param>
+        /// <param name="propertyType"></param>
         public void Update(string title, long rentPrice, string ownerEmail, string ownerPhoneNumber,
             string area, string ownerName, string description, GenderRestriction genderRestriction,
             decimal latitude, decimal longitude, bool isShared, string rentUnit, bool internetAvailable,
-            bool cableTvAvailable, bool garageAvailable)
+            bool cableTvAvailable, bool garageAvailable, string propertyType)
         {
             Title = title;
             RentPrice = rentPrice;
@@ -124,6 +126,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             InternetAvailable = internetAvailable;
             CableTvAvailable = cableTvAvailable;
             GarageAvailable = garageAvailable;
+            PropertyType = propertyType;
             LastModified = DateTime.Now;
         }
 

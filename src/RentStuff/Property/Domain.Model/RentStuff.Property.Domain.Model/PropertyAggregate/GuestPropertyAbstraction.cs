@@ -40,18 +40,19 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="lawn"></param>
         /// <param name="cctvCameras"></param>
         /// <param name="backupElectricity"></param>
+        /// <param name="heating"></param>
         public GuestPropertyAbstraction(string title, long rentPrice, string ownerEmail,
                 string ownerPhoneNumber,
                 decimal latitude, decimal longitude, string area, string ownerName,
                 string description,
                 GenderRestriction genderRestriction, bool isShared, string rentUnit, bool internetAvailable,
-                bool cableTvAvailable, bool parkingAvailable, bool laundry, bool ac, 
+                bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac, 
                 bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
-                bool balcony, bool lawn, bool cctvCameras, bool backupElectricity)
+                bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating)
             // Initiate the parent Property class as well
             : base(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
-                rentUnit, internetAvailable, cableTvAvailable, parkingAvailable)
+                rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, propertyType)
         {
             Laundry = laundry;
             AC = ac;
@@ -63,6 +64,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             Lawn = lawn;
             CctvCameras = cctvCameras;
             BackupElectricity = backupElectricity;
+            Heating = heating;
         }
 
         /// <summary>
@@ -93,14 +95,15 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="lawn"></param>
         /// <param name="cctvCameras"></param>
         /// <param name="backupElectricity"></param>
+        /// <param name="heating"></param>
         public void UpdateGuestProperty(string title, long rentPrice, string ownerEmail,
             string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName,
             string description,
             GenderRestriction genderRestriction, bool isShared, string rentUnit, bool internetAvailable,
-            bool cableTvAvailable, bool parkingAvailable, bool laundry, bool ac,
+            bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac,
             bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
-            bool balcony, bool lawn, bool cctvCameras, bool backupElectricity)
+            bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating)
         {
             Laundry = laundry;
             AC = ac;
@@ -112,9 +115,10 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             Lawn = lawn;
             CctvCameras = cctvCameras;
             BackupElectricity = backupElectricity;
+            Heating = heating;
             base.Update(title, rentPrice, ownerEmail, ownerPhoneNumber, area, ownerName, description, 
                 genderRestriction, latitude, longitude, isShared, rentUnit, internetAvailable, cableTvAvailable, 
-                parkingAvailable);
+                parkingAvailable, propertyType);
         }
 
         /// <summary>
@@ -166,5 +170,10 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// Is backup electricity available
         /// </summary>
         public bool BackupElectricity { get; set; }
+
+        /// <summary>
+        /// Does the place have Heating facility
+        /// </summary>
+        public bool Heating { get; set; }
     }
 }

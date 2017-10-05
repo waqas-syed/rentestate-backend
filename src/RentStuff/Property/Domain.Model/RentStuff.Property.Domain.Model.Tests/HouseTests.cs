@@ -16,8 +16,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string email = "w@12344321.com";
             string name = "OwnerName";
             string phoneNumber = "03455138018";
-
-            // No Latitude is given. So the house instance should not be created
+            
             int numberOfBedrooms = 3;
             int numberofBathrooms = 1;
             int numberOfKitchens = 1;

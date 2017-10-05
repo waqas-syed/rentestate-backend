@@ -35,7 +35,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             // Initiate the parent Property class as well
             : base(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
-                rentUnit, internetAvailable, cableTvAvailable, garageAvailable)
+                rentUnit, internetAvailable, cableTvAvailable, garageAvailable, propertyType)
         {
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
@@ -94,7 +94,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             // Update the parent property class
             base.Update(title, rentPrice, ownerEmail, ownerPhoneNumber, area, ownerName, description,
                 genderRestriction, latitude, longitude, isShared, rentUnit, internetAvailable, cableTvAvailable,
-                garageAvailable);
+                garageAvailable, propertyType);
         }
         
         /// <summary>

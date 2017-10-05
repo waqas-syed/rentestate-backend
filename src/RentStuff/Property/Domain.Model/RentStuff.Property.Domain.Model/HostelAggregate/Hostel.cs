@@ -17,15 +17,16 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             decimal latitude, decimal longitude, string area, string ownerName,
             string description,
             GenderRestriction genderRestriction, bool isShared, string rentUnit, bool internetAvailable,
-            bool cableTvAvailable, bool parkingAvailable, bool laundry, bool ac,
+            bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac,
             bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
-            bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool meals, bool picknDrop,
-            int numberOfSeats)
+            bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating, bool meals, 
+            bool picknDrop, int numberOfSeats)
             // Initiate the parent GuerstPropertyAbstraction class as well
             : base(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
-                rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, laundry, ac, geyser, fitnessCentre,
-                attachedBathroom, ironing, balcony, lawn, cctvCameras, backupElectricity)
+                rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, propertyType, laundry, ac, geyser,
+                fitnessCentre,
+                attachedBathroom, ironing, balcony, lawn, cctvCameras, backupElectricity, heating)
         {
             Meals = meals;
             PicknDrop = picknDrop;
@@ -50,6 +51,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
         /// <param name="cableTvAvailable"></param>
         /// <param name="parkingAvailable"></param>
         /// <param name="rentUnit"></param>
+        /// <param name="propertyType"></param>
         /// <param name="laundry"></param>
         /// <param name="ac"></param>
         /// <param name="geyser"></param>
@@ -63,23 +65,24 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
         /// <param name="meals"></param>
         /// <param name="picknDrop"></param>
         /// <param name="numberOfSeats"></param>
+        /// <param name="heating"></param>
         public void Update(string title, long rentPrice, string ownerEmail,
             string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName,
             string description,
             GenderRestriction genderRestriction, bool isShared, string rentUnit, bool internetAvailable,
-            bool cableTvAvailable, bool parkingAvailable, bool laundry, bool ac,
+            bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac,
             bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
             bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool meals, bool picknDrop,
-            int numberOfSeats)
+            int numberOfSeats, bool heating)
         {
             Meals = meals;
             PicknDrop = picknDrop;
             NumberOfSeats = numberOfSeats;
             base.UpdateGuestProperty(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
-                rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, laundry, ac, geyser, fitnessCentre,
-                attachedBathroom, ironing, balcony, lawn, cctvCameras, backupElectricity);
+                rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, propertyType, laundry, ac, geyser, fitnessCentre,
+                attachedBathroom, ironing, balcony, lawn, cctvCameras, backupElectricity, heating);
         }
 
         /// <summary>
@@ -315,6 +318,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             private bool _meals;
             private int _numberOfSeats;
             private bool _picknDrop;
+            private bool _heating;
 
             public HostelBuilder Laundry(bool laundry)
             {
@@ -394,6 +398,12 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
                 return this;
             }
 
+            public HostelBuilder Heating(bool heating)
+            {
+                _heating = heating;
+                return this;
+            }
+
             #endregion Hostel Specific Properties 
 
             /// <summary>
@@ -404,8 +414,9 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             {
                 return new Hostel(_title, _rentPrice, _ownerEmail, _ownerPhoneNumber, _latitude, _longitude, 
                     _area, _ownerName, _description, _genderRestriction, _isShared, _rentUnit, _internetAvailable,
-                    _cableTvAvailable, _parking, _laundry, _ac, _geyser, _fitnessCentre, _attachedBathroom,
-                    _ironing, _balcony, _lawn, _cctvCameras, _backupElectricity, _meals, _picknDrop, _numberOfSeats);
+                    _cableTvAvailable, _parking, _propertyType, _laundry, _ac, _geyser, _fitnessCentre, _attachedBathroom,
+                    _ironing, _balcony, _lawn, _cctvCameras, _backupElectricity, _heating, _meals, _picknDrop, 
+                    _numberOfSeats);
             }
         }
     }
