@@ -216,65 +216,6 @@ CREATE TABLE `houseimages` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Table structure for table `hostel`
---
-
-DROP TABLE IF EXISTS `hostel`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `hostel` (
-  `id` varchar(100) NOT NULL,
-  `db_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `title` varchar(200) NOT NULL,
-  `description` varchar(1500) DEFAULT NULL,
-  `owner_email` varchar(100) NOT NULL,
-  `rent_price` bigint(20) NOT NULL,
-  `property_type` varchar(100) DEFAULT NULL,
-  `gender_restriction` varchar(100) DEFAULT NULL,
-  `owner_phone_number` varchar(25) NOT NULL,
-  `latitude` decimal(13,9) NOT NULL,
-  `longitude` decimal(13,9) NOT NULL,
-  `area` varchar(100) DEFAULT NULL,
-  `owner_name` varchar(100) NOT NULL,
-  `is_shared` tinyint(1) NOT NULL DEFAULT '0',
-  `rent_unit` varchar(50) NOT NULL DEFAULT 'Month',
-  `date_created` datetime DEFAULT NULL,
-  `last_modified` datetime DEFAULT NULL,
-  `laundry` tinyint(1) DEFAULT '0',
-  `ac` tinyint(1) DEFAULT '0',
-  `geyser` tinyint(1) DEFAULT '0',
-  `meals` tinyint(1) DEFAULT '0',
-  `pickndrop` tinyint(1) DEFAULT '0',
-  `fitness_centre` tinyint(1) DEFAULT '0',
-  `attached_bathroom` tinyint(1) DEFAULT '0',
-  `internet` tinyint(1) DEFAULT '0',
-  `ironing` tinyint(1) DEFAULT '0',
-  `number_of_seats` tinyint(1) DEFAULT '0',
-  `balcony` tinyint(1) DEFAULT '0',
-  `lawn` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`db_id`),
-  UNIQUE KEY `db_id_UNIQUE` (`db_id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  KEY `dimension_id_fk_idx` (`dimension_id`),
-  CONSTRAINT `dimension_id_fk` FOREIGN KEY (`dimension_id`) REFERENCES `dimension` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=363 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `hostelimages`
---
-
-DROP TABLE IF EXISTS `hostelimages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `hostelimages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `hostel_id` varchar(100) NOT NULL,
-  `image_id` varchar(200) NOT NULL,
-  PRIMARY KEY (`id`)
-)
-
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
