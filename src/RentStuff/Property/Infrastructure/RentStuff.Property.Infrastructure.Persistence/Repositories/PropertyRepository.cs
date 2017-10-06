@@ -12,7 +12,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
     /// <summary>
     /// House Repository
     /// </summary>
-    public class PropertyRepository : IPropertyRepository
+    public class PropertyRepository : IResidentialPropertyRepository
     {
         // The radius in kilometers from the location that was searched. We search within this radius for results
         // The formula is given here: https://developers.google.com/maps/articles/phpsqlsearch_v3

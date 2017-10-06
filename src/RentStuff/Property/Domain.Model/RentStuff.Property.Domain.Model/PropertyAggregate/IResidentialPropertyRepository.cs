@@ -8,7 +8,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
     /// <summary>
     /// Repository for saving and retreving House aggregate instances
     /// </summary>
-    public interface IPropertyRepository
+    public interface IResidentialPropertyRepository
     {
         /// <summary>
         /// Saves new property or updates existing house

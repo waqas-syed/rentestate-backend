@@ -8,6 +8,14 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
     /// </summary>
     public class Hostel : PropertyAggregate.GuestPropertyAbstraction
     {
+        /// <summary>
+        /// Default Constructor to support NHibernate
+        /// </summary>
+        public Hostel()
+        {
+            
+        }
+
         public Hostel(string title, long rentPrice, string ownerEmail,
             string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName,
@@ -16,14 +24,14 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac,
             bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
             bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating, bool meals, 
-            bool picknDrop, int numberOfSeats, string landlineNumber, string fax)
+            bool picknDrop, int numberOfSeats, string landlineNumber, string fax, bool elevator)
             // Initiate the parent GuerstPropertyAbstraction class as well
             : base(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
                 rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, propertyType, laundry, ac, geyser,
                 fitnessCentre,
                 attachedBathroom, ironing, balcony, lawn, cctvCameras, backupElectricity, heating, landlineNumber, 
-                fax)
+                fax, elevator)
         {
             // Property Type must be Hostel. Will be used by Frontend client to check the type and proceed accordingly
             if (!propertyType.Equals("Hostel"))
@@ -70,6 +78,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
         /// <param name="heating"></param>
         /// <param name="landlineNumber"></param>
         /// <param name="fax"></param>
+        /// <param name="elevator"></param>
         public void Update(string title, long rentPrice, string ownerEmail,
             string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName,
@@ -78,7 +87,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac,
             bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
             bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool meals, bool picknDrop,
-            int numberOfSeats, bool heating, string landlineNumber, string fax)
+            int numberOfSeats, bool heating, string landlineNumber, string fax, bool elevator)
         {
             // Property Type must be Hostel. Will be used by Frontend client to check the type and proceed accordingly
             if (!propertyType.Equals("Hostel"))
@@ -92,7 +101,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
                 rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, propertyType, laundry, ac, geyser, fitnessCentre,
                 attachedBathroom, ironing, balcony, lawn, cctvCameras, backupElectricity, heating, landlineNumber,
-                fax);
+                fax, elevator);
         }
 
         /// <summary>
@@ -133,7 +142,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             private string _rentUnit;
             private bool _internetAvailable;
             private bool _cableTvAvailable;
-            private bool _parking;
+            private bool _garageAvailable;
             private string _landlineNumber;
             private string _fax;
             
@@ -294,11 +303,11 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// <summary>
             /// Is Parking available
             /// </summary>
-            /// <param name="parking"></param>
+            /// <param name="garageAvailable"></param>
             /// <returns></returns>
-            public HostelBuilder Parking(bool parking)
+            public HostelBuilder GarageAvailable(bool garageAvailable)
             {
-                _parking = parking;
+                _garageAvailable = garageAvailable;
                 return this;
             }
 
@@ -353,6 +362,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             private int _numberOfSeats;
             private bool _picknDrop;
             private bool _heating;
+            private bool _elevator;
 
             public HostelBuilder Laundry(bool laundry)
             {
@@ -438,6 +448,12 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
                 return this;
             }
 
+            public HostelBuilder Elevator(bool elevator)
+            {
+                _elevator = elevator;
+                return this;
+            }
+
             #endregion Hostel Specific Properties 
 
             /// <summary>
@@ -448,9 +464,9 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             {
                 return new Hostel(_title, _rentPrice, _ownerEmail, _ownerPhoneNumber, _latitude, _longitude, 
                     _area, _ownerName, _description, _genderRestriction, _isShared, _rentUnit, _internetAvailable,
-                    _cableTvAvailable, _parking, _propertyType, _laundry, _ac, _geyser, _fitnessCentre, _attachedBathroom,
+                    _cableTvAvailable, _garageAvailable, _propertyType, _laundry, _ac, _geyser, _fitnessCentre, _attachedBathroom,
                     _ironing, _balcony, _lawn, _cctvCameras, _backupElectricity, _heating, _meals, _picknDrop, 
-                    _numberOfSeats, _landlineNumber, _fax);
+                    _numberOfSeats, _landlineNumber, _fax, _elevator);
             }
         }
     }

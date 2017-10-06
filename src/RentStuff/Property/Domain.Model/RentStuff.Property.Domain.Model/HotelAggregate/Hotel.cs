@@ -10,6 +10,59 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
     /// </summary>
     public class Hotel : GuestPropertyAbstraction
     {
+        /// <summary>
+        /// Defaut Constructor  required by NHibernate
+        /// </summary>
+        public Hotel()
+        {
+            
+        }
+
+        /// <summary>
+        /// Parameterized Constructor
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="rentPrice"></param>
+        /// <param name="ownerEmail"></param>
+        /// <param name="ownerPhoneNumber"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="area"></param>
+        /// <param name="ownerName"></param>
+        /// <param name="description"></param>
+        /// <param name="genderRestriction"></param>
+        /// <param name="isShared"></param>
+        /// <param name="rentUnit"></param>
+        /// <param name="internetAvailable"></param>
+        /// <param name="cableTvAvailable"></param>
+        /// <param name="parkingAvailable"></param>
+        /// <param name="propertyType"></param>
+        /// <param name="laundry"></param>
+        /// <param name="ac"></param>
+        /// <param name="geyser"></param>
+        /// <param name="fitnessCentre"></param>
+        /// <param name="attachedBathroom"></param>
+        /// <param name="ironing"></param>
+        /// <param name="balcony"></param>
+        /// <param name="lawn"></param>
+        /// <param name="cctvCameras"></param>
+        /// <param name="backupElectricity"></param>
+        /// <param name="heating"></param>
+        /// <param name="restaurant"></param>
+        /// <param name="airportShuttle"></param>
+        /// <param name="breakfastIncluded"></param>
+        /// <param name="sittingArea"></param>
+        /// <param name="carRental"></param>
+        /// <param name="spa"></param>
+        /// <param name="salon"></param>
+        /// <param name="bathtub"></param>
+        /// <param name="swimmingPool"></param>
+        /// <param name="kitchen"></param>
+        /// <param name="beds"></param>
+        /// <param name="occupants"></param>
+        /// <param name="landlineNumber"></param>
+        /// <param name="fax"></param>
+        /// <param name="elevator"></param>
         public Hotel(string title, long rentPrice, string ownerEmail,
                 string ownerPhoneNumber,
                 decimal latitude, decimal longitude, string area, string ownerName,
@@ -20,14 +73,14 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
                 bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating,
                 bool restaurant, bool airportShuttle, bool breakfastIncluded, bool sittingArea, bool carRental,
                 bool spa, bool salon, bool bathtub, bool swimmingPool, bool kitchen, IList<Bed> beds,
-                Occupants occupants, string landlineNumber, string fax)
+                Occupants occupants, string landlineNumber, string fax, bool elevator)
             // Initiate the parent GuerstPropertyAbstraction class as well
             : base(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
                 rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, propertyType, laundry, ac, geyser,
                 fitnessCentre,
                 attachedBathroom, ironing, balcony, lawn, cctvCameras, backupElectricity, heating, landlineNumber, 
-                fax)
+                fax, elevator)
         {
             // Property Type must be Hotel. Will be used by Frontend client to check the type and proceed accordingly
             if (!propertyType.Equals(Constants.Hotel) && !propertyType.Equals(Constants.GuestHouse))
@@ -95,6 +148,7 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
         /// <param name="bathtub"></param>
         /// <param name="swimmingPool"></param>
         /// <param name="kitchen"></param>
+        /// <param name="elevator"></param>
         public void Update(string title, long rentPrice, string ownerEmail,
             string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName,
@@ -105,7 +159,7 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating, bool restaurant,
             bool airportShuttle, bool breakfastIncluded, 
             bool sittingArea, bool carRental, bool spa, bool salon, bool bathtub, bool swimmingPool, bool kitchen, 
-            IList<Bed> beds, Occupants occupants, string landlineNumber, string fax)
+            IList<Bed> beds, Occupants occupants, string landlineNumber, string fax, bool elevator)
         {
             // Property Type must be Hotel. Will be used by Frontend client to check the type and proceed accordingly
             if (!propertyType.Equals(Constants.Hotel) && !propertyType.Equals(Constants.GuestHouse))
@@ -116,7 +170,7 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
                 rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, propertyType, laundry, ac, geyser, fitnessCentre,
                 attachedBathroom, ironing, balcony, lawn, cctvCameras, backupElectricity, heating, landlineNumber,
-                fax);
+                fax, elevator);
             Restaurant = restaurant;
             AirportShuttle = airportShuttle;
             BreakfastIncluded = breakfastIncluded;
@@ -178,7 +232,7 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             private string _rentUnit;
             private bool _internetAvailable;
             private bool _cableTvAvailable;
-            private bool _parking;
+            private bool _garageAvailable;
             private string _landlineNumber;
             private string _fax;
 
@@ -339,11 +393,11 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             /// <summary>
             /// Is Parking available
             /// </summary>
-            /// <param name="parking"></param>
+            /// <param name="garageAvailable"></param>
             /// <returns></returns>
-            public HotelBuilder Parking(bool parking)
+            public HotelBuilder GarageAvailable(bool garageAvailable)
             {
-                _parking = parking;
+                _garageAvailable = garageAvailable;
                 return this;
             }
 
@@ -408,6 +462,7 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             private bool _kitchen;
             private IList<Bed> _beds;
             private Occupants _occupants;
+            private bool _elevator;
 
             public HotelBuilder Laundry(bool laundry)
             {
@@ -547,6 +602,12 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
                 return this;
             }
 
+            public HotelBuilder Elevator(bool elevator)
+            {
+                _elevator = elevator;
+                return this;
+            }
+
             #endregion Hostel Specific Properties 
 
             /// <summary>
@@ -557,10 +618,10 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             {
                 return new Hotel(_title, _rentPrice, _ownerEmail, _ownerPhoneNumber, _latitude, _longitude,
                     _area, _ownerName, _description, _genderRestriction, _isShared, _rentUnit, _internetAvailable,
-                    _cableTvAvailable, _parking, _propertyType, _laundry, _ac, _geyser, _fitnessCentre, _attachedBathroom,
+                    _cableTvAvailable, _garageAvailable, _propertyType, _laundry, _ac, _geyser, _fitnessCentre, _attachedBathroom,
                     _ironing, _balcony, _lawn, _cctvCameras, _backupElectricity, _heating, _restaurant,
                     _airportShuttle, _breakfastIncluded, _sittingArea, _carRental, _spa, _salon, _bathtub, 
-                    _swimmingPool, _kitchen, _beds, _occupants, _landlineNumber, _fax);
+                    _swimmingPool, _kitchen, _beds, _occupants, _landlineNumber, _fax, _elevator);
             }
         }
     }

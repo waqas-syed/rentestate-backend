@@ -58,14 +58,19 @@ namespace RentStuff.Property.Domain.Model.Tests
             bool bathtub = true;
             bool swimmingPool = true;
             bool kitchen = true;
+            bool elevator = false;
+
             IList<Bed> beds = new List<Bed>()
             {
                 new Bed(2, BedType.Single)
             };
             Occupants occupants = new Occupants(2, 1);
 
+            string landlineNumber = "0510000000";
+            string fax = "0510000000";
+
             Hotel hostel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -73,7 +78,8 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .CctvCameras(cctvCameras).BackupElectricity(backupElectricity)
                 .Restaurant(restaurant).AirportShuttle(airportShuttle).BreakfastIncluded(breakfastIncluded)
                 .SittingArea(sittingArea).CarRental(carRental).Spa(spa).Salon(salon).Bathtub(bathtub)
-                .SwimmingPool(swimmingPool).Kitchen(kitchen).Beds(beds).Occupants(occupants)
+                .SwimmingPool(swimmingPool).Kitchen(kitchen).Beds(beds).Occupants(occupants).Elevator(elevator)
+                .LandlineNumber(landlineNumber).Fax(fax)
                 .Build();
             hostel.AddImage(image1);
             hostel.AddImage(image2);
@@ -86,7 +92,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(phoneNumber, hostel.OwnerPhoneNumber);
             Assert.AreEqual(cableTv, hostel.CableTvAvailable);
             Assert.AreEqual(internet, hostel.InternetAvailable);
-            Assert.AreEqual(parking, hostel.GarageAvailable);
+            Assert.AreEqual(parking, hostel.ParkingAvailable);
             Assert.AreEqual(latitude, hostel.Latitude);
             Assert.AreEqual(longitude, hostel.Longitude);
             Assert.AreEqual(propertyType, hostel.PropertyType);
@@ -116,6 +122,9 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(bathtub, hostel.Bathtub);
             Assert.AreEqual(swimmingPool, hostel.SwimmingPool);
             Assert.AreEqual(kitchen, hostel.Kitchen);
+            Assert.AreEqual(elevator, hostel.Elevator);
+            Assert.AreEqual(landlineNumber, hostel.LandlineNumber);
+            Assert.AreEqual(fax, hostel.Fax);
             Assert.AreEqual(beds.Count, hostel.Beds.Count);
             Assert.AreEqual(beds[0].BedCount, hostel.Beds[0].BedCount);
             Assert.AreEqual(beds[0].BedType, hostel.Beds[0].BedType);
@@ -177,9 +186,13 @@ namespace RentStuff.Property.Domain.Model.Tests
                 new Bed(2, BedType.Single)
             };
             Occupants occupants = new Occupants(2, 1);
+            bool elevator = true;
+
+            string landlineNumber = "0510000000";
+            string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -187,7 +200,8 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .CctvCameras(cctvCameras).BackupElectricity(backupElectricity)
                 .Restaurant(restaurant).AirportShuttle(airportShuttle).BreakfastIncluded(breakfastIncluded)
                 .SittingArea(sittingArea).CarRental(carRental).Spa(spa).Salon(salon).Bathtub(bathtub)
-                .SwimmingPool(swimmingPool).Kitchen(kitchen).Beds(beds).Occupants(occupants)
+                .SwimmingPool(swimmingPool).Kitchen(kitchen).Beds(beds).Occupants(occupants).Elevator(elevator)
+                .LandlineNumber(landlineNumber).Fax(fax)
                 .Build();
             hotel.AddImage(image1);
             hotel.AddImage(image2);
@@ -200,7 +214,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(phoneNumber, hotel.OwnerPhoneNumber);
             Assert.AreEqual(cableTv, hotel.CableTvAvailable);
             Assert.AreEqual(internet, hotel.InternetAvailable);
-            Assert.AreEqual(parking, hotel.GarageAvailable);
+            Assert.AreEqual(parking, hotel.ParkingAvailable);
             Assert.AreEqual(latitude, hotel.Latitude);
             Assert.AreEqual(longitude, hotel.Longitude);
             Assert.AreEqual(propertyType, hotel.PropertyType);
@@ -240,7 +254,8 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Assert.AreEqual(image1, hotel.Images[0]);
             Assert.AreEqual(image2, hotel.Images[1]);
-
+            Assert.AreEqual(elevator, hotel.Elevator);
+            
             string title2 = "Title No 2";
             string description2 = "Description of hotel 2";
             string email2 = "w@12344321-2.com";
@@ -289,13 +304,14 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             string landlineNumber2 = "0510000001";
             string fax2 = "0510000001";
+            bool elevator2 = false;
 
             hotel.Update(title2, monthlyRent2, email2, phoneNumber2, latitude2, longitude2, area2, name2,
                 description2, genderRestriction2, isShared2, rentUnit2, internet2, cableTv2, parking2,
                 propertyType2, laundry2, ac2, geyser2, fitnessCentre2, attachedBathroom2, ironing2, balcony2, lawn2,
                 cctvCameras2, backupElectricity2, heating2, restaurant2, airportShuttle2, breakfastIncluded2,
                 sittingArea2, carRental2, spa2, salon2, bathtub2, swimmingPool2, kitchen2, beds2, occupants2,
-                landlineNumber2, fax2);
+                landlineNumber2, fax2, elevator2);
             hotel.AddImage(image3);
             hotel.AddImage(image4);
 
@@ -307,7 +323,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(phoneNumber2, hotel.OwnerPhoneNumber);
             Assert.AreEqual(cableTv2, hotel.CableTvAvailable);
             Assert.AreEqual(internet2, hotel.InternetAvailable);
-            Assert.AreEqual(parking2, hotel.GarageAvailable);
+            Assert.AreEqual(parking2, hotel.ParkingAvailable);
             Assert.AreEqual(latitude2, hotel.Latitude);
             Assert.AreEqual(longitude2, hotel.Longitude);
             Assert.AreEqual(propertyType2, hotel.PropertyType);
@@ -338,6 +354,8 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(bathtub2, hotel.Bathtub);
             Assert.AreEqual(swimmingPool2, hotel.SwimmingPool);
             Assert.AreEqual(kitchen2, hotel.Kitchen);
+            Assert.AreEqual(landlineNumber2, hotel.LandlineNumber);
+            Assert.AreEqual(fax2, hotel.Fax);
             Assert.AreEqual(beds2.Count, hotel.Beds.Count);
             Assert.AreEqual(beds2[0].BedCount, hotel.Beds[0].BedCount);
             Assert.AreEqual(beds2[0].BedType, hotel.Beds[0].BedType);
@@ -351,6 +369,8 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(image2, hotel.Images[1]);
             Assert.AreEqual(image3, hotel.Images[2]);
             Assert.AreEqual(image4, hotel.Images[3]);
+
+            Assert.AreEqual(elevator2, hotel.Elevator);
         }
 
         // Create and then Update a Hotel
@@ -405,9 +425,10 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             string landlineNumber = "0510000000";
             string fax = "0510000000";
+            bool elevator = false;
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -416,7 +437,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .Restaurant(restaurant).AirportShuttle(airportShuttle).BreakfastIncluded(breakfastIncluded)
                 .SittingArea(sittingArea).CarRental(carRental).Spa(spa).Salon(salon).Bathtub(bathtub)
                 .SwimmingPool(swimmingPool).Kitchen(kitchen).Beds(beds).Occupants(occupants)
-                .LandlineNumber(landlineNumber).Fax(fax)
+                .LandlineNumber(landlineNumber).Fax(fax).Elevator(elevator)
                 .Build();
             hotel.AddImage(image1);
             hotel.AddImage(image2);
@@ -429,7 +450,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(phoneNumber, hotel.OwnerPhoneNumber);
             Assert.AreEqual(cableTv, hotel.CableTvAvailable);
             Assert.AreEqual(internet, hotel.InternetAvailable);
-            Assert.AreEqual(parking, hotel.GarageAvailable);
+            Assert.AreEqual(parking, hotel.ParkingAvailable);
             Assert.AreEqual(latitude, hotel.Latitude);
             Assert.AreEqual(longitude, hotel.Longitude);
             Assert.AreEqual(propertyType, hotel.PropertyType);
@@ -471,7 +492,9 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(2, hotel.Images.Count);
             Assert.AreEqual(image1, hotel.Images[0]);
             Assert.AreEqual(image2, hotel.Images[1]);
-            
+
+            Assert.AreEqual(elevator, hotel.Elevator);
+
             string title2 = "Title No 2";
             string description2 = "Description of hotel 2";
             string email2 = "w@12344321-2.com";
@@ -520,13 +543,14 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             string landlineNumber2 = "0510000001";
             string fax2 = "0510000001";
+            bool elevator2 = true;
 
             hotel.Update(title2, monthlyRent2, email2, phoneNumber2, latitude2, longitude2, area2, name2,
                 description2, genderRestriction2, isShared2, rentUnit2, internet2, cableTv2, parking2,
                 propertyType2, laundry2, ac2, geyser2, fitnessCentre2, attachedBathroom2, ironing2, balcony2, lawn2,
                 cctvCameras2, backupElectricity2, heating2, restaurant2, airportShuttle2, breakfastIncluded2, 
                 sittingArea2, carRental2, spa2, salon2, bathtub2, swimmingPool2, kitchen2, beds2, occupants2,
-                landlineNumber2, fax2);
+                landlineNumber2, fax2, elevator2);
             hotel.AddImage(image3);
             hotel.AddImage(image4);
 
@@ -538,7 +562,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(phoneNumber2, hotel.OwnerPhoneNumber);
             Assert.AreEqual(cableTv2, hotel.CableTvAvailable);
             Assert.AreEqual(internet2, hotel.InternetAvailable);
-            Assert.AreEqual(parking2, hotel.GarageAvailable);
+            Assert.AreEqual(parking2, hotel.ParkingAvailable);
             Assert.AreEqual(latitude2, hotel.Latitude);
             Assert.AreEqual(longitude2, hotel.Longitude);
             Assert.AreEqual(propertyType2, hotel.PropertyType);
@@ -582,6 +606,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(image2, hotel.Images[1]);
             Assert.AreEqual(image3, hotel.Images[2]);
             Assert.AreEqual(image4, hotel.Images[3]);
+            Assert.AreEqual(elevator2, hotel.Elevator);
         }
 
         // Only Hotel Property type should be able to get a Hostel instance created
@@ -639,7 +664,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -705,7 +730,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -775,7 +800,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -843,7 +868,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -910,7 +935,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -977,7 +1002,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -1044,7 +1069,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -1111,7 +1136,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber)
-                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)

@@ -6,6 +6,7 @@
       <column name="id"/>
       <generator class="assigned" />
     </id>
+    <!-- Property general attributes-->
     <property name="Title" column="title"/>
     <property name="Description" column="description"/>
     <property name="RentPrice" column="rent_price"/>
@@ -21,38 +22,33 @@
     <property name="Longitude" column="longitude"/>
     <property name="DateCreated" column="date_created"/>
     <property name="LastModified" column="last_modified"/>
+    <property name="InternetAvailable" column="internet_available"/>
+    <property name="CableTvAvailable" column="cable_tv_available"/>
+    <property name="ParkingAvailable" column="parking_available"/>
+    <property name="LandlineNumber" column="landline_number"/>
+    <property name="Fax" column="fax"/>
 
-    <property name="laundry"/>
+    <!--Guest properties (Hotel, Hostel and Guest House) common attributes-->
+    <property name="Laundry"/>
     <property name="AC"/>
     <property name="Geyser"/>
     <property name="FitnessCentre" column="fitness_centre"/>
     <property name="AttachedBathroom" column="attached_bathroom"/>
-    <property name="Internet"/>
     <property name="Ironing"/>
     <property name="Elevator"/>
     <property name="Balcony"/>
     <property name="Lawn"/>
     
-    <property name="LandlineNumber" column="landline_number"/>
-    <property name="Fax" column="fax"/>
-    
-    <property name="Restaurant"/>
-    <property name="AirportShuttle" column="airport_shuttle"/>
-    <property name="BreakfastIncluded" column="breakfast_included"/>
-    <property name="SittingArea" column="sitting_area"/>
-    <property name="CarRental" column="car_rental"/>
-    <property name="Spa"/>
-    <property name="Salon"/>
-    <property name="SwimmingPool" column="swimming_pool"/>
-    <property name="Kitchen"/>
+    <!--Hostel specific attributes-->
+    <property name="Meals"/>
+    <property name="PicknDrop" column="pickndrop"/>
+    <property name="NumberOfSeats" column="number_of_seats"/>
 
-    <!--ToDo: Provide a mapping for Beds-->
-    
-    <idbag name="Images" table="hotelimages" lazy="false">
+    <idbag name="Images" table="hostelimages" lazy="false">
       <collection-id column="ID" type="Int64">
         <generator class="native"/>
       </collection-id>
-      <key column="hotel_id" />
+      <key column="hostel_id" />
       <element column="image_id" type="string" />
     </idbag>
     <!--<many-to-one name="Location" unique="true" column="location_id"/>-->

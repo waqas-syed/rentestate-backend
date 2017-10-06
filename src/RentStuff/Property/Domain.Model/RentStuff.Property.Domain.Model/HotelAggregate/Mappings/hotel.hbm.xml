@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
-                   assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.Model.HostelAggregate">
-  <class name="Hostel" table="hostel" lazy="false">
+                   assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.Model.HotelAggregate">
+  <class name="Hotel" table="hotel" lazy="false">
     <id name="Id">
       <column name="id"/>
       <generator class="assigned" />
@@ -17,23 +17,39 @@
     <property name="GenderRestriction" column="gender_restriction"/>
     <property name="OwnerEmail" column="owner_email"/>
     <property name="OwnerPhoneNumber" column="owner_phone_number"/>
-    <property name="LandlineNumber" column="landline_number"/>
-    <property name="Fax" column="fax"/>
     <property name="Latitude" column="latitude"/>
     <property name="Longitude" column="longitude"/>
     <property name="DateCreated" column="date_created"/>
     <property name="LastModified" column="last_modified"/>
 
-    <property name="laundry"/>
+    <property name="InternetAvailable" column="internet_available"/>
+    <property name="CableTvAvailable" column="cable_tv_available"/>
+    <property name="ParkingAvailable" column="parking_available"/>
+
+    <property name="Laundry"/>
     <property name="AC"/>
     <property name="Geyser"/>
     <property name="FitnessCentre" column="fitness_centre"/>
     <property name="AttachedBathroom" column="attached_bathroom"/>
-    <property name="Internet"/>
     <property name="Ironing"/>
     <property name="Elevator"/>
     <property name="Balcony"/>
     <property name="Lawn"/>
+
+    <property name="LandlineNumber" column="landline_number"/>
+    <property name="Fax" column="fax"/>
+
+    <property name="Restaurant"/>
+    <property name="AirportShuttle" column="airport_shuttle"/>
+    <property name="BreakfastIncluded" column="breakfast_included"/>
+    <property name="SittingArea" column="sitting_area"/>
+    <property name="CarRental" column="car_rental"/>
+    <property name="Spa"/>
+    <property name="Salon"/>
+    <property name="SwimmingPool" column="swimming_pool"/>
+    <property name="Kitchen"/>
+
+    <!--ToDo: Provide a mapping for Beds-->
 
     <idbag name="Images" table="hostelimages" lazy="false">
       <collection-id column="ID" type="Int64">

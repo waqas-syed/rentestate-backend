@@ -67,7 +67,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         public Property(string title, long rentPrice, string ownerEmail, string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName, string description,
             GenderRestriction genderRestriction, bool isShared, string rentUnit, bool internetAvailable, 
-            bool cableTvAvailable, bool garageAvailable, string propertyType, string landlineNumber, string fax)
+            bool cableTvAvailable, string propertyType, string landlineNumber, string fax)
         {
             if (string.IsNullOrWhiteSpace(ownerPhoneNumber) && string.IsNullOrWhiteSpace(landlineNumber))
             {
@@ -89,7 +89,6 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             RentUnit = rentUnit;
             InternetAvailable = internetAvailable;
             CableTvAvailable = cableTvAvailable;
-            GarageAvailable = garageAvailable;
             PropertyType = propertyType;
             DateCreated = DateTime.Now;
             LastModified = DateTime.Now;
@@ -112,14 +111,13 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="rentUnit"></param>
         /// <param name="internetAvailable"></param>
         /// <param name="cableTvAvailable"></param>
-        /// <param name="garageAvailable"></param>
         /// <param name="propertyType"></param>
         /// <param name="landlineNumber"></param>
         /// <param name="fax"></param>
         public void Update(string title, long rentPrice, string ownerEmail, string ownerPhoneNumber,
             string area, string ownerName, string description, GenderRestriction genderRestriction,
             decimal latitude, decimal longitude, bool isShared, string rentUnit, bool internetAvailable,
-            bool cableTvAvailable, bool garageAvailable, string propertyType, string landlineNumber, string fax)
+            bool cableTvAvailable, string propertyType, string landlineNumber, string fax)
         {
             if (string.IsNullOrWhiteSpace(ownerPhoneNumber) && string.IsNullOrWhiteSpace(landlineNumber))
             {
@@ -141,7 +139,6 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             RentUnit = rentUnit;
             InternetAvailable = internetAvailable;
             CableTvAvailable = cableTvAvailable;
-            GarageAvailable = garageAvailable;
             PropertyType = propertyType;
             LastModified = DateTime.Now;
         }
@@ -401,15 +398,6 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// Cable TV available
         /// </summary>
         public bool CableTvAvailable
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Garage available
-        /// </summary>
-        public bool GarageAvailable
         {
             get;
             private set;

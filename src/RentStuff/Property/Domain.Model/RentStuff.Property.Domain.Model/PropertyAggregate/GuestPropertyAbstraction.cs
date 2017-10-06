@@ -13,6 +13,14 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
     public class GuestPropertyAbstraction : ResidentialProperty
     {
         /// <summary>
+        /// Default Constructor to support Nhibernate
+        /// </summary>
+        public GuestPropertyAbstraction()
+        {
+            
+        }
+
+        /// <summary>
         /// Initializes the general abstraction for Hostel
         /// </summary>
         /// <param name="title"></param>
@@ -41,6 +49,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="cctvCameras"></param>
         /// <param name="backupElectricity"></param>
         /// <param name="heating"></param>
+        /// <param name="elevator"></param>
         public GuestPropertyAbstraction(string title, long rentPrice, string ownerEmail,
                 string ownerPhoneNumber,
                 decimal latitude, decimal longitude, string area, string ownerName,
@@ -49,11 +58,11 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
                 bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac, 
                 bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
                 bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating, 
-                string landlineNumber, string fax)
+                string landlineNumber, string fax, bool elevator)
             // Initiate the parent Property class as well
             : base(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
-                rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, propertyType, landlineNumber, fax)
+                rentUnit, internetAvailable, cableTvAvailable, propertyType, landlineNumber, fax)
         {
             Laundry = laundry;
             AC = ac;
@@ -66,6 +75,8 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             CctvCameras = cctvCameras;
             BackupElectricity = backupElectricity;
             Heating = heating;
+            Elevator = elevator;
+            ParkingAvailable = parkingAvailable;
         }
 
         /// <summary>
@@ -86,6 +97,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="internetAvailable"></param>
         /// <param name="cableTvAvailable"></param>
         /// <param name="parkingAvailable"></param>
+        /// <param name="propertyType"></param>
         /// <param name="laundry"></param>
         /// <param name="ac"></param>
         /// <param name="geyser"></param>
@@ -97,6 +109,9 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="cctvCameras"></param>
         /// <param name="backupElectricity"></param>
         /// <param name="heating"></param>
+        /// <param name="landlineNumber"></param>
+        /// <param name="fax"></param>
+        /// <param name="elevator"></param>
         public void UpdateGuestProperty(string title, long rentPrice, string ownerEmail,
             string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName,
@@ -105,7 +120,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac,
             bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
             bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating,
-            string landlineNumber, string fax)
+            string landlineNumber, string fax, bool elevator)
         {
             Laundry = laundry;
             AC = ac;
@@ -118,9 +133,11 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             CctvCameras = cctvCameras;
             BackupElectricity = backupElectricity;
             Heating = heating;
+            Elevator = elevator;
+            ParkingAvailable = parkingAvailable;
             base.Update(title, rentPrice, ownerEmail, ownerPhoneNumber, area, ownerName, description, 
                 genderRestriction, latitude, longitude, isShared, rentUnit, internetAvailable, cableTvAvailable, 
-                parkingAvailable, propertyType, landlineNumber, fax);
+                propertyType, landlineNumber, fax);
         }
 
         /// <summary>
@@ -159,6 +176,11 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         public bool Balcony { get; private set; }
 
         /// <summary>
+        /// Is Elevator available in the building
+        /// </summary>
+        public bool Elevator { get; set; }
+
+        /// <summary>
         /// Is Lawn available
         /// </summary>
         public bool Lawn { get; private set; }
@@ -177,5 +199,14 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// Does the place have Heating facility
         /// </summary>
         public bool Heating { get; set; }
+        
+        /// <summary>
+        /// Garage available
+        /// </summary>
+        public bool ParkingAvailable
+        {
+            get;
+            private set;
+        }
     }
 }

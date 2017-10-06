@@ -36,7 +36,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             // Initiate the parent Property class as well
             : base(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
-                rentUnit, internetAvailable, cableTvAvailable, garageAvailable, propertyType, landlineNumber, fax)
+                rentUnit, internetAvailable, cableTvAvailable, propertyType, landlineNumber, fax)
         {
             if (string.IsNullOrWhiteSpace(propertyType))
             {
@@ -55,6 +55,7 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             PropertyType = propertyType;
             HouseNo = houseNo;
             StreetNo = streetNo;
+            GarageAvailable = garageAvailable;
         }
 
         /// <summary>
@@ -104,10 +105,11 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             PropertyType = propertyType;
             HouseNo = houseNo;
             StreetNo = streetNo;
+            GarageAvailable = garageAvailable;
             // Update the parent property class
             base.Update(title, rentPrice, ownerEmail, ownerPhoneNumber, area, ownerName, description,
                 genderRestriction, latitude, longitude, isShared, rentUnit, internetAvailable, cableTvAvailable,
-                garageAvailable, propertyType, landlineNumber, fax);
+                propertyType, landlineNumber, fax);
         }
         
         /// <summary>
@@ -188,6 +190,15 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 //Assertion.AssertStringNotNullorEmpty(value);
                 _streetNo = value;
             }
+        }
+        
+        /// <summary>
+        /// Garage available
+        /// </summary>
+        public bool GarageAvailable
+        {
+            get;
+            private set;
         }
         
         /// <summary>

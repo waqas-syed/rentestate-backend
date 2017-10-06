@@ -48,15 +48,16 @@ namespace RentStuff.Property.Domain.Model.Tests
             bool cctvCameras = true;
             bool backupElectricity = true;
             int numberOfSeats = 3;
+            bool elevator = true;
             
             Hostel hostel = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
                 .FitnessCentre(fitnessCentre).Balcony(balcony).Lawn(lawn).Heating(heating).Meals(meals)
                 .PicknDrop(picknDrop).NumberOfSeats(numberOfSeats).Ironing(ironing).CctvCameras(cctvCameras)
-                .BackupElectricity(backupElectricity)
+                .BackupElectricity(backupElectricity).Elevator(elevator)
                 .Build();
             hostel.AddImage(image1);
             hostel.AddImage(image2);
@@ -69,7 +70,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(phoneNumber, hostel.OwnerPhoneNumber);
             Assert.AreEqual(cableTv, hostel.CableTvAvailable);
             Assert.AreEqual(internet, hostel.InternetAvailable);
-            Assert.AreEqual(parking, hostel.GarageAvailable);
+            Assert.AreEqual(parking, hostel.ParkingAvailable);
             Assert.AreEqual(latitude, hostel.Latitude);
             Assert.AreEqual(longitude, hostel.Longitude);
             Assert.AreEqual(propertyType, hostel.PropertyType);
@@ -95,6 +96,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Assert.AreEqual(image1, hostel.Images[0]);
             Assert.AreEqual(image2, hostel.Images[1]);
+            Assert.AreEqual(elevator, hostel.Elevator);
         }
 
         [Test]
@@ -134,15 +136,16 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberOfSeats = 3;
             string landlineNumber = "0510000000";
             string fax = "0510000000";
+            bool elevator = false;
 
             Hostel hostel = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
                 .FitnessCentre(fitnessCentre).Balcony(balcony).Lawn(lawn).Heating(heating).Meals(meals)
                 .PicknDrop(picknDrop).NumberOfSeats(numberOfSeats).Ironing(ironing).CctvCameras(cctvCameras)
-                .BackupElectricity(backupElectricity).LandlineNumber(landlineNumber).Fax(fax)
+                .BackupElectricity(backupElectricity).LandlineNumber(landlineNumber).Fax(fax).Elevator(elevator)
                 .Build();
             hostel.AddImage(image1);
             hostel.AddImage(image2);
@@ -155,7 +158,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(phoneNumber, hostel.OwnerPhoneNumber);
             Assert.AreEqual(cableTv, hostel.CableTvAvailable);
             Assert.AreEqual(internet, hostel.InternetAvailable);
-            Assert.AreEqual(parking, hostel.GarageAvailable);
+            Assert.AreEqual(parking, hostel.ParkingAvailable);
             Assert.AreEqual(latitude, hostel.Latitude);
             Assert.AreEqual(longitude, hostel.Longitude);
             Assert.AreEqual(propertyType, hostel.PropertyType);
@@ -184,8 +187,8 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(2, hostel.Images.Count);
             Assert.AreEqual(image1, hostel.Images[0]);
             Assert.AreEqual(image2, hostel.Images[1]);
-
-
+            Assert.AreEqual(elevator, hostel.Elevator);
+            
             string title2 = "Title No 2";
             string description2 = "Description of hostel";
             string email2 = "w@12344321-2.com";
@@ -220,12 +223,13 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberOfSeats2 = 5;
             string landlineNumber2 = "0510000001";
             string fax2 = "0510000001";
+            bool elevator2 = true;
 
             hostel.Update(title2, monthlyRent2, email2, phoneNumber2, latitude2, longitude2, area2, name2, 
                 description2, genderRestriction2, isShared2, rentUnit2, internet2, cableTv2, parking2, 
                 propertyType2, laundry2, ac2, geyser2, fitnessCentre2, attachedBathroom2, ironing2, balcony2, lawn2, 
                 cctvCameras2, backupElectricity2, meals2, picknDrop2, numberOfSeats2, heating2, landlineNumber2, 
-                fax2);
+                fax2, elevator2);
             hostel.AddImage(image3);
             hostel.AddImage(image4);
 
@@ -237,7 +241,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(phoneNumber2, hostel.OwnerPhoneNumber);
             Assert.AreEqual(cableTv2, hostel.CableTvAvailable);
             Assert.AreEqual(internet2, hostel.InternetAvailable);
-            Assert.AreEqual(parking2, hostel.GarageAvailable);
+            Assert.AreEqual(parking2, hostel.ParkingAvailable);
             Assert.AreEqual(latitude2, hostel.Latitude);
             Assert.AreEqual(longitude2, hostel.Longitude);
             Assert.AreEqual(propertyType2, hostel.PropertyType);
@@ -268,6 +272,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(image2, hostel.Images[1]);
             Assert.AreEqual(image3, hostel.Images[2]);
             Assert.AreEqual(image4, hostel.Images[3]);
+            Assert.AreEqual(elevator2, hostel.Elevator);
         }
 
         // Only Hostel Property type should be able to get a Hostel instance created
@@ -309,7 +314,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberOfSeats = 3;
 
             Hostel hostel = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -357,7 +362,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberOfSeats = 3;
 
             Hostel hostel = new Hostel.HostelBuilder().OwnerEmail(email).LandlineNumber(landlineNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -389,7 +394,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Hostel house = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
                 .CableTvAvailable(true)
-                .Parking(true).WithInternetAvailable(true)
+                .GarageAvailable(true).WithInternetAvailable(true)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Longitude(longitude)
                 .Area("Pindora").Build();
         }
@@ -413,7 +418,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Hostel house = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
                 .CableTvAvailable(true)
-                .Parking(true).WithInternetAvailable(true)
+                .GarageAvailable(true).WithInternetAvailable(true)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude)
                 .Area("Pindora").Build();
         }
@@ -437,7 +442,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Hostel house = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
                 .CableTvAvailable(true)
-                .Parking(true).WithInternetAvailable(true)
+                .GarageAvailable(true).WithInternetAvailable(true)
                 .PropertyType(propertyType).Latitude(latitude).Longitude(longitude)
                 .Area("Pindora").Build();
         }
@@ -461,7 +466,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Hostel house = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
                 .CableTvAvailable(true)
-                .Parking(true).WithInternetAvailable(true)
+                .GarageAvailable(true).WithInternetAvailable(true)
                 .PropertyType(propertyType).Latitude(latitude).Longitude(longitude).RentPrice(rentPrice)
                 .Area("Pindora").Build();
         }
@@ -485,7 +490,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Hostel house = new Hostel.HostelBuilder().OwnerName(name).OwnerPhoneNumber(phoneNumber).Title(title)
                 .CableTvAvailable(true)
-                .Parking(true).WithInternetAvailable(true)
+                .GarageAvailable(true).WithInternetAvailable(true)
                 .PropertyType(propertyType).Latitude(latitude).Longitude(longitude).RentPrice(rentPrice)
                 .Area("Pindora").Build();
         }
@@ -509,7 +514,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Hostel house = new Hostel.HostelBuilder().OwnerName(name).OwnerPhoneNumber(phoneNumber).OwnerEmail(email)
                 .CableTvAvailable(true)
-                .Parking(true).WithInternetAvailable(true)
+                .GarageAvailable(true).WithInternetAvailable(true)
                 .PropertyType(propertyType).Latitude(latitude).Longitude(longitude).RentPrice(rentPrice)
                 .Area("Pindora").Build();
         }

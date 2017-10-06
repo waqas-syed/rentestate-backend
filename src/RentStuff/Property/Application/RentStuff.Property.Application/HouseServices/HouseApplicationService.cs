@@ -18,14 +18,14 @@ namespace RentStuff.Property.Application.HouseServices
     public class HouseApplicationService : IHouseApplicationService
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        private IPropertyRepository _houseRepository;
+        private IResidentialPropertyRepository _houseRepository;
         private RentStuff.Common.Services.LocationServices.IGeocodingService _geocodingService;
         private RentStuff.Common.Services.GoogleStorageServices.IPhotoStorageService _photoStorageService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
-        public HouseApplicationService(IPropertyRepository houseRepository,
+        public HouseApplicationService(IResidentialPropertyRepository houseRepository,
             RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService,
             RentStuff.Common.Services.GoogleStorageServices.IPhotoStorageService photoStorageService)
         {
@@ -119,7 +119,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         public bool UpdateHouse(UpdateHouseCommand updateHouseCommand)
         {
-            House house = _houseRepository.GetPropertyById(updateHouseCommand.Id);
+            House house = (House)_houseRepository.GetPropertyById(updateHouseCommand.Id);
             if (house == null)
             {
                 throw new InstanceNotFoundException($"House not found for HouseId: {updateHouseCommand.Id}");
@@ -174,7 +174,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="houseId"></param>
         public void DeleteHouse(string houseId)
         {
-            House house = _houseRepository.GetPropertyById(houseId);
+            House house = (House)_houseRepository.GetPropertyById(houseId);
             if (house != null)
             {
                 // Delete all the images from the Google cloud storage photo bucket
@@ -212,7 +212,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         public HouseFullRepresentation GetHouseById(string id)
         {
-            House house = _houseRepository.GetPropertyById(id);
+            House house = (House)_houseRepository.GetPropertyById(id);
             string dimension = null;
             if (house.Dimension != null)
             {
@@ -347,7 +347,7 @@ namespace RentStuff.Property.Application.HouseServices
         public void AddSingleImageToHouse(string houseId, Stream photoStream)
         {
             // Get the house from the repository
-            House house = _houseRepository.GetPropertyById(houseId);
+            House house = (House)_houseRepository.GetPropertyById(houseId);
             // If we find a hosue with the given ID
             if (house != null)
             {
@@ -385,7 +385,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         public void DeleteImagesFromHouse(string houseId, IList<string> imagesList)
         {
-            var house = _houseRepository.GetPropertyById(houseId);
+            var house = (ResidentialProperty)_houseRepository.GetPropertyById(houseId);
             if (house != null && imagesList.Count > 0)
             {
                 foreach (var imageId in imagesList)
@@ -414,7 +414,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         public bool HouseOwnershipCheck(string houseId, string requesterEmail)
         {
-            var house = _houseRepository.GetPropertyById(houseId);
+            var house = (ResidentialProperty)_houseRepository.GetPropertyById(houseId);
             if (house == null)
             {
                 throw new NullReferenceException($"No house found for the given HouseId: {houseId}");
