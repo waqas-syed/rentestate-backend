@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using NHibernate.Cfg;
+﻿using NHibernate.Cfg;
 using RentStuff.Common.NHibernate.Providers;
 using RentStuff.Property.Domain.Model.HouseAggregate;
-using RentStuff.Property.Domain.Model.PropertyAggregate;
 
 namespace RentStuff.Property.Infrastructure.Persistence.NHibernate.Providers
 {

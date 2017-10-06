@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GeocodingServiceTests.cs" />
+    <Compile Include="HostelRepositoryTest.cs" />
     <Compile Include="HouseRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

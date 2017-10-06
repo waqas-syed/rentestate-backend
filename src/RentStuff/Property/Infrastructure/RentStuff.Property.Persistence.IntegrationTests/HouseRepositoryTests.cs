@@ -45,7 +45,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         public void SaveHouseTest_TestsThatHouseUInstancesAreSavedToTheDatabaseAsExpected_VerifiesThroughDatabaseQuery()
         {
              //Save the house in the repository and retreive it. Primitive test
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
             string email = "w@12344321.com";
             string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
             string title = "MGM Grand";
@@ -78,7 +78,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdateDimension(dimension);
             houseRepository.SaveorUpdate(house);
             
-            House retreivedHouse = houseRepository.GetHouseById(house.Id);
+            House retreivedHouse = (House)houseRepository.GetPropertyById(house.Id);
 
             Assert.NotNull(retreivedHouse);
             Assert.AreEqual(house.Title, retreivedHouse.Title);
@@ -118,7 +118,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         public void SaveAndUpdateHouseTest_TestsThatHouseUInstancesAreSavedAndUpdatedToTheDatabaseAsExpected_VerifiesThroughDatabaseQuery()
         {
             //Save the house in the repository and retreive it. Primitive test
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
             string email = "w@12344321.com";
             string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
             string title = "MGM Grand";
@@ -152,7 +152,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             //houseRepository.SaveorUpdateDimension(dimension);
             houseRepository.SaveorUpdate(house);
 
-            House retreivedHouse = houseRepository.GetHouseById(house.Id);
+            House retreivedHouse = (House)houseRepository.GetPropertyById(house.Id);
 
             Assert.NotNull(retreivedHouse);
             Assert.AreEqual(house.Title, retreivedHouse.Title);
@@ -208,7 +208,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool garage2 = false;
             decimal latitude2 = 25.13M;
             decimal longitude2 = 73.11M;
-            string propertyType2 = "Hostel";
+            string propertyType2 = Constants.House;
             GenderRestriction genderRestriction2 = GenderRestriction.BoysOnly;
             string area2 = "Pindora, Rawalpindi, Pakistan";
             long monthlyRent2 = 199000;
@@ -222,7 +222,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 cableTv2, dimension2, garage2, smokingAllowed2, propertyType2, email2, phoneNumber2, null, null, area2, name2,
                 description2, genderRestriction2, latitude2, longitude2, isShared2, rentUnit2, landlineNumber2, fax2);
             houseRepository.SaveorUpdate(house);
-            House retreivedHouse2 = houseRepository.GetHouseById(house.Id);
+            House retreivedHouse2 = (House)houseRepository.GetPropertyById(house.Id);
 
             Assert.AreEqual(title2, retreivedHouse2.Title);
             Assert.AreEqual(description2, retreivedHouse2.Description);
@@ -262,6 +262,59 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
         #endregion Save and Get Houses By Id
 
+        #region Delete House
+
+        [Test]
+        public void SaveAndDeleteHouseTest_TestsThatHouseInstancesAreDeletedFromTheDatabaseAsExpected_VerifiesThroughDatabaseQuery()
+        {
+            // Save the house in the repository and retreive it. Primitive test
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
+            string email = "w@12344321.com";
+            string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
+            string title = "MGM Grand";
+            string phoneNumber = "01234567890";
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            long price = 90000;
+            string houseNo = "123";
+            string area = "Pindora";
+            string streetNo = "13";
+            decimal latitude = 33.29M;
+            decimal longitude = 73.41M;
+            string ownerName = "Owner Name 1";
+            string propertyType = "Apartment";
+            GenderRestriction genderRestriction = GenderRestriction.FamiliesOnly;
+            bool isShared = true;
+            string landlineNumbe = "03510000000";
+            string fax = "0510000000";
+
+            House house = new House.HouseBuilder().Title(title).OwnerEmail(email).OwnerPhoneNumber(phoneNumber)
+                .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
+                .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
+                .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
+                .PropertyType(propertyType).RentPrice(price).Latitude(latitude).Longitude(longitude)
+                .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description)
+                .GenderRestriction(genderRestriction).IsShared(isShared).LandlineNumber(landlineNumbe).Fax(fax).Build();
+            Dimension dimension = new Dimension(DimensionType.Kanal, null, 5, house);
+            house.Dimension = dimension;
+            houseRepository.SaveorUpdateDimension(dimension);
+            houseRepository.SaveorUpdate(house);
+
+            House retreivedHouse = (House)houseRepository.GetPropertyById(house.Id);
+
+            Assert.NotNull(retreivedHouse);
+            
+            // Now Delete the house
+
+            houseRepository.Delete(house);
+            retreivedHouse = (House)houseRepository.GetPropertyById(house.Id);
+
+            Assert.Null(retreivedHouse);
+        }
+
+        #endregion Delete House
+
         #region Save and Search Houses By Area and PropertyType
 
         [Test]
@@ -273,7 +326,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             string area = "Pindora, Rawalpindi, Pakistan";
 
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
             RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = 
                 _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
             var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(area);
@@ -381,7 +434,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             string area = "Pindora, Rawalpindi, Pakistan";
 
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
             RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = 
                 _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
             var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(area);
@@ -483,7 +536,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Save 2 houses that are in other places. 
             // Search should get the 2 houses located near the serched location and also the exact PropertyType
 
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
             RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = 
                 _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
 
@@ -713,7 +766,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             decimal initialLatitude = 33.29M;
             decimal initialLongitude = 73.41M;
             string propertyType = "House";
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
             SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
             IList<House> retreivedHouses = houseRepository.SearchHousesByCoordinatesAndPropertyType(initialLatitude,
                 initialLongitude, propertyType);
@@ -737,7 +790,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Search should get the 2 houses with the same propertyType, and ignore the 3 who have a different propertyType, even
             // though they are located within the search radius (2 kilometers)
 
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
             RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService =
                 _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
 
@@ -949,7 +1002,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         [Test]
         public void RetreiveHousesByPropertyTypePaginationTest_ChecksThatThePaginationIsWorkingFine_VerifiesThroughReturnedOutput()
         {
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
 
             // Save more than 10 houses using the same property type
             SaveMultipleHousesUsingGivenIterations(houseRepository, 21);
@@ -968,7 +1021,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             decimal initialLatitude = 33.29M;
             decimal initialLongitude = 73.41M;
             string propertyType = "House";
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
             SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
             IList<House> retreivedHouses = houseRepository.SearchHousesByPropertyType(propertyType);
             Assert.NotNull(retreivedHouses);
@@ -989,7 +1042,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Save two houses with the same coordinates and get both of them 
             string area = "Pindora, Rawalpindi, Pakistan";
 
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
             RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
             var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(area);
 
@@ -1129,7 +1182,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Save multiple houses, retreive them by specifying coordinates and verify all of them
             decimal initialLatitude = 33.29M;
             decimal initialLongitude = 73.41M;
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
             SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
             IList<House> retreivedHouses = houseRepository.SearchHousesByCoordinates(initialLatitude, initialLongitude);
             Assert.NotNull(retreivedHouses);
@@ -1144,7 +1197,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Save multiple houses and 
             decimal initialLatitude = 33.29M;
             decimal initialLongitude = 73.41M;
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
             SaveMultipleHouses(houseRepository, initialLatitude, initialLongitude);
             IList<House> retreivedHouses = houseRepository.SearchHousesByCoordinates(29.00M, 69.00M);
             Assert.NotNull(retreivedHouses);
@@ -1161,7 +1214,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Save 3 houses in locations nearby and 2 houses that are in other places. 
             // Search should get the 3 houses located near theserched location
 
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
             RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = 
                 _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
 
@@ -1403,7 +1456,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         [Test]
         public void SaveHouseAndRetreiveByEmailTest_TestsThatHouseUInstancesAreSavedToTheDatabaseAsExpected_VerifiesThroughDatabaseQuery()
         {
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
             string email = "w@12344321.com";
             string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
             string title = "MGM Grand";
@@ -1427,7 +1480,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdateDimension(dimension);
             houseRepository.SaveorUpdate(house);
 
-            IList<House> retreivedHouses = houseRepository.GetHouseByOwnerEmail(email);
+            IList<House> retreivedHouses =  houseRepository.GetHouseByOwnerEmail(email);
 
             House retreivedHouse = retreivedHouses[0];
             Assert.NotNull(retreivedHouse);
@@ -1462,7 +1515,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         [Test]
         public void SaveImagesToHouse_ChecksThatAfterAddingImagesHouseIsSavedAsExpected_VerifiesByRetrievingAfterSaving()
         {
-            IHouseRepository houseRepository = _kernel.Get<IHouseRepository>();
+            IPropertyRepository houseRepository = _kernel.Get<IPropertyRepository>();
             string email = "w@12344321.com";
             string title = "MGM Grand";
             string phoneNumber = "01234567890";
@@ -1495,7 +1548,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             houseRepository.SaveorUpdate(house);
 
-            House retreivedHouse = houseRepository.GetHouseById(house.Id);
+            House retreivedHouse = (House)houseRepository.GetPropertyById(house.Id);
             Assert.IsNotNull(retreivedHouse);
             Assert.AreEqual(3, retreivedHouse.Images.Count);
 
@@ -1540,7 +1593,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         /// </summary>
         /// <param name="houseRepository"></param>
         /// <param name="numberOfIterations"></param>
-        private void SaveMultipleHousesUsingGivenIterations(IHouseRepository houseRepository, int numberOfIterations)
+        private void SaveMultipleHousesUsingGivenIterations(IPropertyRepository houseRepository, int numberOfIterations)
         {
             for (int i = 0; i < numberOfIterations; i++)
             {
@@ -1585,7 +1638,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         /// <param name="houseRepository"></param>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
-        private void SaveMultipleHouses(IHouseRepository houseRepository, decimal latitude, decimal longitude)
+        private void SaveMultipleHouses(IPropertyRepository houseRepository, decimal latitude, decimal longitude)
         {
             decimal initialLatitude = latitude;
             decimal initialLongitude = longitude;

@@ -50,7 +50,7 @@
     <Compile Include="HouseAggregate\DimensionType.cs" />
     <Compile Include="PropertyAggregate\GenderRestriction.cs" />
     <Compile Include="HouseAggregate\House.cs" />
-    <Compile Include="HouseAggregate\IHouseRepository.cs" />
+    <Compile Include="PropertyAggregate\IPropertyRepository.cs" />
     <Compile Include="HouseAggregate\Dimension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyAggregate\GuestPropertyAbstraction.cs" />

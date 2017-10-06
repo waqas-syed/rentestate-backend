@@ -1,18 +1,18 @@
-﻿using System;
+﻿using RentStuff.Common.NHibernate.Wrappers;
+using RentStuff.Property.Domain.Model.HouseAggregate;
+using RentStuff.Property.Domain.Model.PropertyAggregate;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using RentStuff.Common.NHibernate.Wrappers;
-using RentStuff.Property.Domain.Model.HouseAggregate;
-using RentStuff.Property.Domain.Model.PropertyAggregate;
 
 namespace RentStuff.Property.Infrastructure.Persistence.Repositories
 {
     /// <summary>
     /// House Repository
     /// </summary>
-    public class HouseRepository : IHouseRepository
+    public class PropertyRepository : IPropertyRepository
     {
         // The radius in kilometers from the location that was searched. We search within this radius for results
         // The formula is given here: https://developers.google.com/maps/articles/phpsqlsearch_v3
@@ -21,20 +21,20 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         private readonly int _resultsPerPage = 10;
         private INhibernateSessionWrapper _session;
 
-        public HouseRepository(INhibernateSessionWrapper nhibernateSessionWrapper)
+        public PropertyRepository(INhibernateSessionWrapper nhibernateSessionWrapper)
         {
             _session = nhibernateSessionWrapper;
         }
 
         /// <summary>
-        /// Saves new House or updates existing house
+        /// Saves new Property or updates existing property
         /// </summary>
-        /// <param name="house"></param>
-        public void SaveorUpdate(House house)
+        /// <param name="property"></param>
+        public void SaveorUpdate(object property)
         {
             using (var transaction = _session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                _session.Session.SaveOrUpdate(house);
+                _session.Session.SaveOrUpdate(property);
                 transaction.Commit();
             }
         }
@@ -57,7 +57,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// Delete the house entity
         /// </summary>
         /// <param name="house"></param>
-        public void Delete(House house)
+        public void Delete(object house)
         {
             using (var transaction = _session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
@@ -72,11 +72,11 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="houseId"></param>
         /// <returns></returns>
         //[Transaction]
-        public House GetHouseById(string houseId)
+        public ResidentialProperty GetPropertyById(string houseId)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                return _session.Session.QueryOver<House>().Where(x => x.Id == houseId).SingleOrDefault();
+                return _session.Session.QueryOver<ResidentialProperty>().Where(x => x.Id == houseId).SingleOrDefault();
             }
         }
 
