@@ -75,7 +75,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             }
             Title = title;
             RentPrice = rentPrice;
-            OwnerEmail = ownerEmail.ToLower();
+            OwnerEmail = ownerEmail;
             OwnerPhoneNumber = ownerPhoneNumber;
             LandlineNumber = landlineNumber;
             Fax = fax;
@@ -127,7 +127,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             }
             Title = title;
             RentPrice = rentPrice;
-            OwnerEmail = ownerEmail.ToLower();
+            OwnerEmail = ownerEmail;
             OwnerPhoneNumber = ownerPhoneNumber;
             LandlineNumber = landlineNumber;
             Fax = fax;
@@ -226,7 +226,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
             {
                 Assertion.AssertStringNotNullorEmpty(value);
                 Assertion.IsEmailValid(value);
-                _ownerEmail = value;
+                _ownerEmail = value.ToLower();
             }
         }
 

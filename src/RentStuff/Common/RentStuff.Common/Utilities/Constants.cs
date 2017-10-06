@@ -16,5 +16,18 @@ namespace RentStuff.Common.Utilities
         public static readonly string FacebookUserInformationEndpoint = "https://graph.facebook.com/v2.8/me?fields=id,name,email";
         public const string AccountActivationUrlLocation = "activate-account";
         public const string PasswordResetUrlLocation = "reset-password";
+
+        /* Property Type */
+        public const string Hostel = "Hostel";
+        public const string Hotel = "Hotel";
+        public const string GuestHouse = "Guest House";
+        public const string House = "House";
+        public const string Apartment = "Apartment";
+
+        /* Rent Units */
+        public const string Monthly = "Month";
+        public const string Weekly = "Week";
+        public const string Daily = "Day";
+        public const string Hourly = "Hour";
     }
 }

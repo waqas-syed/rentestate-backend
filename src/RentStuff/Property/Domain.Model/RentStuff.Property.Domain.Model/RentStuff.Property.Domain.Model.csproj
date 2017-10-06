@@ -43,6 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HostelAggregate\Hostel.cs" />
+    <Compile Include="HotelAggregate\Bed.cs" />
+    <Compile Include="HotelAggregate\BedType.cs" />
+    <Compile Include="HotelAggregate\Hotel.cs" />
+    <Compile Include="HotelAggregate\Occupants.cs" />
     <Compile Include="HouseAggregate\DimensionType.cs" />
     <Compile Include="PropertyAggregate\GenderRestriction.cs" />
     <Compile Include="HouseAggregate\House.cs" />
@@ -76,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="HostelAggregate\Mapping\Hostel.hbm.xml" />
+    <Content Include="HotelAggregate\Mappings\hotel.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

@@ -1,22 +1,26 @@
 ﻿using RentStuff.Property.Domain.Model.PropertyAggregate;
 using System;
+using System.Collections.Generic;
+using RentStuff.Common.Utilities;
 
-namespace RentStuff.Property.Domain.Model.HostelAggregate
+namespace RentStuff.Property.Domain.Model.HotelAggregate
 {
     /// <summary>
-    /// Hostel property type
+    /// Hotel or Guest House
     /// </summary>
-    public class Hostel : PropertyAggregate.GuestPropertyAbstraction
+    public class Hotel : GuestPropertyAbstraction
     {
-        public Hostel(string title, long rentPrice, string ownerEmail,
-            string ownerPhoneNumber,
-            decimal latitude, decimal longitude, string area, string ownerName,
-            string description,
-            GenderRestriction genderRestriction, bool isShared, string rentUnit, bool internetAvailable,
-            bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac,
-            bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
-            bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating, bool meals, 
-            bool picknDrop, int numberOfSeats, string landlineNumber, string fax)
+        public Hotel(string title, long rentPrice, string ownerEmail,
+                string ownerPhoneNumber,
+                decimal latitude, decimal longitude, string area, string ownerName,
+                string description,
+                GenderRestriction genderRestriction, bool isShared, string rentUnit, bool internetAvailable,
+                bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac,
+                bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
+                bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating,
+                bool restaurant, bool airportShuttle, bool breakfastIncluded, bool sittingArea, bool carRental,
+                bool spa, bool salon, bool bathtub, bool swimmingPool, bool kitchen, IList<Bed> beds,
+                Occupants occupants, string landlineNumber, string fax)
             // Initiate the parent GuerstPropertyAbstraction class as well
             : base(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
@@ -25,14 +29,23 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
                 attachedBathroom, ironing, balcony, lawn, cctvCameras, backupElectricity, heating, landlineNumber, 
                 fax)
         {
-            // Property Type must be Hostel. Will be used by Frontend client to check the type and proceed accordingly
-            if (!propertyType.Equals("Hostel"))
+            // Property Type must be Hotel. Will be used by Frontend client to check the type and proceed accordingly
+            if (!propertyType.Equals(Constants.Hotel) && !propertyType.Equals(Constants.GuestHouse))
             {
-                throw new InvalidOperationException("Hostel instance can only be created with type Hostel");
+                throw new InvalidOperationException("Hotel instance can only be created with type Hotel");
             }
-            Meals = meals;
-            PicknDrop = picknDrop;
-            NumberOfSeats = numberOfSeats;
+            Restaurant = restaurant;
+            AirportShuttle = airportShuttle;
+            BreakfastIncluded = breakfastIncluded;
+            SittingArea = sittingArea;
+            CarRental = carRental;
+            Spa = spa;
+            Salon = salon;
+            Bathtub = bathtub;
+            SwimmingPool = swimmingPool;
+            Kitchen = kitchen;
+            Beds = beds;
+            Occupants = occupants;
         }
 
         /// <summary>
@@ -68,8 +81,20 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
         /// <param name="picknDrop"></param>
         /// <param name="numberOfSeats"></param>
         /// <param name="heating"></param>
+        /// <param name="beds"></param>
+        /// <param name="occupants"></param>
         /// <param name="landlineNumber"></param>
         /// <param name="fax"></param>
+        /// <param name="restaurant"></param>
+        /// <param name="airportShuttle"></param>
+        /// <param name="breakfastIncluded"></param>
+        /// <param name="sittingArea"></param>
+        /// <param name="carRental"></param>
+        /// <param name="spa"></param>
+        /// <param name="salon"></param>
+        /// <param name="bathtub"></param>
+        /// <param name="swimmingPool"></param>
+        /// <param name="kitchen"></param>
         public void Update(string title, long rentPrice, string ownerEmail,
             string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName,
@@ -77,44 +102,64 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             GenderRestriction genderRestriction, bool isShared, string rentUnit, bool internetAvailable,
             bool cableTvAvailable, bool parkingAvailable, string propertyType, bool laundry, bool ac,
             bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
-            bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool meals, bool picknDrop,
-            int numberOfSeats, bool heating, string landlineNumber, string fax)
+            bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating, bool restaurant,
+            bool airportShuttle, bool breakfastIncluded, 
+            bool sittingArea, bool carRental, bool spa, bool salon, bool bathtub, bool swimmingPool, bool kitchen, 
+            IList<Bed> beds, Occupants occupants, string landlineNumber, string fax)
         {
-            // Property Type must be Hostel. Will be used by Frontend client to check the type and proceed accordingly
-            if (!propertyType.Equals("Hostel"))
+            // Property Type must be Hotel. Will be used by Frontend client to check the type and proceed accordingly
+            if (!propertyType.Equals(Constants.Hotel) && !propertyType.Equals(Constants.GuestHouse))
             {
-                throw new InvalidOperationException("Hostel instance can only be created with type Hostel");
+                throw new InvalidOperationException("Hotel instance can only be created with type Hotel or Guest House");
             }
-            Meals = meals;
-            PicknDrop = picknDrop;
-            NumberOfSeats = numberOfSeats;
             base.UpdateGuestProperty(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
                 rentUnit, internetAvailable, cableTvAvailable, parkingAvailable, propertyType, laundry, ac, geyser, fitnessCentre,
                 attachedBathroom, ironing, balcony, lawn, cctvCameras, backupElectricity, heating, landlineNumber,
                 fax);
+            Restaurant = restaurant;
+            AirportShuttle = airportShuttle;
+            BreakfastIncluded = breakfastIncluded;
+            SittingArea = sittingArea;
+            CarRental = carRental;
+            Spa = spa;
+            Salon = salon;
+            Bathtub = bathtub;
+            SwimmingPool = swimmingPool;
+            Kitchen = kitchen;
+            Beds = beds;
+            Occupants = occupants;
         }
 
-        /// <summary>
-        /// Is Meals available
-        /// </summary>
-        public bool Meals { get; private set; }
+        public bool Restaurant { get; set; }
+
+        public bool AirportShuttle { get; set; }
+
+        public bool BreakfastIncluded { get; set; }
+
+        public bool SittingArea { get; set; }
+
+        public bool CarRental { get; set; }
+
+        public bool Spa { get; set; }
+
+        public bool Salon { get; set; }
+
+        public bool Bathtub { get; set; }
+
+        public bool SwimmingPool { get; set; }
+        
+        public bool Kitchen { get; set; }
+
+        public IList<Bed> Beds { get; set; }
+
+        public Occupants Occupants { get; set; }
 
         /// <summary>
-        /// Is Pick n Drop available
+        /// Hotel Builder, using the builder pattern that allows easy refactoring of the initialization of the Hotel
+        /// entity
         /// </summary>
-        public bool PicknDrop { get; private set; }
-
-        /// <summary>
-        /// How many seats are there in this hostel room
-        /// </summary>
-        public int NumberOfSeats { get; private set; }
-
-        /// <summary>
-        /// House Builder, using the builder pattern that allows easy refactoring of the references and usages of
-        /// the initialization of the House entity
-        /// </summary>
-        public class HostelBuilder
+        public class HotelBuilder
         {
             #region Generic Property attributes
 
@@ -136,13 +181,13 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             private bool _parking;
             private string _landlineNumber;
             private string _fax;
-            
+
             /// <summary>
             /// Title
             /// </summary>
             /// <param name="title"></param>
             /// <returns></returns>
-            public HostelBuilder Title(string title)
+            public HotelBuilder Title(string title)
             {
                 _title = title;
                 return this;
@@ -153,7 +198,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="description"></param>
             /// <returns></returns>
-            public HostelBuilder Description(string description)
+            public HotelBuilder Description(string description)
             {
                 _description = description;
                 return this;
@@ -164,7 +209,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="rentPrice"></param>
             /// <returns></returns>
-            public HostelBuilder RentPrice(long rentPrice)
+            public HotelBuilder RentPrice(long rentPrice)
             {
                 _rentPrice = rentPrice;
                 return this;
@@ -175,7 +220,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="propertyType"></param>
             /// <returns></returns>
-            public HostelBuilder PropertyType(string propertyType)
+            public HotelBuilder PropertyType(string propertyType)
             {
                 _propertyType = propertyType;
                 return this;
@@ -186,7 +231,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="ownerEmail"></param>
             /// <returns></returns>
-            public HostelBuilder OwnerEmail(string ownerEmail)
+            public HotelBuilder OwnerEmail(string ownerEmail)
             {
                 _ownerEmail = ownerEmail;
                 return this;
@@ -197,7 +242,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="ownerPhoneNumber"></param>
             /// <returns></returns>
-            public HostelBuilder OwnerPhoneNumber(string ownerPhoneNumber)
+            public HotelBuilder OwnerPhoneNumber(string ownerPhoneNumber)
             {
                 _ownerPhoneNumber = ownerPhoneNumber;
                 return this;
@@ -208,7 +253,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="latitude"></param>
             /// <returns></returns>
-            public HostelBuilder Latitude(decimal latitude)
+            public HotelBuilder Latitude(decimal latitude)
             {
                 _latitude = latitude;
                 return this;
@@ -219,7 +264,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="longitude"></param>
             /// <returns></returns>
-            public HostelBuilder Longitude(decimal longitude)
+            public HotelBuilder Longitude(decimal longitude)
             {
                 _longitude = longitude;
                 return this;
@@ -230,7 +275,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="area"></param>
             /// <returns></returns>
-            public HostelBuilder Area(string area)
+            public HotelBuilder Area(string area)
             {
                 _area = area;
                 return this;
@@ -241,7 +286,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="ownerName"></param>
             /// <returns></returns>
-            public HostelBuilder OwnerName(string ownerName)
+            public HotelBuilder OwnerName(string ownerName)
             {
                 _ownerName = ownerName;
                 return this;
@@ -252,7 +297,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="genderRestriction"></param>
             /// <returns></returns>
-            public HostelBuilder GenderRestriction(GenderRestriction genderRestriction)
+            public HotelBuilder GenderRestriction(GenderRestriction genderRestriction)
             {
                 _genderRestriction = genderRestriction;
                 return this;
@@ -263,7 +308,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="isShared"></param>
             /// <returns></returns>
-            public HostelBuilder IsShared(bool isShared)
+            public HotelBuilder IsShared(bool isShared)
             {
                 _isShared = isShared;
                 return this;
@@ -274,7 +319,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="rentUnit"></param>
             /// <returns></returns>
-            public HostelBuilder RentUnit(string rentUnit)
+            public HotelBuilder RentUnit(string rentUnit)
             {
                 _rentUnit = rentUnit;
                 return this;
@@ -285,7 +330,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="internetAvailable"></param>
             /// <returns></returns>
-            public HostelBuilder WithInternetAvailable(bool internetAvailable)
+            public HotelBuilder WithInternetAvailable(bool internetAvailable)
             {
                 _internetAvailable = internetAvailable;
                 return this;
@@ -296,7 +341,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="parking"></param>
             /// <returns></returns>
-            public HostelBuilder Parking(bool parking)
+            public HotelBuilder Parking(bool parking)
             {
                 _parking = parking;
                 return this;
@@ -307,7 +352,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="cableTvAvailable"></param>
             /// <returns></returns>
-            public HostelBuilder CableTvAvailable(bool cableTvAvailable)
+            public HotelBuilder CableTvAvailable(bool cableTvAvailable)
             {
                 _cableTvAvailable = cableTvAvailable;
                 return this;
@@ -318,7 +363,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="landlineNumber"></param>
             /// <returns></returns>
-            public HostelBuilder LandlineNumber(string landlineNumber)
+            public HotelBuilder LandlineNumber(string landlineNumber)
             {
                 _landlineNumber = landlineNumber;
                 return this;
@@ -329,7 +374,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// </summary>
             /// <param name="fax"></param>
             /// <returns></returns>
-            public HostelBuilder Fax(string fax)
+            public HotelBuilder Fax(string fax)
             {
                 _fax = fax;
                 return this;
@@ -349,92 +394,156 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             private bool _lawn;
             private bool _cctvCameras;
             private bool _backupElectricity;
-            private bool _meals;
-            private int _numberOfSeats;
-            private bool _picknDrop;
             private bool _heating;
 
-            public HostelBuilder Laundry(bool laundry)
+            private bool _restaurant;
+            private bool _airportShuttle;
+            private bool _breakfastIncluded;
+            private bool _sittingArea;
+            private bool _carRental;
+            private bool _spa;
+            private bool _salon;
+            private bool _bathtub;
+            private bool _swimmingPool;
+            private bool _kitchen;
+            private IList<Bed> _beds;
+            private Occupants _occupants;
+
+            public HotelBuilder Laundry(bool laundry)
             {
                 _laundry = laundry;
                 return this;
             }
 
-            public HostelBuilder AC(bool ac)
+            public HotelBuilder AC(bool ac)
             {
                 _ac = ac;
                 return this;
             }
 
-            public HostelBuilder Geyser(bool geyser)
+            public HotelBuilder Geyser(bool geyser)
             {
                 _geyser = geyser;
                 return this;
             }
 
-            public HostelBuilder FitnessCentre(bool fitnessCentre)
+            public HotelBuilder FitnessCentre(bool fitnessCentre)
             {
                 _fitnessCentre = fitnessCentre;
                 return this;
             }
 
-            public HostelBuilder AttachedBathroom(bool attachedBathroom)
+            public HotelBuilder AttachedBathroom(bool attachedBathroom)
             {
                 _attachedBathroom = attachedBathroom;
                 return this;
             }
 
-            public HostelBuilder Ironing(bool ironing)
+            public HotelBuilder Ironing(bool ironing)
             {
                 _ironing = ironing;
                 return this;
             }
 
-            public HostelBuilder Balcony(bool balcony)
+            public HotelBuilder Balcony(bool balcony)
             {
                 _balcony = balcony;
                 return this;
             }
 
-            public HostelBuilder Lawn(bool lawn)
+            public HotelBuilder Lawn(bool lawn)
             {
                 _lawn = lawn;
                 return this;
             }
 
-            public HostelBuilder CctvCameras(bool cctvCameras)
+            public HotelBuilder Heating(bool heating)
+            {
+                _heating = heating;
+                return this;
+            }
+
+            public HotelBuilder CctvCameras(bool cctvCameras)
             {
                 _cctvCameras = cctvCameras;
                 return this;
             }
 
-            public HostelBuilder BackupElectricity(bool backupElectricity)
+            public HotelBuilder BackupElectricity(bool backupElectricity)
             {
                 _backupElectricity = backupElectricity;
                 return this;
             }
 
-            public HostelBuilder Meals(bool meals)
+            public HotelBuilder Restaurant(bool restaurant)
             {
-                _meals = meals;
+                _restaurant = restaurant;
                 return this;
             }
 
-            public HostelBuilder NumberOfSeats(int numberOfSeats)
+            public HotelBuilder AirportShuttle(bool airportShuttle)
             {
-                _numberOfSeats = numberOfSeats;
+                _airportShuttle = airportShuttle;
                 return this;
             }
 
-            public HostelBuilder PicknDrop(bool picknDrop)
+            public HotelBuilder BreakfastIncluded(bool breakfastIncluded)
             {
-                _picknDrop = picknDrop;
+                _breakfastIncluded = breakfastIncluded;
                 return this;
             }
 
-            public HostelBuilder Heating(bool heating)
+            public HotelBuilder SittingArea(bool sittingArea)
             {
-                _heating = heating;
+                _sittingArea = sittingArea;
+                return this;
+            }
+
+            public HotelBuilder CarRental(bool carRental)
+            {
+                _carRental = carRental;
+                return this;
+            }
+
+            public HotelBuilder Spa(bool spa)
+            {
+                _spa = spa;
+                return this;
+            }
+
+            public HotelBuilder Salon(bool salon)
+            {
+                _salon = salon;
+                return this;
+            }
+
+            public HotelBuilder Bathtub(bool bathtub)
+            {
+                _bathtub = bathtub;
+                return this;
+            }
+
+            public HotelBuilder SwimmingPool(bool swimmingPool)
+            {
+                _swimmingPool = swimmingPool;
+                return this;
+            }
+
+            public HotelBuilder Kitchen(bool kitchen)
+            {
+                _kitchen = kitchen;
+                return this;
+            }
+
+            public HotelBuilder Beds(IList<Bed> beds)
+            {
+                _beds = beds;
+                return this;
+            }
+
+            public HotelBuilder Occupants(Occupants occupants)
+            {
+                _occupants = occupants;
                 return this;
             }
 
@@ -444,13 +553,14 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// Build a new instance of House
             /// </summary>
             /// <returns></returns>
-            public Hostel Build()
+            public Hotel Build()
             {
-                return new Hostel(_title, _rentPrice, _ownerEmail, _ownerPhoneNumber, _latitude, _longitude, 
+                return new Hotel(_title, _rentPrice, _ownerEmail, _ownerPhoneNumber, _latitude, _longitude,
                     _area, _ownerName, _description, _genderRestriction, _isShared, _rentUnit, _internetAvailable,
                     _cableTvAvailable, _parking, _propertyType, _laundry, _ac, _geyser, _fitnessCentre, _attachedBathroom,
-                    _ironing, _balcony, _lawn, _cctvCameras, _backupElectricity, _heating, _meals, _picknDrop, 
-                    _numberOfSeats, _landlineNumber, _fax);
+                    _ironing, _balcony, _lawn, _cctvCameras, _backupElectricity, _heating, _restaurant,
+                    _airportShuttle, _breakfastIncluded, _sittingArea, _carRental, _spa, _salon, _bathtub, 
+                    _swimmingPool, _kitchen, _beds, _occupants, _landlineNumber, _fax);
             }
         }
     }

@@ -17,6 +17,8 @@
     <property name="GenderRestriction" column="gender_restriction"/>
     <property name="OwnerEmail" column="owner_email"/>
     <property name="OwnerPhoneNumber" column="owner_phone_number"/>
+    <property name="LandlineNumber" column="landline_number"/>
+    <property name="Fax" column="fax"/>
     <property name="Latitude" column="latitude"/>
     <property name="Longitude" column="longitude"/>
     <property name="DateCreated" column="date_created"/>
@@ -32,27 +34,12 @@
     <property name="Elevator"/>
     <property name="Balcony"/>
     <property name="Lawn"/>
-    
-    <property name="LandlineNumber" column="landline_number"/>
-    <property name="Fax" column="fax"/>
-    
-    <property name="Restaurant"/>
-    <property name="AirportShuttle" column="airport_shuttle"/>
-    <property name="BreakfastIncluded" column="breakfast_included"/>
-    <property name="SittingArea" column="sitting_area"/>
-    <property name="CarRental" column="car_rental"/>
-    <property name="Spa"/>
-    <property name="Salon"/>
-    <property name="SwimmingPool" column="swimming_pool"/>
-    <property name="Kitchen"/>
 
-    <!--ToDo: Provide a mapping for Beds-->
-    
-    <idbag name="Images" table="hotelimages" lazy="false">
+    <idbag name="Images" table="hostelimages" lazy="false">
       <collection-id column="ID" type="Int64">
         <generator class="native"/>
       </collection-id>
-      <key column="hotel_id" />
+      <key column="hostel_id" />
       <element column="image_id" type="string" />
     </idbag>
     <!--<many-to-one name="Location" unique="true" column="location_id"/>-->

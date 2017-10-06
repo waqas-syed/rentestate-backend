@@ -132,6 +132,8 @@ namespace RentStuff.Property.Domain.Model.Tests
             bool cctvCameras = true;
             bool backupElectricity = true;
             int numberOfSeats = 3;
+            string landlineNumber = "0510000000";
+            string fax = "0510000000";
 
             Hostel hostel = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
                 .OwnerName(name).CableTvAvailable(cableTv).Parking(parking).WithInternetAvailable(internet)
@@ -140,7 +142,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
                 .FitnessCentre(fitnessCentre).Balcony(balcony).Lawn(lawn).Heating(heating).Meals(meals)
                 .PicknDrop(picknDrop).NumberOfSeats(numberOfSeats).Ironing(ironing).CctvCameras(cctvCameras)
-                .BackupElectricity(backupElectricity)
+                .BackupElectricity(backupElectricity).LandlineNumber(landlineNumber).Fax(fax)
                 .Build();
             hostel.AddImage(image1);
             hostel.AddImage(image2);
@@ -176,6 +178,8 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(meals, hostel.Meals);
             Assert.AreEqual(picknDrop, hostel.PicknDrop);
             Assert.AreEqual(numberOfSeats, hostel.NumberOfSeats);
+            Assert.AreEqual(landlineNumber, hostel.LandlineNumber);
+            Assert.AreEqual(fax, hostel.Fax);
 
             Assert.AreEqual(2, hostel.Images.Count);
             Assert.AreEqual(image1, hostel.Images[0]);
@@ -214,13 +218,16 @@ namespace RentStuff.Property.Domain.Model.Tests
             bool cctvCameras2 = false;
             bool backupElectricity2 = false;
             int numberOfSeats2 = 5;
+            string landlineNumber2 = "0510000001";
+            string fax2 = "0510000001";
 
             hostel.Update(title2, monthlyRent2, email2, phoneNumber2, latitude2, longitude2, area2, name2, 
                 description2, genderRestriction2, isShared2, rentUnit2, internet2, cableTv2, parking2, 
                 propertyType2, laundry2, ac2, geyser2, fitnessCentre2, attachedBathroom2, ironing2, balcony2, lawn2, 
-                cctvCameras2, backupElectricity2, meals2, picknDrop2, numberOfSeats2, heating2, null, null);
-            hostel.AddImage(image1);
-            hostel.AddImage(image2);
+                cctvCameras2, backupElectricity2, meals2, picknDrop2, numberOfSeats2, heating2, landlineNumber2, 
+                fax2);
+            hostel.AddImage(image3);
+            hostel.AddImage(image4);
 
             Assert.IsNotNull(hostel);
             Assert.AreEqual(title2, hostel.Title);
@@ -253,10 +260,14 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(meals2, hostel.Meals);
             Assert.AreEqual(picknDrop2, hostel.PicknDrop);
             Assert.AreEqual(numberOfSeats2, hostel.NumberOfSeats);
+            Assert.AreEqual(landlineNumber2, hostel.LandlineNumber);
+            Assert.AreEqual(fax2, hostel.Fax);
 
             Assert.AreEqual(4, hostel.Images.Count);
             Assert.AreEqual(image1, hostel.Images[0]);
             Assert.AreEqual(image2, hostel.Images[1]);
+            Assert.AreEqual(image3, hostel.Images[2]);
+            Assert.AreEqual(image4, hostel.Images[3]);
         }
 
         // Only Hostel Property type should be able to get a Hostel instance created
