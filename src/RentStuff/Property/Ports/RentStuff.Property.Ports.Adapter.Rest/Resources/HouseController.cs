@@ -275,25 +275,13 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 }
                 _logger.Info("Get House request received");
                 // If both area and property type are given
-                if (area != null && propertyType != null)
+                if (!string.IsNullOrWhiteSpace(area) && !string.IsNullOrWhiteSpace(propertyType))
                 {
                     _logger.Info("Get House by Area {0} and Property Type {1}", area, propertyType);
                     return Ok(_houseApplicationService.SearchHousesByAreaAndPropertyType(area, propertyType, pageNo));
                 }
-                // If only area is given
-                else if (area != null)
-                {
-                    _logger.Info("Get House by Area {0}", area);
-                    return Ok(_houseApplicationService.SearchHousesByArea(area, pageNo));
-                }
-                // If only property type is given
-                else if (propertyType != null)
-                {
-                    _logger.Info("Get House by Property Type {0}", propertyType);
-                    return Ok(_houseApplicationService.SearchHousesByPropertyType(propertyType, pageNo));
-                }
                 // If only email is given
-                else if (email != null)
+                else if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(propertyType))
                 {
                     // Get the email from the identity
                     var emailFromClaims = GetEmailFromClaims(User.Identity);
@@ -318,6 +306,12 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         return Unauthorized();
                     }
                 }
+                // If only property type is given
+                else if (!string.IsNullOrWhiteSpace(propertyType))
+                {
+                    _logger.Info("Get House by Property Type {0}", propertyType);
+                    return Ok(_houseApplicationService.SearchHousesByPropertyType(propertyType, pageNo));
+                }
                 else if (!string.IsNullOrEmpty(houseId))
                 {
                     _logger.Info("Get House by HouseId {0}", houseId);
@@ -325,7 +319,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 }
                 else
                 {
-                    return Ok(_houseApplicationService.GetAllHouses(pageNo));
+                    return BadRequest("An appropriate parameter must be supplied to return data");
                 }
             }
             catch (Exception exception)

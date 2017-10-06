@@ -42,30 +42,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="pageNo"></param>
         /// <returns></returns>
         IList<House> GetHouseByOwnerEmail(string email, int pageNo = 0);
-
-        /// <summary>
-        /// Get the house by providing the latitude and longitude
-        /// </summary>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
-        /// <returns></returns>
-        IList<House> GetHouseByCoordinates(decimal latitude, decimal longitude);
-
-        /// <summary>
-        /// Get all the houses
-        /// </summary>
-        /// <returns></returns>
-        IList<House> GetAllHouses(int pageNo = 0);
-
-        /// <summary>
-        /// Gets the houses by their coordinates
-        /// </summary>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
-        /// <param name="pageNo"></param>
-        /// <returns></returns>
-        IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude, int pageNo = 0);
-
+        
         /// <summary>
         /// Get houses with reference to their PropertyType
         /// </summary>

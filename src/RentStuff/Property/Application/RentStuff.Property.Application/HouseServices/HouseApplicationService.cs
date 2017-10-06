@@ -228,23 +228,7 @@ namespace RentStuff.Property.Application.HouseServices
                 house.GetImageList(), house.OwnerName, house.Description, house.GenderRestriction.ToString(), house.IsShared,
                 house.RentUnit, house.LandlineNumber, house.Fax);
         }
-
-        /// <summary>
-        /// Search nearby houses by providing the address
-        /// </summary>
-        /// <param name="address"></param>
-        /// <param name="pageNo"></param>
-        /// <returns></returns>
-        public IList<HousePartialRepresentation> SearchHousesByArea(string address, int pageNo = 0)
-        {
-            // Get the coordinates for the location using the Geocoding API service
-            var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
-            // Get houses around the given coordinates
-            IList<House> houses = _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2,
-                pageNo);
-            return ConvertHousesToPartialRepresentations(houses);
-        }
-
+        
         /// <summary>
         /// Search houses with reference to propertyType
         /// </summary>
@@ -319,17 +303,7 @@ namespace RentStuff.Property.Application.HouseServices
             recordCount = _houseRepository.GetTotalRecordCount();
             return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
         }
-
-        /// <summary>
-        /// Gets all the houses
-        /// </summary>
-        /// <returns></returns>
-        public IList<HousePartialRepresentation> GetAllHouses(int pageNo = 0)
-        {
-            IList<House> houses = _houseRepository.GetAllHouses(pageNo);
-            return ConvertHousesToPartialRepresentations(houses);
-        }
-
+        
         /// <summary>
         /// Get the types of peroperty: Apartment, House, Hostel, Room
         /// </summary>
