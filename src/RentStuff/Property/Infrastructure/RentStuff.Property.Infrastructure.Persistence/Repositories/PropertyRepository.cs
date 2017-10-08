@@ -102,6 +102,42 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         }
 
         /// <summary>
+        /// Get all the Hostels by the poster's email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        public IList<Hostel> GetHostelsByOwnerEmail(string email, int pageNo = 0)
+        {
+            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return _session.Session.QueryOver<Hostel>()
+                    .Where(x => x.OwnerEmail == email)
+                    .Skip(pageNo * _resultsPerPage)
+                    .Take(_resultsPerPage)
+                    .List<Hostel>();
+            }
+        }
+
+        /// <summary>
+        /// Get all the Hotels and Guest Houses by the poster's email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        public IList<Hotel> GetHotelsByOwnerEmail(string email, int pageNo = 0)
+        {
+            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return _session.Session.QueryOver<Hotel>()
+                    .Where(x => x.OwnerEmail == email)
+                    .Skip(pageNo * _resultsPerPage)
+                    .Take(_resultsPerPage)
+                    .List<Hotel>();
+            }
+        }
+
+        /// <summary>
         /// Get the house by latitude and longitude
         /// </summary>
         /// <param name="latitude"></param>

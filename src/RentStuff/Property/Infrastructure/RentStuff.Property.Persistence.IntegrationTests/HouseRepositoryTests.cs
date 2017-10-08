@@ -592,6 +592,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         public void SaveHouseAndRetreiveByEmailTest_TestsThatHouseUInstancesAreSavedToTheDatabaseAsExpected_VerifiesThroughDatabaseQuery()
         {
             IResidentialPropertyRepository houseRepository = _kernel.Get<IResidentialPropertyRepository>();
+
+            // House # 1: Same as the searched email
             string email = "w@12344321.com";
             string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
             string title = "MGM Grand";
@@ -602,23 +604,61 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             int numberOfKitchens = 1;
             long price = 90000;
             string ownerName = "Owner Name 1";
-            string propertyType = "Apartment";
+            string propertyType = Constants.House;
+            string area = "Pindora, Rawalpindi, Punjab, Pakistan";
 
             House house = new House.HouseBuilder().Title(title).OwnerPhoneNumber(phoneNumber).OwnerEmail(email)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                 .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(false).WithInternetAvailable(true)
                 .PropertyType(propertyType).RentPrice(price).Latitude(33.29M).Longitude(73.41M)
-                .HouseNo("123").Area("Pindora").StreetNo("13").OwnerName(ownerName).Description(description).Build();
+                .Area(area).OwnerName(ownerName).Description(description).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "50", 0, house);
             house.Dimension = dimension;
             houseRepository.SaveorUpdateDimension(dimension);
             houseRepository.SaveorUpdate(house);
 
-            IList<House> retreivedHouses =  houseRepository.GetHouseByOwnerEmail(email);
+            // House # 2: Same as the searched email
+            string email2 = "w@12344321.com";
+            string description2 = "It was a Hobbit Hole. Which means it had good food and a warm hearth. 2";
+            string title2 = "MGM Grand 2";
+            string phoneNumber2 = "03990000001";
+            
+            long price2 = 90000;
+            string ownerName2 = "Owner Name 2";
+            string propertyType2 = Constants.Apartment;
+            string area2 = "Lahore, Punjab, Pakistan";
 
+            House house2 = new House.HouseBuilder().Title(title2).OwnerPhoneNumber(phoneNumber2).OwnerEmail(email2)                
+                .PropertyType(propertyType2).RentPrice(price).Latitude(33.29M).Longitude(73.41M).Area(area)
+                .OwnerName(ownerName2).Description(description2).Build();
+            
+            houseRepository.SaveorUpdate(house2);
+
+            // House # 3: Different from the searched email
+            string email3 = "w@12344321-2.com";
+            string description3 = "It was a Hobbit Hole. Which means it had good food and a warm hearth. 3";
+            string title3 = "MGM Grand 3";
+            string phoneNumber3 = "03990000001";
+            
+            long price3 = 90000;
+            string ownerName3 = "Owner Name 3";
+            string propertyType3 = Constants.Apartment;
+            string area3 = "Karachi, Sindh, Pakistan";
+
+            House house3 = new House.HouseBuilder().Title(title3).OwnerPhoneNumber(phoneNumber3).OwnerEmail(email3)
+                .PropertyType(propertyType3).RentPrice(price).Latitude(33.39M).Longitude(73.41M).Area(area3)
+                .OwnerName(ownerName3).Description(description3).Build();
+
+            houseRepository.SaveorUpdate(house3);
+
+            // Retrieve the Houses by email
+            IList<House> retreivedHouses =  houseRepository.GetHouseByOwnerEmail(email);
+            Assert.AreEqual(2, retreivedHouses.Count);
             House retreivedHouse = retreivedHouses[0];
             Assert.NotNull(retreivedHouse);
+
+            // Verfication of House # 1
             Assert.AreEqual(title, retreivedHouse.Title);
             Assert.AreEqual(house.Title, retreivedHouse.Title);
             Assert.AreEqual(description, retreivedHouse.Description);
@@ -640,6 +680,18 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.Dimension.DecimalValue, retreivedHouse.Dimension.DecimalValue);
             Assert.AreEqual(house.Dimension.StringValue, retreivedHouse.Dimension.StringValue);
             Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
+
+            // Verfication of House # 2
+            retreivedHouse = retreivedHouses[1];
+            Assert.NotNull(retreivedHouse);
+            
+            Assert.AreEqual(house2.Title, retreivedHouse.Title);
+            Assert.AreEqual(house2.Description, retreivedHouse.Description);
+            Assert.AreEqual(house2.PropertyType, retreivedHouse.PropertyType);
+            Assert.AreEqual(house2.Latitude, retreivedHouse.Latitude);
+            Assert.AreEqual(house2.Longitude, retreivedHouse.Longitude);
+            Assert.AreEqual(house2.StreetNo, retreivedHouse.StreetNo);
+            Assert.AreEqual(house2.OwnerName, retreivedHouse.OwnerName);
         }
 
         #endregion Save and Search Houses by Email

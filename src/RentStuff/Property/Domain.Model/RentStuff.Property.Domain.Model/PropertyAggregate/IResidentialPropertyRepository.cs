@@ -43,7 +43,23 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="pageNo"></param>
         /// <returns></returns>
         IList<House> GetHouseByOwnerEmail(string email, int pageNo = 0);
-        
+
+        /// <summary>
+        /// Gets all the Hostels by the poster's email address
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        IList<Hostel> GetHostelsByOwnerEmail(string email, int pageNo = 0);
+
+        /// <summary>
+        /// Get all the Hotels and Guest Houses by Owners email address
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        IList<Hotel> GetHotelsByOwnerEmail(string email, int pageNo = 0);
+
         /// <summary>
         /// Get houses with reference to their PropertyType
         /// </summary>

@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using System.Collections.Generic;
+using Ninject;
 using NUnit.Framework;
 using RentStuff.Common.Ninject.Modules;
 using RentStuff.Common.Utilities;
@@ -291,6 +292,161 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Hostel retrievedHostel2 = (Hostel)propertyRepository.GetPropertyById(hostel.Id);
             Assert.IsNull(retrievedHostel2);
         }
-        
+
+        [Test]
+        public void
+            GetHostelsByEmailTest_TestsThatHostelsAreRetrievedByThePostersEmailAsExpected_VerifiesByReturnedValue()
+        {
+            IResidentialPropertyRepository houseRepository = _kernel.Get<IResidentialPropertyRepository>();
+
+            // Hostel # 1: Same Email as the searched one
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+            string phoneNumber = "03455138018";
+            decimal latitude = 25.43M;
+            decimal longitude = 73.41M;
+            string propertyType = "Hostel";
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+            bool cableTv = false;
+            bool internet = true;
+            bool parking = true;
+            string image1 = "Image1.jpg";
+            string image2 = "Image2.png";
+            string rentUnit = "Hour";
+            bool isShared = true;
+            bool laundry = true;
+            bool ac = true;
+            bool geyser = true;
+            bool attachedBathroom = true;
+            bool fitnessCentre = false;
+            bool balcony = false;
+            bool lawn = true;
+            bool heating = false;
+            bool meals = true;
+            bool picknDrop = false;
+            bool ironing = false;
+            bool cctvCameras = true;
+            bool backupElectricity = true;
+            int numberOfSeats = 3;
+            string landlineNumber = "0510000000";
+            string fax = "0510000000";
+            bool elevator = true;
+
+            Hostel hostel = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
+                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
+                .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
+                .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
+                .FitnessCentre(fitnessCentre).Balcony(balcony).Lawn(lawn).Heating(heating).Meals(meals)
+                .PicknDrop(picknDrop).NumberOfSeats(numberOfSeats).Ironing(ironing).CctvCameras(cctvCameras)
+                .BackupElectricity(backupElectricity).LandlineNumber(landlineNumber).Fax(fax).Elevator(elevator)
+                .Build();
+            hostel.AddImage(image1);
+            hostel.AddImage(image2);
+
+            houseRepository.SaveorUpdate(hostel);
+            
+            // Hostel # 2: Same email as the searched one
+            string title2 = "Title No 2";
+            string description2 = "Description of house 2";
+            string email2 = "w@12344321.com";
+            string name2 = "OwnerName 2";
+            string phoneNumber2 = "03990000002";
+            decimal latitude2 = 26.43M;
+            decimal longitude2 = 74.41M;
+            string propertyType2 = Constants.Hostel;
+            GenderRestriction genderRestriction2 = GenderRestriction.FamiliesOnly;
+            string area2 = "Lahore, Pakistan";
+            long monthlyRent2 = 92000;
+            string rentUnit2 = Constants.Hourly;
+
+            Hostel hostel2 = new Hostel.HostelBuilder().OwnerEmail(email2).OwnerPhoneNumber(phoneNumber2).Title(title2)
+                .OwnerName(name2)
+                .PropertyType(propertyType2).RentPrice(monthlyRent2).Latitude(latitude2).Longitude(longitude2)
+                .Area(area2).GenderRestriction(genderRestriction2).RentUnit(rentUnit2)
+                .Build();
+
+            houseRepository.SaveorUpdate(hostel2);
+
+            // Hostel # 3: Different email from the searched one
+            string title3 = "Title No 3";
+            string description3 = "Description of house 3";
+            string email3 = "w@13344331.com";
+            string name3 = "OwnerName 3";
+            string phoneNumber3 = "03990000003";
+            decimal latitude3 = 36.43M;
+            decimal longitude3 = 74.41M;
+            string propertyType3 = Constants.Hostel;
+            GenderRestriction genderRestriction3 = GenderRestriction.FamiliesOnly;
+            string area3 = "Lahore, Pakistan";
+            long monthlyRent3 = 93000;
+            string rentUnit3 = Constants.Hourly;
+
+            Hostel hostel3 = new Hostel.HostelBuilder().OwnerEmail(email3).OwnerPhoneNumber(phoneNumber).Title(title3)
+                .OwnerName(name3)
+                .PropertyType(propertyType3).RentPrice(monthlyRent3).Latitude(latitude3).Longitude(longitude3)
+                .Area(area3).GenderRestriction(genderRestriction3).RentUnit(rentUnit3)
+                .Build();
+
+            houseRepository.SaveorUpdate(hostel3);
+
+            // Search using the owner of the first and second Hostel
+            IList<Hostel> retrievedHostel = houseRepository.GetHostelsByOwnerEmail(hostel.OwnerEmail);
+            Assert.IsNotNull(retrievedHostel);
+            Assert.AreEqual(2, retrievedHostel.Count);
+            Assert.AreEqual(title, retrievedHostel[0].Title);
+            Assert.AreEqual(description, retrievedHostel[0].Description);
+            Assert.AreEqual(email, retrievedHostel[0].OwnerEmail);
+            Assert.AreEqual(name, retrievedHostel[0].OwnerName);
+            Assert.AreEqual(phoneNumber, retrievedHostel[0].OwnerPhoneNumber);
+            Assert.AreEqual(cableTv, retrievedHostel[0].CableTvAvailable);
+            Assert.AreEqual(internet, retrievedHostel[0].InternetAvailable);
+            Assert.AreEqual(parking, retrievedHostel[0].ParkingAvailable);
+            Assert.AreEqual(latitude, retrievedHostel[0].Latitude);
+            Assert.AreEqual(longitude, retrievedHostel[0].Longitude);
+            Assert.AreEqual(propertyType, retrievedHostel[0].PropertyType);
+            Assert.AreEqual(genderRestriction, retrievedHostel[0].GenderRestriction);
+            Assert.AreEqual(area, retrievedHostel[0].Area);
+            Assert.AreEqual(monthlyRent, retrievedHostel[0].RentPrice);
+            Assert.AreEqual(isShared, retrievedHostel[0].IsShared);
+            Assert.AreEqual(rentUnit, retrievedHostel[0].RentUnit);
+            Assert.AreEqual(laundry, retrievedHostel[0].Laundry);
+            Assert.AreEqual(ac, retrievedHostel[0].AC);
+            Assert.AreEqual(geyser, retrievedHostel[0].Geyser);
+            Assert.AreEqual(attachedBathroom, retrievedHostel[0].AttachedBathroom);
+            Assert.AreEqual(fitnessCentre, retrievedHostel[0].FitnessCentre);
+            Assert.AreEqual(balcony, retrievedHostel[0].Balcony);
+            Assert.AreEqual(lawn, retrievedHostel[0].Lawn);
+            Assert.AreEqual(ironing, retrievedHostel[0].Ironing);
+            Assert.AreEqual(cctvCameras, retrievedHostel[0].CctvCameras);
+            Assert.AreEqual(backupElectricity, retrievedHostel[0].BackupElectricity);
+            Assert.AreEqual(heating, retrievedHostel[0].Heating);
+            Assert.AreEqual(meals, retrievedHostel[0].Meals);
+            Assert.AreEqual(picknDrop, retrievedHostel[0].PicknDrop);
+            Assert.AreEqual(numberOfSeats, retrievedHostel[0].NumberOfSeats);
+            Assert.AreEqual(landlineNumber, retrievedHostel[0].LandlineNumber);
+            Assert.AreEqual(fax, retrievedHostel[0].Fax);
+
+            Assert.AreEqual(2, retrievedHostel[0].Images.Count);
+            Assert.AreEqual(image1, retrievedHostel[0].Images[0]);
+            Assert.AreEqual(image2, retrievedHostel[0].Images[1]);
+            Assert.AreEqual(elevator, retrievedHostel[0].Elevator);
+
+            // Verification of Hostel # 2
+            Assert.AreEqual(title2, retrievedHostel[1].Title);
+            Assert.AreEqual(email2, retrievedHostel[1].OwnerEmail);
+            Assert.AreEqual(name2, retrievedHostel[1].OwnerName);
+            Assert.AreEqual(phoneNumber2, retrievedHostel[1].OwnerPhoneNumber);
+            Assert.AreEqual(latitude2, retrievedHostel[1].Latitude);
+            Assert.AreEqual(longitude2, retrievedHostel[1].Longitude);
+            Assert.AreEqual(propertyType2, retrievedHostel[1].PropertyType);
+            Assert.AreEqual(genderRestriction2, retrievedHostel[1].GenderRestriction);
+            Assert.AreEqual(area2, retrievedHostel[1].Area);
+            Assert.AreEqual(monthlyRent2, retrievedHostel[1].RentPrice);
+        }
     }
 }
