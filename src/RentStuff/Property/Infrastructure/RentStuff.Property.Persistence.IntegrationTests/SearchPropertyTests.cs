@@ -94,8 +94,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .Build();
             houseRepository.SaveorUpdate(hotel);
 
-            // Saving Property # 3: House. Outside the bounds of the search location, should not be in the search results
-            string area3 = "Bahria Town, Punjab, Pakistan";
+            // Saving Property # 3: Apartment. Should be in the search results
+            string area3 = "Bahria Town, Rawalpindi, Punjab, Pakistan";
             var coordinatesFromAddress3 = geocodingService.GetCoordinatesFromAddress(area3);
             string title3 = "Title # 3";
             string email3 = "special2@spsp123456-3.com";
@@ -113,7 +113,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdate(apartment);
 
             // Saving House # 4: Guest House. Should be in the search results
-            string area4 = "Satellite Town, Rawalpindi, Pakistan";
+            string area4 = "Lohi Bhair, Islamabad Capital Territory, Pakistan";
             var coordinatesFromAddress4 = geocodingService.GetCoordinatesFromAddress(area4);
             string title4 = "Title No 4";
             string email4 = "w@12344321-4.com";
@@ -135,7 +135,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdate(guestHouse);
 
             // Saving House # 5: Hostel. Should be in the search results
-            string area5 = "Gulberg, Pakistan";
+            string area5 = "Gulberg Greens, Gulberg, Islamabad Capital Territory, Pakistan";
             var coordinatesFromAddress5 = geocodingService.GetCoordinatesFromAddress(area5);
             string title5 = "Title No 5";
             string email5 = "w@12344321-5.com";
@@ -143,7 +143,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string phoneNumber5 = "03990000005";
             decimal latitude5 = coordinatesFromAddress5.Item1;
             decimal longitude5 = coordinatesFromAddress5.Item2;
-            string propertyType5 = Constants.Hotel;
+            string propertyType5 = Constants.Hostel;
             string rentUnit5 = Constants.Daily;
             long monthlyRent5 = 95000;
             GenderRestriction genderRestriction5 = GenderRestriction.NoRestriction;
@@ -177,7 +177,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdate(house2);
 
             // Saving Property # 7: Hotel. Outside bounds, should NOT be in the search results
-            string area7 = "Kallar Syedan, Punjab, Pakistan";
+            string area7 = "Choha Khalsa, Punjab, Pakistan";
             var coordinatesFromAddress7 = geocodingService.GetCoordinatesFromAddress(area7);
             string title7 = "Title No 7";
             string email7 = "w@12344321-7.com";
@@ -206,7 +206,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string phoneNumber8 = "03990000008";
             decimal latitude8 = coordinatesFromAddress8.Item1;
             decimal longitude8 = coordinatesFromAddress8.Item2;
-            string propertyType8 = Constants.Hotel;
+            string propertyType8 = Constants.GuestHouse;
             string rentUnit8 = Constants.Weekly;
             long monthlyRent8 = 98000;
             GenderRestriction genderRestriction8 = GenderRestriction.FamiliesOnly;
@@ -218,7 +218,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .Build();
             houseRepository.SaveorUpdate(guestHouse2);
 
-            // Saving Property # 9: House. Outside bounds, should NOT be in the search results
+            // Saving Property # 9: Aparment. Outside bounds, should NOT be in the search results
             string area9 = "Murree, Punjab, Pakistan";
             var coordinatesFromAddress9 = geocodingService.GetCoordinatesFromAddress(area9);
             string title9 = "Title # 9";
@@ -237,7 +237,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdate(apartment2);
 
             // Saving Property # 10: Hostel. Should be in the search results, again
-            string area10 = "Gulberg, Pakistan";
+            string area10 = "6th Road, Rawalpindi, Pakistan";
             var coordinatesFromAddress10 = geocodingService.GetCoordinatesFromAddress(area10);
             string title10 = "Title No 10";
             string email10 = "w@12344321-5.com";
@@ -245,7 +245,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string phoneNumber10 = "03990000010";
             decimal latitude10 = coordinatesFromAddress10.Item1;
             decimal longitude10 = coordinatesFromAddress10.Item2;
-            string propertyType10 = Constants.Hotel;
+            string propertyType10 = Constants.Hostel;
             string rentUnit10 = Constants.Daily;
             long monthlyRent10 = 100000;
             GenderRestriction genderRestriction10 = GenderRestriction.GirlsOnly;
@@ -258,15 +258,50 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .Build();
             houseRepository.SaveorUpdate(hostel2);
 
-            // Search Property type is House, so we should only get the 1 house
-            var retreivedHouses = houseRepository.SearchHousesByCoordinatesAndPropertyType(coordinatesFromAddress.Item1,
-                coordinatesFromAddress.Item2, Constants.House);
-            Assert.NotNull(retreivedHouses);
+            string searchLocation = "Pindora, Rawalpindi, Pakistan";
+            var searchCoordinates = geocodingService.GetCoordinatesFromAddress(searchLocation);
 
-            // Verification of House # 1
+            // Verification of House & Apartment
+            var retreivedHouses = houseRepository.SearchHousesByCoordinates(searchCoordinates.Item1,
+                searchCoordinates.Item2);
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(2, retreivedHouses.Count);
+            // House
             Assert.AreEqual(house.Id, retreivedHouses[0].Id);
             Assert.AreEqual(title, retreivedHouses[0].Title);
-            
+            Assert.AreEqual(Constants.House, retreivedHouses[0].PropertyType);
+            // Apartment
+            Assert.AreEqual(apartment.Id, retreivedHouses[1].Id);
+            Assert.AreEqual(apartment.Title, retreivedHouses[1].Title);
+            Assert.AreEqual(Constants.Apartment, retreivedHouses[1].PropertyType);
+
+            // Verification of 2 Hostels
+            var retreivedHostels = houseRepository.SearchHostelByLocation(searchCoordinates.Item1,
+                searchCoordinates.Item2);
+            Assert.NotNull(retreivedHostels);
+            Assert.AreEqual(2, retreivedHostels.Count);
+            // Hostel # 1
+            Assert.AreEqual(hostel2.Id, retreivedHostels[0].Id);
+            Assert.AreEqual(hostel2.Title, retreivedHostels[0].Title);
+            Assert.AreEqual(Constants.Hostel, retreivedHostels[0].PropertyType);
+            // Hostel # 2
+            Assert.AreEqual(hostel.Id, retreivedHostels[1].Id);
+            Assert.AreEqual(hostel.Title, retreivedHostels[1].Title);
+            Assert.AreEqual(Constants.Hostel, retreivedHostels[1].PropertyType);
+
+            // Verification of Hotel & Guest House
+            var retreivedHotels = houseRepository.SearchHotelByCoordinates(searchCoordinates.Item1,
+                searchCoordinates.Item2);
+            Assert.NotNull(retreivedHotels);
+            Assert.AreEqual(2, retreivedHotels.Count);
+            // Hotel
+            Assert.AreEqual(hotel.Id, retreivedHotels[0].Id);
+            Assert.AreEqual(hotel.Title, retreivedHotels[0].Title);
+            Assert.AreEqual(Constants.Hotel, retreivedHotels[0].PropertyType);
+            // Guest House
+            Assert.AreEqual(guestHouse.Id, retreivedHotels[1].Id);
+            Assert.AreEqual(guestHouse.Title, retreivedHotels[1].Title);
+            Assert.AreEqual(Constants.GuestHouse, retreivedHotels[1].PropertyType);
         }
     }
 }

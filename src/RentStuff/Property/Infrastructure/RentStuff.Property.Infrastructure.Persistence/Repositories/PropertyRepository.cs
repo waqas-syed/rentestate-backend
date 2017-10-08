@@ -6,6 +6,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using RentStuff.Property.Domain.Model.HostelAggregate;
+using RentStuff.Property.Domain.Model.HotelAggregate;
 
 namespace RentStuff.Property.Infrastructure.Persistence.Repositories
 {
@@ -139,25 +141,29 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
             .SetMaxResults(10)
             .Future<House>().ToList();*/
         }
-
+        
         /// <summary>
-        /// Get Location by Coordinates
+        /// Searches houses by coordinates and given propertytype
         /// </summary>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
+        /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-       // [Transaction]
+        //[Transaction]
         public IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude, int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                IList houses =
-                    _session.Session.CreateSQLQuery("SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house HAVING distance < :radius ORDER BY distance")
-                        // LIMIT 0 , 20")//("SELECT name, latitude, longitude, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM geo_location HAVING distance < 25 ORDER BY distance LIMIT 0 , 20")
+                IList houses = _session.Session.CreateSQLQuery(
+                            "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house HAVING distance < :radius ORDER BY distance")
                         .AddEntity(typeof(House))
+                        //.AddScalar("latitude", NHibernateUtil.Decimal)
+                        //.AddScalar("longitude", NHibernateUtil.Decimal)
+                        //.AddScalar("distance", NHibernateUtil.Decimal)
                         .SetParameter("inputLatitude", latitude)
                         .SetParameter("inputLongitude", longitude)
+                        //.SetParameter("propertyType", propertyType)
                         .SetParameter("radius", _radius)
                         .SetFirstResult(pageNo*_resultsPerPage)
                         .SetMaxResults(_resultsPerPage)
@@ -168,34 +174,52 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         }
 
         /// <summary>
-        /// Searches houses by coordinates and given propertytype
+        /// Search Hostels in the radius sorrounding the coordinates
         /// </summary>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        //[Transaction]
-        public IList<House> SearchHousesByCoordinatesAndPropertyType(decimal latitude, decimal longitude,
-            string propertyType, int pageNo = 0)
+        public IList<Hostel> SearchHostelByLocation(decimal latitude, decimal longitude, int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 IList houses = _session.Session.CreateSQLQuery(
-                            "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house HAVING distance < :radius AND property_type=:propertyType ORDER BY distance")
-                        .AddEntity(typeof(House))
-                        //.AddScalar("latitude", NHibernateUtil.Decimal)
-                        //.AddScalar("longitude", NHibernateUtil.Decimal)
-                        //.AddScalar("distance", NHibernateUtil.Decimal)
-                        .SetParameter("inputLatitude", latitude)
-                        .SetParameter("inputLongitude", longitude)
-                        .SetParameter("propertyType", propertyType)
-                        .SetParameter("radius", _radius)
-                        .SetFirstResult(pageNo*_resultsPerPage)
-                        .SetMaxResults(_resultsPerPage)
-                        .List();
+                        "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM hostel HAVING distance < :radius ORDER BY distance")
+                    .AddEntity(typeof(Hostel))
+                    //.AddScalar("latitude", NHibernateUtil.Decimal)
+                    //.AddScalar("longitude", NHibernateUtil.Decimal)
+                    //.AddScalar("distance", NHibernateUtil.Decimal)
+                    .SetParameter("inputLatitude", latitude)
+                    .SetParameter("inputLongitude", longitude)
+                    .SetParameter("radius", _radius)
+                    .SetFirstResult(pageNo * _resultsPerPage)
+                    .SetMaxResults(_resultsPerPage)
+                    .List();
 
-                return houses.Cast<House>().ToList();
+                return houses.Cast<Hostel>().ToList();
+            }
+        }
+
+        public IList<Hotel> SearchHotelByCoordinates(decimal latitude, decimal longitude, int pageNo = 0)
+        {
+            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                IList houses = _session.Session.CreateSQLQuery(
+                        "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM hotel HAVING distance < :radius ORDER BY distance")
+                    .AddEntity(typeof(Hotel))
+                    //.AddScalar("latitude", NHibernateUtil.Decimal)
+                    //.AddScalar("longitude", NHibernateUtil.Decimal)
+                    //.AddScalar("distance", NHibernateUtil.Decimal)
+                    .SetParameter("inputLatitude", latitude)
+                    .SetParameter("inputLongitude", longitude)
+                    .SetParameter("radius", _radius)
+                    .SetFirstResult(pageNo * _resultsPerPage)
+                    .SetMaxResults(_resultsPerPage)
+                    .List();
+
+                return houses.Cast<Hotel>().ToList();
             }
         }
 

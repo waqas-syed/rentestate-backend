@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RentStuff.Property.Domain.Model.HostelAggregate;
+using RentStuff.Property.Domain.Model.HotelAggregate;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 
 namespace RentStuff.Property.Domain.Model.PropertyAggregate
@@ -59,8 +60,25 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<House> SearchHousesByCoordinatesAndPropertyType(decimal latitude, decimal longitude,
-            string propertyType, int pageNo = 0);
+        IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude, int pageNo = 0);
+
+        /// <summary>
+        /// Search Hostels in the radius sorrounding the given location
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        IList<Hostel> SearchHostelByLocation(decimal latitude, decimal longitude, int pageNo = 0);
+
+        /// <summary>
+        /// Search Hotels in the radius sorrounding the given location
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        IList<Hotel> SearchHotelByCoordinates(decimal latitude, decimal longitude, int pageNo = 0);
 
         /// <summary>
         /// Get the total number of houses with the given property type present in the database

@@ -253,9 +253,28 @@ namespace RentStuff.Property.Application.HouseServices
         {
             // Get the coordinates for the location using the Geocoding API service
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
+
+            switch (propertyType)
+            {
+                case Constants.House:
+                    _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+                    break;
+                case Constants.Apartment:
+                    _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+                    break;
+                case Constants.Hostel:
+                    _houseRepository.SearchHostelByLocation(coordinates.Item1, coordinates.Item2, pageNo);
+                    break;
+                case Constants.Hotel:
+                    _houseRepository.SearchHotelByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+                    break;
+                case Constants.GuestHouse:
+                    _houseRepository.SearchHotelByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+                    break;
+            }
             // Get 20 coordinates within the range of around 30 kilometers radius
-            IList<House> houses = _houseRepository.SearchHousesByCoordinatesAndPropertyType(coordinates.Item1,
-                coordinates.Item2, propertyType, pageNo);
+            IList<House> houses = _houseRepository.SearchHousesByCoordinates(coordinates.Item1,
+                coordinates.Item2, pageNo);
             return ConvertHousesToPartialRepresentations(houses);
         }
 
