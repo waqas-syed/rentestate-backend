@@ -17,7 +17,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Ninject.Modules
             //Bind<ISessionFactory>().ToMethod(context => context.Kernel.Get<INHibernateSessionFactoryProvider>().SessionFactory).InSingletonScope();
             //Bind<INhibernateSessionWrapper>().To<NHibernateSessionWrapper>().InRequestScope();
             Bind<IPropertyMappingProvider>().To<PropertyMappingProvider>().InSingletonScope();
-            Bind<IResidentialPropertyRepository>().To<PropertyRepository>().InTransientScope();
+            Bind<IResidentialPropertyRepository>().To<ResidentialPropertyRepository>().InTransientScope();
         }
     }
 }

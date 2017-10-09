@@ -16,7 +16,7 @@ using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 namespace RentStuff.Property.Persistence.IntegrationTests
 {
     [TestFixture]
-    class SearchPropertyTests
+    class SearchResidentialPropertyTests
     {
         private DatabaseUtility _databaseUtility;
         private IKernel _kernel;
@@ -276,7 +276,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(Constants.Apartment, retreivedHouses[1].PropertyType);
 
             // Verification of 2 Hostels
-            var retreivedHostels = houseRepository.SearchHostelByLocation(searchCoordinates.Item1,
+            var retreivedHostels = houseRepository.SearchHostelByCoordinates(searchCoordinates.Item1,
                 searchCoordinates.Item2);
             Assert.NotNull(retreivedHostels);
             Assert.AreEqual(2, retreivedHostels.Count);

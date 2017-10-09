@@ -69,7 +69,7 @@
     <Compile Include="NHibernate\Providers\PropertyMappingProvider.cs" />
     <Compile Include="Ninject\Modules\PropertyPersistenceNinjectModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\PropertyRepository.cs" />
+    <Compile Include="Repositories\ResidentialPropertyRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\RentStuff.Common\RentStuff.Common.csproj">

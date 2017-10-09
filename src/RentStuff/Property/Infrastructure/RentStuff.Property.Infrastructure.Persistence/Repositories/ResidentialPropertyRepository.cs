@@ -14,7 +14,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
     /// <summary>
     /// House Repository
     /// </summary>
-    public class PropertyRepository : IResidentialPropertyRepository
+    public class ResidentialPropertyRepository : IResidentialPropertyRepository
     {
         // The radius in kilometers from the location that was searched. We search within this radius for results
         // The formula is given here: https://developers.google.com/maps/articles/phpsqlsearch_v3
@@ -23,7 +23,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         private readonly int _resultsPerPage = 10;
         private INhibernateSessionWrapper _session;
 
-        public PropertyRepository(INhibernateSessionWrapper nhibernateSessionWrapper)
+        public ResidentialPropertyRepository(INhibernateSessionWrapper nhibernateSessionWrapper)
         {
             _session = nhibernateSessionWrapper;
         }
@@ -158,15 +158,14 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <summary>
         /// Gets houses with reference to their PropertyType
         /// </summary>
-        /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
         //[Transaction]
-        public IList<House> SearchHousesByPropertyType(string propertyType, int pageNo = 0)
+        public IList<House> GetAllHouses(int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                return _session.Session.QueryOver<House>().Where(x => x.PropertyType == propertyType)
+                return _session.Session.QueryOver<House>()
                         .Skip(pageNo*_resultsPerPage)
                         .Take(_resultsPerPage)
                         .List<House>();
@@ -177,7 +176,39 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
             .SetMaxResults(10)
             .Future<House>().ToList();*/
         }
-        
+
+        /// <summary>
+        /// Search All Hostels
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        public IList<Hostel> GetAllHostels(int pageNo = 0)
+        {
+            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return _session.Session.QueryOver<Hostel>()
+                    .Skip(pageNo * _resultsPerPage)
+                    .Take(_resultsPerPage)
+                    .List<Hostel>();
+            }
+        }
+
+        /// <summary>
+        /// Search all the Hotels
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        public IList<Hotel> GetAllHotels(int pageNo = 0)
+        {
+            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return _session.Session.QueryOver<Hotel>()
+                    .Skip(pageNo * _resultsPerPage)
+                    .Take(_resultsPerPage)
+                    .List<Hotel>();
+            }
+        }
+
         /// <summary>
         /// Searches houses by coordinates and given propertytype
         /// </summary>
@@ -217,7 +248,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public IList<Hostel> SearchHostelByLocation(decimal latitude, decimal longitude, int pageNo = 0)
+        public IList<Hostel> SearchHostelByCoordinates(decimal latitude, decimal longitude, int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
@@ -258,24 +289,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
                 return houses.Cast<Hotel>().ToList();
             }
         }
-
-        /// <summary>
-        /// Get all the houses
-        /// </summary>
-        /// <returns></returns>
-        //[Transaction]
-        public IList<House> GetAllHouses(int pageNo = 0)
-        {
-            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
-            {
-                return _session
-                        .Session.QueryOver<House>()
-                        .Skip(pageNo*_resultsPerPage)
-                        .Take(_resultsPerPage)
-                        .List<House>();
-            }
-        }
-
+        
         /// <summary>
         /// Gets the number of records for the given criteria in the database
         /// Item 1: RecordCount 

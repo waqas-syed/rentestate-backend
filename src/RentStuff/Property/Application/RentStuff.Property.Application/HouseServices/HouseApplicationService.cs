@@ -237,8 +237,12 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         public IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType, int pageNo = 0)
         {
-            IList<House> houses = _houseRepository.SearchHousesByPropertyType(propertyType, pageNo);
-            return ConvertHousesToPartialRepresentations(houses);
+            if (propertyType.Equals(Constants.House) && propertyType.Equals(Constants.Apartment))
+            {
+                IList<House> houses = _houseRepository.GetAllHouses(pageNo);
+                return ConvertHousesToPartialRepresentations(houses);
+            }
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -263,7 +267,7 @@ namespace RentStuff.Property.Application.HouseServices
                     _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
                     break;
                 case Constants.Hostel:
-                    _houseRepository.SearchHostelByLocation(coordinates.Item1, coordinates.Item2, pageNo);
+                    _houseRepository.SearchHostelByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
                     break;
                 case Constants.Hotel:
                     _houseRepository.SearchHotelByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
