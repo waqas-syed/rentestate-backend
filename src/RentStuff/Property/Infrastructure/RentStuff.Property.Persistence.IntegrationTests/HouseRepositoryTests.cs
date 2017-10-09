@@ -800,7 +800,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         }
 
         [Test]
-        public void RetreiveHousesByPropertyTypePaginationTest_ChecksThatThePaginationIsWorkingFine_VerifiesThroughReturnedOutput()
+        public void RetreiveAllHousesPaginationTest_ChecksThatThePaginationIsWorkingFine_VerifiesThroughReturnedOutput()
         {
             IResidentialPropertyRepository houseRepository = _kernel.Get<IResidentialPropertyRepository>();
 
@@ -813,9 +813,46 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.NotNull(retreivedHouses);
             Assert.AreEqual(10, retreivedHouses.Count);
         }
-        
-        #endregion Save and Search Houses By PropertyType Only
-        
+
+        [Test]
+        public void RetreiveHousesByCoordinatesPaginationTest_ChecksThatThePaginationIsWorkingFine_VerifiesThroughReturnedOutput()
+        {
+            IResidentialPropertyRepository houseRepository = _kernel.Get<IResidentialPropertyRepository>();
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService =
+                _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
+
+            string searchArea = "Pindora, Rawalpindi, Pakistan";
+            var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(searchArea);
+            // Save more than 10 houses using the same property type
+            SaveMultipleHousesUsingGivenIterations(houseRepository, 21, searchArea,
+                coordinatesFromAddress.Item1, coordinatesFromAddress.Item2);
+
+            // Now search by property type and check we only retreived 10 houses
+            string searchedPropertyType = "House";
+            var retreivedHouses = houseRepository.SearchHousesByCoordinates(coordinatesFromAddress.Item1, 
+                coordinatesFromAddress.Item2);
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(10, retreivedHouses.Count);
+        }
+
+        [Test]
+        public void RetreiveHousesByEmailPaginationTest_ChecksThatThePaginationIsWorkingFine_VerifiesThroughReturnedOutput()
+        {
+            IResidentialPropertyRepository houseRepository = _kernel.Get<IResidentialPropertyRepository>();
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService =
+                _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
+
+            string ownerEemail = "special@spsp123456-1.com";
+            // Save more than 10 houses using the same property type
+            SaveMultipleHousesUsingGivenIterations(houseRepository, 21, email: ownerEemail);
+            
+            var retreivedHouses = houseRepository.GetHouseByOwnerEmail(ownerEemail);
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(10, retreivedHouses.Count);
+        }
+
+        #endregion Save and Search All Houses
+
         #region Save and Search Houses by Email
 
         [Test]
@@ -1006,17 +1043,20 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         /// </summary>
         /// <param name="houseRepository"></param>
         /// <param name="numberOfIterations"></param>
-        private void SaveMultipleHousesUsingGivenIterations(IResidentialPropertyRepository houseRepository, int numberOfIterations)
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="email"></param>
+        private void SaveMultipleHousesUsingGivenIterations(IResidentialPropertyRepository houseRepository, 
+            int numberOfIterations, string area = "Pindora, Rawalpindi, Pakistan", decimal latitude = 25.74M, 
+            decimal longitude = 73.91M, string email = "special@spsp123456-1.com")
         {
             for (int i = 0; i < numberOfIterations; i++)
             {
-                string area = "Pindora, Rawalpindi, Pakistan";
                 string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
                 string houseNo = "House # 1";
                 string streetNo = "1";
                 string title = "Title # 1";
                 string phoneNumber = "01234567890";
-                string email = "special@spsp123456-1.com";
                 int numberOfBathrooms = 1;
                 int numberOfBedrooms = 1;
                 int numberOfKitchens = 1;
@@ -1029,8 +1069,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                     .OwnerPhoneNumber(phoneNumber)
                     .NumberOfKitchens(numberOfKitchens).CableTvAvailable(true)
                     .GarageAvailable(true).LandlinePhoneAvailable(true).SmokingAllowed(true).WithInternetAvailable(true)
-                    .PropertyType(propertyType).RentPrice(rent).Latitude(i + 1)
-                    .Longitude(i + 1)
+                    .PropertyType(propertyType).RentPrice(rent).Latitude(latitude)
+                    .Longitude(longitude)
                     .HouseNo(houseNo)
                     .Area(area)
                     .StreetNo(streetNo)

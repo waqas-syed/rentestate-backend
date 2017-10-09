@@ -956,5 +956,86 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             Assert.AreEqual(elevator, retrievedHotel[0].Elevator);
         }
+
+        [Test]
+        public void RetreiveAllHousesPaginationTest_ChecksThatThePaginationIsWorkingFine_VerifiesThroughReturnedOutput()
+        {
+            IResidentialPropertyRepository houseRepository = _kernel.Get<IResidentialPropertyRepository>();
+
+            // Save more than 10 houses using the same property type
+            SaveMultipleHousesUsingGivenIterations(houseRepository, 21);
+
+            var retreivedHouses = houseRepository.GetAllHotels();
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(10, retreivedHouses.Count);
+        }
+
+        [Test]
+        public void RetreiveHousesByCoordinatesPaginationTest_ChecksThatThePaginationIsWorkingFine_VerifiesThroughReturnedOutput()
+        {
+            IResidentialPropertyRepository houseRepository = _kernel.Get<IResidentialPropertyRepository>();
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService =
+                _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
+
+            string searchArea = "Pindora, Rawalpindi, Pakistan";
+            var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(searchArea);
+            // Save more than 10 houses using the same property type
+            SaveMultipleHousesUsingGivenIterations(houseRepository, 21, searchArea,
+                coordinatesFromAddress.Item1, coordinatesFromAddress.Item2);
+
+            var retreivedHouses = houseRepository.SearchHotelByCoordinates(coordinatesFromAddress.Item1,
+                coordinatesFromAddress.Item2);
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(10, retreivedHouses.Count);
+        }
+
+        [Test]
+        public void RetreiveHousesByEmailPaginationTest_ChecksThatThePaginationIsWorkingFine_VerifiesThroughReturnedOutput()
+        {
+            IResidentialPropertyRepository residentialRepository = _kernel.Get<IResidentialPropertyRepository>();
+            RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService =
+                _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
+
+            string ownerEemail = "special@spsp123456-1.com";
+            // Save more than 10 houses using the same property type
+            SaveMultipleHousesUsingGivenIterations(residentialRepository, 21, email: ownerEemail);
+
+            var retreivedHouses = residentialRepository.GetHotelsByOwnerEmail(ownerEemail);
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(10, retreivedHouses.Count);
+        }
+
+        /// <summary>
+        /// We can use this method to create data for pagination tests. Values are simple and repetitive
+        /// </summary>
+        /// <param name="houseRepository"></param>
+        /// <param name="numberOfIterations"></param>
+        /// <param name="area"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="email"></param>
+        private void SaveMultipleHousesUsingGivenIterations(IResidentialPropertyRepository houseRepository,
+            int numberOfIterations, string area = "Pindora, Rawalpindi, Pakistan", decimal latitude = 25.74M,
+            decimal longitude = 73.91M, string email = "special@spsp123456-1.com")
+        {
+            for (int i = 0; i < numberOfIterations; i++)
+            {
+                string description = "It was a Hobbit Hole. Which means it had good food and a warm hearth.";
+                string title = "Title # 1";
+                string phoneNumber = "01234567890";
+                int rent = 100;
+                string ownerName = "Owner Name 1";
+                string propertyType = Constants.Hotel;
+                Hotel hostel = new Hotel.HotelBuilder().Title(title).OwnerEmail(email)
+                    .OwnerPhoneNumber(phoneNumber)
+                    .PropertyType(propertyType).RentPrice(rent).Latitude(latitude)
+                    .Longitude(longitude)
+                    .Area(area)
+                    .OwnerName(ownerName)
+                    .Description(description)
+                    .Build();
+                houseRepository.SaveorUpdate(hostel);
+            }
+        }
     }
 }
