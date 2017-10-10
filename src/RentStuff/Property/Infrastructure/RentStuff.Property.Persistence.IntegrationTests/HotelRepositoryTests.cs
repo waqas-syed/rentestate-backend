@@ -15,7 +15,7 @@ using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 namespace RentStuff.Property.Persistence.IntegrationTests
 {
     [TestFixture]
-    class HotelRepository
+    class HotelRepositoryTests
     {
         private DatabaseUtility _databaseUtility;
         private IKernel _kernel;
@@ -95,7 +95,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool elevator = false;
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -341,7 +341,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool elevator = false;
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -430,7 +430,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool elevator = false;
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -623,7 +623,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool elevator = false;
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -833,7 +833,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool elevator = false;
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)

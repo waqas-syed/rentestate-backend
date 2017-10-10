@@ -1,8 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.Runtime.Serialization;
 
-namespace RentStuff.Property.Application.HouseServices.Commands
+namespace RentStuff.Property.Application.HouseServices.Commands.UpdateCommands
 {
     /// <summary>
     /// Updates en existing House instance

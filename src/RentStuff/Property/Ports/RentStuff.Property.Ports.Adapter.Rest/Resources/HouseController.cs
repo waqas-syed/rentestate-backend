@@ -9,6 +9,9 @@ using Newtonsoft.Json;
 using NLog;
 using RentStuff.Property.Application.HouseServices;
 using RentStuff.Property.Application.HouseServices.Commands;
+using RentStuff.Property.Application.HouseServices.Commands.CreateCommands;
+using RentStuff.Property.Application.HouseServices.Commands.DeleteCommands;
+using RentStuff.Property.Application.HouseServices.Commands.UpdateCommands;
 
 namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 {
@@ -19,13 +22,13 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
     public class HouseController : ApiController
     {
         private static Logger _logger = LogManager.GetCurrentClassLogger();
-        private IHouseApplicationService _houseApplicationService;
+        private IPropertyApplicationService _houseApplicationService;
         
         /// <summary>
         /// Initialize with House's application service
         /// </summary>
         /// <param name="houseApplicationService"></param>
-        public HouseController(IHouseApplicationService houseApplicationService)
+        public HouseController(IPropertyApplicationService houseApplicationService)
         {
             _houseApplicationService = houseApplicationService;
         }

@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using RentStuff.Property.Application.HouseServices.Commands.AbstractCommands;
 
-namespace RentStuff.Property.Application.HouseServices.Commands
+namespace RentStuff.Property.Application.HouseServices.Commands.CreateCommands
 {
     /// <summary>
     /// Command for the House instance
     /// </summary>
     [Serializable]
     [DataContract]
-    public class CreateHouseCommand
+    public class CreateHouseCommand : ResidentialPropertyBaseCommand
     {
         public CreateHouseCommand(string title, long rentPrice, int numberOfBedrooms,
             int numberOfKitchens, int numberOfBathrooms,
@@ -17,44 +18,23 @@ namespace RentStuff.Property.Application.HouseServices.Commands
             string houseNo, string streetNo, string area, string dimensionType, string dimensionStringValue, 
             decimal dimensionIntValue, string ownerName, string description, string genderRestriction, bool isShared,
             string rentUnit, string landlineNumber, string fax)
+            : base(title, rentPrice, internetAvailable, cableTvAvailable, propertyType,
+                  ownerEmail, ownerPhoneNumber, area, ownerName, description, genderRestriction, isShared, rentUnit,
+                  landlineNumber, fax)
         {
-            Title = title;
-            RentPrice = rentPrice;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
-            InternetAvailable = internetAvailable;
-            LandlinePhoneAvailable = landlinePhoneAvailable;
-            CableTvAvailable = cableTvAvailable;
-            GarageAvailable = garageAvailable;
             SmokingAllowed = smokingAllowed;
-            PropertyType = propertyType;
-            OwnerEmail = ownerEmail;
-            OwnerPhoneNumber = ownerPhoneNumber;
             HouseNo = houseNo;
             StreetNo = streetNo;
-            Area = area;
             DimensionType = dimensionType;
             DimensionStringValue = dimensionStringValue;
             DimensionIntValue = dimensionIntValue;
-            OwnerName = ownerName;
-            Description = description;
-            GenderRestriction = genderRestriction;
-            IsShared = isShared;
-            RentUnit = rentUnit;
-            LandlineNumber = landlineNumber;
-            Fax = fax;
+            GarageAvailable = garageAvailable;
+            LandlinePhoneAvailable = landlinePhoneAvailable;
         }
-
-        [DataMember]
-        public string Title { get; private set; }
-
-        [DataMember]
-        public string Description { get; private set; }
-
-        [DataMember]
-        public long RentPrice { get; private set; }
-
+        
         [DataMember]
         public int NumberOfBedrooms { get; private set; }
 
@@ -65,44 +45,20 @@ namespace RentStuff.Property.Application.HouseServices.Commands
         public int NumberOfBathrooms { get; private set; }
         
         [DataMember]
-        public bool InternetAvailable { get; private set; }
-
-        [DataMember]
-        public bool LandlinePhoneAvailable { get; private set; }
-
-        [DataMember]
-        public bool CableTvAvailable { get; private set; }
-
-        [DataMember]
         public bool GarageAvailable { get; private set; }
 
         [DataMember]
         public bool SmokingAllowed { get; private set; }
 
         [DataMember]
-        public string PropertyType { get; private set; }
-
-        [DataMember]
-        public string OwnerEmail { get; private set; }
-
-        [DataMember]
-        public string OwnerPhoneNumber { get; private set; }
-
-        [DataMember]
-        public string LandlineNumber { get; private set; }
-
-        [DataMember]
-        public string Fax { get; private set; }
+        public bool LandlinePhoneAvailable { get; private set; }
 
         [DataMember]
         public string HouseNo { get; private set; }
 
         [DataMember]
         public string StreetNo { get; private set; }
-
-        [DataMember]
-        public string Area { get; private set; }
-
+        
         [DataMember]
         public string DimensionType { get; private set; }
 
@@ -111,17 +67,5 @@ namespace RentStuff.Property.Application.HouseServices.Commands
 
         [DataMember]
         public decimal DimensionIntValue { get; private set; }
-
-        [DataMember]
-        public string OwnerName { get; private set; }
-
-        [DataMember]
-        public string GenderRestriction { get; private set; }
-
-        [DataMember]
-        public bool IsShared { get; private set; }
-
-        [DataMember]
-        public string RentUnit { get; private set; }
     }
 }

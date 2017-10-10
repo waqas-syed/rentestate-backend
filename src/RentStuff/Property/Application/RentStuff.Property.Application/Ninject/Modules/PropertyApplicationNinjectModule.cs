@@ -11,7 +11,7 @@ namespace RentStuff.Property.Application.Ninject.Modules
         /// <summary>Loads the module into the kernel.</summary>
         public override void Load()
         {
-            Bind<IHouseApplicationService>().To<HouseApplicationService>().InTransientScope();
+            Bind<IPropertyApplicationService>().To<PropertyApplicationService>().InTransientScope();
         }
     }
 }

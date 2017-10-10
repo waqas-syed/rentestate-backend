@@ -66,15 +66,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HouseServices\Commands\CreateHouseCommand.cs" />
-    <Compile Include="HouseServices\Commands\DeleteImageCommand.cs" />
-    <Compile Include="HouseServices\Commands\UpdateHouseCommand.cs" />
-    <Compile Include="HouseServices\HouseApplicationService.cs" />
+    <Compile Include="HouseServices\Commands\CreateCommands\CreateHostelCommand.cs" />
+    <Compile Include="HouseServices\Commands\CreateCommands\CreateHotelCommand.cs" />
+    <Compile Include="HouseServices\Commands\CreateCommands\CreateHouseCommand.cs" />
+    <Compile Include="HouseServices\Commands\DeleteCommands\DeleteImageCommand.cs" />
+    <Compile Include="HouseServices\Commands\AbstractCommands\GuestPropertyBaseCommand.cs" />
+    <Compile Include="HouseServices\Commands\AbstractCommands\PropertyBaseCommand.cs" />
+    <Compile Include="HouseServices\Commands\AbstractCommands\ResidentialPropertyBaseCommand.cs" />
+    <Compile Include="HouseServices\Commands\UpdateCommands\UpdateHouseCommand.cs" />
+    <Compile Include="HouseServices\PropertyApplicationService.cs" />
+    <Compile Include="HouseServices\Representation\AbstractRepresentations\GuestPropertyBaseRepresentation.cs" />
+    <Compile Include="HouseServices\Representation\FullRepresentations\HostelFullRepresentation.cs" />
+    <Compile Include="HouseServices\Representation\FullRepresentations\HotelFullRepresentation.cs" />
     <Compile Include="HouseServices\Representation\HouseCountRepresentation.cs" />
-    <Compile Include="HouseServices\Representation\HouseFullRepresentation.cs" />
+    <Compile Include="HouseServices\Representation\FullRepresentations\HouseFullRepresentation.cs" />
     <Compile Include="HouseServices\Representation\HousePartialRepresentation.cs" />
-    <Compile Include="HouseServices\IHouseApplicationService.cs" />
+    <Compile Include="HouseServices\IPropertyApplicationService.cs" />
     <Compile Include="HouseServices\Representation\ImageRepresentation.cs" />
+    <Compile Include="HouseServices\Representation\PropertyBaseRepresentation.cs" />
+    <Compile Include="HouseServices\Representation\AbstractRepresentations\ResidentialPropertyBaseRepresentation.cs" />
     <Compile Include="Ninject\Modules\PropertyApplicationNinjectModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

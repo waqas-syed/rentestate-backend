@@ -326,6 +326,10 @@ CREATE TABLE `house` (
   `owner_name` varchar(100) NOT NULL,
   `is_shared` tinyint(1) NOT NULL DEFAULT '0',
   `rent_unit` varchar(50) NOT NULL DEFAULT 'Month',
+  
+  `landline_number` varchar(25) DEFAULT NULL,
+  `fax` varchar(25) DEFAULT NULL,
+  
   `date_created` datetime DEFAULT NULL,
   `last_modified` datetime DEFAULT NULL,
   PRIMARY KEY (`db_id`),

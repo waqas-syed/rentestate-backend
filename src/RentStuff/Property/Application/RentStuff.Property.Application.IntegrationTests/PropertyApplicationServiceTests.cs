@@ -9,13 +9,17 @@ using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 using System;
 using System.Collections.Generic;
+using RentStuff.Property.Application.HouseServices.Commands.CreateCommands;
+using RentStuff.Property.Application.HouseServices.Representation.FullRepresentations;
+using RentStuff.Property.Domain.Model.HostelAggregate;
+using RentStuff.Property.Domain.Model.HotelAggregate;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.PropertyAggregate;
 
 namespace RentStuff.Property.Application.IntegrationTests
 {
     [TestFixture]
-    public class HouseApplicationServiceTests
+    public class PropertyApplicationServiceTests
     {
         private DatabaseUtility _databaseUtility;
         private IKernel _kernel;
@@ -41,10 +45,11 @@ namespace RentStuff.Property.Application.IntegrationTests
             _databaseUtility.Create();
         }
 
+        // Save and retrieve a full House
         [Test]
         public void SaveHouseTest_TestsThatANewHouseIsSavedInTheDatabaseAsExpected_VerifiesByOutput()
         {
-            IHouseApplicationService houseApplicationService = _kernel.Get<IHouseApplicationService>();
+            IPropertyApplicationService houseApplicationService = _kernel.Get<IPropertyApplicationService>();
             
             string email = "w@12344321.com";
             string phoneNumber = "01234567890";
@@ -75,41 +80,238 @@ namespace RentStuff.Property.Application.IntegrationTests
                 internet, landline, cableTv, garage, smokingAllowed, propertyType, email, phoneNumber, houseNo, streetNo, area,
                 dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared, rentUnit,
                 landlineNumber, fax);
-            string houseCreated = houseApplicationService.SaveNewHouseOffer(createNewHouseCommand);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
-            Assert.AreEqual(email, createNewHouseCommand.OwnerEmail);
-            Assert.AreEqual(phoneNumber, createNewHouseCommand.OwnerPhoneNumber);
-            Assert.AreEqual(ownerName, createNewHouseCommand.OwnerName);
-            Assert.AreEqual(description, createNewHouseCommand.Description);
-            Assert.AreEqual(houseNo, createNewHouseCommand.HouseNo);
-            Assert.AreEqual(streetNo, createNewHouseCommand.StreetNo);
-            Assert.AreEqual(title, createNewHouseCommand.Title);
-            Assert.AreEqual(area, createNewHouseCommand.Area);
-            Assert.AreEqual(dimensionType, createNewHouseCommand.DimensionType);
-            Assert.AreEqual(dimensionString, createNewHouseCommand.DimensionStringValue);
-            Assert.AreEqual(dimensionType, createNewHouseCommand.DimensionType);
-            Assert.AreEqual(numberofBathrooms, createNewHouseCommand.NumberOfBathrooms);
-            Assert.AreEqual(numberOfBedrooms, createNewHouseCommand.NumberOfBedrooms);
-            Assert.AreEqual(numberOfKitchens, createNewHouseCommand.NumberOfKitchens);
-            Assert.AreEqual(propertyType, createNewHouseCommand.PropertyType);
-            Assert.AreEqual(monthlyRent, createNewHouseCommand.RentPrice);
-            Assert.AreEqual(numberofBathrooms, createNewHouseCommand.NumberOfBathrooms);
-            Assert.AreEqual(genderRestriction, createNewHouseCommand.GenderRestriction);
-            Assert.AreEqual(internet, createNewHouseCommand.InternetAvailable);
-            Assert.AreEqual(garage, createNewHouseCommand.GarageAvailable);
-            Assert.AreEqual(landline, createNewHouseCommand.LandlinePhoneAvailable);
-            Assert.AreEqual(cableTv, createNewHouseCommand.CableTvAvailable);
-            Assert.AreEqual(smokingAllowed, createNewHouseCommand.SmokingAllowed);
-            Assert.AreEqual(isShared, createNewHouseCommand.IsShared);
-            Assert.AreEqual(rentUnit, createNewHouseCommand.RentUnit);
-            Assert.AreEqual(landlineNumber, createNewHouseCommand.LandlineNumber);
-            Assert.AreEqual(fax, createNewHouseCommand.Fax);
+            string houseId = houseApplicationService.SaveNewHouseOffer(createNewHouseCommand);
+
+            HouseFullRepresentation retreivedHouse = 
+                (HouseFullRepresentation)houseApplicationService.GetPropertyById(houseId, Constants.House);
+
+            Assert.NotNull(retreivedHouse);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
+            Assert.AreEqual(houseId, retreivedHouse.Id);
+            Assert.AreEqual(email, retreivedHouse.OwnerEmail);
+            Assert.AreEqual(phoneNumber, retreivedHouse.OwnerPhoneNumber);
+            Assert.AreEqual(ownerName, retreivedHouse.OwnerName);
+            Assert.AreEqual(description, retreivedHouse.Description);
+            Assert.AreEqual(houseNo, retreivedHouse.HouseNo);
+            Assert.AreEqual(streetNo, retreivedHouse.StreetNo);
+            Assert.AreEqual(title, retreivedHouse.Title);
+            Assert.AreEqual(area, retreivedHouse.Area);
+            Assert.AreEqual(dimensionString + " " + dimensionType, retreivedHouse.Dimension);
+            Assert.AreEqual(numberofBathrooms, retreivedHouse.NumberOfBathrooms);
+            Assert.AreEqual(numberOfBedrooms, retreivedHouse.NumberOfBedrooms);
+            Assert.AreEqual(numberOfKitchens, retreivedHouse.NumberOfKitchens);
+            Assert.AreEqual(propertyType, retreivedHouse.PropertyType);
+            Assert.AreEqual(monthlyRent, retreivedHouse.RentPrice);
+            Assert.AreEqual(genderRestriction, retreivedHouse.GenderRestriction);
+            Assert.AreEqual(internet, retreivedHouse.InternetAvailable);
+            Assert.AreEqual(garage, retreivedHouse.GarageAvailable);
+            Assert.AreEqual(landline, retreivedHouse.LandlinePhoneAvailable);
+            Assert.AreEqual(cableTv, retreivedHouse.CableTvAvailable);
+            Assert.AreEqual(smokingAllowed, retreivedHouse.SmokingAllowed);
+            Assert.AreEqual(isShared, retreivedHouse.IsShared);
+            Assert.AreEqual(rentUnit, retreivedHouse.RentUnit);
+            Assert.AreEqual(landlineNumber, retreivedHouse.LandlineNumber);
+            Assert.AreEqual(fax, retreivedHouse.Fax);
         }
 
+        // Save and retrieve a full Hostel
+        [Test]
+        public void SaveNewHostelTest_ChecksThatANewHostelIsSavedAndRetrievedAsExpected_VerifiesByTheReturnValue()
+        {
+            IPropertyApplicationService propertyApplicationService = _kernel.Get<IPropertyApplicationService>();
+
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+            string phoneNumber = "03455138018";
+            string propertyType = "Hostel";
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+            bool cableTv = false;
+            bool internet = true;
+            bool parking = true;
+            string rentUnit = "Hour";
+            bool isShared = true;
+            bool laundry = true;
+            bool ac = true;
+            bool geyser = true;
+            bool attachedBathroom = true;
+            bool fitnessCentre = false;
+            bool balcony = false;
+            bool lawn = true;
+            bool heating = false;
+            bool meals = true;
+            bool picknDrop = false;
+            bool ironing = false;
+            bool cctvCameras = true;
+            bool backupElectricity = true;
+            int numberOfSeats = 3;
+            string landlineNumber = "0510000000";
+            string fax = "0510000000";
+            bool elevator = true;
+
+            var hostelId = propertyApplicationService.SaveNewHouseOffer(new CreateHostelCommand(title, monthlyRent, internet,
+                cableTv, parking, propertyType, email, phoneNumber, area, name, description, genderRestriction.ToString(),
+                isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony, lawn,
+                cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, meals, picknDrop,
+                numberOfSeats));
+            
+            Assert.IsFalse(string.IsNullOrWhiteSpace(hostelId));
+            // Now retrieve the Hostel from the database
+            HostelFullRepresentation retrievedHostel =
+                (HostelFullRepresentation)propertyApplicationService.GetPropertyById(hostelId, Constants.Hostel);
+            Assert.IsNotNull(retrievedHostel);
+            Assert.AreEqual(hostelId, retrievedHostel.Id);
+            Assert.AreEqual(title, retrievedHostel.Title);
+            Assert.AreEqual(description, retrievedHostel.Description);
+            Assert.AreEqual(email, retrievedHostel.OwnerEmail);
+            Assert.AreEqual(name, retrievedHostel.OwnerName);
+            Assert.AreEqual(phoneNumber, retrievedHostel.OwnerPhoneNumber);
+            Assert.AreEqual(cableTv, retrievedHostel.CableTvAvailable);
+            Assert.AreEqual(internet, retrievedHostel.InternetAvailable);
+            Assert.AreEqual(parking, retrievedHostel.ParkingAvailable);
+            Assert.AreEqual(propertyType, retrievedHostel.PropertyType);
+            Assert.AreEqual(genderRestriction.ToString(), retrievedHostel.GenderRestriction);
+            Assert.AreEqual(area, retrievedHostel.Area);
+            Assert.AreEqual(monthlyRent, retrievedHostel.RentPrice);
+            Assert.AreEqual(isShared, retrievedHostel.IsShared);
+            Assert.AreEqual(rentUnit, retrievedHostel.RentUnit);
+            Assert.AreEqual(laundry, retrievedHostel.Laundry);
+            Assert.AreEqual(ac, retrievedHostel.AC);
+            Assert.AreEqual(geyser, retrievedHostel.Geyser);
+            Assert.AreEqual(attachedBathroom, retrievedHostel.AttachedBathroom);
+            Assert.AreEqual(fitnessCentre, retrievedHostel.FitnessCentre);
+            Assert.AreEqual(balcony, retrievedHostel.Balcony);
+            Assert.AreEqual(lawn, retrievedHostel.Lawn);
+            Assert.AreEqual(ironing, retrievedHostel.Ironing);
+            Assert.AreEqual(cctvCameras, retrievedHostel.CctvCameras);
+            Assert.AreEqual(backupElectricity, retrievedHostel.BackupElectricity);
+            Assert.AreEqual(heating, retrievedHostel.Heating);
+            Assert.AreEqual(meals, retrievedHostel.Meals);
+            Assert.AreEqual(picknDrop, retrievedHostel.PicknDrop);
+            Assert.AreEqual(numberOfSeats, retrievedHostel.NumberOfSeats);
+            Assert.AreEqual(landlineNumber, retrievedHostel.LandlineNumber);
+            Assert.AreEqual(fax, retrievedHostel.Fax);
+            Assert.AreEqual(elevator, retrievedHostel.Elevator);
+        }
+
+        // Save and retrieve a full Hotel
+        [Test]
+        public void SaveNewHotelTest_ChecksThatANewHostelIsSavedAndRetrievedAsExpected_VerifiesByTheReturnValue()
+        {
+            IPropertyApplicationService propertyApplicationService = _kernel.Get<IPropertyApplicationService>();
+
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+            string phoneNumber = "03455138018";
+            decimal latitude = 25.43M;
+            decimal longitude = 73.41M;
+            string propertyType = Constants.Hotel;
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+            bool cableTv = false;
+            bool internet = true;
+            bool parking = true;
+            string image1 = "Image1.jpg";
+            string image2 = "Image2.png";
+            string rentUnit = Constants.Daily;
+            bool isShared = true;
+            bool laundry = true;
+            bool ac = true;
+            bool geyser = true;
+            bool attachedBathroom = true;
+            bool fitnessCentre = false;
+            bool balcony = false;
+            bool lawn = true;
+            bool heating = false;
+            bool ironing = false;
+            bool cctvCameras = true;
+            bool backupElectricity = true;
+
+            bool restaurant = true;
+            bool airportShuttle = true;
+            bool breakfastIncluded = true;
+            bool sittingArea = true;
+            bool carRental = true;
+            bool spa = true;
+            bool salon = false;
+            bool bathtub = true;
+            bool swimmingPool = true;
+            bool kitchen = true;
+            int numberOfAdults = 2;
+            int numberOfChildren = 1;
+
+            string landlineNumber = "0510000000";
+            string fax = "0510000000";
+            bool elevator = false;
+            
+            // Save the Hotel
+            var hotelId = propertyApplicationService.SaveNewHouseOffer(new CreateHotelCommand(title, monthlyRent, internet,
+                cableTv, parking, propertyType, email, phoneNumber, area, name, description, genderRestriction.ToString(),
+                isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
+                lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
+                airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
+                kitchen, numberOfAdults, numberOfChildren));
+
+            // Retreive the Hotel
+            HotelFullRepresentation retrievedHotel = 
+                (HotelFullRepresentation)propertyApplicationService.GetPropertyById(hotelId, Constants.Hotel);
+
+            Assert.IsNotNull(retrievedHotel);
+            Assert.AreEqual(title, retrievedHotel.Title);
+            Assert.AreEqual(description, retrievedHotel.Description);
+            Assert.AreEqual(email, retrievedHotel.OwnerEmail);
+            Assert.AreEqual(name, retrievedHotel.OwnerName);
+            Assert.AreEqual(phoneNumber, retrievedHotel.OwnerPhoneNumber);
+            Assert.AreEqual(cableTv, retrievedHotel.CableTvAvailable);
+            Assert.AreEqual(internet, retrievedHotel.InternetAvailable);
+            Assert.AreEqual(parking, retrievedHotel.ParkingAvailable);
+            Assert.AreEqual(propertyType, retrievedHotel.PropertyType);
+            Assert.AreEqual(genderRestriction.ToString(), retrievedHotel.GenderRestriction);
+            Assert.AreEqual(area, retrievedHotel.Area);
+            Assert.AreEqual(monthlyRent, retrievedHotel.RentPrice);
+            Assert.AreEqual(isShared, retrievedHotel.IsShared);
+            Assert.AreEqual(rentUnit, retrievedHotel.RentUnit);
+            Assert.AreEqual(laundry, retrievedHotel.Laundry);
+            Assert.AreEqual(ac, retrievedHotel.AC);
+            Assert.AreEqual(geyser, retrievedHotel.Geyser);
+            Assert.AreEqual(attachedBathroom, retrievedHotel.AttachedBathroom);
+            Assert.AreEqual(fitnessCentre, retrievedHotel.FitnessCentre);
+            Assert.AreEqual(balcony, retrievedHotel.Balcony);
+            Assert.AreEqual(lawn, retrievedHotel.Lawn);
+            Assert.AreEqual(ironing, retrievedHotel.Ironing);
+            Assert.AreEqual(cctvCameras, retrievedHotel.CctvCameras);
+            Assert.AreEqual(backupElectricity, retrievedHotel.BackupElectricity);
+            Assert.AreEqual(heating, retrievedHotel.Heating);
+
+            Assert.AreEqual(restaurant, retrievedHotel.Restaurant);
+            Assert.AreEqual(airportShuttle, retrievedHotel.AirportShuttle);
+            Assert.AreEqual(breakfastIncluded, retrievedHotel.BreakfastIncluded);
+            Assert.AreEqual(sittingArea, retrievedHotel.SittingArea);
+            Assert.AreEqual(carRental, retrievedHotel.CarRental);
+            Assert.AreEqual(spa, retrievedHotel.Spa);
+            Assert.AreEqual(salon, retrievedHotel.Salon);
+            Assert.AreEqual(bathtub, retrievedHotel.Bathtub);
+            Assert.AreEqual(swimmingPool, retrievedHotel.SwimmingPool);
+            Assert.AreEqual(kitchen, retrievedHotel.Kitchen);
+
+            Assert.AreEqual(numberOfAdults, retrievedHotel.NumberOfAdults);
+            Assert.AreEqual(numberOfChildren, retrievedHotel.NumberOfChildren);
+            Assert.AreEqual(numberOfAdults + numberOfChildren, retrievedHotel.TotalOccupants);
+            
+            Assert.AreEqual(elevator, retrievedHotel.Elevator);
+        }
+
+        // Save and retrieve Partial House
         [Test]
         public void SaveHouseAndRetrieveTest_TestsThatANewHouseIsSavedInTheDatabaseAsExpected_VerifiesByOutput()
         {
-            IHouseApplicationService houseApplicationService = _kernel.Get<IHouseApplicationService>();
+            IPropertyApplicationService houseApplicationService = _kernel.Get<IPropertyApplicationService>();
 
             string email = "w@12344321.com";
             string phoneNumber = "01234567890";
@@ -134,9 +336,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService = _kernel.Get<RentStuff.Common.Services.LocationServices.IGeocodingService>();
             Tuple<decimal, decimal> coordinates = geocodingService.GetCoordinatesFromAddress(area);
             Assert.IsNotNull(coordinates);
-
-            decimal latitude = coordinates.Item1;
-            decimal longitude = coordinates.Item2;
+            
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 true, true, true, true, true, "Apartment", email, phoneNumber, houseNo, streetNo, area,
                 dimensionType, dimensionString, 0, ownerName, description, genderRestriction,isShared, rentUnit,
@@ -167,7 +367,7 @@ namespace RentStuff.Property.Application.IntegrationTests
         [Test]
         public void SearchHousesByAddressAndPropertyTypeTest_TestsThatANewHouseIsSavedInTheDatabaseAndRetreivedAsExpected_VerifiesByOutput()
         {
-            IHouseApplicationService houseApplicationService = _kernel.Get<IHouseApplicationService>();
+            IPropertyApplicationService houseApplicationService = _kernel.Get<IPropertyApplicationService>();
 
             // Saving House # 1 : Wont appear in search results as the PropertyType is Apartment; search criteria is House
             string email = "w@12344321.com";
@@ -291,7 +491,7 @@ namespace RentStuff.Property.Application.IntegrationTests
         [Test]
         public void SearchHousesByPropertyTypeOnlyTest_TestsThatANewHouseIsSavedInTheDatabaseAndRetreivedAsExpected_VerifiesByOutput()
         {
-            IHouseApplicationService houseApplicationService = _kernel.Get<IHouseApplicationService>();
+            IPropertyApplicationService houseApplicationService = _kernel.Get<IPropertyApplicationService>();
 
             // Saving House # 1 : Wont appear in search results as the PropertyType is Apartment; search criteria is House
             string email = "w@12344321.com";
@@ -398,7 +598,7 @@ namespace RentStuff.Property.Application.IntegrationTests
         [Test]
         public void SaveHouseAndGetHouseByIdTest_TestsThatANewHouseIsSavedInTheDatabaseAsExpected_VerifiesByOutput()
         {
-            IHouseApplicationService houseApplicationService = _kernel.Get<IHouseApplicationService>();
+            IPropertyApplicationService houseApplicationService = _kernel.Get<IPropertyApplicationService>();
 
             string email = "w@12344321.com";
             string phoneNumber = "01234567890";
@@ -428,7 +628,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string houseId = houseApplicationService.SaveNewHouseOffer(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
 
-            HouseFullRepresentation retreivedHouse = houseApplicationService.GetHouseById(houseId);
+            HouseFullRepresentation retreivedHouse = (HouseFullRepresentation)houseApplicationService.GetPropertyById(houseId, Constants.House);
 
             Assert.NotNull(retreivedHouse);
             Assert.AreEqual(houseId, retreivedHouse.Id);

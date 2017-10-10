@@ -51,7 +51,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             bool elevator = true;
             
             Hostel hostel = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -139,7 +139,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             bool elevator = false;
 
             Hostel hostel = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -314,7 +314,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberOfSeats = 3;
 
             Hostel hostel = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -362,7 +362,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             int numberOfSeats = 3;
 
             Hostel hostel = new Hostel.HostelBuilder().OwnerEmail(email).LandlineNumber(landlineNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -394,7 +394,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Hostel house = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
                 .CableTvAvailable(true)
-                .GarageAvailable(true).WithInternetAvailable(true)
+                .ParkingAvailable(true).WithInternetAvailable(true)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Longitude(longitude)
                 .Area("Pindora").Build();
         }
@@ -418,7 +418,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Hostel house = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
                 .CableTvAvailable(true)
-                .GarageAvailable(true).WithInternetAvailable(true)
+                .ParkingAvailable(true).WithInternetAvailable(true)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude)
                 .Area("Pindora").Build();
         }
@@ -442,7 +442,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Hostel house = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
                 .CableTvAvailable(true)
-                .GarageAvailable(true).WithInternetAvailable(true)
+                .ParkingAvailable(true).WithInternetAvailable(true)
                 .PropertyType(propertyType).Latitude(latitude).Longitude(longitude)
                 .Area("Pindora").Build();
         }
@@ -466,7 +466,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Hostel house = new Hostel.HostelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
                 .CableTvAvailable(true)
-                .GarageAvailable(true).WithInternetAvailable(true)
+                .ParkingAvailable(true).WithInternetAvailable(true)
                 .PropertyType(propertyType).Latitude(latitude).Longitude(longitude).RentPrice(rentPrice)
                 .Area("Pindora").Build();
         }
@@ -490,7 +490,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Hostel house = new Hostel.HostelBuilder().OwnerName(name).OwnerPhoneNumber(phoneNumber).Title(title)
                 .CableTvAvailable(true)
-                .GarageAvailable(true).WithInternetAvailable(true)
+                .ParkingAvailable(true).WithInternetAvailable(true)
                 .PropertyType(propertyType).Latitude(latitude).Longitude(longitude).RentPrice(rentPrice)
                 .Area("Pindora").Build();
         }
@@ -514,7 +514,7 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             Hostel house = new Hostel.HostelBuilder().OwnerName(name).OwnerPhoneNumber(phoneNumber).OwnerEmail(email)
                 .CableTvAvailable(true)
-                .GarageAvailable(true).WithInternetAvailable(true)
+                .ParkingAvailable(true).WithInternetAvailable(true)
                 .PropertyType(propertyType).Latitude(latitude).Longitude(longitude).RentPrice(rentPrice)
                 .Area("Pindora").Build();
         }

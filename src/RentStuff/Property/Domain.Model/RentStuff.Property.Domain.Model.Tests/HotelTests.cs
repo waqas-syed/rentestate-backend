@@ -70,7 +70,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hostel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -192,7 +192,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -428,7 +428,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             bool elevator = false;
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -664,7 +664,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -730,7 +730,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -800,7 +800,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -868,7 +868,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -935,7 +935,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -1002,7 +1002,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
-                .CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -1069,7 +1069,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerPhoneNumber(phoneNumber).Title(title)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)
@@ -1136,7 +1136,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string fax = "0510000000";
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber)
-                .OwnerName(name).CableTvAvailable(cableTv).GarageAvailable(parking).WithInternetAvailable(internet)
+                .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
                 .IsShared(isShared).Laundry(laundry).AC(ac).Geyser(geyser).AttachedBathroom(attachedBathroom)

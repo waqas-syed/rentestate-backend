@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace RentStuff.Property.Application.HouseServices.Commands
+namespace RentStuff.Property.Application.HouseServices.Commands.DeleteCommands
 {
     /// <summary>
     /// To delete an image related to a house

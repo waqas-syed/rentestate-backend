@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using RentStuff.Property.Application.HouseServices.Commands;
+using RentStuff.Property.Application.HouseServices.Commands.CreateCommands;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.PropertyAggregate;
 

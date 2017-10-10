@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using RentStuff.Property.Application.HouseServices.Representation.AbstractRepresentations;
 
 namespace RentStuff.Property.Application.HouseServices.Representation
 {
@@ -9,60 +10,29 @@ namespace RentStuff.Property.Application.HouseServices.Representation
     /// </summary>
     [Serializable]
     [DataContract]
-    public class HouseFullRepresentation
+    public class HouseFullRepresentation : ResidentialPropertyBaseRepresentation
     {
         public HouseFullRepresentation(string id, string title, long rentPrice, int numberOfBedrooms, int numberOfKitchens, 
             int numberOfBathrooms, bool internetAvailable, 
             bool landlinePhoneAvailable, bool cableTvAvailable, string dimension, bool garageAvailable, bool smokingAllowed, 
-            string propertyType, string ownerEmail, string ownerPhoneNumber, decimal latitude, decimal longitude, string houseNo, 
+            string propertyType, string ownerEmail, string ownerPhoneNumber, string houseNo, 
             string streetNo, string area, IList<string> houseImages, string ownerName, string description,
             string genderRestriction, bool isShared, string rentUnit, string landlineNumber, string fax)
+            : base(id, title, rentPrice, internetAvailable, cableTvAvailable, propertyType, ownerEmail, 
+                  ownerPhoneNumber, area, ownerName, description, genderRestriction, isShared, rentUnit, 
+                  landlineNumber, fax, houseImages)
         {
-            Id = id;
-            Title = title;
-            RentPrice = rentPrice;
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfKitchens = numberOfKitchens;
             NumberOfBathrooms = numberOfBathrooms;
-            InternetAvailable = internetAvailable;
             LandlinePhoneAvailable = landlinePhoneAvailable;
-            CableTvAvailable = cableTvAvailable;
             Dimension = dimension;
             GarageAvailable = garageAvailable;
             SmokingAllowed = smokingAllowed;
-            PropertyType = propertyType;
-            OwnerEmail = ownerEmail;
-            OwnerPhoneNumber = ownerPhoneNumber;
-            Latitude = latitude;
-            Longitude = longitude;
             HouseNo = houseNo;
             StreetNo = streetNo;
-            Area = area;
-            HouseImages = houseImages;
-            OwnerName = ownerName;
-            Description = description;
-            GenderRestriction = genderRestriction;
-            IsShared = isShared;
-            RentUnit = rentUnit;
-            LandlineNumber = landlineNumber;
-            Fax = fax;
         }
-
-        [DataMember]
-        public string Id { get; private set; }
-
-        [DataMember]
-        public string Title { get; private set; }
-
-        [DataMember]
-        public string Description { get; private set; }
-
-        [DataMember]
-        public long RentPrice
-        {
-            get; private set;
-        }
-
+        
         [DataMember]
         public int NumberOfBedrooms
         {
@@ -82,23 +52,11 @@ namespace RentStuff.Property.Application.HouseServices.Representation
         }
         
         [DataMember]
-        public bool InternetAvailable
-        {
-            get; private set;
-        }
-
-        [DataMember]
         public bool LandlinePhoneAvailable
         {
             get; private set;
         }
-
-        [DataMember]
-        public bool CableTvAvailable
-        {
-            get; private set;
-        }
-
+        
         [DataMember]
         public string Dimension
         {
@@ -116,37 +74,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
         {
             get; private set;
         }
-
-        [DataMember]
-        public string PropertyType
-        {
-            get; private set;
-        }
         
-        [DataMember]
-        public string OwnerEmail
-        {
-            get; private set;
-        }
-
-        [DataMember]
-        public string OwnerPhoneNumber
-        {
-            get; private set;
-        }
-
-        [DataMember]
-        public string LandlineNumber
-        {
-            get; private set;
-        }
-
-        [DataMember]
-        public string Fax
-        {
-            get; private set;
-        }
-
         [DataMember]
         public decimal Latitude
         {
@@ -170,39 +98,9 @@ namespace RentStuff.Property.Application.HouseServices.Representation
         {
             get; private set;
         }
-
-        [DataMember]
-        public string Area
-        {
-            get; private set;
-        }
-
+        
         [DataMember]
         public IList<string> HouseImages
-        {
-            get; private set;
-        }
-
-        [DataMember]
-        public string OwnerName
-        {
-            get; private set;
-        }
-
-        [DataMember]
-        public string GenderRestriction
-        {
-            get; private set;
-        }
-
-        [DataMember]
-        public bool IsShared
-        {
-            get; private set;
-        }
-
-        [DataMember]
-        public string RentUnit
         {
             get; private set;
         }

@@ -185,29 +185,29 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             Occupants = occupants;
         }
 
-        public bool Restaurant { get; set; }
+        public bool Restaurant { get; private set; }
 
-        public bool AirportShuttle { get; set; }
+        public bool AirportShuttle { get; private set; }
 
-        public bool BreakfastIncluded { get; set; }
+        public bool BreakfastIncluded { get; private set; }
 
-        public bool SittingArea { get; set; }
+        public bool SittingArea { get; private set; }
 
-        public bool CarRental { get; set; }
+        public bool CarRental { get; private set; }
 
-        public bool Spa { get; set; }
+        public bool Spa { get; private set; }
 
-        public bool Salon { get; set; }
+        public bool Salon { get; private set; }
 
-        public bool Bathtub { get; set; }
+        public bool Bathtub { get; private set; }
 
-        public bool SwimmingPool { get; set; }
+        public bool SwimmingPool { get; private set; }
         
-        public bool Kitchen { get; set; }
+        public bool Kitchen { get; private set; }
 
-        public IList<Bed> Beds { get; set; }
+        public IList<Bed> Beds { get; private set; }
 
-        public Occupants Occupants { get; set; }
+        public Occupants Occupants { get; private set; }
 
         /// <summary>
         /// Hotel Builder, using the builder pattern that allows easy refactoring of the initialization of the Hotel
@@ -232,7 +232,7 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             private string _rentUnit;
             private bool _internetAvailable;
             private bool _cableTvAvailable;
-            private bool _garageAvailable;
+            private bool _parkingAvailable;
             private string _landlineNumber;
             private string _fax;
 
@@ -393,11 +393,11 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             /// <summary>
             /// Is Parking available
             /// </summary>
-            /// <param name="garageAvailable"></param>
+            /// <param name="parkingAvailable"></param>
             /// <returns></returns>
-            public HotelBuilder GarageAvailable(bool garageAvailable)
+            public HotelBuilder ParkingAvailable(bool parkingAvailable)
             {
-                _garageAvailable = garageAvailable;
+                _parkingAvailable = parkingAvailable;
                 return this;
             }
 
@@ -618,7 +618,7 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             {
                 return new Hotel(_title, _rentPrice, _ownerEmail, _ownerPhoneNumber, _latitude, _longitude,
                     _area, _ownerName, _description, _genderRestriction, _isShared, _rentUnit, _internetAvailable,
-                    _cableTvAvailable, _garageAvailable, _propertyType, _laundry, _ac, _geyser, _fitnessCentre, _attachedBathroom,
+                    _cableTvAvailable, _parkingAvailable, _propertyType, _laundry, _ac, _geyser, _fitnessCentre, _attachedBathroom,
                     _ironing, _balcony, _lawn, _cctvCameras, _backupElectricity, _heating, _restaurant,
                     _airportShuttle, _breakfastIncluded, _sittingArea, _carRental, _spa, _salon, _bathtub, 
                     _swimmingPool, _kitchen, _beds, _occupants, _landlineNumber, _fax, _elevator);

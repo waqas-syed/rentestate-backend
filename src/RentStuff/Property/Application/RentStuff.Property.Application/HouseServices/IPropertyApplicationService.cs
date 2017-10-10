@@ -1,19 +1,21 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using RentStuff.Property.Application.HouseServices.Commands;
+﻿using RentStuff.Property.Application.HouseServices.Commands.AbstractCommands;
+using RentStuff.Property.Application.HouseServices.Commands.UpdateCommands;
 using RentStuff.Property.Application.HouseServices.Representation;
+using System.Collections.Generic;
+using System.IO;
+using RentStuff.Property.Application.HouseServices.Representation.AbstractRepresentations;
 
 namespace RentStuff.Property.Application.HouseServices
 {
     /// <summary>
     /// Interface for House aggregate related operations
     /// </summary>
-    public interface IHouseApplicationService
+    public interface IPropertyApplicationService
     {
         /// <summary>
         /// Saves a new house instance to the database
         /// </summary>
-        string SaveNewHouseOffer(CreateHouseCommand house);
+        string SaveNewHouseOffer(PropertyBaseCommand propertyBaseCommand);
 
         /// <summary>
         /// Update an existing house
@@ -27,13 +29,14 @@ namespace RentStuff.Property.Application.HouseServices
         /// </summary>
         /// <param name="houseId"></param>
         void DeleteHouse(string houseId);
-        
+
         /// <summary>
         /// Get House by it's ID
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="propertyType"></param>
         /// <returns></returns>
-        HouseFullRepresentation GetHouseById(string id);
+        PropertyBaseRepresentation GetPropertyById(string id, string propertyType);
 
         /// <summary>
         /// Gets the house by providing the owner's email id

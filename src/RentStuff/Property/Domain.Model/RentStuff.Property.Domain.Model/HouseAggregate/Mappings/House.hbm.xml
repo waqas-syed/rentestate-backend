@@ -32,6 +32,8 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
     <property name="SmokingAllowed" column="smoking_allowed"/>    
     <property name="HouseNo" column="house_no"/>
     <property name="StreetNo" column="street_no"/>
+    <property name="LandlineNumber" column="landline_number"/>
+    <property name="Fax"/>
     
     <many-to-one name="Dimension" unique="true" column="dimension_id" cascade="all">
     </many-to-one>

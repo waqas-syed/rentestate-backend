@@ -31,7 +31,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             int numberOfKitchens, int numberOfBathrooms,
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension, 
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
-            decimal latitude, decimal longitude, string houseNo, string streetNo, string area, string ownerName, string description, 
+            decimal latitude, decimal longitude, string houseNo, string streetNo, string area, string ownerName, 
+            string description, 
             GenderRestriction genderRestriction, bool isShared, string rentUnit, string landlineNumber, string fax) 
             // Initiate the parent Property class as well
             : base(title, rentPrice, ownerEmail,

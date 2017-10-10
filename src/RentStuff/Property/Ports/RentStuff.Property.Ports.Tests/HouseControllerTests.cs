@@ -13,6 +13,8 @@ using RentStuff.Common;
 using RentStuff.Common.Ninject.Modules;
 using RentStuff.Common.Utilities;
 using RentStuff.Property.Application.HouseServices.Commands;
+using RentStuff.Property.Application.HouseServices.Commands.CreateCommands;
+using RentStuff.Property.Application.HouseServices.Commands.UpdateCommands;
 using RentStuff.Property.Application.HouseServices.Representation;
 using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Domain.Model.HouseAggregate;

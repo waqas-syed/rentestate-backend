@@ -303,11 +303,11 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             /// <summary>
             /// Is Parking available
             /// </summary>
-            /// <param name="garageAvailable"></param>
+            /// <param name="parkingAvailable"></param>
             /// <returns></returns>
-            public HostelBuilder GarageAvailable(bool garageAvailable)
+            public HostelBuilder ParkingAvailable(bool parkingAvailable)
             {
-                _garageAvailable = garageAvailable;
+                _garageAvailable = parkingAvailable;
                 return this;
             }
 
