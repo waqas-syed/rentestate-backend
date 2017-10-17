@@ -1,9 +1,6 @@
-﻿using System;
+﻿using RentStuff.Property.Application.HouseServices.Representation.AbstractRepresentations;
+using RentStuff.Property.Domain.Model.HotelAggregate;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RentStuff.Property.Application.HouseServices.Representation.AbstractRepresentations;
 
 namespace RentStuff.Property.Application.HouseServices.Representation.FullRepresentations
 {
@@ -22,7 +19,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation.FullRepres
                 bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating,
                 bool restaurant, bool airportShuttle, bool breakfastIncluded, bool sittingArea, bool carRental,
                 bool spa, bool salon, bool bathtub, bool swimmingPool, bool kitchen,
-                int numberOfAdults, int numberOfChildren, int totalOccupants, string landlineNumber, string fax, 
+                Occupants occupants, string landlineNumber, string fax, 
                 bool elevator, IList<string> images)
             // Initiate the parent GuerstPropertyAbstraction class as well
             : base(id, title, rentPrice, internetAvailable, cableTvAvailable, parkingAvailable, propertyType,
@@ -40,9 +37,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation.FullRepres
             Bathtub = bathtub;
             SwimmingPool = swimmingPool;
             Kitchen = kitchen;
-            NumberOfAdults = numberOfAdults;
-            NumberOfChildren = numberOfChildren;
-            TotalOccupants = totalOccupants;
+            Occupants = occupants;
         }
 
         public bool Restaurant { get; private set; }
@@ -65,10 +60,6 @@ namespace RentStuff.Property.Application.HouseServices.Representation.FullRepres
 
         public bool Kitchen { get; private set; }
         
-        public int NumberOfAdults { get; private set; }
-
-        public int NumberOfChildren { get; private set; }
-
-        public int TotalOccupants { get; private set; }
+        public Occupants Occupants { get; private set; }
     }
 }

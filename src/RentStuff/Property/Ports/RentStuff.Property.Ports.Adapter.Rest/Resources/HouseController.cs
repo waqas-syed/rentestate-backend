@@ -281,7 +281,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 if (!string.IsNullOrWhiteSpace(area) && !string.IsNullOrWhiteSpace(propertyType))
                 {
                     _logger.Info("Get House by Area {0} and Property Type {1}", area, propertyType);
-                    return Ok(_houseApplicationService.SearchHousesByAreaAndPropertyType(area, propertyType, pageNo));
+                    return Ok(_houseApplicationService.SearchPropertiesByAreaAndPropertyType(area, propertyType, pageNo));
                 }
                 // If only email is given
                 else if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(propertyType))
@@ -295,7 +295,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         if (email.Equals(emailFromClaims))
                         {
                             _logger.Info("Get House by Email {0}", email);
-                            return Ok(_houseApplicationService.GetHouseByEmail(email, pageNo));
+                            return Ok(_houseApplicationService.GetPropertiesByEmail(propertyType, email, pageNo));
                         }
                         else
                         {
@@ -313,12 +313,12 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 else if (!string.IsNullOrWhiteSpace(propertyType))
                 {
                     _logger.Info("Get House by Property Type {0}", propertyType);
-                    return Ok(_houseApplicationService.SearchHousesByPropertyType(propertyType, pageNo));
+                    return Ok(_houseApplicationService.SearchPropertiesByPropertyType(propertyType, pageNo));
                 }
-                else if (!string.IsNullOrEmpty(houseId))
+                else if (!string.IsNullOrEmpty(houseId) && !string.IsNullOrWhiteSpace(propertyType))
                 {
                     _logger.Info("Get House by HouseId {0}", houseId);
-                    return Ok(_houseApplicationService.GetHouseById(houseId));
+                    return Ok(_houseApplicationService.GetPropertyById(houseId, propertyType));
                 }
                 else
                 {

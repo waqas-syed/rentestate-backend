@@ -6,7 +6,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation.AbstractRe
     /// <summary>
     /// Represents properties such as Hostel, Hote & Guest House
     /// </summary>
-    public abstract class GuestPropertyBaseRepresentation : ResidentialPropertyBaseRepresentation
+    public abstract class GuestPropertyBaseRepresentation : ResidentialPropertyFullBaseRepresentation
     {
         public GuestPropertyBaseRepresentation(string id, string title, long rentPrice,
             bool internetAvailable, bool cableTvAvailable, bool parkingAvailable,

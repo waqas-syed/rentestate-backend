@@ -1,24 +1,27 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using RentStuff.Property.Application.HouseServices.Representation.AbstractRepresentations;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.PropertyAggregate;
 
 namespace RentStuff.Property.Application.HouseServices.Representation
 {
+    /// <summary>
+    /// Partial Representation for a House
+    /// </summary>
     [Serializable]
     [DataContract]
-    public class HousePartialRepresentation
+    public class HousePartialRepresentation : ResidentialPropertyPartialBaseImplementation
     {
-        public HousePartialRepresentation(string houseId, string title, string area, long rentPrice, string propertyType, 
-            Dimension dimension, int numberOfBedrooms, int numberOfBathrooms, int numberOfKitchens,
-            string ownerEmail, string ownerPhoneNumber, string image, string ownerName, string description, bool isShared,
-            string genderRestriction, string rentUnit)
+        public HousePartialRepresentation(string houseId, string title, string area, long rentPrice, 
+            string propertyType, Dimension dimension, string ownerPhoneNumber, 
+            string ownerLandlineNumber,
+            string image, string ownerName, bool isShared, string genderRestriction, 
+            string rentUnit, bool internet, bool cableTv, int numberOfBedrooms, int numberOfBathrooms,
+            int numberOfKitchens)
+            : base(houseId, title, rentPrice, ownerPhoneNumber, ownerLandlineNumber, area, ownerName,
+                  genderRestriction, isShared, rentUnit, internet, cableTv, propertyType, image)
         {
-            HouseId = houseId;
-            Title = title;
-            Area = area;
-            RentPrice = rentPrice;
-            PropertyType = propertyType;
             if (dimension != null)
             {
                 if (!string.IsNullOrWhiteSpace(dimension.StringValue))
@@ -33,34 +36,8 @@ namespace RentStuff.Property.Application.HouseServices.Representation
             NumberOfBedrooms = numberOfBedrooms;
             NumberOfBathrooms = numberOfBathrooms;
             NumberOfKitchens = numberOfKitchens;
-            OwnerEmail = ownerEmail;
-            OwnerPhoneNumber = ownerPhoneNumber;
-            Image = image;
-            OwnerName = ownerName;
-            Description = description;
-            IsShared = isShared;
-            GenderRestriction = genderRestriction;
-            RentUnit = rentUnit;
         }
-
-        [DataMember]
-        public string HouseId { get; private set; }
-
-        [DataMember]
-        public string Title { get; private set; }
-
-        [DataMember]
-        public string Description { get; private set; }
-
-        [DataMember]
-        public string Area { get; private set; }
-
-        [DataMember]
-        public long RentPrice { get; private set; }
-
-        [DataMember]
-        public string PropertyType { get; private set; }
-
+        
         [DataMember]
         public string Dimension { get; private set; }
 
@@ -72,26 +49,5 @@ namespace RentStuff.Property.Application.HouseServices.Representation
 
         [DataMember]
         public int NumberOfKitchens { get; private set; }
-
-        [DataMember]
-        public string OwnerEmail { get; private set; }
-
-        [DataMember]
-        public string OwnerPhoneNumber { get; private set; }
-
-        [DataMember]
-        public string Image { get; private set; }
-
-        [DataMember]
-        public string OwnerName { get; private set; }
-
-        [DataMember]
-        public bool IsShared { get; private set; }
-
-        [DataMember]
-        public string GenderRestriction { get; private set; }
-
-        [DataMember]
-        public string RentUnit { get; private set; }
     }
 }

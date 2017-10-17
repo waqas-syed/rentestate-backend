@@ -74,7 +74,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="houseId"></param>
         /// <returns></returns>
         //[Transaction]
-        public ResidentialProperty GetPropertyById(string houseId)
+        public Domain.Model.PropertyAggregate.Property GetPropertyById(string houseId)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {

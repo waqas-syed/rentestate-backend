@@ -10,7 +10,7 @@ namespace RentStuff.Property.Application.HouseServices.Representation
     /// </summary>
     [Serializable]
     [DataContract]
-    public class HouseFullRepresentation : ResidentialPropertyBaseRepresentation
+    public class HouseFullRepresentation : ResidentialPropertyFullBaseRepresentation
     {
         public HouseFullRepresentation(string id, string title, long rentPrice, int numberOfBedrooms, int numberOfKitchens, 
             int numberOfBathrooms, bool internetAvailable, 

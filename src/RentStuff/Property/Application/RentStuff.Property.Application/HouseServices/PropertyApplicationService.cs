@@ -6,10 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Management.Instrumentation;
+using System.Resources;
 using RentStuff.Property.Application.HouseServices.Commands.AbstractCommands;
 using RentStuff.Property.Application.HouseServices.Commands.CreateCommands;
 using RentStuff.Property.Application.HouseServices.Commands.UpdateCommands;
+using RentStuff.Property.Application.HouseServices.Representation.AbstractRepresentations;
 using RentStuff.Property.Application.HouseServices.Representation.FullRepresentations;
+using RentStuff.Property.Application.HouseServices.Representation.PartialRepresentations;
 using RentStuff.Property.Domain.Model.HostelAggregate;
 using RentStuff.Property.Domain.Model.HotelAggregate;
 using RentStuff.Property.Domain.Model.HouseAggregate;
@@ -160,20 +163,20 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="houseId"></param>
         public void DeleteHouse(string houseId)
         {
-            House house = (House)_houseRepository.GetPropertyById(houseId);
-            if (house != null)
+            Domain.Model.PropertyAggregate.Property property = (Domain.Model.PropertyAggregate.Property)_houseRepository.GetPropertyById(houseId);
+            if (property != null)
             {
                 // Delete all the images from the Google cloud storage photo bucket
-                foreach (var image in house.Images)
+                foreach (var image in property.Images)
                 {
                     _photoStorageService.DeletePhoto(image);
                 }
-                _houseRepository.Delete(house);
-                _logger.Info("Deleted House successfully: {0}", house);
+                _houseRepository.Delete(property);
+                _logger.Info("Deleted property successfully: {0}", property);
             }
             else
             {
-                throw new InstanceNotFoundException($"No house could be found for the given id. HouseId: {houseId}");
+                throw new InstanceNotFoundException($"No property could be found for the given id. HouseId: {houseId}");
             }
         }
 
@@ -181,14 +184,33 @@ namespace RentStuff.Property.Application.HouseServices
         /// Gets the house by providing the owner's email id
         /// </summary>
         /// <returns></returns>
-        public IList<HousePartialRepresentation> GetHouseByEmail(string email, int pageNo = 0)
+        public IList<ResidentialPropertyPartialBaseImplementation> GetPropertiesByEmail(string propertyType, string email,
+            int pageNo = 0)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
                 throw new NullReferenceException("Email cannot be null");
             }
-            IList<House> houses = _houseRepository.GetHouseByOwnerEmail(email.ToLower(), pageNo);
-            return ConvertHousesToPartialRepresentations(houses);
+            switch (propertyType)
+            {
+                case Constants.House:
+                    var houses = _houseRepository.GetHouseByOwnerEmail(email, pageNo);
+                    return ConvertHousesToPartialRepresentations(houses);
+                case Constants.Apartment:
+                    var apartments = _houseRepository.GetHouseByOwnerEmail(email, pageNo);
+                    return ConvertHousesToPartialRepresentations(apartments);
+                case Constants.Hostel:
+                    var hostels = _houseRepository.GetHostelsByOwnerEmail(email, pageNo);
+                    return ConvertHostelsToPartialRepresentations(hostels);
+                case Constants.Hotel:
+                    var hotels = _houseRepository.GetHotelsByOwnerEmail(email, pageNo);
+                    return ConvertHotelsToPartialRepresentations(hotels);
+                case Constants.GuestHouse:
+                    var guestHouses = _houseRepository.GetHotelsByOwnerEmail(email, pageNo);
+                    return ConvertHotelsToPartialRepresentations(guestHouses);
+                default:
+                    throw new NotImplementedException("Requested Proeprty type is not supported");
+            }
         }
 
         /// <summary>
@@ -227,14 +249,28 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public IList<HousePartialRepresentation> SearchHousesByPropertyType(string propertyType, int pageNo = 0)
+        public IList<ResidentialPropertyPartialBaseImplementation> SearchPropertiesByPropertyType(string propertyType, int pageNo = 0)
         {
-            if (propertyType.Equals(Constants.House) && propertyType.Equals(Constants.Apartment))
+            switch (propertyType)
             {
-                IList<House> houses = _houseRepository.GetAllHouses(pageNo);
-                return ConvertHousesToPartialRepresentations(houses);
+                case Constants.House:
+                    var houses = _houseRepository.GetAllHouses(pageNo);
+                    return ConvertHousesToPartialRepresentations(houses);
+                case Constants.Apartment:
+                    var apartments = _houseRepository.GetAllHouses(pageNo);
+                    return ConvertHousesToPartialRepresentations(apartments);
+                case Constants.Hostel:
+                    var hostels = _houseRepository.GetAllHostels(pageNo);
+                    return ConvertHostelsToPartialRepresentations(hostels);
+                case Constants.Hotel:
+                    var hotels = _houseRepository.GetAllHotels(pageNo);
+                    return ConvertHotelsToPartialRepresentations(hotels);
+                case Constants.GuestHouse:
+                    var guestHouses = _houseRepository.GetAllHotels(pageNo);
+                    return ConvertHotelsToPartialRepresentations(guestHouses);
+                default:
+                    throw new NotImplementedException("Requested Proeprty type is not supported");
             }
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -244,7 +280,7 @@ namespace RentStuff.Property.Application.HouseServices
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public IList<HousePartialRepresentation> SearchHousesByAreaAndPropertyType(string address, 
+        public IList<ResidentialPropertyPartialBaseImplementation> SearchPropertiesByAreaAndPropertyType(string address, 
             string propertyType, int pageNo = 0)
         {
             // Get the coordinates for the location using the Geocoding API service
@@ -253,25 +289,22 @@ namespace RentStuff.Property.Application.HouseServices
             switch (propertyType)
             {
                 case Constants.House:
-                    _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
-                    break;
+                    var houses = _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+                    return ConvertHousesToPartialRepresentations(houses);
                 case Constants.Apartment:
-                    _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
-                    break;
+                    var apartments = _houseRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+                    return ConvertHousesToPartialRepresentations(apartments);
                 case Constants.Hostel:
-                    _houseRepository.SearchHostelByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
-                    break;
+                    var hostels = _houseRepository.SearchHostelByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+                    return ConvertHostelsToPartialRepresentations(hostels);
                 case Constants.Hotel:
-                    _houseRepository.SearchHotelByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
-                    break;
+                    var hotels = _houseRepository.SearchHotelByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+                    return ConvertHotelsToPartialRepresentations(hotels);
                 case Constants.GuestHouse:
-                    _houseRepository.SearchHotelByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
-                    break;
+                    var guestHouses = _houseRepository.SearchHotelByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+                    return ConvertHotelsToPartialRepresentations(guestHouses);
             }
-            // Get 20 coordinates within the range of around 30 kilometers radius
-            IList<House> houses = _houseRepository.SearchHousesByCoordinates(coordinates.Item1,
-                coordinates.Item2, pageNo);
-            return ConvertHousesToPartialRepresentations(houses);
+            throw new NotImplementedException("Requested property Type is not supported");
         }
 
         /// <summary>
@@ -432,9 +465,9 @@ namespace RentStuff.Property.Application.HouseServices
         /// </summary>
         /// <param name="houses"></param>
         /// <returns></returns>
-        private IList<HousePartialRepresentation> ConvertHousesToPartialRepresentations(IList<House> houses)
+        private IList<ResidentialPropertyPartialBaseImplementation> ConvertHousesToPartialRepresentations(IList<House> houses)
         {
-            IList<HousePartialRepresentation> houseRepresentations = new List<HousePartialRepresentation>();
+            IList<ResidentialPropertyPartialBaseImplementation> houseRepresentations = new List<ResidentialPropertyPartialBaseImplementation>();
             if (houses != null && houses.Count > 0)
             {
                 foreach (var house in houses)
@@ -444,16 +477,79 @@ namespace RentStuff.Property.Application.HouseServices
                     {
                        firstImage =  house.GetImageList()[0];
                     }
-                    HousePartialRepresentation houseRepresentation = new HousePartialRepresentation(house.Id, house.Title, house.Area, 
-                        house.RentPrice, house.PropertyType.ToString(), house.Dimension, house.NumberOfBedrooms, 
-                        house.NumberOfBathrooms, house.NumberOfKitchens, house.OwnerEmail, house.OwnerPhoneNumber,
-                        firstImage, house.OwnerName, house.Description, house.IsShared, house.GenderRestriction.ToString(),
-                        house.RentUnit);
+                    HousePartialRepresentation houseRepresentation = new HousePartialRepresentation(
+                        house.Id, house.Title, house.Area, house.RentPrice, house.PropertyType, house.Dimension,
+                        house.OwnerPhoneNumber, house.LandlineNumber, firstImage, house.OwnerName,
+                        house.IsShared, house.GenderRestriction.ToString(), house.RentUnit, house.InternetAvailable, 
+                        house.CableTvAvailable, house.NumberOfBedrooms, house.NumberOfBathrooms,
+                        house.NumberOfKitchens);
                     
                     houseRepresentations.Add(houseRepresentation);
                 }
             }
             return houseRepresentations;
+        }
+
+        /// <summary>
+        /// Convert Hostels to their partial representations
+        /// </summary>
+        /// <param name="hostels"></param>
+        /// <returns></returns>
+        private IList<ResidentialPropertyPartialBaseImplementation> ConvertHostelsToPartialRepresentations(IList<Hostel> hostels)
+        {
+            IList<ResidentialPropertyPartialBaseImplementation> hostelRepresentations = new List<ResidentialPropertyPartialBaseImplementation>();
+            if (hostels != null && hostels.Count > 0)
+            {
+                foreach (var hostel in hostels)
+                {
+                    string firstImage = null;
+                    if (hostel.GetImageList() != null && hostel.GetImageList().Count > 0)
+                    {
+                        firstImage = hostel.GetImageList()[0];
+                    }
+                    HostelPartialRepresentation houseRepresentation = new HostelPartialRepresentation(
+                        hostel.Id, hostel.Title, hostel.RentPrice, hostel.OwnerPhoneNumber,
+                        hostel.LandlineNumber, hostel.Area, hostel.OwnerName, hostel.GenderRestriction.ToString(), 
+                        hostel.IsShared, hostel.RentUnit, hostel.InternetAvailable, hostel.CableTvAvailable,
+                        hostel.PropertyType, hostel.ParkingAvailable, hostel.Laundry, hostel.AC, hostel.Geyser, 
+                        hostel.AttachedBathroom, hostel.BackupElectricity, hostel.Meals, hostel.NumberOfSeats,
+                        firstImage);
+
+                    hostelRepresentations.Add(houseRepresentation);
+                }
+            }
+            return hostelRepresentations;
+        }
+
+        /// <summary>
+        /// Converts Hotel & Gueast House Domain Objects to their representation
+        /// </summary>
+        /// <param name="hotels"></param>
+        /// <returns></returns>
+        private IList<ResidentialPropertyPartialBaseImplementation> ConvertHotelsToPartialRepresentations(IList<Hotel> hotels)
+        {
+            IList<ResidentialPropertyPartialBaseImplementation> hostelRepresentations = new List<ResidentialPropertyPartialBaseImplementation>();
+            if (hotels != null && hotels.Count > 0)
+            {
+                foreach (var hotel in hotels)
+                {
+                    string firstImage = null;
+                    if (hotel.GetImageList() != null && hotel.GetImageList().Count > 0)
+                    {
+                        firstImage = hotel.GetImageList()[0];
+                    }
+                    HotelPartialRepresentation houseRepresentation = new HotelPartialRepresentation(
+                        hotel.Id, hotel.Title, hotel.RentPrice, hotel.OwnerPhoneNumber,
+                        hotel.Area, hotel.OwnerName, hotel.GenderRestriction.ToString(),
+                        hotel.IsShared, hotel.RentUnit, hotel.InternetAvailable, hotel.CableTvAvailable,
+                        hotel.ParkingAvailable, hotel.PropertyType, hotel.AC, hotel.Geyser,
+                        hotel.AttachedBathroom, hotel.BackupElectricity, hotel.Heating, hotel.AirportShuttle,
+                        hotel.BreakfastIncluded, hotel.Occupants, hotel.LandlineNumber, firstImage);
+
+                    hostelRepresentations.Add(houseRepresentation);
+                }
+            }
+            return hostelRepresentations;
         }
 
         /// <summary>
@@ -645,7 +741,13 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         private HouseFullRepresentation ConvertHouseToRepresentation(string id)
         {
-            House house = (House)_houseRepository.GetPropertyById(id);
+            Domain.Model.PropertyAggregate.Property property = (Domain.Model.PropertyAggregate.Property)_houseRepository.GetPropertyById(id);
+
+            if (property == null)
+            {
+                return null;
+            }
+            House house = (House)property;
             string dimension = null;
             if (house.Dimension != null)
             {
@@ -672,15 +774,21 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         private HostelFullRepresentation ConvertHostelToRepresentation(string id)
         {
-            Hostel house = (Hostel)_houseRepository.GetPropertyById(id);
+            Domain.Model.PropertyAggregate.Property property = (Domain.Model.PropertyAggregate.Property)_houseRepository.GetPropertyById(id);
+
+            if (property == null)
+            {
+                return null;
+            }
+            Hostel hostel = (Hostel) property;
             
-            return new HostelFullRepresentation(house.Id, house.Title, house.RentPrice, house.OwnerEmail,
-                house.OwnerPhoneNumber, house.Latitude, house.Longitude, house.Area, house.OwnerName, 
-                house.Description, house.GenderRestriction.ToString(), house.IsShared, house.RentUnit, house.InternetAvailable,
-                house.CableTvAvailable, house.ParkingAvailable, house.PropertyType, house.Laundry, house.AC,
-                house.Geyser, house.FitnessCentre, house.AttachedBathroom, house.Ironing, house.Balcony, house.Lawn,
-                house.CctvCameras, house.BackupElectricity, house.Heating, house.Meals, house.PicknDrop, 
-                house.NumberOfSeats, house.LandlineNumber, house.Fax, house.Elevator, house.Images);
+            return new HostelFullRepresentation(hostel.Id, hostel.Title, hostel.RentPrice, hostel.OwnerEmail,
+                hostel.OwnerPhoneNumber, hostel.Latitude, hostel.Longitude, hostel.Area, hostel.OwnerName, 
+                hostel.Description, hostel.GenderRestriction.ToString(), hostel.IsShared, hostel.RentUnit, hostel.InternetAvailable,
+                hostel.CableTvAvailable, hostel.ParkingAvailable, hostel.PropertyType, hostel.Laundry, hostel.AC,
+                hostel.Geyser, hostel.FitnessCentre, hostel.AttachedBathroom, hostel.Ironing, hostel.Balcony, hostel.Lawn,
+                hostel.CctvCameras, hostel.BackupElectricity, hostel.Heating, hostel.Meals, hostel.PicknDrop, 
+                hostel.NumberOfSeats, hostel.LandlineNumber, hostel.Fax, hostel.Elevator, hostel.Images);
         }
 
         /// <summary>
@@ -690,7 +798,13 @@ namespace RentStuff.Property.Application.HouseServices
         /// <returns></returns>
         private HotelFullRepresentation ConvertHotelToRepresentation(string id)
         {
-            Hotel house = (Hotel)_houseRepository.GetPropertyById(id);
+            Domain.Model.PropertyAggregate.Property property = (Domain.Model.PropertyAggregate.Property)_houseRepository.GetPropertyById(id);
+
+            if (property == null)
+            {
+                return null;
+            }
+            Hotel house = (Hotel)property;
 
             return new HotelFullRepresentation(house.Id, house.Title, house.RentPrice, house.OwnerEmail,
                 house.OwnerPhoneNumber, house.Area, house.OwnerName, house.Description, house.GenderRestriction.ToString(),
@@ -699,8 +813,7 @@ namespace RentStuff.Property.Application.HouseServices
                 house.FitnessCentre, house.AttachedBathroom, house.Ironing, house.Balcony, house.Lawn,
                 house.CctvCameras, house.BackupElectricity, house.Heating, house.Restaurant, house.AirportShuttle,
                 house.BreakfastIncluded, house.SittingArea, house.CarRental, house.Spa, house.Salon, house.Bathtub,
-                house.SwimmingPool, house.Kitchen, house.Occupants.Adults, house.Occupants.Children, 
-                house.Occupants.TotalOccupants, house.LandlineNumber, house.Fax, house.Elevator, house.Images);
+                house.SwimmingPool, house.Kitchen, house.Occupants, house.LandlineNumber, house.Fax, house.Elevator, house.Images);
         }
 
         #endregion Convert to representations

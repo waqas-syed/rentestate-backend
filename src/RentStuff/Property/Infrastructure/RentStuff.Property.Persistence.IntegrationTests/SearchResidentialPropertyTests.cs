@@ -48,8 +48,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Console.WriteLine("Start");
             DateTime startTime = DateTime.Now;
 
-            // Save 3 houses in locations nearby and 2 houses that are in other places. 
-            // Search should get the 3 houses located near theserched location
+            // Save property for each property type multiple times, and search for each proeprty type. The 
+            // result should get the expected proeprty type
 
             IResidentialPropertyRepository houseRepository = _kernel.Get<IResidentialPropertyRepository>();
             RentStuff.Common.Services.LocationServices.IGeocodingService geocodingService =

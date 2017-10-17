@@ -34,7 +34,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        ResidentialProperty GetPropertyById(string id);
+        Property GetPropertyById(string id);
 
         /// <summary>
         /// Get the owner house by email

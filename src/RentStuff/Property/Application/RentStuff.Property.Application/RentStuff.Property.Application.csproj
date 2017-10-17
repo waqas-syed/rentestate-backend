@@ -76,6 +76,7 @@
     <Compile Include="HouseServices\Commands\UpdateCommands\UpdateHouseCommand.cs" />
     <Compile Include="HouseServices\PropertyApplicationService.cs" />
     <Compile Include="HouseServices\Representation\AbstractRepresentations\GuestPropertyBaseRepresentation.cs" />
+    <Compile Include="HouseServices\Representation\AbstractRepresentations\ResidentialPropertyPartialBaseImplementation.cs" />
     <Compile Include="HouseServices\Representation\FullRepresentations\HostelFullRepresentation.cs" />
     <Compile Include="HouseServices\Representation\FullRepresentations\HotelFullRepresentation.cs" />
     <Compile Include="HouseServices\Representation\HouseCountRepresentation.cs" />
@@ -83,8 +84,10 @@
     <Compile Include="HouseServices\Representation\HousePartialRepresentation.cs" />
     <Compile Include="HouseServices\IPropertyApplicationService.cs" />
     <Compile Include="HouseServices\Representation\ImageRepresentation.cs" />
+    <Compile Include="HouseServices\Representation\PartialRepresentations\HostelPartialRepresentation.cs" />
+    <Compile Include="HouseServices\Representation\PartialRepresentations\HotelPartialRepresentation.cs" />
     <Compile Include="HouseServices\Representation\PropertyBaseRepresentation.cs" />
-    <Compile Include="HouseServices\Representation\AbstractRepresentations\ResidentialPropertyBaseRepresentation.cs" />
+    <Compile Include="HouseServices\Representation\AbstractRepresentations\ResidentialPropertyFullBaseRepresentation.cs" />
     <Compile Include="Ninject\Modules\PropertyApplicationNinjectModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

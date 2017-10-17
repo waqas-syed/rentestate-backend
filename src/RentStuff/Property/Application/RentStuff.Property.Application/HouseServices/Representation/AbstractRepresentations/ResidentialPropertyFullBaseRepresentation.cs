@@ -3,10 +3,13 @@ using System.Runtime.Serialization;
 
 namespace RentStuff.Property.Application.HouseServices.Representation.AbstractRepresentations
 {
+    /// <summary>
+    /// Full abstract representation for all Residential Properties
+    /// </summary>
     [DataContract]
-    public abstract class ResidentialPropertyBaseRepresentation : PropertyBaseRepresentation
+    public abstract class ResidentialPropertyFullBaseRepresentation : PropertyBaseRepresentation
     {
-        public ResidentialPropertyBaseRepresentation(string id, string title, long rentPrice,
+        public ResidentialPropertyFullBaseRepresentation(string id, string title, long rentPrice,
             bool internetAvailable, bool cableTvAvailable,
             string propertyType, string ownerEmail, string ownerPhoneNumber, string area, string ownerName, 
             string description,
