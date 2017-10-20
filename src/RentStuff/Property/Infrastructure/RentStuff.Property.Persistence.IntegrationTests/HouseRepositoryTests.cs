@@ -640,7 +640,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
         
         #endregion Save and Search Houses By Area and PropertyType
 
-        #region Save and Search All Houses
+        #region House Pagination Tests
 
         [Test]
         public void SearchAllHousesTest_TestsThatAllHOusesAreRetrievedAsExpected_VerifiesBYReturnValue() {
@@ -851,7 +851,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(10, retreivedHouses.Count);
         }
 
-        #endregion Save and Search All Houses
+        #endregion House Pagination Tests
 
         #region Save and Search Houses by Email
 

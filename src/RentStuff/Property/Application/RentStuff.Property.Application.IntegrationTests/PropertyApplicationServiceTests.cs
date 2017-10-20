@@ -2,17 +2,17 @@
 using NUnit.Framework;
 using RentStuff.Common.Ninject.Modules;
 using RentStuff.Common.Utilities;
-using RentStuff.Property.Application.HouseServices;
-using RentStuff.Property.Application.HouseServices.Commands.CreateCommands;
-using RentStuff.Property.Application.HouseServices.Representation;
-using RentStuff.Property.Application.HouseServices.Representation.FullRepresentations;
-using RentStuff.Property.Application.HouseServices.Representation.PartialRepresentations;
 using RentStuff.Property.Application.Ninject.Modules;
 using RentStuff.Property.Domain.Model.PropertyAggregate;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RentStuff.Property.Application.PropertyServices;
+using RentStuff.Property.Application.PropertyServices.Commands.CreateCommands;
+using RentStuff.Property.Application.PropertyServices.Representation;
+using RentStuff.Property.Application.PropertyServices.Representation.FullRepresentations;
+using RentStuff.Property.Application.PropertyServices.Representation.PartialRepresentations;
 
 namespace RentStuff.Property.Application.IntegrationTests
 {
@@ -81,7 +81,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 internet, landline, cableTv, garage, smokingAllowed, propertyType, email, phoneNumber, houseNo, streetNo, area,
                 dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared, rentUnit,
                 landlineNumber, fax);
-            string houseId = houseApplicationService.SaveNewHouseOffer(createNewHouseCommand);
+            string houseId = houseApplicationService.SaveNewProperty(createNewHouseCommand);
 
             HouseFullRepresentation retreivedHouse = 
                 (HouseFullRepresentation)houseApplicationService.GetPropertyById(houseId, Constants.House);
@@ -151,7 +151,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 internet, landline, cableTv, garage, smokingAllowed, propertyType, email, phoneNumber, houseNo, streetNo, area,
                 dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared, rentUnit,
                 landlineNumber, fax);
-            string houseId = houseApplicationService.SaveNewHouseOffer(createNewHouseCommand);
+            string houseId = houseApplicationService.SaveNewProperty(createNewHouseCommand);
 
             HouseFullRepresentation retreivedHouse =
                 (HouseFullRepresentation)houseApplicationService.GetPropertyById(houseId, Constants.House);
@@ -224,7 +224,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string fax = "0510000000";
             bool elevator = true;
 
-            var hostelId = propertyApplicationService.SaveNewHouseOffer(new CreateHostelCommand(title, monthlyRent, internet,
+            var hostelId = propertyApplicationService.SaveNewProperty(new CreateHostelCommand(title, monthlyRent, internet,
                 cableTv, parking, propertyType, email, phoneNumber, area, name, description, genderRestriction.ToString(),
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony, lawn,
                 cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, meals, picknDrop,
@@ -324,7 +324,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             bool elevator = false;
             
             // Save the Hotel
-            var hotelId = propertyApplicationService.SaveNewHouseOffer(new CreateHotelCommand(title, monthlyRent, internet,
+            var hotelId = propertyApplicationService.SaveNewProperty(new CreateHotelCommand(title, monthlyRent, internet,
                 cableTv, parking, propertyType, email, phoneNumber, area, name, description, genderRestriction.ToString(),
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                 lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
@@ -435,7 +435,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             bool elevator = false;
 
             // Save the Hotel
-            var hotelId = propertyApplicationService.SaveNewHouseOffer(new CreateHotelCommand(title, monthlyRent, internet,
+            var hotelId = propertyApplicationService.SaveNewProperty(new CreateHotelCommand(title, monthlyRent, internet,
                 cableTv, parking, propertyType, email, phoneNumber, area, name, description, genderRestriction.ToString(),
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                 lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
@@ -531,7 +531,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 true, true, true, true, true, propertyType, email, phoneNumber, houseNo, streetNo, area,
                 dimensionType, dimensionString, 0, ownerName, description, genderRestriction,isShared, rentUnit,
                 null, null);
-            string houseCreated = houseApplicationService.SaveNewHouseOffer(house);
+            string houseCreated = houseApplicationService.SaveNewProperty(house);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
             // BY EMAIL & PROPERTY TYPE
@@ -625,7 +625,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string fax = "0510000000";
             bool elevator = true;
 
-            var hostelId = propertyApplicationService.SaveNewHouseOffer(new CreateHostelCommand(title, monthlyRent,
+            var hostelId = propertyApplicationService.SaveNewProperty(new CreateHostelCommand(title, monthlyRent,
                 internet,
                 cableTv, parking, propertyType, email, phoneNumber, area, name, description, 
                 genderRestriction.ToString(),
@@ -746,7 +746,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             bool elevator = false;
 
             // Save the Hotel
-            var hotelId = propertyApplicationService.SaveNewHouseOffer(new CreateHotelCommand(title, monthlyRent, internet,
+            var hotelId = propertyApplicationService.SaveNewProperty(new CreateHotelCommand(title, monthlyRent, internet,
                 cableTv, parking, propertyType, email, phoneNumber, area, name, description, genderRestriction.ToString(),
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                 lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
@@ -837,7 +837,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             CreateHouseCommand house = new CreateHouseCommand(title, rent, 3, 2, 3, true, true, true,
                 false, false, propertyType, email, phoneNumber, null, null, area, null, null, 0, ownerName,
                 null, null, false, rentUnit, null, null);
-            var hosue1Id = propertyApplicationService.SaveNewHouseOffer(house);
+            var hosue1Id = propertyApplicationService.SaveNewProperty(house);
 
             // Saving Property # 2: Hotel. Near the search location, should be in the search results
             string area2 = "Satellite Town, Rawalpindi, Pakistan";
@@ -854,7 +854,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 propertyType2, email2, phoneNumber2, area2, name2, null, genderRestriction2.ToString(), false, rentUnit2, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
                 false, false, false, false, false, false, false, false, 2, 1);
-            var hotel1Id = propertyApplicationService.SaveNewHouseOffer(hotel1);
+            var hotel1Id = propertyApplicationService.SaveNewProperty(hotel1);
 
             // Saving Property # 3: Apartment. Should be in the search results
             string area3 = "Bahria Town, Rawalpindi, Punjab, Pakistan";
@@ -870,7 +870,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             CreateHouseCommand apartment = new CreateHouseCommand(title2, rent3, 3, 2, 3, true, true, true,
                 false, false, propertyType3, email3, phoneNumber3, null, null, area3, null, null, 0, ownerName3,
                 null, null, false, rentUnit3, null, null);
-            var apartment1Id = propertyApplicationService.SaveNewHouseOffer(apartment);
+            var apartment1Id = propertyApplicationService.SaveNewProperty(apartment);
 
             // Saving House # 4: Guest House. Should be in the search results
             string area4 = "Lohi Bhair, Islamabad Capital Territory, Pakistan";
@@ -888,7 +888,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 rentUnit4, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
                 false, false, false, false, false, false, false, false, 2, 1);
-            var guestHouse1Id = propertyApplicationService.SaveNewHouseOffer(guestHouse1);
+            var guestHouse1Id = propertyApplicationService.SaveNewProperty(guestHouse1);
 
             // Saving House # 5: Hostel. Should be in the search results
             string area5 = "Gulberg Greens, Gulberg, Islamabad Capital Territory, Pakistan";
@@ -905,7 +905,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 rentUnit5, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false,
                 false, 3);
-            var hostel1Id = propertyApplicationService.SaveNewHouseOffer(hostel);
+            var hostel1Id = propertyApplicationService.SaveNewProperty(hostel);
 
             // Saving Property # 6: House. Outside Bounds, should NOT be in search results
             string area6 = "Nara, Rawalpindi, Pakistan";
@@ -919,7 +919,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             CreateHouseCommand house2 = new CreateHouseCommand(title6, rent6, 3, 2, 3, true, true, true,
                 false, false, propertyType6, email6, phoneNumber6, null, null, area6, null, null, 0, ownerName6,
                 null, null, false, rentUnit6, null, null);
-            var hosue2Id = propertyApplicationService.SaveNewHouseOffer(house2);
+            var hosue2Id = propertyApplicationService.SaveNewProperty(house2);
 
             // Saving Property # 7: Hotel. Outside bounds, should NOT be in the search results
             string area7 = "Choha Khalsa, Punjab, Pakistan";
@@ -937,7 +937,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 rentUnit7, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
                 false, false, false, false, false, false, false, false, 2, 1);
-            var hotel2Id = propertyApplicationService.SaveNewHouseOffer(hotel2);
+            var hotel2Id = propertyApplicationService.SaveNewProperty(hotel2);
 
             // Saving Property # 8: Guest House. Outside bounds, should NOT be in the search results
             string area8 = "Patriata, Punjab, Pakistan";
@@ -955,7 +955,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 rentUnit8, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
                 false, false, false, false, false, false, false, false, 2, 1);
-            var guestHouse2Id = propertyApplicationService.SaveNewHouseOffer(guestHouse2);
+            var guestHouse2Id = propertyApplicationService.SaveNewProperty(guestHouse2);
 
             // Saving Property # 9: Aparment. Outside bounds, should NOT be in the search results
             string area9 = "Murree, Punjab, Pakistan";
@@ -970,7 +970,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             CreateHouseCommand apartment2 = new CreateHouseCommand(title9, rent9, 3, 2, 3, true, true, true,
                 false, false, propertyType9, email9, phoneNumber9, null, null, area9, null, null, 0, ownerName9,
                 null, null, false, rentUnit9, null, null);
-            var apartment2Id = propertyApplicationService.SaveNewHouseOffer(apartment2);
+            var apartment2Id = propertyApplicationService.SaveNewProperty(apartment2);
 
             // Saving Property # 10: Hostel. Should be in the search results, again
             string area10 = "6th Road, Rawalpindi, Pakistan";
@@ -988,7 +988,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 rentUnit10, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false,
                 false, 3);
-            var hostel2Id = propertyApplicationService.SaveNewHouseOffer(hostel2);
+            var hostel2Id = propertyApplicationService.SaveNewProperty(hostel2);
 
             #region PROPERTY TYPE ONLY SEARCH
 
@@ -1162,7 +1162,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             CreateHouseCommand house = new CreateHouseCommand(title, rent, 3, 2, 3, true, true, true,
                 false, false, propertyType, email, phoneNumber, null, null, area, null, null, 0, ownerName,
                 null, null, false, rentUnit, null, null);
-            var hosue1Id = propertyApplicationService.SaveNewHouseOffer(house);
+            var hosue1Id = propertyApplicationService.SaveNewProperty(house);
 
             var retrievedHouse = propertyApplicationService.GetPropertyById(hosue1Id, propertyType);
             Assert.IsNotNull(retrievedHouse);
@@ -1193,7 +1193,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 rentUnit5, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false,
                 false, 3);
-            var hosue1Id = propertyApplicationService.SaveNewHouseOffer(hostel);
+            var hosue1Id = propertyApplicationService.SaveNewProperty(hostel);
 
             var retrievedHouse = propertyApplicationService.GetPropertyById(hosue1Id, propertyType5);
             Assert.IsNotNull(retrievedHouse);
@@ -1224,7 +1224,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 propertyType2, email2, phoneNumber2, area2, name2, null, genderRestriction2.ToString(), false, rentUnit2, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
                 false, false, false, false, false, false, false, false, 2, 1);
-            var hotel1Id = propertyApplicationService.SaveNewHouseOffer(hotel1);
+            var hotel1Id = propertyApplicationService.SaveNewProperty(hotel1);
 
             var retrievedHouse = propertyApplicationService.GetPropertyById(hotel1Id, propertyType2);
             Assert.IsNotNull(retrievedHouse);

@@ -12,11 +12,11 @@ using NUnit.Framework;
 using RentStuff.Common;
 using RentStuff.Common.Ninject.Modules;
 using RentStuff.Common.Utilities;
-using RentStuff.Property.Application.HouseServices.Commands;
-using RentStuff.Property.Application.HouseServices.Commands.CreateCommands;
-using RentStuff.Property.Application.HouseServices.Commands.UpdateCommands;
-using RentStuff.Property.Application.HouseServices.Representation;
 using RentStuff.Property.Application.Ninject.Modules;
+using RentStuff.Property.Application.PropertyServices.Commands.CreateCommands;
+using RentStuff.Property.Application.PropertyServices.Commands.UpdateCommands;
+using RentStuff.Property.Application.PropertyServices.Representation;
+using RentStuff.Property.Application.PropertyServices.Representation.FullRepresentations;
 using RentStuff.Property.Domain.Model.HouseAggregate;
 using RentStuff.Property.Domain.Model.PropertyAggregate;
 using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
@@ -56,18 +56,8 @@ namespace RentStuff.Property.Ports.Tests
         {
             _databaseUtility.Create();
         }
-
-        /// <summary>
-        /// Shows the SQL output in the Output window.
-        /// </summary>
-        private void ShowNhibernateLogging()
-        {
-            var hierarchy = (Hierarchy)LogManager.GetRepository();
-            var logger = (Logger)hierarchy.GetLogger("NHibernate.SQL");
-            logger.AddAppender(new TraceAppender() { Layout = new SimpleLayout() });
-            hierarchy.Configured = true;
-        }
-
+        
+        // Get House by Id
         [Category("Integration")]
         [Test]
         public void SaveUpdateAndGetHouseInstanceByIdTest_TestsThatHouseIsSavedThenUpdatedAndRetreivedAsExpected_VerfiesThroughInstanceValue()
@@ -124,37 +114,32 @@ namespace RentStuff.Property.Ports.Tests
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>) houseSaveResult).Content;
                 
-                IHttpActionResult response = (IHttpActionResult)houseController.GetHouse(houseId:houseId);
-                HouseFullRepresentation retreivedHouse = ((OkNegotiatedContentResult<HouseFullRepresentation>) response).Content;
+                IHttpActionResult response = (IHttpActionResult)houseController.GetHouse(houseId:houseId, propertyType: Constants.House);
+                dynamic retreivedHouse = ((OkNegotiatedContentResult<PropertyBaseRepresentation>) response).Content;
                 Assert.NotNull(retreivedHouse);
                 Assert.AreEqual(houseId, retreivedHouse.Id);
                 Assert.AreEqual(title, retreivedHouse.Title);
-                Assert.AreEqual(house.Title, retreivedHouse.Title);
                 Assert.AreEqual(description, retreivedHouse.Description);
-                Assert.AreEqual(house.Description, retreivedHouse.Description);
+                Assert.AreEqual(ownerPhoneNumber, retreivedHouse.OwnerPhoneNumber);
+                Assert.AreEqual(ownerEmail, retreivedHouse.OwnerEmail);
                 Assert.AreEqual(rent, retreivedHouse.RentPrice);
-                Assert.AreEqual(house.RentPrice, retreivedHouse.RentPrice);
                 Assert.AreEqual(numberOfBathrooms, retreivedHouse.NumberOfBathrooms);
-                Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
                 Assert.AreEqual(numberOfBedrooms, retreivedHouse.NumberOfBedrooms);
-                Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
                 Assert.AreEqual(numberOfKitchens, retreivedHouse.NumberOfKitchens);
-                Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
-                Assert.AreEqual(landlinePhoneAvailable, retreivedHouse.LandlinePhoneAvailable);
-                Assert.AreEqual(house.LandlinePhoneAvailable, retreivedHouse.LandlinePhoneAvailable);
                 Assert.AreEqual(garageAvailable, retreivedHouse.GarageAvailable);
-                Assert.AreEqual(house.GarageAvailable, retreivedHouse.GarageAvailable);
-                Assert.AreEqual(smokingAllowed, retreivedHouse.SmokingAllowed);
-                Assert.AreEqual(house.SmokingAllowed, retreivedHouse.SmokingAllowed);
+                Assert.AreEqual(landlinePhoneAvailable, retreivedHouse.LandlinePhoneAvailable);
+                Assert.AreEqual(cableTvAvailable, retreivedHouse.CableTvAvailable);
                 Assert.AreEqual(internetAvailable, retreivedHouse.InternetAvailable);
-                Assert.AreEqual(house.InternetAvailable, retreivedHouse.InternetAvailable);                
+                Assert.AreEqual(smokingAllowed, retreivedHouse.SmokingAllowed);
                 Assert.AreEqual(propertyType, retreivedHouse.PropertyType);
-                Assert.AreEqual(house.PropertyType, retreivedHouse.PropertyType);
+                Assert.AreEqual(houseNo, retreivedHouse.HouseNo);
+                Assert.AreEqual(area, retreivedHouse.Area);
+                Assert.AreEqual(streetNo, retreivedHouse.StreetNo);
+                Assert.AreEqual(dimensionType, retreivedHouse.Dimension.DimensionType);
+                Assert.AreEqual(dimensionDecimal, retreivedHouse.Dimension.DecimalValue);
+                Assert.AreEqual(dimensionString, retreivedHouse.Dimension.StringValue);
+                Assert.AreEqual(ownerName, retreivedHouse.OwnerName);
                 Assert.AreEqual(genderRestriction, retreivedHouse.GenderRestriction);
-                Assert.AreEqual(house.GenderRestriction, retreivedHouse.GenderRestriction);
-                Assert.AreEqual(genderRestriction, retreivedHouse.GenderRestriction);
-                Assert.AreEqual(house.GenderRestriction, retreivedHouse.GenderRestriction);
-                Assert.AreEqual(house.RentUnit, retreivedHouse.RentUnit);
                 Assert.AreEqual(rentUnit, retreivedHouse.RentUnit);
                 Assert.AreEqual(landlineNumber, retreivedHouse.LandlineNumber);
                 Assert.AreEqual(fax, retreivedHouse.Fax);
@@ -164,16 +149,7 @@ namespace RentStuff.Property.Ports.Tests
                 var coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(area);
                 Assert.AreEqual(coordinatesFromAddress.Item1, retreivedHouse.Latitude);
                 Assert.AreEqual(coordinatesFromAddress.Item2, retreivedHouse.Longitude);
-
-                Assert.AreEqual(houseNo, retreivedHouse.HouseNo);
-                Assert.AreEqual(house.HouseNo, retreivedHouse.HouseNo);
-                Assert.AreEqual(area, retreivedHouse.Area);
-                Assert.AreEqual(house.Area, retreivedHouse.Area);
-                Assert.AreEqual(streetNo, retreivedHouse.StreetNo);
-                Assert.AreEqual(house.StreetNo, retreivedHouse.StreetNo);
-                Assert.AreEqual(ownerName, retreivedHouse.OwnerName);
-                Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
-
+                
                 string updatedTitle = "Updated House For Rent";
                 string updatedDescription = "updated Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
                 int updatedRent = 195000;
@@ -215,30 +191,27 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.NotNull(retreivedHouse);
                 Assert.AreEqual(houseId, retreivedHouse.Id);
                 Assert.AreEqual(updatedTitle, retreivedHouse.Title);
-                Assert.AreEqual(updateHouseCommand.Title, retreivedHouse.Title);
                 Assert.AreEqual(updatedDescription, retreivedHouse.Description);
-                Assert.AreEqual(updateHouseCommand.Description, retreivedHouse.Description);
+                Assert.AreEqual(updatedOwnerPhoneNumber, retreivedHouse.OwnerPhoneNumber);
+                Assert.AreEqual(updatedOwnerEmail, retreivedHouse.OwnerEmail);
                 Assert.AreEqual(updatedRent, retreivedHouse.RentPrice);
-                Assert.AreEqual(updateHouseCommand.RentPrice, retreivedHouse.RentPrice);
                 Assert.AreEqual(updatedNumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
-                Assert.AreEqual(updateHouseCommand.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
                 Assert.AreEqual(updatedNumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
-                Assert.AreEqual(updateHouseCommand.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
                 Assert.AreEqual(updatedNumberOfKitchens, retreivedHouse.NumberOfKitchens);
-                Assert.AreEqual(updateHouseCommand.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
-                Assert.AreEqual(updatedLandlinePhoneAvailable, retreivedHouse.LandlinePhoneAvailable);
-                Assert.AreEqual(updateHouseCommand.LandlinePhoneAvailable, retreivedHouse.LandlinePhoneAvailable);
                 Assert.AreEqual(updatedGarageAvailable, retreivedHouse.GarageAvailable);
-                Assert.AreEqual(updateHouseCommand.GarageAvailable, retreivedHouse.GarageAvailable);
-                Assert.AreEqual(updatedSmokingAllowed, retreivedHouse.SmokingAllowed);
-                Assert.AreEqual(updateHouseCommand.SmokingAllowed, retreivedHouse.SmokingAllowed);
+                Assert.AreEqual(updatedLandlinePhoneAvailable, retreivedHouse.LandlinePhoneAvailable);
+                Assert.AreEqual(updatedCableTvAvailable, retreivedHouse.CableTvAvailable);
                 Assert.AreEqual(updatedInternetAvailable, retreivedHouse.InternetAvailable);
-                Assert.AreEqual(updateHouseCommand.InternetAvailable, retreivedHouse.InternetAvailable);
+                Assert.AreEqual(updatedSmokingAllowed, retreivedHouse.SmokingAllowed);
                 Assert.AreEqual(updatedPropertyType, retreivedHouse.PropertyType);
-                Assert.AreEqual(updateHouseCommand.PropertyType, retreivedHouse.PropertyType);
+                Assert.AreEqual(updatedHouseNo, retreivedHouse.HouseNo);
+                Assert.AreEqual(updatedArea, retreivedHouse.Area);
+                Assert.AreEqual(updatedStreetNo, retreivedHouse.StreetNo);
+                Assert.AreEqual(updatedDimensionType, retreivedHouse.Dimension.DimensionType);
+                Assert.AreEqual(updatedDimensionDecimal, retreivedHouse.Dimension.DecimalValue);
+                Assert.AreEqual(updatedDimensionString, retreivedHouse.Dimension.StringValue);
+                Assert.AreEqual(updatedOwnerName, retreivedHouse.OwnerName);
                 Assert.AreEqual(updatedGenderRestriction, retreivedHouse.GenderRestriction);
-                Assert.AreEqual(updateHouseCommand.GenderRestriction, retreivedHouse.GenderRestriction);
-                Assert.AreEqual(updateHouseCommand.RentUnit, retreivedHouse.RentUnit);
                 Assert.AreEqual(updatedRentUnit, retreivedHouse.RentUnit);
                 Assert.AreEqual(updatedLandlineNumber, retreivedHouse.LandlineNumber);
                 Assert.AreEqual(updatedFax, retreivedHouse.Fax);
@@ -248,15 +221,6 @@ namespace RentStuff.Property.Ports.Tests
                 coordinatesFromAddress = geocodingService.GetCoordinatesFromAddress(updatedArea);
                 Assert.AreEqual(coordinatesFromAddress.Item1, retreivedHouse.Latitude);
                 Assert.AreEqual(coordinatesFromAddress.Item2, retreivedHouse.Longitude);
-
-                Assert.AreEqual(updatedHouseNo, retreivedHouse.HouseNo);
-                Assert.AreEqual(updateHouseCommand.HouseNo, retreivedHouse.HouseNo);
-                Assert.AreEqual(updatedArea, retreivedHouse.Area);
-                Assert.AreEqual(updateHouseCommand.Area, retreivedHouse.Area);
-                Assert.AreEqual(updatedStreetNo, retreivedHouse.StreetNo);
-                Assert.AreEqual(updateHouseCommand.StreetNo, retreivedHouse.StreetNo);
-                Assert.AreEqual(updatedOwnerName, retreivedHouse.OwnerName);
-                Assert.AreEqual(updateHouseCommand.OwnerName, retreivedHouse.OwnerName);
             }
         }
         

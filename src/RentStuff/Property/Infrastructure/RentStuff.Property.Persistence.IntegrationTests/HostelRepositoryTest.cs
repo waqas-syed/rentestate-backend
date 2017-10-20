@@ -93,6 +93,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Now retrieve the Hostel from the database
             Hostel retrievedHostel = (Hostel)houseRepository.GetPropertyById(hostel.Id);
             Assert.IsNotNull(retrievedHostel);
+            Assert.AreEqual(hostel.Id, retrievedHostel.Id);
             Assert.AreEqual(title, retrievedHostel.Title);
             Assert.AreEqual(description, retrievedHostel.Description);
             Assert.AreEqual(email, retrievedHostel.OwnerEmail);

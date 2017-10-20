@@ -1,5 +1,5 @@
 ﻿using Ninject.Modules;
-using RentStuff.Property.Application.HouseServices;
+using RentStuff.Property.Application.PropertyServices;
 
 namespace RentStuff.Property.Application.Ninject.Modules
 {

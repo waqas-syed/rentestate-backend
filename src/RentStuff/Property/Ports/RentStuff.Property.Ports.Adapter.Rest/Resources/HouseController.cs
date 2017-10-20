@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Newtonsoft.Json;
 using NLog;
-using RentStuff.Property.Application.HouseServices;
-using RentStuff.Property.Application.HouseServices.Commands;
-using RentStuff.Property.Application.HouseServices.Commands.CreateCommands;
-using RentStuff.Property.Application.HouseServices.Commands.DeleteCommands;
-using RentStuff.Property.Application.HouseServices.Commands.UpdateCommands;
+using RentStuff.Property.Application.PropertyServices;
+using RentStuff.Property.Application.PropertyServices.Commands.AbstractCommands;
+using RentStuff.Property.Application.PropertyServices.Commands.DeleteCommands;
+using RentStuff.Property.Application.PropertyServices.Commands.UpdateCommands;
 
 namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 {
@@ -38,32 +37,27 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         /// After saving the house, the images for that House need to be uploaded using another PoSt call to 
         /// 'HouseImageUplaod' method
         /// </summary>
-        /// <param name="house"></param>
+        /// <param name="property"></param>
         /// <returns></returns>
         [Route("house")]
         [HttpPost]
         [Authorize]
-        public IHttpActionResult Post([FromBody] Object house)
+        public IHttpActionResult Post([FromBody] object property)
         {
             try
             {
-                // Nul reference check
-                if (house != null)
+                // Null reference check
+                if (property != null)
                 {
-                    var jsonString = house.ToString();
-
-                    CreateHouseCommand houseReborn = null;
-                    // First try to convert it to CreateHouseCommand
-                    houseReborn = JsonConvert.DeserializeObject<CreateHouseCommand>(jsonString);
-                    // Check if the house's owner email is the same as the one the current user is logged in with
-                    CheckOwnerEmailIntegrity(houseReborn.OwnerEmail);
+                    // Get the email of the current user from the user's identity in our system
+                    var currentUserEmail = GetEmailFromClaims(User.Identity);
                     // Save the new house
-                    return Ok(_houseApplicationService.SaveNewHouseOffer(houseReborn));
+                    return Ok(_houseApplicationService.SaveNewProperty(property, currentUserEmail));
                 }
             }
             catch (Exception exception)
             {
-                _logger.Error("Error occured while uploading house. Exception: {0} | House: {1}", exception, house);
+                _logger.Error("Error occured while uploading house. Exception: {0} | House: {1}", exception, property);
                 return InternalServerError();
             }
             return BadRequest();
@@ -84,8 +78,8 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     UpdateHouseCommand refurbishedHouse = null;
                     // Try to convert the JSON into a domain model object
                     refurbishedHouse = JsonConvert.DeserializeObject<UpdateHouseCommand>(jsonString);
-                    // First check that the request initiator has the same email as the uploader of the house
-                    CheckOwnerEmailIntegrity(refurbishedHouse.OwnerEmail);
+                    var currentUserEmail = GetEmailFromClaims(User.Identity);
+
                     // Then check that this house was actually upoaded by the current requestor
                     _houseApplicationService.HouseOwnershipCheck(refurbishedHouse.Id,
                                                                         refurbishedHouse.OwnerEmail);
@@ -99,25 +93,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             }
             return BadRequest();
         }
-
-        /// <summary>
-        /// Checks that the current user's email and the request house's uploader emails are the same
-        /// </summary>
-        /// <param name="houseOwnerEmail"></param>
-        /// <returns></returns>
-        private void CheckOwnerEmailIntegrity(string houseOwnerEmail)
-        {
-            // Check if the current caller is using his own email in the CreateHouseCommand to upload a new house
-            var currentUserEmail = GetEmailFromClaims(User.Identity);
-            if (!currentUserEmail.Equals(houseOwnerEmail))
-            {
-                _logger.Error(
-                    "Current user cannot upload house using another user's email. CurrentUser:{0} | HouseOwner:{1}",
-                    currentUserEmail, houseOwnerEmail);
-                throw new InvalidOperationException("Current user cannot upload house using another user's email.");
-            }
-        }
-
+        
         /// <summary>
         /// Separate method is used for uploading the images for a house. So two POST calls are involved; 
         /// One for saving the House, and then another(this one) to save the images related to a house
@@ -309,16 +285,17 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         return Unauthorized();
                     }
                 }
+                // If both property type and ID are given
+                else if (!string.IsNullOrEmpty(houseId) && !string.IsNullOrWhiteSpace(propertyType))
+                {
+                    _logger.Info("Get House by HouseId {0}", houseId);
+                    return Ok(_houseApplicationService.GetPropertyById(houseId, propertyType));
+                }
                 // If only property type is given
                 else if (!string.IsNullOrWhiteSpace(propertyType))
                 {
                     _logger.Info("Get House by Property Type {0}", propertyType);
                     return Ok(_houseApplicationService.SearchPropertiesByPropertyType(propertyType, pageNo));
-                }
-                else if (!string.IsNullOrEmpty(houseId) && !string.IsNullOrWhiteSpace(propertyType))
-                {
-                    _logger.Info("Get House by HouseId {0}", houseId);
-                    return Ok(_houseApplicationService.GetPropertyById(houseId, propertyType));
                 }
                 else
                 {
