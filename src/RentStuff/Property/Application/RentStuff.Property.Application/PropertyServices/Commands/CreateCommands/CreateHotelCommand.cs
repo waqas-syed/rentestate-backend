@@ -1,12 +1,12 @@
-﻿using System.Runtime.Serialization;
-using RentStuff.Property.Application.PropertyServices.Commands.AbstractCommands;
+﻿using RentStuff.Property.Application.PropertyServices.Commands.AbstractCommands;
+using System;
 
 namespace RentStuff.Property.Application.PropertyServices.Commands.CreateCommands
 {
     /// <summary>
     /// Command for types like Hotel and Guest House
     /// </summary>
-    [DataContract]
+    [Serializable]
     public class CreateHotelCommand : GuestPropertyBaseCommand
     {
         public CreateHotelCommand(string title, long rentPrice,
@@ -37,7 +37,7 @@ namespace RentStuff.Property.Application.PropertyServices.Commands.CreateCommand
             NumberOfAdults = numberOfAdults;
             NumberOfChildren = numberOfChildren;
         }
-
+        
         public bool Restaurant { get; private set; }
 
         public bool AirportShuttle { get; private set; }

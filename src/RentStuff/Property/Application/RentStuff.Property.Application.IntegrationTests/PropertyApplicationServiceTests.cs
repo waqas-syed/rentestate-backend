@@ -8,6 +8,7 @@ using RentStuff.Property.Infrastructure.Persistence.Ninject.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using RentStuff.Property.Application.PropertyServices;
 using RentStuff.Property.Application.PropertyServices.Commands.CreateCommands;
 using RentStuff.Property.Application.PropertyServices.Representation;
@@ -66,7 +67,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string dimensionType = "Kanal";
             string dimensionString = "50";
             string ownerName = "Owner Name 1";
-            string propertyType = Constants.Apartment;
+            string propertyType = Constants.House;
             string genderRestriction = GenderRestriction.GirlsOnly.ToString();
             bool smokingAllowed = false;
             bool landline = true;
@@ -81,7 +82,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 internet, landline, cableTv, garage, smokingAllowed, propertyType, email, phoneNumber, houseNo, streetNo, area,
                 dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared, rentUnit,
                 landlineNumber, fax);
-            string houseId = houseApplicationService.SaveNewProperty(createNewHouseCommand);
+            string houseId = houseApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHouseCommand), email);
 
             HouseFullRepresentation retreivedHouse = 
                 (HouseFullRepresentation)houseApplicationService.GetPropertyById(houseId, Constants.House);
@@ -151,7 +152,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 internet, landline, cableTv, garage, smokingAllowed, propertyType, email, phoneNumber, houseNo, streetNo, area,
                 dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared, rentUnit,
                 landlineNumber, fax);
-            string houseId = houseApplicationService.SaveNewProperty(createNewHouseCommand);
+            string houseId = houseApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHouseCommand), email);
 
             HouseFullRepresentation retreivedHouse =
                 (HouseFullRepresentation)houseApplicationService.GetPropertyById(houseId, Constants.House);
@@ -224,11 +225,13 @@ namespace RentStuff.Property.Application.IntegrationTests
             string fax = "0510000000";
             bool elevator = true;
 
-            var hostelId = propertyApplicationService.SaveNewProperty(new CreateHostelCommand(title, monthlyRent, internet,
-                cableTv, parking, propertyType, email, phoneNumber, area, name, description, genderRestriction.ToString(),
+            var createNewHostelCommand = new CreateHostelCommand(title, monthlyRent, internet,
+                cableTv, parking, propertyType, email, phoneNumber, area, name, description,
+                genderRestriction.ToString(),
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony, lawn,
                 cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, meals, picknDrop,
-                numberOfSeats));
+                numberOfSeats);
+            var hostelId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHostelCommand), email);
             
             Assert.IsFalse(string.IsNullOrWhiteSpace(hostelId));
             // Now retrieve the Hostel from the database
@@ -281,8 +284,6 @@ namespace RentStuff.Property.Application.IntegrationTests
             string email = "w@12344321.com";
             string name = "OwnerName";
             string phoneNumber = "03455138018";
-            decimal latitude = 25.43M;
-            decimal longitude = 73.41M;
             string propertyType = Constants.Hotel;
             GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
             string area = "Pindora, Rawalpindi, Pakistan";
@@ -290,8 +291,6 @@ namespace RentStuff.Property.Application.IntegrationTests
             bool cableTv = false;
             bool internet = true;
             bool parking = true;
-            string image1 = "Image1.jpg";
-            string image2 = "Image2.png";
             string rentUnit = Constants.Daily;
             bool isShared = true;
             bool laundry = true;
@@ -322,34 +321,37 @@ namespace RentStuff.Property.Application.IntegrationTests
             string landlineNumber = "0510000000";
             string fax = "0510000000";
             bool elevator = false;
-            
-            // Save the Hotel
-            var hotelId = propertyApplicationService.SaveNewProperty(new CreateHotelCommand(title, monthlyRent, internet,
-                cableTv, parking, propertyType, email, phoneNumber, area, name, description, genderRestriction.ToString(),
+
+            var createNewHotelCommand = new CreateHotelCommand(title, monthlyRent, internet,
+                cableTv, parking, propertyType, email, phoneNumber, area, name, description,
+                genderRestriction.ToString(),
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                 lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                 airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                kitchen, numberOfAdults, numberOfChildren));
+                kitchen, numberOfAdults, numberOfChildren);
+            // Save the Hotel
+            var hotelId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHotelCommand), email);
 
             // Retreive the Hotel
             HotelFullRepresentation retrievedHotel = 
                 (HotelFullRepresentation)propertyApplicationService.GetPropertyById(hotelId, Constants.Hotel);
 
             Assert.IsNotNull(retrievedHotel);
+            Assert.AreEqual(hotelId, retrievedHotel.Id);
             Assert.AreEqual(title, retrievedHotel.Title);
             Assert.AreEqual(description, retrievedHotel.Description);
             Assert.AreEqual(email, retrievedHotel.OwnerEmail);
             Assert.AreEqual(name, retrievedHotel.OwnerName);
             Assert.AreEqual(phoneNumber, retrievedHotel.OwnerPhoneNumber);
-            Assert.AreEqual(cableTv, retrievedHotel.CableTvAvailable);
-            Assert.AreEqual(internet, retrievedHotel.InternetAvailable);
-            Assert.AreEqual(parking, retrievedHotel.ParkingAvailable);
             Assert.AreEqual(propertyType, retrievedHotel.PropertyType);
             Assert.AreEqual(genderRestriction.ToString(), retrievedHotel.GenderRestriction);
             Assert.AreEqual(area, retrievedHotel.Area);
             Assert.AreEqual(monthlyRent, retrievedHotel.RentPrice);
-            Assert.AreEqual(isShared, retrievedHotel.IsShared);
+            Assert.AreEqual(cableTv, retrievedHotel.CableTvAvailable);
+            Assert.AreEqual(internet, retrievedHotel.InternetAvailable);
+            Assert.AreEqual(parking, retrievedHotel.ParkingAvailable);
             Assert.AreEqual(rentUnit, retrievedHotel.RentUnit);
+            Assert.AreEqual(isShared, retrievedHotel.IsShared);
             Assert.AreEqual(laundry, retrievedHotel.Laundry);
             Assert.AreEqual(ac, retrievedHotel.AC);
             Assert.AreEqual(geyser, retrievedHotel.Geyser);
@@ -377,6 +379,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(numberOfChildren, retrievedHotel.Occupants.Children);
             Assert.AreEqual(numberOfAdults + numberOfChildren, retrievedHotel.Occupants.TotalOccupants);
             
+            Assert.AreEqual(landlineNumber, retrievedHotel.LandlineNumber);
+            Assert.AreEqual(fax, retrievedHotel.Fax);
             Assert.AreEqual(elevator, retrievedHotel.Elevator);
         }
 
@@ -435,60 +439,63 @@ namespace RentStuff.Property.Application.IntegrationTests
             bool elevator = false;
 
             // Save the Hotel
-            var hotelId = propertyApplicationService.SaveNewProperty(new CreateHotelCommand(title, monthlyRent, internet,
+            var guestHouseId = propertyApplicationService.SaveNewProperty(new CreateHotelCommand(title, monthlyRent, internet,
                 cableTv, parking, propertyType, email, phoneNumber, area, name, description, genderRestriction.ToString(),
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                 lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                 airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                kitchen, numberOfAdults, numberOfChildren));
+                kitchen, numberOfAdults, numberOfChildren), email);
 
             // Retreive the Hotel
-            HotelFullRepresentation retrievedHotel =
-                (HotelFullRepresentation)propertyApplicationService.GetPropertyById(hotelId, Constants.Hotel);
+            HotelFullRepresentation retrievedGuestHouse =
+                (HotelFullRepresentation)propertyApplicationService.GetPropertyById(guestHouseId, Constants.Hotel);
 
-            Assert.IsNotNull(retrievedHotel);
-            Assert.AreEqual(title, retrievedHotel.Title);
-            Assert.AreEqual(description, retrievedHotel.Description);
-            Assert.AreEqual(email, retrievedHotel.OwnerEmail);
-            Assert.AreEqual(name, retrievedHotel.OwnerName);
-            Assert.AreEqual(phoneNumber, retrievedHotel.OwnerPhoneNumber);
-            Assert.AreEqual(cableTv, retrievedHotel.CableTvAvailable);
-            Assert.AreEqual(internet, retrievedHotel.InternetAvailable);
-            Assert.AreEqual(parking, retrievedHotel.ParkingAvailable);
-            Assert.AreEqual(propertyType, retrievedHotel.PropertyType);
-            Assert.AreEqual(genderRestriction.ToString(), retrievedHotel.GenderRestriction);
-            Assert.AreEqual(area, retrievedHotel.Area);
-            Assert.AreEqual(monthlyRent, retrievedHotel.RentPrice);
-            Assert.AreEqual(isShared, retrievedHotel.IsShared);
-            Assert.AreEqual(rentUnit, retrievedHotel.RentUnit);
-            Assert.AreEqual(laundry, retrievedHotel.Laundry);
-            Assert.AreEqual(ac, retrievedHotel.AC);
-            Assert.AreEqual(geyser, retrievedHotel.Geyser);
-            Assert.AreEqual(attachedBathroom, retrievedHotel.AttachedBathroom);
-            Assert.AreEqual(fitnessCentre, retrievedHotel.FitnessCentre);
-            Assert.AreEqual(balcony, retrievedHotel.Balcony);
-            Assert.AreEqual(lawn, retrievedHotel.Lawn);
-            Assert.AreEqual(ironing, retrievedHotel.Ironing);
-            Assert.AreEqual(cctvCameras, retrievedHotel.CctvCameras);
-            Assert.AreEqual(backupElectricity, retrievedHotel.BackupElectricity);
-            Assert.AreEqual(heating, retrievedHotel.Heating);
+            Assert.IsNotNull(retrievedGuestHouse);
+            Assert.AreEqual(guestHouseId, retrievedGuestHouse.Id);
+            Assert.AreEqual(title, retrievedGuestHouse.Title);
+            Assert.AreEqual(description, retrievedGuestHouse.Description);
+            Assert.AreEqual(email, retrievedGuestHouse.OwnerEmail);
+            Assert.AreEqual(name, retrievedGuestHouse.OwnerName);
+            Assert.AreEqual(phoneNumber, retrievedGuestHouse.OwnerPhoneNumber);
+            Assert.AreEqual(propertyType, retrievedGuestHouse.PropertyType);
+            Assert.AreEqual(genderRestriction.ToString(), retrievedGuestHouse.GenderRestriction);
+            Assert.AreEqual(area, retrievedGuestHouse.Area);
+            Assert.AreEqual(monthlyRent, retrievedGuestHouse.RentPrice);
+            Assert.AreEqual(cableTv, retrievedGuestHouse.CableTvAvailable);
+            Assert.AreEqual(internet, retrievedGuestHouse.InternetAvailable);
+            Assert.AreEqual(parking, retrievedGuestHouse.ParkingAvailable);
+            Assert.AreEqual(rentUnit, retrievedGuestHouse.RentUnit);
+            Assert.AreEqual(isShared, retrievedGuestHouse.IsShared);
+            Assert.AreEqual(laundry, retrievedGuestHouse.Laundry);
+            Assert.AreEqual(ac, retrievedGuestHouse.AC);
+            Assert.AreEqual(geyser, retrievedGuestHouse.Geyser);
+            Assert.AreEqual(attachedBathroom, retrievedGuestHouse.AttachedBathroom);
+            Assert.AreEqual(fitnessCentre, retrievedGuestHouse.FitnessCentre);
+            Assert.AreEqual(balcony, retrievedGuestHouse.Balcony);
+            Assert.AreEqual(lawn, retrievedGuestHouse.Lawn);
+            Assert.AreEqual(ironing, retrievedGuestHouse.Ironing);
+            Assert.AreEqual(cctvCameras, retrievedGuestHouse.CctvCameras);
+            Assert.AreEqual(backupElectricity, retrievedGuestHouse.BackupElectricity);
+            Assert.AreEqual(heating, retrievedGuestHouse.Heating);
 
-            Assert.AreEqual(restaurant, retrievedHotel.Restaurant);
-            Assert.AreEqual(airportShuttle, retrievedHotel.AirportShuttle);
-            Assert.AreEqual(breakfastIncluded, retrievedHotel.BreakfastIncluded);
-            Assert.AreEqual(sittingArea, retrievedHotel.SittingArea);
-            Assert.AreEqual(carRental, retrievedHotel.CarRental);
-            Assert.AreEqual(spa, retrievedHotel.Spa);
-            Assert.AreEqual(salon, retrievedHotel.Salon);
-            Assert.AreEqual(bathtub, retrievedHotel.Bathtub);
-            Assert.AreEqual(swimmingPool, retrievedHotel.SwimmingPool);
-            Assert.AreEqual(kitchen, retrievedHotel.Kitchen);
+            Assert.AreEqual(restaurant, retrievedGuestHouse.Restaurant);
+            Assert.AreEqual(airportShuttle, retrievedGuestHouse.AirportShuttle);
+            Assert.AreEqual(breakfastIncluded, retrievedGuestHouse.BreakfastIncluded);
+            Assert.AreEqual(sittingArea, retrievedGuestHouse.SittingArea);
+            Assert.AreEqual(carRental, retrievedGuestHouse.CarRental);
+            Assert.AreEqual(spa, retrievedGuestHouse.Spa);
+            Assert.AreEqual(salon, retrievedGuestHouse.Salon);
+            Assert.AreEqual(bathtub, retrievedGuestHouse.Bathtub);
+            Assert.AreEqual(swimmingPool, retrievedGuestHouse.SwimmingPool);
+            Assert.AreEqual(kitchen, retrievedGuestHouse.Kitchen);
 
-            Assert.AreEqual(numberOfAdults, retrievedHotel.Occupants.Adults);
-            Assert.AreEqual(numberOfChildren, retrievedHotel.Occupants.Children);
-            Assert.AreEqual(numberOfAdults + numberOfChildren, retrievedHotel.Occupants.TotalOccupants);
+            Assert.AreEqual(numberOfAdults, retrievedGuestHouse.Occupants.Adults);
+            Assert.AreEqual(numberOfChildren, retrievedGuestHouse.Occupants.Children);
+            Assert.AreEqual(numberOfAdults + numberOfChildren, retrievedGuestHouse.Occupants.TotalOccupants);
 
-            Assert.AreEqual(elevator, retrievedHotel.Elevator);
+            Assert.AreEqual(landlineNumber, retrievedGuestHouse.LandlineNumber);
+            Assert.AreEqual(fax, retrievedGuestHouse.Fax);
+            Assert.AreEqual(elevator, retrievedGuestHouse.Elevator);
         }
 
         #endregion Save and retrieve Full Representations
@@ -496,8 +503,8 @@ namespace RentStuff.Property.Application.IntegrationTests
         #region Save House and retrieve Partial Representations
 
         // Save and retrieve Partial House Representations
-        // SEARCH HOTELS BY PROPERTY TYPE
-        // SEARCH HOTELS BY PROPERTY TYPE + EMAIL
+        // SEARCH HOUSES BY PROPERTY TYPE
+        // SEARCH HOUSES BY PROPERTY TYPE + EMAIL
         [Test]
         public void SaveHouseAndRetrieveTest_TestsThatANewHouseIsSavedInTheDatabaseAsExpected_VerifiesByOutput()
         {
@@ -531,7 +538,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 true, true, true, true, true, propertyType, email, phoneNumber, houseNo, streetNo, area,
                 dimensionType, dimensionString, 0, ownerName, description, genderRestriction,isShared, rentUnit,
                 null, null);
-            string houseCreated = houseApplicationService.SaveNewProperty(house);
+            string houseCreated = houseApplicationService.SaveNewProperty(JsonConvert.SerializeObject(house),email);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
             // BY EMAIL & PROPERTY TYPE
@@ -556,7 +563,6 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
-            Assert.AreEqual(house.NumberOfBedrooms, retreivedHouse.NumberOfBedrooms);
             Assert.AreEqual(rentUnit, retreivedHouse.RentUnit);
 
             // BY PROPERTY TYPE ONLY
@@ -586,8 +592,8 @@ namespace RentStuff.Property.Application.IntegrationTests
         }
 
         // Save and retrieve Partial Hostels Representations
-        // SEARCH HOTELS BY PROPERTY TYPE
-        // SEARCH HOTELS BY PROPERTY TYPE + EMAIL
+        // SEARCH HOSTELS BY PROPERTY TYPE
+        // SEARCH HOSTELS BY PROPERTY TYPE + EMAIL
         [Test]
         public void SaveHostelAndRetrieveTest_TestsThatANewHostelIsSavedInTheDatabaseAsExpected_VerifiesByOutput()
         {
@@ -625,13 +631,14 @@ namespace RentStuff.Property.Application.IntegrationTests
             string fax = "0510000000";
             bool elevator = true;
 
-            var hostelId = propertyApplicationService.SaveNewProperty(new CreateHostelCommand(title, monthlyRent,
+            var createNewHostelCommand = new CreateHostelCommand(title, monthlyRent,
                 internet,
-                cableTv, parking, propertyType, email, phoneNumber, area, name, description, 
+                cableTv, parking, propertyType, email, phoneNumber, area, name, description,
                 genderRestriction.ToString(),
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony, lawn,
                 cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, meals, picknDrop,
-                numberOfSeats));
+                numberOfSeats);
+            var hostelId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHostelCommand), email);
 
             Assert.IsFalse(string.IsNullOrWhiteSpace(hostelId));
 
@@ -745,13 +752,15 @@ namespace RentStuff.Property.Application.IntegrationTests
             string fax = "0510000000";
             bool elevator = false;
 
-            // Save the Hotel
-            var hotelId = propertyApplicationService.SaveNewProperty(new CreateHotelCommand(title, monthlyRent, internet,
-                cableTv, parking, propertyType, email, phoneNumber, area, name, description, genderRestriction.ToString(),
+           var createNewHotelCommand = new CreateHotelCommand(title, monthlyRent, internet,
+                cableTv, parking, propertyType, email, phoneNumber, area, name, description,
+                genderRestriction.ToString(),
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                 lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                 airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                kitchen, numberOfAdults, numberOfChildren));
+                kitchen, numberOfAdults, numberOfChildren);
+            // Save the Hotel
+            var hotelId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHotelCommand), email);
 
             // BY EMAIL & PROPERTY TYPE
             // Retreive the Hotel
@@ -766,12 +775,16 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(title, retrievedHotel.Title);
             Assert.AreEqual(name, retrievedHotel.OwnerName);
             Assert.AreEqual(phoneNumber, retrievedHotel.OwnerPhoneNumber);
+            Assert.AreEqual(landlineNumber, retrievedHotel.OwnerLandlineNumber);
             Assert.AreEqual(propertyType, retrievedHotel.PropertyType);
             Assert.AreEqual(genderRestriction.ToString(), retrievedHotel.GenderRestriction);
             Assert.AreEqual(area, retrievedHotel.Area);
             Assert.AreEqual(monthlyRent, retrievedHotel.RentPrice);
             Assert.AreEqual(isShared, retrievedHotel.IsShared);
             Assert.AreEqual(rentUnit, retrievedHotel.RentUnit);
+            Assert.AreEqual(internet, retrievedHotel.Internet);
+            Assert.AreEqual(cableTv, retrievedHotel.CableTv);
+            Assert.AreEqual(parking, retrievedHotel.Parking);
             Assert.AreEqual(ac, retrievedHotel.AC);
             Assert.AreEqual(geyser, retrievedHotel.Geyser);
             Assert.AreEqual(attachedBathroom, retrievedHotel.AttachedBathroom);
@@ -797,12 +810,16 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(title, retrievedHotel.Title);
             Assert.AreEqual(name, retrievedHotel.OwnerName);
             Assert.AreEqual(phoneNumber, retrievedHotel.OwnerPhoneNumber);
+            Assert.AreEqual(landlineNumber, retrievedHotel.OwnerLandlineNumber);
             Assert.AreEqual(propertyType, retrievedHotel.PropertyType);
             Assert.AreEqual(genderRestriction.ToString(), retrievedHotel.GenderRestriction);
             Assert.AreEqual(area, retrievedHotel.Area);
             Assert.AreEqual(monthlyRent, retrievedHotel.RentPrice);
             Assert.AreEqual(isShared, retrievedHotel.IsShared);
             Assert.AreEqual(rentUnit, retrievedHotel.RentUnit);
+            Assert.AreEqual(internet, retrievedHotel.Internet);
+            Assert.AreEqual(cableTv, retrievedHotel.CableTv);
+            Assert.AreEqual(parking, retrievedHotel.Parking);
             Assert.AreEqual(ac, retrievedHotel.AC);
             Assert.AreEqual(geyser, retrievedHotel.Geyser);
             Assert.AreEqual(attachedBathroom, retrievedHotel.AttachedBathroom);
@@ -837,7 +854,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             CreateHouseCommand house = new CreateHouseCommand(title, rent, 3, 2, 3, true, true, true,
                 false, false, propertyType, email, phoneNumber, null, null, area, null, null, 0, ownerName,
                 null, null, false, rentUnit, null, null);
-            var hosue1Id = propertyApplicationService.SaveNewProperty(house);
+            var hosue1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(house), email);
 
             // Saving Property # 2: Hotel. Near the search location, should be in the search results
             string area2 = "Satellite Town, Rawalpindi, Pakistan";
@@ -854,7 +871,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 propertyType2, email2, phoneNumber2, area2, name2, null, genderRestriction2.ToString(), false, rentUnit2, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
                 false, false, false, false, false, false, false, false, 2, 1);
-            var hotel1Id = propertyApplicationService.SaveNewProperty(hotel1);
+            var hotel1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(hotel1), email2);
 
             // Saving Property # 3: Apartment. Should be in the search results
             string area3 = "Bahria Town, Rawalpindi, Punjab, Pakistan";
@@ -870,7 +887,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             CreateHouseCommand apartment = new CreateHouseCommand(title2, rent3, 3, 2, 3, true, true, true,
                 false, false, propertyType3, email3, phoneNumber3, null, null, area3, null, null, 0, ownerName3,
                 null, null, false, rentUnit3, null, null);
-            var apartment1Id = propertyApplicationService.SaveNewProperty(apartment);
+            var apartment1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(apartment), email3);
 
             // Saving House # 4: Guest House. Should be in the search results
             string area4 = "Lohi Bhair, Islamabad Capital Territory, Pakistan";
@@ -888,7 +905,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 rentUnit4, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
                 false, false, false, false, false, false, false, false, 2, 1);
-            var guestHouse1Id = propertyApplicationService.SaveNewProperty(guestHouse1);
+            var guestHouse1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(guestHouse1), email4);
 
             // Saving House # 5: Hostel. Should be in the search results
             string area5 = "Gulberg Greens, Gulberg, Islamabad Capital Territory, Pakistan";
@@ -905,7 +922,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 rentUnit5, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false,
                 false, 3);
-            var hostel1Id = propertyApplicationService.SaveNewProperty(hostel);
+            var hostel1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(hostel), email5);
 
             // Saving Property # 6: House. Outside Bounds, should NOT be in search results
             string area6 = "Nara, Rawalpindi, Pakistan";
@@ -919,7 +936,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             CreateHouseCommand house2 = new CreateHouseCommand(title6, rent6, 3, 2, 3, true, true, true,
                 false, false, propertyType6, email6, phoneNumber6, null, null, area6, null, null, 0, ownerName6,
                 null, null, false, rentUnit6, null, null);
-            var hosue2Id = propertyApplicationService.SaveNewProperty(house2);
+            var hosue2Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(house2), email6);
 
             // Saving Property # 7: Hotel. Outside bounds, should NOT be in the search results
             string area7 = "Choha Khalsa, Punjab, Pakistan";
@@ -937,7 +954,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 rentUnit7, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
                 false, false, false, false, false, false, false, false, 2, 1);
-            var hotel2Id = propertyApplicationService.SaveNewProperty(hotel2);
+            var hotel2Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(hotel2), email7);
 
             // Saving Property # 8: Guest House. Outside bounds, should NOT be in the search results
             string area8 = "Patriata, Punjab, Pakistan";
@@ -955,7 +972,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 rentUnit8, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
                 false, false, false, false, false, false, false, false, 2, 1);
-            var guestHouse2Id = propertyApplicationService.SaveNewProperty(guestHouse2);
+            var guestHouse2Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(guestHouse2), email8);
 
             // Saving Property # 9: Aparment. Outside bounds, should NOT be in the search results
             string area9 = "Murree, Punjab, Pakistan";
@@ -970,7 +987,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             CreateHouseCommand apartment2 = new CreateHouseCommand(title9, rent9, 3, 2, 3, true, true, true,
                 false, false, propertyType9, email9, phoneNumber9, null, null, area9, null, null, 0, ownerName9,
                 null, null, false, rentUnit9, null, null);
-            var apartment2Id = propertyApplicationService.SaveNewProperty(apartment2);
+            var apartment2Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(apartment2), email9);
 
             // Saving Property # 10: Hostel. Should be in the search results, again
             string area10 = "6th Road, Rawalpindi, Pakistan";
@@ -988,7 +1005,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 rentUnit10, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false,
                 false, 3);
-            var hostel2Id = propertyApplicationService.SaveNewProperty(hostel2);
+            var hostel2Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(hostel2), email10);
 
             #region PROPERTY TYPE ONLY SEARCH
 
@@ -1116,11 +1133,10 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(apartment2.Title, retreivedHouses[1].Title);
             Assert.AreEqual(Constants.Apartment, retreivedHouses[1].PropertyType);
 
-            // Verification of Hostel
+            // Verification of Hostel # 2
             retreivedHostels = propertyApplicationService.GetPropertiesByEmail(Constants.Hostel, searchedEmail);
             Assert.NotNull(retreivedHostels);
             Assert.AreEqual(1, retreivedHostels.Count);
-            // Hostel # 2
             Assert.AreEqual(hostel2Id, retreivedHostels[0].Id);
             Assert.AreEqual(hostel2.Title, retreivedHostels[0].Title);
             Assert.AreEqual(Constants.Hostel, retreivedHostels[0].PropertyType);
@@ -1162,7 +1178,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             CreateHouseCommand house = new CreateHouseCommand(title, rent, 3, 2, 3, true, true, true,
                 false, false, propertyType, email, phoneNumber, null, null, area, null, null, 0, ownerName,
                 null, null, false, rentUnit, null, null);
-            var hosue1Id = propertyApplicationService.SaveNewProperty(house);
+            var hosue1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(house), email);
 
             var retrievedHouse = propertyApplicationService.GetPropertyById(hosue1Id, propertyType);
             Assert.IsNotNull(retrievedHouse);
@@ -1193,14 +1209,14 @@ namespace RentStuff.Property.Application.IntegrationTests
                 rentUnit5, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false,
                 false, 3);
-            var hosue1Id = propertyApplicationService.SaveNewProperty(hostel);
+            var hostelId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(hostel), email5);
 
-            var retrievedHouse = propertyApplicationService.GetPropertyById(hosue1Id, propertyType5);
+            var retrievedHouse = propertyApplicationService.GetPropertyById(hostelId, propertyType5);
             Assert.IsNotNull(retrievedHouse);
 
-            propertyApplicationService.DeleteHouse(hosue1Id);
+            propertyApplicationService.DeleteHouse(hostelId);
 
-            retrievedHouse = propertyApplicationService.GetPropertyById(hosue1Id, propertyType5);
+            retrievedHouse = propertyApplicationService.GetPropertyById(hostelId, propertyType5);
             Assert.IsNull(retrievedHouse);
         }
 
@@ -1224,7 +1240,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 propertyType2, email2, phoneNumber2, area2, name2, null, genderRestriction2.ToString(), false, rentUnit2, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
                 false, false, false, false, false, false, false, false, 2, 1);
-            var hotel1Id = propertyApplicationService.SaveNewProperty(hotel1);
+            var hotel1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(hotel1), email2);
 
             var retrievedHouse = propertyApplicationService.GetPropertyById(hotel1Id, propertyType2);
             Assert.IsNotNull(retrievedHouse);

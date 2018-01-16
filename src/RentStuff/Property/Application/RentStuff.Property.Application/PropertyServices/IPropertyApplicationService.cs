@@ -14,7 +14,7 @@ namespace RentStuff.Property.Application.PropertyServices
         /// <summary>
         /// Saves a new house instance to the database
         /// </summary>
-        string SaveNewProperty(dynamic propertyBaseCommand, string currentUserEmail);
+        string SaveNewProperty(object propertyBaseCommand, string currentUserEmail);
 
         /// <summary>
         /// Update an existing house

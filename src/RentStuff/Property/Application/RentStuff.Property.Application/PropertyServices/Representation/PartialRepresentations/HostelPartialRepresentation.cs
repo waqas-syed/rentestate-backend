@@ -27,7 +27,6 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.Partial
             BackupElectricity = backupElectricity;
             Meals = meals;
             NumberOfSeats = numberOfSeats;
-            DefaultImage = defautImage;
         }
         
         public bool Parking { get; private set; }

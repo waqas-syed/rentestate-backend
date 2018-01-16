@@ -44,9 +44,10 @@ namespace RentStuff.Property.Application.PropertyServices
         /// <summary>
         /// Saves a new house instance to the database
         /// </summary>
-        public string SaveNewProperty(dynamic propertyJson, string currentUserEmail)
+        public string SaveNewProperty(object propertyJson, string currentUserEmail)
         {
-            dynamic propertyBaseCommand = JsonConvert.DeserializeObject<object>(propertyJson);
+            dynamic propertyBaseCommand = JsonConvert.DeserializeObject<dynamic>(propertyJson.ToString());
+
             // Check if the owner and current user's email are not empty
             if (string.IsNullOrWhiteSpace(propertyBaseCommand.OwnerEmail.Value))
             {
@@ -71,19 +72,17 @@ namespace RentStuff.Property.Application.PropertyServices
 
             // Get the coordinates for the location using the Geocoding API service
             Tuple<decimal, decimal> coordinates = _geocodingService.GetCoordinatesFromAddress(propertyBaseCommand.Area.Value);
-            GenderRestriction genderRestriction = default(GenderRestriction);
+            var genderRestriction = ParseGenderRestriction(propertyBaseCommand.GenderRestriction.Value);
 
-            if (!string.IsNullOrWhiteSpace(propertyBaseCommand.GenderRestriction.Value))
-            {
-                Enum.TryParse(propertyBaseCommand.GenderRestriction.Value, out genderRestriction);
-            }
             // The Id of whichever property gets created
             string id = null;
             // Now check what type of command it is, and cast it to that property type
             if (propertyBaseCommand.PropertyType.Value.Equals(Constants.House) ||
                 propertyBaseCommand.PropertyType.Value.Equals(Constants.Apartment))
             {
-                CreateHouseCommand createHouseCommand = (CreateHouseCommand)propertyBaseCommand;
+                CreateHouseCommand createHouseCommand = 
+                    JsonConvert.DeserializeObject<CreateHouseCommand>(propertyBaseCommand.ToString());
+                
                 House house = CreateHouseInstance(createHouseCommand, coordinates.Item1, coordinates.Item2,
                     genderRestriction);
                 // Save the new house instance
@@ -94,7 +93,8 @@ namespace RentStuff.Property.Application.PropertyServices
             // If the request is for creating a new Hostel
             else if (propertyBaseCommand.PropertyType.Value.Equals(Constants.Hostel))
             {
-                CreateHostelCommand createHostelCommand = (CreateHostelCommand) propertyBaseCommand;
+                CreateHostelCommand createHostelCommand = 
+                    JsonConvert.DeserializeObject<CreateHostelCommand>(propertyBaseCommand.ToString());
                 Hostel hostel = CreateHostelInstance(createHostelCommand, coordinates.Item1, coordinates.Item2,
                     genderRestriction);
                 _houseRepository.SaveorUpdate(hostel);
@@ -106,7 +106,8 @@ namespace RentStuff.Property.Application.PropertyServices
             else if (propertyBaseCommand.PropertyType.Value.Equals(Constants.Hotel) ||
                      propertyBaseCommand.PropertyType.Value.Equals(Constants.GuestHouse))
             {
-                CreateHotelCommand createHotelCommand = (CreateHotelCommand)propertyBaseCommand;
+                CreateHotelCommand createHotelCommand = 
+                    JsonConvert.DeserializeObject<CreateHotelCommand>(propertyBaseCommand.ToString());
                 Hotel hotel = CreateHotelInstance(createHotelCommand, coordinates.Item1, coordinates.Item2,
                     genderRestriction);
                 _houseRepository.SaveorUpdate(hotel);
@@ -122,6 +123,21 @@ namespace RentStuff.Property.Application.PropertyServices
             return id;
         }
 
+        /// <summary>
+        /// Parse the Gender Restriction string to the actual enum value
+        /// </summary>
+        /// <param name="genderRestrictionString"></param>
+        private GenderRestriction ParseGenderRestriction(string genderRestrictionString)
+        {
+            GenderRestriction genderRestriction = default(GenderRestriction);
+
+            if (!string.IsNullOrWhiteSpace(genderRestrictionString))
+            {
+                Enum.TryParse(genderRestrictionString, out genderRestriction);
+            }
+            return genderRestriction;
+        }
+        
         /// <summary>
         /// Updates an exisitng house
         /// </summary>
@@ -564,7 +580,7 @@ namespace RentStuff.Property.Application.PropertyServices
                         hotel.Area, hotel.OwnerName, hotel.GenderRestriction.ToString(),
                         hotel.IsShared, hotel.RentUnit, hotel.InternetAvailable, hotel.CableTvAvailable,
                         hotel.ParkingAvailable, hotel.PropertyType, hotel.AC, hotel.Geyser,
-                        hotel.AttachedBathroom, hotel.BackupElectricity, hotel.Heating, hotel.AirportShuttle,
+                        hotel.AttachedBathroom, hotel.FitnessCentre, hotel.BackupElectricity, hotel.Heating, hotel.AirportShuttle,
                         hotel.BreakfastIncluded, hotel.Occupants, hotel.LandlineNumber, firstImage);
 
                     hostelRepresentations.Add(houseRepresentation);
