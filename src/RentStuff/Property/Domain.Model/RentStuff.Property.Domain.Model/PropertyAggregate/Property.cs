@@ -114,7 +114,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="propertyType"></param>
         /// <param name="landlineNumber"></param>
         /// <param name="fax"></param>
-        public void Update(string title, long rentPrice, string ownerEmail, string ownerPhoneNumber,
+        protected void Update(string title, long rentPrice, string ownerEmail, string ownerPhoneNumber,
             string area, string ownerName, string description, GenderRestriction genderRestriction,
             decimal latitude, decimal longitude, bool isShared, string rentUnit, bool internetAvailable,
             bool cableTvAvailable, string propertyType, string landlineNumber, string fax)

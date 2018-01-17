@@ -142,7 +142,6 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             private string _rentUnit;
             private bool _internetAvailable;
             private bool _cableTvAvailable;
-            private bool _garageAvailable;
             private string _landlineNumber;
             private string _fax;
             
@@ -299,18 +298,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
                 _internetAvailable = internetAvailable;
                 return this;
             }
-
-            /// <summary>
-            /// Is Parking available
-            /// </summary>
-            /// <param name="parkingAvailable"></param>
-            /// <returns></returns>
-            public HostelBuilder ParkingAvailable(bool parkingAvailable)
-            {
-                _garageAvailable = parkingAvailable;
-                return this;
-            }
-
+            
             /// <summary>
             /// is cable tv available
             /// </summary>
@@ -348,6 +336,7 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
 
             #region Hostel Specific Properties 
 
+            private bool _garageAvailable;
             private bool _laundry;
             private bool _ac;
             private bool _geyser;
@@ -363,6 +352,17 @@ namespace RentStuff.Property.Domain.Model.HostelAggregate
             private bool _picknDrop;
             private bool _heating;
             private bool _elevator;
+
+            /// <summary>
+            /// Is Parking available
+            /// </summary>
+            /// <param name="parkingAvailable"></param>
+            /// <returns></returns>
+            public HostelBuilder ParkingAvailable(bool parkingAvailable)
+            {
+                _garageAvailable = parkingAvailable;
+                return this;
+            }
 
             public HostelBuilder Laundry(bool laundry)
             {

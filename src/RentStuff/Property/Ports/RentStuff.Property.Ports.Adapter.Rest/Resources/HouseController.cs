@@ -51,7 +51,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 {
                     // Get the email of the current user from the user's identity in our system
                     var currentUserEmail = GetEmailFromClaims(User.Identity);
-                    // Save the new house
+                    // Save the new property
                     return Ok(_houseApplicationService.SaveNewProperty(property, currentUserEmail));
                 }
             }
@@ -67,28 +67,22 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         [HttpPut]
         [Authorize]
         [AcceptVerbs(new string[] {"OPTIONS", "PUT"})]
-        public IHttpActionResult Put([FromBody] Object house)
+        public IHttpActionResult Put([FromBody] Object property)
         {
             try
             {
-                if (house != null)
+                if (property != null)
                 {
-                    var jsonString = house.ToString();
-
-                    UpdateHouseCommand refurbishedHouse = null;
-                    // Try to convert the JSON into a domain model object
-                    refurbishedHouse = JsonConvert.DeserializeObject<UpdateHouseCommand>(jsonString);
+                    // Get the email of the current user from the user's identity in our system
                     var currentUserEmail = GetEmailFromClaims(User.Identity);
-
-                    // Then check that this house was actually upoaded by the current requestor
-                    _houseApplicationService.HouseOwnershipCheck(refurbishedHouse.Id,
-                                                                        refurbishedHouse.OwnerEmail);
-                    return Ok(_houseApplicationService.UpdateHouse(refurbishedHouse));
+                    // Update the requested property
+                    _houseApplicationService.UpdateProperty(property, currentUserEmail);
+                    return Ok();
                 }
             }
             catch (Exception exception)
             {
-                _logger.Error("Error occured while updating house. Exception: {0} | House: {1}", exception, house);
+                _logger.Error("Error occured while updating house. Exception: {0} | House: {1}", exception, property);
                 return InternalServerError();
             }
             return BadRequest();

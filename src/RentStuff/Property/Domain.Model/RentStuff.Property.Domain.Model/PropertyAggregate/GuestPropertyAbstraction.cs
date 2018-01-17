@@ -112,7 +112,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="landlineNumber"></param>
         /// <param name="fax"></param>
         /// <param name="elevator"></param>
-        public void UpdateGuestProperty(string title, long rentPrice, string ownerEmail,
+        protected void UpdateGuestProperty(string title, long rentPrice, string ownerEmail,
             string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName,
             string description,

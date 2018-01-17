@@ -19,9 +19,10 @@ namespace RentStuff.Property.Application.PropertyServices
         /// <summary>
         /// Update an existing house
         /// </summary>
-        /// <param name="updateHouseCommand"></param>
+        /// <param name="propertyJson"></param>
+        /// <param name="currentUserEmail"></param>
         /// <returns></returns>
-        bool UpdateHouse(UpdateHouseCommand updateHouseCommand);
+        void UpdateProperty(object propertyJson, string currentUserEmail);
 
         /// <summary>
         /// Delete the given house instance

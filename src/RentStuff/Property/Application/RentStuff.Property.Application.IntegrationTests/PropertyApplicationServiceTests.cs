@@ -114,6 +114,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(rentUnit, retreivedHouse.RentUnit);
             Assert.AreEqual(landlineNumber, retreivedHouse.LandlineNumber);
             Assert.AreEqual(fax, retreivedHouse.Fax);
+
+            // Now Update the House
         }
 
         // Save and retrieve a full Apartment Representation

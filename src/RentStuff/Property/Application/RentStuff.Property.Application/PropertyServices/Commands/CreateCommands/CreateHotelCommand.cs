@@ -1,5 +1,7 @@
 ﻿using RentStuff.Property.Application.PropertyServices.Commands.AbstractCommands;
 using System;
+using System.Collections.Generic;
+using RentStuff.Property.Domain.Model.HotelAggregate;
 
 namespace RentStuff.Property.Application.PropertyServices.Commands.CreateCommands
 {
@@ -61,5 +63,7 @@ namespace RentStuff.Property.Application.PropertyServices.Commands.CreateCommand
         public int NumberOfAdults { get; private set; }
 
         public int NumberOfChildren { get; private set; }
+
+        public List<Bed> Beds { get; set; }
     }
 }

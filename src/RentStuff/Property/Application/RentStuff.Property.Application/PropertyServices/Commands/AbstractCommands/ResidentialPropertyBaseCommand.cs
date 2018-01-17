@@ -1,4 +1,5 @@
 ﻿using System;
+using Ninject;
 
 namespace RentStuff.Property.Application.PropertyServices.Commands.AbstractCommands
 {
@@ -27,6 +28,8 @@ namespace RentStuff.Property.Application.PropertyServices.Commands.AbstractComma
             LandlineNumber = landlineNumber;
             Fax = fax;
         }
+
+        public string Id { get; set; }
         
         public string Title { get; private set; }
         
