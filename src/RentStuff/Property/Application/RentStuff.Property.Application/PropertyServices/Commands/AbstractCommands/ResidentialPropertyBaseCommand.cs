@@ -1,5 +1,4 @@
 ﻿using System;
-using Ninject;
 
 namespace RentStuff.Property.Application.PropertyServices.Commands.AbstractCommands
 {

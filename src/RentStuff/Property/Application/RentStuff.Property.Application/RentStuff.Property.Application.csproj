@@ -73,6 +73,8 @@
     <Compile Include="PropertyServices\Commands\AbstractCommands\GuestPropertyBaseCommand.cs" />
     <Compile Include="PropertyServices\Commands\AbstractCommands\PropertyBaseCommand.cs" />
     <Compile Include="PropertyServices\Commands\AbstractCommands\ResidentialPropertyBaseCommand.cs" />
+    <Compile Include="PropertyServices\Commands\UpdateCommands\UpdateHostelCommand.cs" />
+    <Compile Include="PropertyServices\Commands\UpdateCommands\UpdateHotelCommand.cs" />
     <Compile Include="PropertyServices\Commands\UpdateCommands\UpdateHouseCommand.cs" />
     <Compile Include="PropertyServices\PropertyApplicationService.cs" />
     <Compile Include="PropertyServices\Representation\AbstractRepresentations\GuestPropertyBaseRepresentation.cs" />

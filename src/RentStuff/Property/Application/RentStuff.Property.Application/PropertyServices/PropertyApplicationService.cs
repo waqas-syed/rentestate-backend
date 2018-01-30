@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Management.Instrumentation;
+using RentStuff.Property.Application.PropertyServices.Commands.UpdateCommands;
 using ConfigurationManager = System.Configuration.ConfigurationManager;
 
 namespace RentStuff.Property.Application.PropertyServices
@@ -171,35 +172,28 @@ namespace RentStuff.Property.Application.PropertyServices
             if (propertyBaseCommand.PropertyType.Value.Equals(Constants.House) ||
                 propertyBaseCommand.PropertyType.Value.Equals(Constants.Apartment))
             {
-                CreateHouseCommand createHouseCommand =
-                    JsonConvert.DeserializeObject<CreateHouseCommand>(propertyBaseCommand.ToString());
+                UpdateHouseCommand updateHouseCommand =
+                    JsonConvert.DeserializeObject<UpdateHouseCommand>(propertyBaseCommand.ToString());
 
-                House house = UpdateHouse(createHouseCommand, coordinates.Item1, coordinates.Item2,
+                UpdateHouse(updateHouseCommand, coordinates.Item1, coordinates.Item2,
                     genderRestriction);
-                // Save the new house instance
-                _residentialPropertyRepository.SaveorUpdate(house);
-                _logger.Info("House updated Successfully: {0}", house);
             }
             // If Hostel update is requested
             else if (propertyBaseCommand.PropertyType.Value.Equals(Constants.Hostel))
             {
-                CreateHostelCommand createHostelCommand =
-                    JsonConvert.DeserializeObject<CreateHostelCommand>(propertyBaseCommand.ToString());
-                Hostel hostel = UpdateHostel(createHostelCommand, coordinates.Item1, coordinates.Item2,
+                UpdateHostelCommand updateHostelCommand =
+                    JsonConvert.DeserializeObject<UpdateHostelCommand>(propertyBaseCommand.ToString());
+                UpdateHostel(updateHostelCommand, coordinates.Item1, coordinates.Item2,
                     genderRestriction);
-                _residentialPropertyRepository.SaveorUpdate(hostel);
-                _logger.Info("Hostel updated Successfully: {0}", hostel);
             }
             // If Hotel or Guest House update is requested
             else if (propertyBaseCommand.PropertyType.Value.Equals(Constants.Hotel) ||
                      propertyBaseCommand.PropertyType.Value.Equals(Constants.GuestHouse))
             {
-                CreateHotelCommand createHotelCommand =
-                    JsonConvert.DeserializeObject<CreateHotelCommand>(propertyBaseCommand.ToString());
-                Hotel hotel = CreateHotelInstance(createHotelCommand, coordinates.Item1, coordinates.Item2,
+                UpdateHotelCommand updateHotelCommand =
+                    JsonConvert.DeserializeObject<UpdateHotelCommand>(propertyBaseCommand.ToString());
+                UpdateHotel(updateHotelCommand, coordinates.Item1, coordinates.Item2,
                     genderRestriction);
-                _residentialPropertyRepository.SaveorUpdate(hotel);
-                _logger.Info("Hotel updated Successfully: {0}", hotel);
             }
             else
             {
@@ -676,7 +670,7 @@ namespace RentStuff.Property.Application.PropertyServices
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <param name="genderRestriction"></param>
-        private void UpdateHouse(CreateHouseCommand updateHouseCommand, decimal latitude, decimal longitude,
+        private void UpdateHouse(UpdateHouseCommand updateHouseCommand, decimal latitude, decimal longitude,
             GenderRestriction genderRestriction)
         {
             House house = (House)_residentialPropertyRepository.GetPropertyById(updateHouseCommand.Id);
@@ -686,8 +680,14 @@ namespace RentStuff.Property.Application.PropertyServices
             }
             else
             {
-                // Check that this user has the same email as the one associated with the requested house
-                HouseOwnershipCheck(house.Id, house.OwnerEmail);
+                // Check that this Update instance has the same email as the one associated with the requested 
+                // house
+                if (!updateHouseCommand.OwnerEmail.Equals(house.OwnerEmail))
+                {
+                    // These emails must match because this email is only related to account and not for display,
+                    // once an account is created with an email it cannot be changed
+                    throw new InvalidOperationException("Emails in original House and updated House do not match");
+                }
             }
 
             Dimension dimension = CreateDimensionInstance(updateHouseCommand.DimensionType,
@@ -718,9 +718,13 @@ namespace RentStuff.Property.Application.PropertyServices
                 updateHouseCommand.RentUnit,
                 updateHouseCommand.LandlineNumber,
                 updateHouseCommand.Fax);
+
+            // Save the new house instance
+            _residentialPropertyRepository.SaveorUpdate(house);
+            _logger.Info("House updated Successfully: {0}", house);
         }
 
-        private void UpdateHostel(CreateHostelCommand updateHostelCommand, decimal latitude, decimal longitude,
+        private void UpdateHostel(UpdateHostelCommand updateHostelCommand, decimal latitude, decimal longitude,
             GenderRestriction genderRestriction)
         {
             Hostel hostel = (Hostel)_residentialPropertyRepository.GetPropertyById(updateHostelCommand.Id);
@@ -730,8 +734,14 @@ namespace RentStuff.Property.Application.PropertyServices
             }
             else
             {
-                // Check that this user has the same email as the one associated with the requested hostel
-                HouseOwnershipCheck(hostel.Id, hostel.OwnerEmail);
+                // Check that this Update instance has the same email as the one associated with the requested 
+                // house
+                if (!updateHostelCommand.OwnerEmail.Equals(hostel.OwnerEmail))
+                {
+                    // These emails must match because this email is only related to account and not for display,
+                    // once an account is created with an email it cannot be changed
+                    throw new InvalidOperationException("Emails in original Hostel and updated Hostel do not match");
+                }
             }
 
             hostel.Update(updateHostelCommand.Title,
@@ -767,6 +777,9 @@ namespace RentStuff.Property.Application.PropertyServices
                 updateHostelCommand.LandlineNumber,
                 updateHostelCommand.Fax,
                 updateHostelCommand.Elevator);
+
+            _residentialPropertyRepository.SaveorUpdate(hostel);
+            _logger.Info("Hostel updated Successfully: {0}", hostel);
         }
 
         /// <summary>
@@ -776,7 +789,7 @@ namespace RentStuff.Property.Application.PropertyServices
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <param name="genderRestriction"></param>
-        private void UpdateHotel(CreateHotelCommand updateHotelCommand, decimal latitude, decimal longitude,
+        private void UpdateHotel(UpdateHotelCommand updateHotelCommand, decimal latitude, decimal longitude,
             GenderRestriction genderRestriction)
         {
             Hotel hotel = (Hotel)_residentialPropertyRepository.GetPropertyById(updateHotelCommand.Id);
@@ -786,8 +799,14 @@ namespace RentStuff.Property.Application.PropertyServices
             }
             else
             {
-                // Check that this user has the same email as the one associated with the requested hotel
-                HouseOwnershipCheck(hotel.Id, hotel.OwnerEmail);
+                // Check that this Update instance has the same email as the one associated with the requested 
+                // house
+                if (!updateHotelCommand.OwnerEmail.Equals(hotel.OwnerEmail))
+                {
+                    // These emails must match because this email is only related to account and not for display,
+                    // once an account is created with an email it cannot be changed
+                    throw new InvalidOperationException("Emails in original Hotel and updated Hotel do not match");
+                }
             }
 
             hotel.Update(updateHotelCommand.Title,
@@ -832,8 +851,11 @@ namespace RentStuff.Property.Application.PropertyServices
                 updateHotelCommand.LandlineNumber,
                 updateHotelCommand.Fax,
                 updateHotelCommand.Elevator);
-        }
 
+            _residentialPropertyRepository.SaveorUpdate(hotel);
+            _logger.Info("Hotel updated Successfully: {0}", hotel);
+        }
+        
         #endregion Update Property Helper Methods
 
         #region Miscellaneous Helper Methods

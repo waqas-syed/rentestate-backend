@@ -11,6 +11,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using RentStuff.Property.Application.PropertyServices;
 using RentStuff.Property.Application.PropertyServices.Commands.CreateCommands;
+using RentStuff.Property.Application.PropertyServices.Commands.UpdateCommands;
 using RentStuff.Property.Application.PropertyServices.Representation;
 using RentStuff.Property.Application.PropertyServices.Representation.FullRepresentations;
 using RentStuff.Property.Application.PropertyServices.Representation.PartialRepresentations;
@@ -114,8 +115,6 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(rentUnit, retreivedHouse.RentUnit);
             Assert.AreEqual(landlineNumber, retreivedHouse.LandlineNumber);
             Assert.AreEqual(fax, retreivedHouse.Fax);
-
-            // Now Update the House
         }
 
         // Save and retrieve a full Apartment Representation
@@ -1254,5 +1253,416 @@ namespace RentStuff.Property.Application.IntegrationTests
         }
 
         #endregion Delete Tests
+
+        #region Update Tests
+
+        // Save and then Update a House
+        [Test]
+        public void UpdateHouseTest_TestsThatANewHouseIsSavedInTheDatabaseAndThenUpdatedAsExpected_VerifiesByOutput()
+        {
+            IPropertyApplicationService propertyApplicationService = _kernel.Get<IPropertyApplicationService>();
+
+            string email = "w@12344321.com";
+            string phoneNumber = "01234567890";
+            string description = "Erebor. Built deep within the mountain itself the beauty of this fortress was legend.";
+            long monthlyRent = 130000;
+            int numberOfBedrooms = 3;
+            int numberofBathrooms = 1;
+            int numberOfKitchens = 1;
+            string houseNo = "747";
+            string streetNo = "13";
+            string title = "Bellagio";
+            string area = "1600+Amphitheatre+Parkway,+Mountain+View,+CA";
+            string dimensionType = "Kanal";
+            string dimensionString = "50";
+            string ownerName = "Owner Name 1";
+            string propertyType = Constants.House;
+            string genderRestriction = GenderRestriction.GirlsOnly.ToString();
+            bool smokingAllowed = false;
+            bool landline = true;
+            bool cableTv = false;
+            bool internet = true;
+            bool garage = true;
+            bool isShared = true;
+            string rentUnit = "Hour";
+            string landlineNumber = "0510000000";
+            string fax = "0510000000";
+            var createNewHouseCommand = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
+                internet, landline, cableTv, garage, smokingAllowed, propertyType, email, phoneNumber, houseNo, streetNo, area,
+                dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared, rentUnit,
+                landlineNumber, fax);
+            string houseId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHouseCommand), email);
+
+            HouseFullRepresentation retreivedHouse =
+                (HouseFullRepresentation)propertyApplicationService.GetPropertyById(houseId, Constants.House);
+
+            Assert.NotNull(retreivedHouse);
+
+            // Update variables
+            string updatedPhoneNumber = "01234567891";
+            string updatedDescription = "Erebor Updated. Built deep within the mountain itself the beauty of this fortress was legend.";
+            long updatedMonthlyRent = 130001;
+            int updatedNumberOfBedrooms = 4;
+            int updatedNumberofBathrooms = 2;
+            int updatedNumberOfKitchens = 2;
+            string updatedHouseNo = "747-2";
+            string updatedStreetNo = "13-2";
+            string updatedTitle = "Bellagio Updated";
+            string updatedArea = "Pindora, Rawalpindi, Pakistan";
+            string updatedDimensionType = "Marla";
+            string updatedDimensionString = "100";
+            int updatedDimensionIntValue = 0;
+            string updatedOwnerName = "Owner Name 1 Updated";
+            string updatedPropertyType = Constants.House;
+            string updatedGenderRestriction = GenderRestriction.BoysOnly.ToString();
+            bool updatedSmokingAllowed = false;
+            bool updatedLandline = true;
+            bool updatedCableTv = false;
+            bool updatedInternet = true;
+            bool updatedGarage = true;
+            bool updatedIsShared = true;
+            string updatedRentUnit = "Hour";
+            string updatedLandlineNumber = "0510000000";
+            string updatedFax = "0510000000";
+            var updateHouseCommand = new UpdateHouseCommand(retreivedHouse.Id, updatedTitle, updatedMonthlyRent,
+                updatedNumberOfBedrooms, updatedNumberOfKitchens, updatedNumberofBathrooms, updatedInternet,
+                updatedLandline, updatedCableTv, updatedGarage, updatedSmokingAllowed, updatedPropertyType,
+                email, updatedPhoneNumber, updatedHouseNo, updatedStreetNo, updatedArea,
+                updatedDimensionType, updatedDimensionString, updatedDimensionIntValue, updatedOwnerName,
+                updatedDescription, updatedGenderRestriction, updatedIsShared, updatedRentUnit, 
+                updatedLandlineNumber, updatedFax);
+            propertyApplicationService.UpdateProperty(JsonConvert.SerializeObject(updateHouseCommand), email);
+
+            // Now Update the House
+            var updatedRetrievedHouse = (HouseFullRepresentation)propertyApplicationService.GetPropertyById(retreivedHouse.Id, propertyType);
+            Assert.IsNotNull(updatedRetrievedHouse);
+
+            Assert.AreEqual(retreivedHouse.Id, updatedRetrievedHouse.Id);
+            Assert.AreEqual(email, updatedRetrievedHouse.OwnerEmail);
+            Assert.AreEqual(updatedPhoneNumber, updatedRetrievedHouse.OwnerPhoneNumber);
+            Assert.AreEqual(updatedOwnerName, updatedRetrievedHouse.OwnerName);
+            Assert.AreEqual(updatedDescription, updatedRetrievedHouse.Description);
+            Assert.AreEqual(updatedHouseNo, updatedRetrievedHouse.HouseNo);
+            Assert.AreEqual(updatedStreetNo, updatedRetrievedHouse.StreetNo);
+            Assert.AreEqual(updatedTitle, updatedRetrievedHouse.Title);
+            Assert.AreEqual(updatedArea, updatedRetrievedHouse.Area);
+            Assert.AreEqual(updatedDimensionString + " " + updatedDimensionType, updatedRetrievedHouse.Dimension);
+            Assert.AreEqual(updatedNumberofBathrooms, updatedRetrievedHouse.NumberOfBathrooms);
+            Assert.AreEqual(updatedNumberOfBedrooms, updatedRetrievedHouse.NumberOfBedrooms);
+            Assert.AreEqual(updatedNumberOfKitchens, updatedRetrievedHouse.NumberOfKitchens);
+            Assert.AreEqual(updatedPropertyType, updatedRetrievedHouse.PropertyType);
+            Assert.AreEqual(updatedMonthlyRent, updatedRetrievedHouse.RentPrice);
+            Assert.AreEqual(updatedGenderRestriction, updatedRetrievedHouse.GenderRestriction);
+            Assert.AreEqual(updatedInternet, updatedRetrievedHouse.InternetAvailable);
+            Assert.AreEqual(updatedGarage, updatedRetrievedHouse.GarageAvailable);
+            Assert.AreEqual(updatedLandline, updatedRetrievedHouse.LandlinePhoneAvailable);
+            Assert.AreEqual(updatedCableTv, updatedRetrievedHouse.CableTvAvailable);
+            Assert.AreEqual(updatedSmokingAllowed, updatedRetrievedHouse.SmokingAllowed);
+            Assert.AreEqual(updatedIsShared, updatedRetrievedHouse.IsShared);
+            Assert.AreEqual(updatedRentUnit, updatedRetrievedHouse.RentUnit);
+            Assert.AreEqual(updatedLandlineNumber, updatedRetrievedHouse.LandlineNumber);
+            Assert.AreEqual(updatedFax, updatedRetrievedHouse.Fax);
+        }
+
+        // Update a Hostel
+        [Test]
+        public void UpdateHostelTest_ChecksThatANewHostelIsSavedAndThenUpdatedAsExpected_VerifiesByTheReturnValue()
+        {
+            IPropertyApplicationService propertyApplicationService = _kernel.Get<IPropertyApplicationService>();
+
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+            string phoneNumber = "03455138018";
+            string propertyType = "Hostel";
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+            bool cableTv = false;
+            bool internet = true;
+            bool parking = true;
+            string rentUnit = Constants.Hourly;
+            bool isShared = true;
+            bool laundry = true;
+            bool ac = true;
+            bool geyser = true;
+            bool attachedBathroom = true;
+            bool fitnessCentre = false;
+            bool balcony = false;
+            bool lawn = true;
+            bool heating = false;
+            bool meals = true;
+            bool picknDrop = false;
+            bool ironing = false;
+            bool cctvCameras = true;
+            bool backupElectricity = true;
+            int numberOfSeats = 3;
+            string landlineNumber = "0510000000";
+            string fax = "0510000000";
+            bool elevator = true;
+
+            var createNewHostelCommand = new CreateHostelCommand(title, monthlyRent, internet,
+                cableTv, parking, propertyType, email, phoneNumber, area, name, description,
+                genderRestriction.ToString(),
+                isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony, lawn,
+                cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, meals, picknDrop,
+                numberOfSeats);
+            var hostelId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHostelCommand), email);
+
+            Assert.IsFalse(string.IsNullOrWhiteSpace(hostelId));
+            // Now retrieve the Hostel from the database
+            HostelFullRepresentation retrievedHostel =
+                (HostelFullRepresentation)propertyApplicationService.GetPropertyById(hostelId, Constants.Hostel);
+            Assert.IsNotNull(retrievedHostel);
+
+            string updatedTitle = "Title No 1 - updated";
+            string updatedDescription = "Description of Hostel - updated";
+            string updatedName = "OwnerName";
+            string updatedPhoneNumber = "03123456789";
+            string updatedPropertyType = "Hostel";
+            GenderRestriction updatedGenderRestriction = GenderRestriction.NoRestriction;
+            string updatedArea = "Satellite Town, Rawalpindi, Pakistan";
+            long updatedMonthlyRent = 90001;
+            bool updatedCableTv = true;
+            bool updatedInternet = false;
+            bool updatedParking = false;
+            string updatedRentUnit = Constants.Daily;
+            bool updatedIsShared = false;
+            bool updatedLaundry = false;
+            bool updatedAc = false;
+            bool updatedGeyser = false;
+            bool updatedAttachedBathroom = false;
+            bool updatedFitnessCentre = true;
+            bool updatedBalcony = true;
+            bool updatedLawn = false;
+            bool updatedHeating = true;
+            bool updatedMeals = false;
+            bool updatedPicknDrop = true;
+            bool updatedIroning = true;
+            bool updatedCctvCameras = false;
+            bool updatedBackupElectricity = false;
+            int updatedNumberOfSeats = 2;
+            string updatedLandlineNumber = "0510000001";
+            string updatedFax = "0510000001";
+            bool updatedElevator = true;
+
+            var updateHostelCommand = new UpdateHostelCommand(retrievedHostel.Id, updatedTitle, updatedMonthlyRent,
+                updatedInternet, updatedCableTv, updatedParking, updatedPropertyType, email, 
+                updatedPhoneNumber, updatedArea, updatedName, updatedDescription, updatedGenderRestriction.ToString(), 
+                updatedIsShared, updatedRentUnit, updatedLaundry, updatedAc, updatedGeyser, updatedFitnessCentre,
+                updatedAttachedBathroom, updatedIroning, updatedBalcony, updatedLawn, updatedCctvCameras, 
+                updatedBackupElectricity, updatedHeating, updatedLandlineNumber, updatedFax, updatedElevator,
+                updatedMeals, updatedPicknDrop, updatedNumberOfSeats);
+            // Now update the Hostel
+            propertyApplicationService.UpdateProperty(JsonConvert.SerializeObject(updateHostelCommand), email);
+            
+            Assert.AreEqual(hostelId, retrievedHostel.Id);
+            Assert.AreEqual(title, retrievedHostel.Title);
+            Assert.AreEqual(description, retrievedHostel.Description);
+            Assert.AreEqual(email, retrievedHostel.OwnerEmail);
+            Assert.AreEqual(name, retrievedHostel.OwnerName);
+            Assert.AreEqual(phoneNumber, retrievedHostel.OwnerPhoneNumber);
+            Assert.AreEqual(cableTv, retrievedHostel.CableTvAvailable);
+            Assert.AreEqual(internet, retrievedHostel.InternetAvailable);
+            Assert.AreEqual(parking, retrievedHostel.ParkingAvailable);
+            Assert.AreEqual(propertyType, retrievedHostel.PropertyType);
+            Assert.AreEqual(genderRestriction.ToString(), retrievedHostel.GenderRestriction);
+            Assert.AreEqual(area, retrievedHostel.Area);
+            Assert.AreEqual(monthlyRent, retrievedHostel.RentPrice);
+            Assert.AreEqual(isShared, retrievedHostel.IsShared);
+            Assert.AreEqual(rentUnit, retrievedHostel.RentUnit);
+            Assert.AreEqual(laundry, retrievedHostel.Laundry);
+            Assert.AreEqual(ac, retrievedHostel.AC);
+            Assert.AreEqual(geyser, retrievedHostel.Geyser);
+            Assert.AreEqual(attachedBathroom, retrievedHostel.AttachedBathroom);
+            Assert.AreEqual(fitnessCentre, retrievedHostel.FitnessCentre);
+            Assert.AreEqual(balcony, retrievedHostel.Balcony);
+            Assert.AreEqual(lawn, retrievedHostel.Lawn);
+            Assert.AreEqual(ironing, retrievedHostel.Ironing);
+            Assert.AreEqual(cctvCameras, retrievedHostel.CctvCameras);
+            Assert.AreEqual(backupElectricity, retrievedHostel.BackupElectricity);
+            Assert.AreEqual(heating, retrievedHostel.Heating);
+            Assert.AreEqual(meals, retrievedHostel.Meals);
+            Assert.AreEqual(picknDrop, retrievedHostel.PicknDrop);
+            Assert.AreEqual(numberOfSeats, retrievedHostel.NumberOfSeats);
+            Assert.AreEqual(landlineNumber, retrievedHostel.LandlineNumber);
+            Assert.AreEqual(fax, retrievedHostel.Fax);
+            Assert.AreEqual(elevator, retrievedHostel.Elevator);
+        }
+
+        // Update a Hotel
+        [Test]
+        public void UpdateHotelTest_ChecksThatANewHostelIsSavedAndThenUpdatedAsExpected_VerifiesByTheReturnValue()
+        {
+            IPropertyApplicationService propertyApplicationService = _kernel.Get<IPropertyApplicationService>();
+
+            string title = "Title No 1";
+            string description = "Description of house";
+            string email = "w@12344321.com";
+            string name = "OwnerName";
+            string phoneNumber = "03455138018";
+            string propertyType = Constants.Hotel;
+            GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
+            string area = "Pindora, Rawalpindi, Pakistan";
+            long monthlyRent = 90000;
+            bool cableTv = false;
+            bool internet = true;
+            bool parking = true;
+            string rentUnit = Constants.Daily;
+            bool isShared = true;
+            bool laundry = true;
+            bool ac = true;
+            bool geyser = true;
+            bool attachedBathroom = true;
+            bool fitnessCentre = false;
+            bool balcony = false;
+            bool lawn = true;
+            bool heating = false;
+            bool ironing = false;
+            bool cctvCameras = true;
+            bool backupElectricity = true;
+
+            bool restaurant = true;
+            bool airportShuttle = true;
+            bool breakfastIncluded = true;
+            bool sittingArea = true;
+            bool carRental = true;
+            bool spa = true;
+            bool salon = false;
+            bool bathtub = true;
+            bool swimmingPool = true;
+            bool kitchen = true;
+            int numberOfAdults = 2;
+            int numberOfChildren = 1;
+
+            string landlineNumber = "0510000000";
+            string fax = "0510000000";
+            bool elevator = false;
+
+            var createNewHotelCommand = new CreateHotelCommand(title, monthlyRent, internet,
+                cableTv, parking, propertyType, email, phoneNumber, area, name, description,
+                genderRestriction.ToString(),
+                isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
+                lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
+                airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
+                kitchen, numberOfAdults, numberOfChildren);
+            // Save the Hotel
+            var hotelId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHotelCommand), email);
+
+            // Retreive the Hotel
+            HotelFullRepresentation retrievedHotel =
+                (HotelFullRepresentation)propertyApplicationService.GetPropertyById(hotelId, Constants.Hotel);
+
+            Assert.IsNotNull(retrievedHotel);
+
+            // Declare update variables
+            string updatedTitle = "Title No 2";
+            string updatedDescription = "Description of Hotel - Updated";
+            string updatedName = "OwnerName updated";
+            string updatedPhoneNumber = "03123456789";
+            string updatedPropertyType = Constants.Hotel;
+            GenderRestriction updatedGenderRestriction = GenderRestriction.NoRestriction;
+            string updatedArea = "Bahria Town, Rawalpindi, Pakistan";
+            long updatedMonthlyRent = 90001;
+            bool updatedCableTv = true;
+            bool updatedInternet = false;
+            bool updatedParking = false;
+            string updatedRentUnit = Constants.Daily;
+            bool updatedIsShared = false;
+            bool updatedLaundry = false;
+            bool updatedAc = false;
+            bool updatedGeyser = false;
+            bool updatedAttachedBathroom = false;
+            bool updatedFitnessCentre = true;
+            bool updatedBalcony = true;
+            bool updatedLawn = false;
+            bool updatedHeating = true;
+            bool updatedIroning = true;
+            bool updatedCctvCameras = false;
+            bool updatedBackupElectricity = false;
+
+            bool updatedRestaurant = true;
+            bool updatedAirportShuttle = true;
+            bool updatedBreakfastIncluded = true;
+            bool updatedSittingArea = true;
+            bool updatedCarRental = true;
+            bool updatedSpa = false;
+            bool updatedSalon = false;
+            bool updatedBathtub = false;
+            bool updatedSwimmingPool = false;
+            bool updatedKitchen = false;
+            int updatedNumberOfAdults = 3;
+            int updatedNumberOfChildren = 0;
+
+            string updatedLandlineNumber = "0510000001";
+            string updatedFax = "0510000001";
+            bool updatedElevator = true;
+
+            var updateHotelCommand = new UpdateHotelCommand(hotelId, updatedTitle, updatedMonthlyRent, updatedInternet,
+                updatedCableTv, updatedParking, updatedPropertyType, email, updatedPhoneNumber, updatedArea,
+                updatedName, updatedDescription, updatedGenderRestriction.ToString(), updatedIsShared, updatedRentUnit,
+                updatedLaundry, updatedAc, updatedGeyser, updatedFitnessCentre, updatedAttachedBathroom,
+                updatedIroning, updatedBalcony, updatedLawn, updatedCctvCameras, updatedBackupElectricity,
+                updatedHeating, updatedLandlineNumber, updatedFax, updatedElevator, updatedRestaurant,
+                updatedAirportShuttle, updatedBreakfastIncluded, updatedSittingArea, updatedCarRental, updatedSpa,
+                updatedSalon, updatedBathtub, updatedSwimmingPool, updatedKitchen, updatedNumberOfAdults,
+                updatedNumberOfChildren);
+
+            // Update the Hotel
+            propertyApplicationService.UpdateProperty(JsonConvert.SerializeObject(updateHotelCommand), email);
+
+            // Retreive the Hotel
+            HotelFullRepresentation retrievedUpdatedHotel =
+                (HotelFullRepresentation)propertyApplicationService.GetPropertyById(hotelId, Constants.Hotel);
+
+            Assert.AreEqual(hotelId, retrievedUpdatedHotel.Id);
+            Assert.AreEqual(updatedTitle, retrievedUpdatedHotel.Title);
+            Assert.AreEqual(updatedDescription, retrievedUpdatedHotel.Description);
+            Assert.AreEqual(email, retrievedUpdatedHotel.OwnerEmail);
+            Assert.AreEqual(updatedName, retrievedUpdatedHotel.OwnerName);
+            Assert.AreEqual(updatedPhoneNumber, retrievedUpdatedHotel.OwnerPhoneNumber);
+            Assert.AreEqual(updatedPropertyType, retrievedUpdatedHotel.PropertyType);
+            Assert.AreEqual(updatedGenderRestriction.ToString(), retrievedUpdatedHotel.GenderRestriction);
+            Assert.AreEqual(updatedArea, retrievedUpdatedHotel.Area);
+            Assert.AreEqual(updatedMonthlyRent, retrievedUpdatedHotel.RentPrice);
+            Assert.AreEqual(updatedCableTv, retrievedUpdatedHotel.CableTvAvailable);
+            Assert.AreEqual(updatedInternet, retrievedUpdatedHotel.InternetAvailable);
+            Assert.AreEqual(updatedParking, retrievedUpdatedHotel.ParkingAvailable);
+            Assert.AreEqual(updatedRentUnit, retrievedUpdatedHotel.RentUnit);
+            Assert.AreEqual(updatedIsShared, retrievedUpdatedHotel.IsShared);
+            Assert.AreEqual(updatedLaundry, retrievedUpdatedHotel.Laundry);
+            Assert.AreEqual(updatedAc, retrievedUpdatedHotel.AC);
+            Assert.AreEqual(updatedGeyser, retrievedUpdatedHotel.Geyser);
+            Assert.AreEqual(updatedAttachedBathroom, retrievedUpdatedHotel.AttachedBathroom);
+            Assert.AreEqual(updatedFitnessCentre, retrievedUpdatedHotel.FitnessCentre);
+            Assert.AreEqual(updatedBalcony, retrievedUpdatedHotel.Balcony);
+            Assert.AreEqual(updatedLawn, retrievedUpdatedHotel.Lawn);
+            Assert.AreEqual(updatedIroning, retrievedUpdatedHotel.Ironing);
+            Assert.AreEqual(updatedCctvCameras, retrievedUpdatedHotel.CctvCameras);
+            Assert.AreEqual(updatedBackupElectricity, retrievedUpdatedHotel.BackupElectricity);
+            Assert.AreEqual(updatedHeating, retrievedUpdatedHotel.Heating);
+
+            Assert.AreEqual(updatedRestaurant, retrievedUpdatedHotel.Restaurant);
+            Assert.AreEqual(updatedAirportShuttle, retrievedUpdatedHotel.AirportShuttle);
+            Assert.AreEqual(updatedBreakfastIncluded, retrievedUpdatedHotel.BreakfastIncluded);
+            Assert.AreEqual(updatedSittingArea, retrievedUpdatedHotel.SittingArea);
+            Assert.AreEqual(updatedCarRental, retrievedUpdatedHotel.CarRental);
+            Assert.AreEqual(updatedSpa, retrievedUpdatedHotel.Spa);
+            Assert.AreEqual(updatedSalon, retrievedUpdatedHotel.Salon);
+            Assert.AreEqual(updatedBathtub, retrievedUpdatedHotel.Bathtub);
+            Assert.AreEqual(updatedSwimmingPool, retrievedUpdatedHotel.SwimmingPool);
+            Assert.AreEqual(updatedKitchen, retrievedUpdatedHotel.Kitchen);
+
+            Assert.AreEqual(updatedNumberOfAdults, retrievedUpdatedHotel.Occupants.Adults);
+            Assert.AreEqual(updatedNumberOfChildren, retrievedUpdatedHotel.Occupants.Children);
+            Assert.AreEqual(updatedNumberOfAdults + updatedNumberOfChildren, retrievedUpdatedHotel.Occupants.TotalOccupants);
+
+            Assert.AreEqual(updatedLandlineNumber, retrievedUpdatedHotel.LandlineNumber);
+            Assert.AreEqual(updatedFax, retrievedUpdatedHotel.Fax);
+            Assert.AreEqual(updatedElevator, retrievedUpdatedHotel.Elevator);
+        }
+
+        #endregion Update Tests
     }
 }
