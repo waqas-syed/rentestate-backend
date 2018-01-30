@@ -399,7 +399,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string phoneNumber = "03455138018";
             decimal latitude = 25.43M;
             decimal longitude = 73.41M;
-            string propertyType = Constants.Hotel;
+            string propertyType = Constants.GuestHouse;
             GenderRestriction genderRestriction = GenderRestriction.GirlsOnly;
             string area = "Pindora, Rawalpindi, Pakistan";
             long monthlyRent = 90000;
@@ -439,13 +439,15 @@ namespace RentStuff.Property.Application.IntegrationTests
             string fax = "0510000000";
             bool elevator = false;
 
-            // Save the Hotel
-            var guestHouseId = propertyApplicationService.SaveNewProperty(new CreateHotelCommand(title, monthlyRent, internet,
-                cableTv, parking, propertyType, email, phoneNumber, area, name, description, genderRestriction.ToString(),
+            var createHotelCommand = new CreateHotelCommand(title, monthlyRent, internet,
+                cableTv, parking, propertyType, email, phoneNumber, area, name, description,
+                genderRestriction.ToString(),
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                 lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                 airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                kitchen, numberOfAdults, numberOfChildren), email);
+                kitchen, numberOfAdults, numberOfChildren);
+            // Save the Hotel
+            var guestHouseId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createHotelCommand), email);
 
             // Retreive the Hotel
             HotelFullRepresentation retrievedGuestHouse =
