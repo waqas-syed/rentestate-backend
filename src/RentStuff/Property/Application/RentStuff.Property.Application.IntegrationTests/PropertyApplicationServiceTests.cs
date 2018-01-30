@@ -1186,7 +1186,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             var retrievedHouse = propertyApplicationService.GetPropertyById(hosue1Id, propertyType);
             Assert.IsNotNull(retrievedHouse);
 
-            propertyApplicationService.DeleteHouse(hosue1Id);
+            propertyApplicationService.DeleteHouse(hosue1Id, email);
 
             retrievedHouse = propertyApplicationService.GetPropertyById(hosue1Id, propertyType);
             Assert.IsNull(retrievedHouse);
@@ -1217,7 +1217,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             var retrievedHouse = propertyApplicationService.GetPropertyById(hostelId, propertyType5);
             Assert.IsNotNull(retrievedHouse);
 
-            propertyApplicationService.DeleteHouse(hostelId);
+            propertyApplicationService.DeleteHouse(hostelId, email5);
 
             retrievedHouse = propertyApplicationService.GetPropertyById(hostelId, propertyType5);
             Assert.IsNull(retrievedHouse);
@@ -1248,7 +1248,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             var retrievedHouse = propertyApplicationService.GetPropertyById(hotel1Id, propertyType2);
             Assert.IsNotNull(retrievedHouse);
 
-            propertyApplicationService.DeleteHouse(hotel1Id);
+            propertyApplicationService.DeleteHouse(hotel1Id, email2);
 
             retrievedHouse = propertyApplicationService.GetPropertyById(hotel1Id, propertyType2);
             Assert.IsNull(retrievedHouse);

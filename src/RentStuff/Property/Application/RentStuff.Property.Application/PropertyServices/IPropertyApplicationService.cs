@@ -28,7 +28,8 @@ namespace RentStuff.Property.Application.PropertyServices
         /// Delete the given house instance
         /// </summary>
         /// <param name="houseId"></param>
-        void DeleteHouse(string houseId);
+        /// <param name="currentUserEmail"></param>
+        void DeleteHouse(string houseId, string currentUserEmail);
 
         /// <summary>
         /// Get House by it's ID

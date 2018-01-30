@@ -200,16 +200,19 @@ namespace RentStuff.Property.Application.PropertyServices
                 throw new NotImplementedException("Requested Property Type not supported");
             }
         }
-        
+
         /// <summary>
         /// Delete the given house instance
         /// </summary>
         /// <param name="houseId"></param>
-        public void DeleteHouse(string houseId)
+        /// <param name="currentUserEmail"></param>
+        public void DeleteHouse(string houseId, string currentUserEmail)
         {
             Domain.Model.PropertyAggregate.Property property = (Domain.Model.PropertyAggregate.Property)_residentialPropertyRepository.GetPropertyById(houseId);
             if (property != null)
             {
+                // Check that the current user is posting the property on his own email as the owner
+                CheckOwnerEmailIntegrity(property.OwnerEmail, currentUserEmail);
                 // Delete all the images from the Google cloud storage photo bucket
                 foreach (var image in property.Images)
                 {

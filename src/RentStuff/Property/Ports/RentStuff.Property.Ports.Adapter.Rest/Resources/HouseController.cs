@@ -316,24 +316,10 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    // Get email
+                    // Get email from claims identity
                     var userEmail = GetEmailFromClaims(User.Identity);
-                    // Check if its the same user who owns this house
-                    bool allowedToEditHouse = _houseApplicationService.HouseOwnershipCheck(id, userEmail);
-                    // If so, proceed
-                    if (allowedToEditHouse)
-                    {
-                        _houseApplicationService.DeleteHouse(id);
-                        return Ok();
-                    }
-                    else
-                    {
-                        _logger.Error("Current user is not allowed to delete this house. CurrentUser: {0} | HouseId: {1}", userEmail, id);
-                        return
-                            BadRequest(
-                                "Current user is not allowed to delete this house. Security breach, taking necessary action");
-                        throw new InvalidOperationException("Current user is not allowed to delete this house. Security breach, taking necessary action");
-                    }
+                    _houseApplicationService.DeleteHouse(id, userEmail);
+                    return Ok();
                 }
                 return BadRequest();
             }
