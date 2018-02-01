@@ -304,7 +304,7 @@ namespace RentStuff.Property.Application.PropertyServices
                     var houses = _residentialPropertyRepository.GetAllHouses(pageNo);
                     return ConvertHousesToPartialRepresentations(houses);
                 case Constants.Apartment:
-                    var apartments = _residentialPropertyRepository.GetAllHouses(pageNo);
+                    var apartments = _residentialPropertyRepository.GetAllApartments(pageNo);
                     return ConvertHousesToPartialRepresentations(apartments);
                 case Constants.Hostel:
                     var hostels = _residentialPropertyRepository.GetAllHostels(pageNo);
@@ -313,7 +313,7 @@ namespace RentStuff.Property.Application.PropertyServices
                     var hotels = _residentialPropertyRepository.GetAllHotels(pageNo);
                     return ConvertHotelsToPartialRepresentations(hotels);
                 case Constants.GuestHouse:
-                    var guestHouses = _residentialPropertyRepository.GetAllHotels(pageNo);
+                    var guestHouses = _residentialPropertyRepository.GetAllGuestHouses(pageNo);
                     return ConvertHotelsToPartialRepresentations(guestHouses);
                 default:
                     throw new NotImplementedException("Requested Proeprty type is not supported");
@@ -336,19 +336,19 @@ namespace RentStuff.Property.Application.PropertyServices
             switch (propertyType)
             {
                 case Constants.House:
-                    var houses = _residentialPropertyRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+                    var houses = _residentialPropertyRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, Constants.House, pageNo);
                     return ConvertHousesToPartialRepresentations(houses);
                 case Constants.Apartment:
-                    var apartments = _residentialPropertyRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+                    var apartments = _residentialPropertyRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, Constants.Apartment, pageNo);
                     return ConvertHousesToPartialRepresentations(apartments);
                 case Constants.Hostel:
                     var hostels = _residentialPropertyRepository.SearchHostelByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
                     return ConvertHostelsToPartialRepresentations(hostels);
                 case Constants.Hotel:
-                    var hotels = _residentialPropertyRepository.SearchHotelByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+                    var hotels = _residentialPropertyRepository.SearchHotelByCoordinates(coordinates.Item1, coordinates.Item2, Constants.Hotel, pageNo);
                     return ConvertHotelsToPartialRepresentations(hotels);
                 case Constants.GuestHouse:
-                    var guestHouses = _residentialPropertyRepository.SearchHotelByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+                    var guestHouses = _residentialPropertyRepository.SearchHotelByCoordinates(coordinates.Item1, coordinates.Item2, Constants.GuestHouse, pageNo);
                     return ConvertHotelsToPartialRepresentations(guestHouses);
             }
             throw new NotImplementedException("Requested property Type is not supported");
@@ -936,7 +936,7 @@ namespace RentStuff.Property.Application.PropertyServices
                 house.NumberOfKitchens, house.NumberOfBathrooms, house.InternetAvailable,
                 house.LandlinePhoneAvailable,
                 house.CableTvAvailable, dimension, house.GarageAvailable, house.SmokingAllowed,
-                house.PropertyType.ToString(),
+                house.PropertyType,
                 house.OwnerEmail, house.OwnerPhoneNumber, house.HouseNo,
                 house.StreetNo,
                 house.Area,

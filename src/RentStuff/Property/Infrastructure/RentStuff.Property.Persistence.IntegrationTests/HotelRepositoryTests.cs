@@ -984,7 +984,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 coordinatesFromAddress.Item1, coordinatesFromAddress.Item2);
 
             var retreivedHouses = houseRepository.SearchHotelByCoordinates(coordinatesFromAddress.Item1,
-                coordinatesFromAddress.Item2);
+                coordinatesFromAddress.Item2, TODO);
             Assert.NotNull(retreivedHouses);
             Assert.AreEqual(10, retreivedHouses.Count);
         }

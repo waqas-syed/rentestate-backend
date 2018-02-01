@@ -263,7 +263,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             // Verification of House & Apartment
             var retreivedHouses = houseRepository.SearchHousesByCoordinates(searchCoordinates.Item1,
-                searchCoordinates.Item2);
+                searchCoordinates.Item2, TODO);
             Assert.NotNull(retreivedHouses);
             Assert.AreEqual(2, retreivedHouses.Count);
             // House
@@ -291,7 +291,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             // Verification of Hotel & Guest House
             var retreivedHotels = houseRepository.SearchHotelByCoordinates(searchCoordinates.Item1,
-                searchCoordinates.Item2);
+                searchCoordinates.Item2, TODO);
             Assert.NotNull(retreivedHotels);
             Assert.AreEqual(2, retreivedHotels.Count);
             // Hotel

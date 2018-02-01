@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using RentStuff.Common.Utilities;
 using RentStuff.Property.Domain.Model.HostelAggregate;
 using RentStuff.Property.Domain.Model.HotelAggregate;
 
@@ -166,6 +167,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 return _session.Session.QueryOver<House>()
+                    .Where(x => x.PropertyType == Constants.House)
                         .Skip(pageNo*_resultsPerPage)
                         .Take(_resultsPerPage)
                         .List<House>();
@@ -175,6 +177,24 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
             .SetFirstResult(pageNo * 10)
             .SetMaxResults(10)
             .Future<House>().ToList();*/
+        }
+
+        /// <summary>
+        /// Gets Apartments with reference to their PropertyType
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        //[Transaction]
+        public IList<House> GetAllApartments(int pageNo = 0)
+        {
+            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return _session.Session.QueryOver<House>()
+                    .Where(x => x.PropertyType == Constants.Apartment)
+                    .Skip(pageNo * _resultsPerPage)
+                    .Take(_resultsPerPage)
+                    .List<House>();
+            }
         }
 
         /// <summary>
@@ -203,6 +223,24 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 return _session.Session.QueryOver<Hotel>()
+                    .Where(x => x.PropertyType == Constants.Hotel)
+                    .Skip(pageNo * _resultsPerPage)
+                    .Take(_resultsPerPage)
+                    .List<Hotel>();
+            }
+        }
+
+        /// <summary>
+        /// Search all the Guest Houses
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        public IList<Hotel> GetAllGuestHouses(int pageNo = 0)
+        {
+            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return _session.Session.QueryOver<Hotel>()
+                    .Where(x => x.PropertyType == Constants.GuestHouse)
                     .Skip(pageNo * _resultsPerPage)
                     .Take(_resultsPerPage)
                     .List<Hotel>();
@@ -218,19 +256,19 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="pageNo"></param>
         /// <returns></returns>
         //[Transaction]
-        public IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude, int pageNo = 0)
+        public IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude, string propertyType, int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 IList houses = _session.Session.CreateSQLQuery(
-                            "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house HAVING distance < :radius ORDER BY distance")
+                            "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house WHERE property_type = :propertyType HAVING distance < :radius ORDER BY distance")
                         .AddEntity(typeof(House))
                         //.AddScalar("latitude", NHibernateUtil.Decimal)
                         //.AddScalar("longitude", NHibernateUtil.Decimal)
                         //.AddScalar("distance", NHibernateUtil.Decimal)
                         .SetParameter("inputLatitude", latitude)
                         .SetParameter("inputLongitude", longitude)
-                        //.SetParameter("propertyType", propertyType)
+                        .SetParameter("propertyType", propertyType)
                         .SetParameter("radius", _radius)
                         .SetFirstResult(pageNo*_resultsPerPage)
                         .SetMaxResults(_resultsPerPage)
@@ -245,7 +283,6 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// </summary>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
-        /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
         public IList<Hostel> SearchHostelByCoordinates(decimal latitude, decimal longitude, int pageNo = 0)
@@ -269,18 +306,19 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
             }
         }
 
-        public IList<Hotel> SearchHotelByCoordinates(decimal latitude, decimal longitude, int pageNo = 0)
+        public IList<Hotel> SearchHotelByCoordinates(decimal latitude, decimal longitude, string propertyType, int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 IList houses = _session.Session.CreateSQLQuery(
-                        "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM hotel HAVING distance < :radius ORDER BY distance")
+                        "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM hotel WHERE property_type = :propertyType HAVING distance < :radius ORDER BY distance")
                     .AddEntity(typeof(Hotel))
                     //.AddScalar("latitude", NHibernateUtil.Decimal)
                     //.AddScalar("longitude", NHibernateUtil.Decimal)
                     //.AddScalar("distance", NHibernateUtil.Decimal)
                     .SetParameter("inputLatitude", latitude)
                     .SetParameter("inputLongitude", longitude)
+                    .SetParameter("propertyType", propertyType)
                     .SetParameter("radius", _radius)
                     .SetFirstResult(pageNo * _resultsPerPage)
                     .SetMaxResults(_resultsPerPage)

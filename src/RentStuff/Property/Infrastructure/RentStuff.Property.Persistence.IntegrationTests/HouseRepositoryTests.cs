@@ -573,7 +573,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdate(house4);
 
             var retreivedHouses = houseRepository.SearchHousesByCoordinates(coordinatesFromAddress.Item1,
-                coordinatesFromAddress.Item2);
+                coordinatesFromAddress.Item2, TODO);
             Assert.NotNull(retreivedHouses);
             Assert.AreEqual(2, retreivedHouses.Count);
 
@@ -830,7 +830,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             // Now search by property type and check we only retreived 10 houses
             string searchedPropertyType = "House";
             var retreivedHouses = houseRepository.SearchHousesByCoordinates(coordinatesFromAddress.Item1, 
-                coordinatesFromAddress.Item2);
+                coordinatesFromAddress.Item2, TODO);
             Assert.NotNull(retreivedHouses);
             Assert.AreEqual(10, retreivedHouses.Count);
         }

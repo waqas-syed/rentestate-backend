@@ -1,16 +1,13 @@
-﻿using System;
+﻿using NLog;
+using RentStuff.Property.Application.PropertyServices;
+using RentStuff.Property.Application.PropertyServices.Commands.DeleteCommands;
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Newtonsoft.Json;
-using NLog;
-using RentStuff.Property.Application.PropertyServices;
-using RentStuff.Property.Application.PropertyServices.Commands.AbstractCommands;
-using RentStuff.Property.Application.PropertyServices.Commands.DeleteCommands;
-using RentStuff.Property.Application.PropertyServices.Commands.UpdateCommands;
 
 namespace RentStuff.Property.Ports.Adapter.Rest.Resources
 {

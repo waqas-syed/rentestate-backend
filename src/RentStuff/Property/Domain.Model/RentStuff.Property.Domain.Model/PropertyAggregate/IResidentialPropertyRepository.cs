@@ -68,6 +68,13 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         IList<House> GetAllHouses(int pageNo = 0);
 
         /// <summary>
+        /// Get All Apartments
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        IList<House> GetAllApartments(int pageNo = 0);
+
+        /// <summary>
         /// Search All Hostels
         /// </summary>
         /// <param name="pageNo"></param>
@@ -82,13 +89,21 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         IList<Hotel> GetAllHotels(int pageNo = 0);
 
         /// <summary>
+        /// Search all the Guest Houses
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        IList<Hotel> GetAllGuestHouses(int pageNo = 0);
+
+        /// <summary>
         /// Gets the houses by coordinates and property type
         /// </summary>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
+        /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude, int pageNo = 0);
+        IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude, string propertyType, int pageNo = 0);
 
         /// <summary>
         /// Search Hostels in the radius sorrounding the given location
@@ -104,9 +119,10 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// </summary>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
+        /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<Hotel> SearchHotelByCoordinates(decimal latitude, decimal longitude, int pageNo = 0);
+        IList<Hotel> SearchHotelByCoordinates(decimal latitude, decimal longitude, string propertyType, int pageNo = 0);
 
         /// <summary>
         /// Get the total number of houses with the given property type present in the database

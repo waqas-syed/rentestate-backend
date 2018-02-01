@@ -1458,39 +1458,41 @@ namespace RentStuff.Property.Application.IntegrationTests
                 updatedMeals, updatedPicknDrop, updatedNumberOfSeats);
             // Now update the Hostel
             propertyApplicationService.UpdateProperty(JsonConvert.SerializeObject(updateHostelCommand), email);
+
+            var retrievedUpdatedHostel = (HostelFullRepresentation)propertyApplicationService.GetPropertyById(hostelId, email);
             
-            Assert.AreEqual(hostelId, retrievedHostel.Id);
-            Assert.AreEqual(title, retrievedHostel.Title);
-            Assert.AreEqual(description, retrievedHostel.Description);
-            Assert.AreEqual(email, retrievedHostel.OwnerEmail);
-            Assert.AreEqual(name, retrievedHostel.OwnerName);
-            Assert.AreEqual(phoneNumber, retrievedHostel.OwnerPhoneNumber);
-            Assert.AreEqual(cableTv, retrievedHostel.CableTvAvailable);
-            Assert.AreEqual(internet, retrievedHostel.InternetAvailable);
-            Assert.AreEqual(parking, retrievedHostel.ParkingAvailable);
-            Assert.AreEqual(propertyType, retrievedHostel.PropertyType);
-            Assert.AreEqual(genderRestriction.ToString(), retrievedHostel.GenderRestriction);
-            Assert.AreEqual(area, retrievedHostel.Area);
-            Assert.AreEqual(monthlyRent, retrievedHostel.RentPrice);
-            Assert.AreEqual(isShared, retrievedHostel.IsShared);
-            Assert.AreEqual(rentUnit, retrievedHostel.RentUnit);
-            Assert.AreEqual(laundry, retrievedHostel.Laundry);
-            Assert.AreEqual(ac, retrievedHostel.AC);
-            Assert.AreEqual(geyser, retrievedHostel.Geyser);
-            Assert.AreEqual(attachedBathroom, retrievedHostel.AttachedBathroom);
-            Assert.AreEqual(fitnessCentre, retrievedHostel.FitnessCentre);
-            Assert.AreEqual(balcony, retrievedHostel.Balcony);
-            Assert.AreEqual(lawn, retrievedHostel.Lawn);
-            Assert.AreEqual(ironing, retrievedHostel.Ironing);
-            Assert.AreEqual(cctvCameras, retrievedHostel.CctvCameras);
-            Assert.AreEqual(backupElectricity, retrievedHostel.BackupElectricity);
-            Assert.AreEqual(heating, retrievedHostel.Heating);
-            Assert.AreEqual(meals, retrievedHostel.Meals);
-            Assert.AreEqual(picknDrop, retrievedHostel.PicknDrop);
-            Assert.AreEqual(numberOfSeats, retrievedHostel.NumberOfSeats);
-            Assert.AreEqual(landlineNumber, retrievedHostel.LandlineNumber);
-            Assert.AreEqual(fax, retrievedHostel.Fax);
-            Assert.AreEqual(elevator, retrievedHostel.Elevator);
+            Assert.AreEqual(hostelId, retrievedUpdatedHostel.Id);
+            Assert.AreEqual(title, retrievedUpdatedHostel.Title);
+            Assert.AreEqual(description, retrievedUpdatedHostel.Description);
+            Assert.AreEqual(email, retrievedUpdatedHostel.OwnerEmail);
+            Assert.AreEqual(name, retrievedUpdatedHostel.OwnerName);
+            Assert.AreEqual(phoneNumber, retrievedUpdatedHostel.OwnerPhoneNumber);
+            Assert.AreEqual(cableTv, retrievedUpdatedHostel.CableTvAvailable);
+            Assert.AreEqual(internet, retrievedUpdatedHostel.InternetAvailable);
+            Assert.AreEqual(parking, retrievedUpdatedHostel.ParkingAvailable);
+            Assert.AreEqual(propertyType, retrievedUpdatedHostel.PropertyType);
+            Assert.AreEqual(genderRestriction.ToString(), retrievedUpdatedHostel.GenderRestriction);
+            Assert.AreEqual(area, retrievedUpdatedHostel.Area);
+            Assert.AreEqual(monthlyRent, retrievedUpdatedHostel.RentPrice);
+            Assert.AreEqual(isShared, retrievedUpdatedHostel.IsShared);
+            Assert.AreEqual(rentUnit, retrievedUpdatedHostel.RentUnit);
+            Assert.AreEqual(laundry, retrievedUpdatedHostel.Laundry);
+            Assert.AreEqual(ac, retrievedUpdatedHostel.AC);
+            Assert.AreEqual(geyser, retrievedUpdatedHostel.Geyser);
+            Assert.AreEqual(attachedBathroom, retrievedUpdatedHostel.AttachedBathroom);
+            Assert.AreEqual(fitnessCentre, retrievedUpdatedHostel.FitnessCentre);
+            Assert.AreEqual(balcony, retrievedUpdatedHostel.Balcony);
+            Assert.AreEqual(lawn, retrievedUpdatedHostel.Lawn);
+            Assert.AreEqual(ironing, retrievedUpdatedHostel.Ironing);
+            Assert.AreEqual(cctvCameras, retrievedUpdatedHostel.CctvCameras);
+            Assert.AreEqual(backupElectricity, retrievedUpdatedHostel.BackupElectricity);
+            Assert.AreEqual(heating, retrievedUpdatedHostel.Heating);
+            Assert.AreEqual(meals, retrievedUpdatedHostel.Meals);
+            Assert.AreEqual(picknDrop, retrievedUpdatedHostel.PicknDrop);
+            Assert.AreEqual(numberOfSeats, retrievedUpdatedHostel.NumberOfSeats);
+            Assert.AreEqual(landlineNumber, retrievedUpdatedHostel.LandlineNumber);
+            Assert.AreEqual(fax, retrievedUpdatedHostel.Fax);
+            Assert.AreEqual(elevator, retrievedUpdatedHostel.Elevator);
         }
 
         // Update a Hotel
