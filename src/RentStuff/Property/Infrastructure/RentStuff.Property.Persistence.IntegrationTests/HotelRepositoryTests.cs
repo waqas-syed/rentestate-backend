@@ -495,8 +495,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             IList<Hotel> retrievedHotel = propertyRepository.GetHotelsByOwnerEmail(email);
 
-            Assert.AreEqual(2, retrievedHotel.Count);
-            Assert.IsNotNull(retrievedHotel);
+            Assert.AreEqual(1, retrievedHotel.Count);
 
             // Verification of Hotel # 1
             Assert.AreEqual(title, retrievedHotel[0].Title);
@@ -551,18 +550,21 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             Assert.AreEqual(elevator, retrievedHotel[0].Elevator);
 
+            retrievedHotel = propertyRepository.GetGuestHousesByOwnerEmail(email);
+            Assert.AreEqual(1, retrievedHotel.Count);
+
             // Verification of Hotel(Guest House) # 3
-            Assert.AreEqual(title3, retrievedHotel[1].Title);
-            Assert.AreEqual(description3, retrievedHotel[1].Description);
-            Assert.AreEqual(email3, retrievedHotel[1].OwnerEmail);
-            Assert.AreEqual(name3, retrievedHotel[1].OwnerName);
-            Assert.AreEqual(latitude3, retrievedHotel[1].Latitude);
-            Assert.AreEqual(longitude3, retrievedHotel[1].Longitude);
-            Assert.AreEqual(propertyType3, retrievedHotel[1].PropertyType);
-            Assert.AreEqual(genderRestriction3, retrievedHotel[1].GenderRestriction);
-            Assert.AreEqual(area3, retrievedHotel[1].Area);
-            Assert.AreEqual(monthlyRent3, retrievedHotel[1].RentPrice);
-            Assert.AreEqual(rentUnit3, retrievedHotel[1].RentUnit);
+            Assert.AreEqual(title3, retrievedHotel[0].Title);
+            Assert.AreEqual(description3, retrievedHotel[0].Description);
+            Assert.AreEqual(email3, retrievedHotel[0].OwnerEmail);
+            Assert.AreEqual(name3, retrievedHotel[0].OwnerName);
+            Assert.AreEqual(latitude3, retrievedHotel[0].Latitude);
+            Assert.AreEqual(longitude3, retrievedHotel[0].Longitude);
+            Assert.AreEqual(propertyType3, retrievedHotel[0].PropertyType);
+            Assert.AreEqual(genderRestriction3, retrievedHotel[0].GenderRestriction);
+            Assert.AreEqual(area3, retrievedHotel[0].Area);
+            Assert.AreEqual(monthlyRent3, retrievedHotel[0].RentPrice);
+            Assert.AreEqual(rentUnit3, retrievedHotel[0].RentUnit);
         }
 
         // Gets all the Hotels and Guest Houses
