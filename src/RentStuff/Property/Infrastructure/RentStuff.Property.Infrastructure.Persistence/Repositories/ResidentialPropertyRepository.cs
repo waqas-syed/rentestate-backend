@@ -82,7 +82,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
                 return _session.Session.QueryOver<ResidentialProperty>().Where(x => x.Id == houseId).SingleOrDefault();
             }
         }
-
+        
         /// <summary>
         /// Get the owner house by email
         /// </summary>
@@ -95,8 +95,27 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 return _session.Session.QueryOver<House>()
-                    .Where(x => x.OwnerEmail == email)
+                    .Where(x => x.OwnerEmail == email && x.PropertyType == Constants.House)
                     .Skip(pageNo*_resultsPerPage)
+                    .Take(_resultsPerPage)
+                    .List<House>();
+            }
+        }
+
+        /// <summary>
+        /// Get the owner house by email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        //[Transaction]
+        public IList<House> GetApartmentByOwnerEmail(string email, int pageNo = 0)
+        {
+            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return _session.Session.QueryOver<House>()
+                    .Where(x => x.OwnerEmail == email && x.PropertyType == Constants.Apartment)
+                    .Skip(pageNo * _resultsPerPage)
                     .Take(_resultsPerPage)
                     .List<House>();
             }
@@ -113,7 +132,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 return _session.Session.QueryOver<Hostel>()
-                    .Where(x => x.OwnerEmail == email)
+                    .Where(x => x.OwnerEmail == email && x.PropertyType == Constants.Hostel)
                     .Skip(pageNo * _resultsPerPage)
                     .Take(_resultsPerPage)
                     .List<Hostel>();
@@ -131,7 +150,25 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 return _session.Session.QueryOver<Hotel>()
-                    .Where(x => x.OwnerEmail == email)
+                    .Where(x => x.OwnerEmail == email && x.PropertyType == Constants.Hotel)
+                    .Skip(pageNo * _resultsPerPage)
+                    .Take(_resultsPerPage)
+                    .List<Hotel>();
+            }
+        }
+
+        /// <summary>
+        /// Get Guest houses by email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        public IList<Hotel> GetGuestHousesByOwnerEmail(string email, int pageNo = 0)
+        {
+            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return _session.Session.QueryOver<Hotel>()
+                    .Where(x => x.OwnerEmail == email && x.PropertyType == Constants.GuestHouse)
                     .Skip(pageNo * _resultsPerPage)
                     .Take(_resultsPerPage)
                     .List<Hotel>();

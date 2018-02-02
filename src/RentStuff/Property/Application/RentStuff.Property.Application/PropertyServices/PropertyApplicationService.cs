@@ -244,7 +244,7 @@ namespace RentStuff.Property.Application.PropertyServices
                     var houses = _residentialPropertyRepository.GetHouseByOwnerEmail(email, pageNo);
                     return ConvertHousesToPartialRepresentations(houses);
                 case Constants.Apartment:
-                    var apartments = _residentialPropertyRepository.GetHouseByOwnerEmail(email, pageNo);
+                    var apartments = _residentialPropertyRepository.GetApartmentByOwnerEmail(email, pageNo);
                     return ConvertHousesToPartialRepresentations(apartments);
                 case Constants.Hostel:
                     var hostels = _residentialPropertyRepository.GetHostelsByOwnerEmail(email, pageNo);
@@ -253,10 +253,10 @@ namespace RentStuff.Property.Application.PropertyServices
                     var hotels = _residentialPropertyRepository.GetHotelsByOwnerEmail(email, pageNo);
                     return ConvertHotelsToPartialRepresentations(hotels);
                 case Constants.GuestHouse:
-                    var guestHouses = _residentialPropertyRepository.GetHotelsByOwnerEmail(email, pageNo);
+                    var guestHouses = _residentialPropertyRepository.GetGuestHousesByOwnerEmail(email, pageNo);
                     return ConvertHotelsToPartialRepresentations(guestHouses);
                 default:
-                    throw new NotImplementedException("Requested Proeprty type is not supported");
+                    throw new NotImplementedException("Requested Property type is not supported");
             }
         }
 

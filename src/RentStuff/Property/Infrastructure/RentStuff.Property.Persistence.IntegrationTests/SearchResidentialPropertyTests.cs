@@ -261,19 +261,25 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string searchLocation = "Pindora, Rawalpindi, Pakistan";
             var searchCoordinates = geocodingService.GetCoordinatesFromAddress(searchLocation);
 
-            // Verification of House & Apartment
+            // Verification of House
             var retreivedHouses = houseRepository.SearchHousesByCoordinates(searchCoordinates.Item1,
-                searchCoordinates.Item2, TODO);
+                searchCoordinates.Item2, Constants.House);
             Assert.NotNull(retreivedHouses);
-            Assert.AreEqual(2, retreivedHouses.Count);
+            Assert.AreEqual(1, retreivedHouses.Count);
             // House
             Assert.AreEqual(house.Id, retreivedHouses[0].Id);
             Assert.AreEqual(title, retreivedHouses[0].Title);
             Assert.AreEqual(Constants.House, retreivedHouses[0].PropertyType);
+
+            // Verification of Apartment
+            retreivedHouses = houseRepository.SearchHousesByCoordinates(searchCoordinates.Item1,
+                searchCoordinates.Item2, Constants.Apartment);
+            Assert.NotNull(retreivedHouses);
+            Assert.AreEqual(1, retreivedHouses.Count);
             // Apartment
-            Assert.AreEqual(apartment.Id, retreivedHouses[1].Id);
-            Assert.AreEqual(apartment.Title, retreivedHouses[1].Title);
-            Assert.AreEqual(Constants.Apartment, retreivedHouses[1].PropertyType);
+            Assert.AreEqual(apartment.Id, retreivedHouses[0].Id);
+            Assert.AreEqual(apartment.Title, retreivedHouses[0].Title);
+            Assert.AreEqual(Constants.Apartment, retreivedHouses[0].PropertyType);
 
             // Verification of 2 Hostels
             var retreivedHostels = houseRepository.SearchHostelByCoordinates(searchCoordinates.Item1,
@@ -289,19 +295,25 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(hostel.Title, retreivedHostels[1].Title);
             Assert.AreEqual(Constants.Hostel, retreivedHostels[1].PropertyType);
 
-            // Verification of Hotel & Guest House
+            // Verification of Hotel
             var retreivedHotels = houseRepository.SearchHotelByCoordinates(searchCoordinates.Item1,
-                searchCoordinates.Item2, TODO);
+                searchCoordinates.Item2, Constants.Hotel);
             Assert.NotNull(retreivedHotels);
-            Assert.AreEqual(2, retreivedHotels.Count);
+            Assert.AreEqual(1, retreivedHotels.Count);
             // Hotel
             Assert.AreEqual(hotel.Id, retreivedHotels[0].Id);
             Assert.AreEqual(hotel.Title, retreivedHotels[0].Title);
             Assert.AreEqual(Constants.Hotel, retreivedHotels[0].PropertyType);
+
+            // Verification of Guest House
+            retreivedHotels = houseRepository.SearchHotelByCoordinates(searchCoordinates.Item1,
+                searchCoordinates.Item2, Constants.GuestHouse);
+            Assert.NotNull(retreivedHotels);
+            Assert.AreEqual(1, retreivedHotels.Count);
             // Guest House
-            Assert.AreEqual(guestHouse.Id, retreivedHotels[1].Id);
-            Assert.AreEqual(guestHouse.Title, retreivedHotels[1].Title);
-            Assert.AreEqual(Constants.GuestHouse, retreivedHotels[1].PropertyType);
+            Assert.AreEqual(guestHouse.Id, retreivedHotels[0].Id);
+            Assert.AreEqual(guestHouse.Title, retreivedHotels[0].Title);
+            Assert.AreEqual(Constants.GuestHouse, retreivedHotels[0].PropertyType);
         }
     }
 }
