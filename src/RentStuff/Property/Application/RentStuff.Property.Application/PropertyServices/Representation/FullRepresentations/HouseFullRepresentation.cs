@@ -98,11 +98,5 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.FullRep
         {
             get; private set;
         }
-        
-        [DataMember]
-        public IList<string> HouseImages
-        {
-            get; private set;
-        }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace RentStuff.Property.Application.PropertyServices.Representation.AbstractRepresentations
+﻿using System;
+
+namespace RentStuff.Property.Application.PropertyServices.Representation.AbstractRepresentations
 {
     /// <summary>
     /// Partial representation for al residential properties
@@ -23,11 +25,11 @@
             Internet = internetAvailable;
             CableTv = cableTvAvailable;
             PropertyType = propertyType;
-            DefaultImage = defaultImage;
+            Image = defaultImage;
         }
 
-        public string Id { get; private set; }
-        public string Title { get; private set; }
+        public string Id { get; set; }
+        public string Title { get; set; }
         public long RentPrice { get; private set; }
         public string OwnerPhoneNumber { get; private set; }
         public string OwnerLandlineNumber { get; private set; }
@@ -39,6 +41,6 @@
         public bool Internet { get; private set; }
         public bool CableTv { get; private set; }
         public string PropertyType { get; private set; }
-        public string DefaultImage { get; set; }
+        public string Image { get; set; }
     }
 }

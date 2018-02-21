@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 using RentStuff.Property.Application.PropertyServices.Representation.AbstractRepresentations;
 using RentStuff.Property.Domain.Model.HouseAggregate;
+using Newtonsoft.Json;
 
 namespace RentStuff.Property.Application.PropertyServices.Representation
 {
@@ -9,7 +10,7 @@ namespace RentStuff.Property.Application.PropertyServices.Representation
     /// Partial Representation for a House
     /// </summary>
     [Serializable]
-    [DataContract]
+    [JsonObject]
     public class HousePartialRepresentation : ResidentialPropertyPartialBaseImplementation
     {
         public HousePartialRepresentation(string houseId, string title, string area, long rentPrice, 
@@ -37,16 +38,12 @@ namespace RentStuff.Property.Application.PropertyServices.Representation
             NumberOfKitchens = numberOfKitchens;
         }
         
-        [DataMember]
-        public string Dimension { get; private set; }
-
-        [DataMember]
-        public int NumberOfBedrooms { get; private set; }
-
-        [DataMember]
-        public int NumberOfBathrooms { get; private set; }
-
-        [DataMember]
-        public int NumberOfKitchens { get; private set; }
+        public string Dimension { get; set; }
+        
+        public int NumberOfBedrooms { get; set; }
+        
+        public int NumberOfBathrooms { get; set; }
+        
+        public int NumberOfKitchens { get; set; }
     }
 }
