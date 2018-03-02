@@ -6,7 +6,6 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.Partial
     /// <summary>
     /// Partial Representation of a Hostel
     /// </summary>
-    [DataContract]
     public class HostelPartialRepresentation : ResidentialPropertyPartialBaseImplementation
     {
         public HostelPartialRepresentation(string id, string title, long rentPrice,
