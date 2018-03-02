@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Management.Instrumentation;
+using System.Threading;
 using RentStuff.Property.Application.PropertyServices.Commands.UpdateCommands;
 using ConfigurationManager = System.Configuration.ConfigurationManager;
 
@@ -238,7 +239,9 @@ namespace RentStuff.Property.Application.PropertyServices
             {
                 throw new NullReferenceException("Email cannot be null");
             }
-            switch (propertyType)
+            var properties = _residentialPropertyRepository.GetHouseByOwnerEmail(email, pageNo);
+            return ConvertPropertiesToPartialRepresentation(properties);
+            /*switch (propertyType)
             {
                 case Constants.House:
                     var houses = _residentialPropertyRepository.GetHouseByOwnerEmail(email, pageNo);
@@ -257,7 +260,7 @@ namespace RentStuff.Property.Application.PropertyServices
                     return ConvertHotelsToPartialRepresentations(guestHouses);
                 default:
                     throw new NotImplementedException("Requested Property type is not supported");
-            }
+            }*/
         }
 
         /// <summary>
@@ -995,6 +998,32 @@ namespace RentStuff.Property.Application.PropertyServices
                 house.SwimmingPool, house.Kitchen, house.Occupants, house.LandlineNumber, house.Fax, house.Elevator, house.Images);
         }
 
+        private IList<ResidentialPropertyPartialBaseImplementation> ConvertPropertiesToPartialRepresentation(
+            IList<Property.Domain.Model.PropertyAggregate.Property> properties)
+        {
+            IList<ResidentialPropertyPartialBaseImplementation> propertyRepresentations =
+                new List<ResidentialPropertyPartialBaseImplementation>();
+            foreach (var property in properties)
+            {
+                if (property is House)
+                {
+                    var houseRepresentation = ConvertHouseToPartialRepresentation((House) property);
+                    propertyRepresentations.Add(houseRepresentation);
+                }
+                else if (property is Hostel)
+                {
+                    var hostelRepresentation = ConvertHostelToPartialRepresentation((Hostel) property);
+                    propertyRepresentations.Add(hostelRepresentation);
+                }
+                else if (property is Hotel)
+                {
+                    var hotelRepresentations = ConvertHotelToPartialRepresentation((Hotel) property);
+                    propertyRepresentations.Add(hotelRepresentations);
+                }
+            }
+            return propertyRepresentations;
+        }
+
         /// <summary>
         /// Converts the list of houses to a list of PartialHouseRepresentations
         /// </summary>
@@ -1007,22 +1036,32 @@ namespace RentStuff.Property.Application.PropertyServices
             {
                 foreach (var house in houses)
                 {
-                    string firstImage = null;
-                    if (house.GetImageList() != null && house.GetImageList().Count > 0)
-                    {
-                        firstImage = house.GetImageList()[0];
-                    }
-                    HousePartialRepresentation houseRepresentation = new HousePartialRepresentation(
-                        house.Id, house.Title, house.Area, house.RentPrice, house.PropertyType, house.Dimension,
-                        house.OwnerPhoneNumber, house.LandlineNumber, firstImage, house.OwnerName,
-                        house.IsShared, house.GenderRestriction.ToString(), house.RentUnit, house.InternetAvailable,
-                        house.CableTvAvailable, house.NumberOfBedrooms, house.NumberOfBathrooms,
-                        house.NumberOfKitchens);
+                    var houseRepresentation = ConvertHouseToPartialRepresentation(house);
 
                     houseRepresentations.Add(houseRepresentation);
                 }
             }
             return houseRepresentations;
+        }
+
+        /// <summary>
+        /// Converts a sinlge house to a representation
+        /// </summary>
+        /// <returns></returns>
+        private HousePartialRepresentation ConvertHouseToPartialRepresentation(House house)
+        {
+            string firstImage = null;
+            if (house.GetImageList() != null && house.GetImageList().Count > 0)
+            {
+                firstImage = house.GetImageList()[0];
+            }
+            HousePartialRepresentation houseRepresentation = new HousePartialRepresentation(
+                house.Id, house.Title, house.Area, house.RentPrice, house.PropertyType, house.Dimension,
+                house.OwnerPhoneNumber, house.LandlineNumber, firstImage, house.OwnerName,
+                house.IsShared, house.GenderRestriction.ToString(), house.RentUnit, house.InternetAvailable,
+                house.CableTvAvailable, house.NumberOfBedrooms, house.NumberOfBathrooms,
+                house.NumberOfKitchens);
+            return houseRepresentation;
         }
 
         /// <summary>
@@ -1037,23 +1076,33 @@ namespace RentStuff.Property.Application.PropertyServices
             {
                 foreach (var hostel in hostels)
                 {
-                    string firstImage = null;
-                    if (hostel.GetImageList() != null && hostel.GetImageList().Count > 0)
-                    {
-                        firstImage = hostel.GetImageList()[0];
-                    }
-                    HostelPartialRepresentation houseRepresentation = new HostelPartialRepresentation(
-                        hostel.Id, hostel.Title, hostel.RentPrice, hostel.OwnerPhoneNumber,
-                        hostel.LandlineNumber, hostel.Area, hostel.OwnerName, hostel.GenderRestriction.ToString(),
-                        hostel.IsShared, hostel.RentUnit, hostel.InternetAvailable, hostel.CableTvAvailable,
-                        hostel.PropertyType, hostel.ParkingAvailable, hostel.Laundry, hostel.AC, hostel.Geyser,
-                        hostel.AttachedBathroom, hostel.BackupElectricity, hostel.Meals, hostel.NumberOfSeats,
-                        firstImage);
+                    var hostelRepresentation = ConvertHostelToPartialRepresentation(hostel);
 
-                    hostelRepresentations.Add(houseRepresentation);
+                    hostelRepresentations.Add(hostelRepresentation);
                 }
             }
             return hostelRepresentations;
+        }
+
+        /// <summary>
+        /// Converts a single hostel to a representation
+        /// </summary>
+        /// <returns></returns>
+        private HostelPartialRepresentation ConvertHostelToPartialRepresentation(Hostel hostel)
+        {
+            string firstImage = null;
+            if (hostel.GetImageList() != null && hostel.GetImageList().Count > 0)
+            {
+                firstImage = hostel.GetImageList()[0];
+            }
+            HostelPartialRepresentation hostelRepresentation = new HostelPartialRepresentation(
+                hostel.Id, hostel.Title, hostel.RentPrice, hostel.OwnerPhoneNumber,
+                hostel.LandlineNumber, hostel.Area, hostel.OwnerName, hostel.GenderRestriction.ToString(),
+                hostel.IsShared, hostel.RentUnit, hostel.InternetAvailable, hostel.CableTvAvailable,
+                hostel.PropertyType, hostel.ParkingAvailable, hostel.Laundry, hostel.AC, hostel.Geyser,
+                hostel.AttachedBathroom, hostel.BackupElectricity, hostel.Meals, hostel.NumberOfSeats,
+                firstImage);
+            return hostelRepresentation;
         }
 
         /// <summary>
@@ -1068,23 +1117,33 @@ namespace RentStuff.Property.Application.PropertyServices
             {
                 foreach (var hotel in hotels)
                 {
-                    string firstImage = null;
-                    if (hotel.GetImageList() != null && hotel.GetImageList().Count > 0)
-                    {
-                        firstImage = hotel.GetImageList()[0];
-                    }
-                    HotelPartialRepresentation houseRepresentation = new HotelPartialRepresentation(
-                        hotel.Id, hotel.Title, hotel.RentPrice, hotel.OwnerPhoneNumber,
-                        hotel.Area, hotel.OwnerName, hotel.GenderRestriction.ToString(),
-                        hotel.IsShared, hotel.RentUnit, hotel.InternetAvailable, hotel.CableTvAvailable,
-                        hotel.ParkingAvailable, hotel.PropertyType, hotel.AC, hotel.Geyser,
-                        hotel.AttachedBathroom, hotel.FitnessCentre, hotel.BackupElectricity, hotel.Heating, hotel.AirportShuttle,
-                        hotel.BreakfastIncluded, hotel.Occupants, hotel.LandlineNumber, firstImage);
+                    var hotelRepresentations = ConvertHotelToPartialRepresentation(hotel);
 
-                    hostelRepresentations.Add(houseRepresentation);
+                    hostelRepresentations.Add(hotelRepresentations);
                 }
             }
             return hostelRepresentations;
+        }
+
+        /// <summary>
+        /// Converts a single hotel to a representation
+        /// </summary>
+        /// <returns></returns>
+        private HotelPartialRepresentation ConvertHotelToPartialRepresentation(Hotel hotel)
+        {
+            string firstImage = null;
+            if (hotel.GetImageList() != null && hotel.GetImageList().Count > 0)
+            {
+                firstImage = hotel.GetImageList()[0];
+            }
+            HotelPartialRepresentation hotelRepresentation = new HotelPartialRepresentation(
+                hotel.Id, hotel.Title, hotel.RentPrice, hotel.OwnerPhoneNumber,
+                hotel.Area, hotel.OwnerName, hotel.GenderRestriction.ToString(),
+                hotel.IsShared, hotel.RentUnit, hotel.InternetAvailable, hotel.CableTvAvailable,
+                hotel.ParkingAvailable, hotel.PropertyType, hotel.AC, hotel.Geyser,
+                hotel.AttachedBathroom, hotel.FitnessCentre, hotel.BackupElectricity, hotel.Heating, hotel.AirportShuttle,
+                hotel.BreakfastIncluded, hotel.Occupants, hotel.LandlineNumber, firstImage);
+            return hotelRepresentation;
         }
 
         #endregion Convert to representations

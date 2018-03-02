@@ -90,15 +90,15 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="pageNo"></param>
         /// <returns></returns>
         //[Transaction]
-        public IList<House> GetHouseByOwnerEmail(string email, int pageNo = 0)
+        public IList<Domain.Model.PropertyAggregate.Property> GetHouseByOwnerEmail(string email, int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                return _session.Session.QueryOver<House>()
-                    .Where(x => x.OwnerEmail == email && x.PropertyType == Constants.House)
+                return _session.Session.QueryOver<Domain.Model.PropertyAggregate.Property>()
+                    .Where(x => x.OwnerEmail == email)
                     .Skip(pageNo*_resultsPerPage)
                     .Take(_resultsPerPage)
-                    .List<House>();
+                    .List<Domain.Model.PropertyAggregate.Property>();
             }
         }
 

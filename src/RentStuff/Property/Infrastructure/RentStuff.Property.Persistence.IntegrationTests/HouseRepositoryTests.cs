@@ -930,9 +930,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             houseRepository.SaveorUpdate(house3);
 
             // Retrieve the Houses by email
-            IList<House> retreivedHouses =  houseRepository.GetHouseByOwnerEmail(email);
-            Assert.AreEqual(1, retreivedHouses.Count);
-            House retreivedHouse = retreivedHouses[0];
+            IList<Domain.Model.PropertyAggregate.Property> retreivedHouses =  houseRepository.GetHouseByOwnerEmail(email);
+            Assert.AreEqual(2, retreivedHouses.Count);
+            House retreivedHouse = (House)retreivedHouses[0];
 
             // Verfication of House # 1
             Assert.AreEqual(title, retreivedHouse.Title);
@@ -957,11 +957,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.Dimension.StringValue, retreivedHouse.Dimension.StringValue);
             Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
 
-            // Retrieve the Apartment by Owner Email
-            retreivedHouses = houseRepository.GetApartmentByOwnerEmail(email);
-            Assert.AreEqual(1, retreivedHouses.Count);
-            retreivedHouse = retreivedHouses[0];
-
             // Verfication of House # 2
             Assert.AreEqual(house2.Title, retreivedHouse.Title);
             Assert.AreEqual(house2.Description, retreivedHouse.Description);
@@ -970,6 +965,13 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house2.Longitude, retreivedHouse.Longitude);
             Assert.AreEqual(house2.StreetNo, retreivedHouse.StreetNo);
             Assert.AreEqual(house2.OwnerName, retreivedHouse.OwnerName);
+
+            // Retrieve the Apartment by Owner Email
+            /*retreivedHouses = houseRepository.GetApartmentByOwnerEmail(email);
+            Assert.AreEqual(1, retreivedHouses.Count);
+            retreivedHouse = retreivedHouses[0];
+
+            */
         }
 
         #endregion Save and Search Houses by Email

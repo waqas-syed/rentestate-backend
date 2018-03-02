@@ -1144,51 +1144,35 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             // This email is shared by 5 properties
             string searchedEmail = "special@spsp123456.com";
-
-            // Verification of House
-            retreivedHouses = propertyApplicationService.GetPropertiesByEmail(Constants.House, searchedEmail);
-            Assert.NotNull(retreivedHouses);
-            Assert.AreEqual(1, retreivedHouses.Count);
-            // House # 2
-            Assert.AreEqual(hosue2Id, retreivedHouses[0].Id);
-            Assert.AreEqual(house2.Title, retreivedHouses[0].Title);
-            Assert.AreEqual(Constants.House, retreivedHouses[0].PropertyType);
-
-            // Verification of Apartments
-            retreivedHouses = propertyApplicationService.GetPropertiesByEmail(Constants.Apartment, searchedEmail);
-            Assert.NotNull(retreivedHouses);
-            Assert.AreEqual(1, retreivedHouses.Count);
-            // Apartment # 2
-            Assert.AreEqual(apartment2Id, retreivedHouses[0].Id);
-            Assert.AreEqual(apartment2.Title, retreivedHouses[0].Title);
-            Assert.AreEqual(Constants.Apartment, retreivedHouses[0].PropertyType);
-
-            // Verification of Hostel # 2
-            retreivedHostels = propertyApplicationService.GetPropertiesByEmail(Constants.Hostel, searchedEmail);
-            Assert.NotNull(retreivedHostels);
-            Assert.AreEqual(1, retreivedHostels.Count);
-            Assert.AreEqual(hostel2Id, retreivedHostels[0].Id);
-            Assert.AreEqual(hostel2.Title, retreivedHostels[0].Title);
-            Assert.AreEqual(Constants.Hostel, retreivedHostels[0].PropertyType);
-
-            // Verification of Hotel
+            
             retreivedHotels = propertyApplicationService.GetPropertiesByEmail(Constants.Hotel, searchedEmail);
             Assert.NotNull(retreivedHotels);
-            Assert.AreEqual(1, retreivedHotels.Count);
-            // Hotel # 2
+            Assert.AreEqual(5, retreivedHotels.Count);
+            // Verification of Hotel # 2
             Assert.AreEqual(hotel2Id, retreivedHotels[0].Id);
             Assert.AreEqual(hotel2.Title, retreivedHotels[0].Title);
             Assert.AreEqual(Constants.Hotel, retreivedHotels[0].PropertyType);
 
-            // Verification of Guest House
-            retreivedHotels = propertyApplicationService.GetPropertiesByEmail(Constants.GuestHouse, searchedEmail);
-            Assert.NotNull(retreivedHotels);
-            Assert.AreEqual(1, retreivedHotels.Count);
-            // Guest House # 2
-            Assert.AreEqual(guestHouse2Id, retreivedHotels[0].Id);
-            Assert.AreEqual(guestHouse2.Title, retreivedHotels[0].Title);
-            Assert.AreEqual(Constants.GuestHouse, retreivedHotels[0].PropertyType);
+            // Verification of Guest House # 2
+            Assert.AreEqual(guestHouse2Id, retreivedHotels[1].Id);
+            Assert.AreEqual(guestHouse2.Title, retreivedHotels[1].Title);
+            Assert.AreEqual(Constants.GuestHouse, retreivedHotels[1].PropertyType);
 
+            // Verification of Hostel
+            Assert.AreEqual(hostel2Id, retreivedHotels[2].Id);
+            Assert.AreEqual(hostel2.Title, retreivedHotels[2].Title);
+            Assert.AreEqual(Constants.Hostel, retreivedHotels[2].PropertyType);
+
+            // Verification of House # 2
+            Assert.AreEqual(hosue2Id, retreivedHotels[3].Id);
+            Assert.AreEqual(house2.Title, retreivedHotels[3].Title);
+            Assert.AreEqual(Constants.House, retreivedHotels[3].PropertyType);
+
+            // Verification of Apartment # 2
+            Assert.AreEqual(apartment2Id, retreivedHotels[4].Id);
+            Assert.AreEqual(apartment2.Title, retreivedHotels[4].Title);
+            Assert.AreEqual(Constants.Apartment, retreivedHotels[4].PropertyType);
+            
             #endregion EMAIL ONLY SEARCH
         }
 

@@ -42,7 +42,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="email"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<House> GetHouseByOwnerEmail(string email, int pageNo = 0);
+        IList<Property> GetHouseByOwnerEmail(string email, int pageNo = 0);
 
         /// <summary>
         /// Get all Apartments by their owner's email
