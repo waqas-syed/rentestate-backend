@@ -251,7 +251,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     return Ok(_houseApplicationService.SearchPropertiesByAreaAndPropertyType(area, propertyType, pageNo));
                 }
                 // If only email is given
-                else if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(propertyType))
+                else if (!string.IsNullOrWhiteSpace(email))
                 {
                     // Get the email from the identity
                     var emailFromClaims = GetEmailFromClaims(User.Identity);
@@ -262,7 +262,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         if (email.Equals(emailFromClaims))
                         {
                             _logger.Info("Get House by Email {0}", email);
-                            return Ok(_houseApplicationService.GetPropertiesByEmail(propertyType, email, pageNo));
+                            return Ok(_houseApplicationService.GetPropertiesByEmail(email, pageNo));
                         }
                         else
                         {

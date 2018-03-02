@@ -546,7 +546,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             // BY EMAIL & PROPERTY TYPE
             IList<HousePartialRepresentation> houses = 
-                houseApplicationService.GetPropertiesByEmail(Constants.House, email).Cast<HousePartialRepresentation>().ToList();
+                houseApplicationService.GetPropertiesByEmail(email).Cast<HousePartialRepresentation>().ToList();
             HousePartialRepresentation retreivedHouse = houses[0];
 
             Assert.NotNull(retreivedHouse);
@@ -648,7 +648,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             // BY EMAIL & PROPERTY TYPE
             // Now retrieve the Hostel from the database
             IList<HostelPartialRepresentation> retrievedHostels =
-                propertyApplicationService.GetPropertiesByEmail(Constants.Hostel, email).Cast<HostelPartialRepresentation>().ToList();
+                propertyApplicationService.GetPropertiesByEmail(email).Cast<HostelPartialRepresentation>().ToList();
             HostelPartialRepresentation retrievedHostel = retrievedHostels[0];
 
             Assert.IsNotNull(retrievedHostel);
@@ -768,7 +768,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             // BY EMAIL & PROPERTY TYPE
             // Retreive the Hotel
             List<HotelPartialRepresentation> retrievedHotels =
-                propertyApplicationService.GetPropertiesByEmail(Constants.Hotel, email).Cast<HotelPartialRepresentation>().ToList();
+                propertyApplicationService.GetPropertiesByEmail(email).Cast<HotelPartialRepresentation>().ToList();
 
             Assert.IsNotNull(retrievedHotels);
             Assert.AreEqual(1, retrievedHotels.Count);
@@ -1145,7 +1145,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             // This email is shared by 5 properties
             string searchedEmail = "special@spsp123456.com";
             
-            retreivedHotels = propertyApplicationService.GetPropertiesByEmail(Constants.Hotel, searchedEmail);
+            retreivedHotels = propertyApplicationService.GetPropertiesByEmail(searchedEmail);
             Assert.NotNull(retreivedHotels);
             Assert.AreEqual(5, retreivedHotels.Count);
             // Verification of Hotel # 2

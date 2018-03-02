@@ -43,7 +43,7 @@ namespace RentStuff.Property.Application.PropertyServices
         /// Gets the house by providing the owner's email id
         /// </summary>
         /// <returns></returns>
-        IList<ResidentialPropertyPartialBaseImplementation> GetPropertiesByEmail(string propertyType, string email, int pageNo = 0);
+        IList<ResidentialPropertyPartialBaseImplementation> GetPropertiesByEmail(string email, int pageNo = 0);
         
         /// <summary>
         /// Searches the houses with reference to area

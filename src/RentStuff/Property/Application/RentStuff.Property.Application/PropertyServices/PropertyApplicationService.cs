@@ -232,7 +232,7 @@ namespace RentStuff.Property.Application.PropertyServices
         /// Gets the house by providing the owner's email id
         /// </summary>
         /// <returns></returns>
-        public IList<ResidentialPropertyPartialBaseImplementation> GetPropertiesByEmail(string propertyType, string email,
+        public IList<ResidentialPropertyPartialBaseImplementation> GetPropertiesByEmail(string email,
             int pageNo = 0)
         {
             if (string.IsNullOrWhiteSpace(email))
