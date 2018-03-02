@@ -416,9 +416,10 @@ namespace RentStuff.Property.Application.PropertyServices
         public void AddSingleImageToHouse(string houseId, Stream photoStream)
         {
             // Get the house from the repository
-            House house = (House)_residentialPropertyRepository.GetPropertyById(houseId);
-            // If we find a hosue with the given ID
-            if (house != null)
+            Property.Domain.Model.PropertyAggregate.Property property= _residentialPropertyRepository.GetPropertyById(houseId);
+
+            // If we find a house with the given ID
+            if (property != null)
             {
                 // Create a name for this image
                 string imageId = "IMG_" + Guid.NewGuid().ToString();
@@ -433,11 +434,11 @@ namespace RentStuff.Property.Application.PropertyServices
                 // url for this image and ready to view
                 fileName = ConfigurationManager.AppSettings["GoogleCloudStoragePhotoBucketUrl"] + fileName;
                 // Add the image link to the list of images this house owns
-                house.AddImage(fileName);
+                property.AddImage(fileName);
                 // Save the updated house in the repository
-                _residentialPropertyRepository.SaveorUpdate(house);
+                _residentialPropertyRepository.SaveorUpdate(property);
                 // Log the info
-                _logger.Info("Added images to house successfully. HouseId: {0}", house.Id);
+                _logger.Info("Added images to house successfully. HouseId: {0}", property.Id);
             }
             // Otherwise throw an exception
             else
