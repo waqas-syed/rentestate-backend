@@ -7,7 +7,6 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.FullRep
     /// <summary>
     /// Full representation for Hostel
     /// </summary>
-    [DataContract]
     public class HostelFullRepresentation : GuestPropertyBaseRepresentation
     {
         public HostelFullRepresentation(string id, string title, long rentPrice, string ownerEmail,

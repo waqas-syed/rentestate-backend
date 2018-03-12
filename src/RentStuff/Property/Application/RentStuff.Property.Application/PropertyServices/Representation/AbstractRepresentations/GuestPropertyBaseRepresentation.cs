@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace RentStuff.Property.Application.PropertyServices.Representation.AbstractRepresentations
 {
@@ -38,79 +37,66 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.Abstrac
         /// <summary>
         /// Is laundry available
         /// </summary>
-        [DataMember]
         public bool Laundry { get; private set; }
 
         /// <summary>
         /// Is AC available
         /// </summary>
-        [DataMember]
         public bool AC { get; private set; }
 
         /// <summary>
         /// Is Geyser available
         /// </summary>
-        [DataMember]
         public bool Geyser { get; private set; }
 
         /// <summary>
         /// Is Fitness Centre available
         /// </summary>
-        [DataMember]
         public bool FitnessCentre { get; private set; }
 
         /// <summary>
         /// Is Attached bathroom available
         /// </summary>
-        [DataMember]
         public bool AttachedBathroom { get; private set; }
 
         /// <summary>
         /// Is ironing available
         /// </summary>
-        [DataMember]
         public bool Ironing { get; private set; }
 
         /// <summary>
         /// Is Balcony available
         /// </summary>
-        [DataMember]
         public bool Balcony { get; private set; }
 
         /// <summary>
         /// Is Elevator available in the building
         /// </summary>
-        [DataMember]
         public bool Elevator { get; private set; }
 
         /// <summary>
         /// Is Lawn available
         /// </summary>
-        [DataMember]
         public bool Lawn { get; private set; }
 
         /// <summary>
         /// Are CCTV Cameras available
         /// </summary>
-        [DataMember]
         public bool CctvCameras { get; private set; }
 
         /// <summary>
         /// Is backup electricity available
         /// </summary>
-        [DataMember]
         public bool BackupElectricity { get; private set; }
 
         /// <summary>
         /// Does the place have Heating facility
         /// </summary>
-        [DataMember]
         public bool Heating { get; set; }
 
         /// <summary>
         /// is parking available
         /// </summary>
-        [DataMember]
         public bool ParkingAvailable { get; set; }
     }
 }

@@ -6,7 +6,6 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.Abstrac
     /// <summary>
     /// Full abstract representation for all Residential Properties
     /// </summary>
-    [DataContract]
     public abstract class ResidentialPropertyFullBaseRepresentation : PropertyBaseRepresentation
     {
         public ResidentialPropertyFullBaseRepresentation(string id, string title, long rentPrice,
@@ -34,95 +33,78 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.Abstrac
             Fax = fax;
             Images = images;
         }
-
-        [DataMember]
+        
         public string Id { get; private set; }
-
-        [DataMember]
+        
         public string Title { get; private set; }
-
-        [DataMember]
+        
         public string Description { get; private set; }
-
-        [DataMember]
+        
         public long RentPrice
         {
             get; private set;
         }
         
-        [DataMember]
         public bool InternetAvailable
         {
             get; private set;
         }
         
-        [DataMember]
         public bool CableTvAvailable
         {
             get; private set;
         }
-
-        [DataMember]
+        
         public string PropertyType
         {
             get; private set;
         }
-
-        [DataMember]
+        
         public string OwnerEmail
         {
             get; private set;
         }
-
-        [DataMember]
+        
         public string OwnerPhoneNumber
         {
             get; private set;
         }
-
-        [DataMember]
+        
         public string LandlineNumber
         {
             get; private set;
         }
-
-        [DataMember]
+        
         public string Fax
         {
             get; private set;
         }
         
-        [DataMember]
         public string Area
         {
             get; private set;
         }
-
-        [DataMember]
+        
         public IList<string> Images
         {
             get; private set;
         }
-
-        [DataMember]
+        
         public string OwnerName
         {
             get; private set;
         }
-
-        [DataMember]
+        
         public string GenderRestriction
         {
             get; private set;
         }
-
-        [DataMember]
+        
         public bool IsShared
         {
             get; private set;
         }
-
-        [DataMember]
+        
         public string RentUnit
         {
             get; private set;

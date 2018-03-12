@@ -29,6 +29,9 @@
     <property name="Fax" column="fax"/>
 
     <!--Guest properties (Hotel, Hostel and Guest House) common attributes-->
+    <property name="CctvCameras" column="cctv_cameras"/>
+    <property name="BackupElectricity" column="backup_electricity"/>
+    <property name="Heating" column="heating"/>
     <property name="Laundry"/>
     <property name="AC"/>
     <property name="Geyser"/>
