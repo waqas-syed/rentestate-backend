@@ -6,7 +6,6 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
     /// <summary>
     /// The Number of occupants this room can accommodate
     /// </summary>
-    [Serializable]
     public class Occupants : Entity
     {
         public Occupants()

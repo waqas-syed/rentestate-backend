@@ -1,6 +1,7 @@
 ﻿using RentStuff.Property.Domain.Model.PropertyAggregate;
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using RentStuff.Common.Utilities;
 
 namespace RentStuff.Property.Domain.Model.HotelAggregate
@@ -207,6 +208,7 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
 
         private IList<Bed> _beds;
 
+        [JsonIgnore]
         public virtual IList<Bed> Beds
         {
             get
