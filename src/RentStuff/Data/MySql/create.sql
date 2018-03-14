@@ -126,6 +126,22 @@ CREATE TABLE `aspnetusers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `bed`
+--
+
+DROP TABLE IF EXISTS `bed`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bed` (
+  `id` varchar(100) NOT NULL,
+  `bed_count` int(11) NOT NULL,
+  `bed_type` varchar(50) DEFAULT NULL,
+  `hotel_id` varchar(100) DEFAULT NULL,
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `dimension`
 --
 
@@ -200,6 +216,9 @@ CREATE TABLE `hostel` (
   `number_of_seats` int(2) DEFAULT NULL,
   `date_created` datetime DEFAULT NULL,
   `last_modified` datetime DEFAULT NULL,
+  `cctv_cameras` tinyint(1) DEFAULT NULL,
+  `backup_electricity` tinyint(1) DEFAULT NULL,
+  `heating` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -271,6 +290,11 @@ CREATE TABLE `hotel` (
   `kitchen` int(2) DEFAULT NULL,
   `date_created` datetime DEFAULT NULL,
   `last_modified` datetime DEFAULT NULL,
+  `cctv_cameras` tinyint(1) DEFAULT NULL,
+  `backup_electricity` tinyint(1) DEFAULT NULL,
+  `heating` tinyint(1) DEFAULT NULL,
+  `bathtub` tinyint(1) DEFAULT NULL,
+  `occupants_id` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -326,10 +350,8 @@ CREATE TABLE `house` (
   `owner_name` varchar(100) NOT NULL,
   `is_shared` tinyint(1) NOT NULL DEFAULT '0',
   `rent_unit` varchar(50) NOT NULL DEFAULT 'Month',
-  
   `landline_number` varchar(25) DEFAULT NULL,
   `fax` varchar(25) DEFAULT NULL,
-  
   `date_created` datetime DEFAULT NULL,
   `last_modified` datetime DEFAULT NULL,
   PRIMARY KEY (`db_id`),
@@ -337,7 +359,7 @@ CREATE TABLE `house` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `dimension_id_fk_idx` (`dimension_id`),
   CONSTRAINT `dimension_id_fk` FOREIGN KEY (`dimension_id`) REFERENCES `dimension` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=474 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=475 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -354,6 +376,22 @@ CREATE TABLE `houseimages` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=271 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `occupants`
+--
+
+DROP TABLE IF EXISTS `occupants`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `occupants` (
+  `id` varchar(100) NOT NULL,
+  `adults` int(11) DEFAULT '0',
+  `children` int(11) DEFAULT '0',
+  `total_occupants` int(11) DEFAULT '0',
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -364,4 +402,4 @@ CREATE TABLE `houseimages` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-06 21:13:12
+-- Dump completed on 2018-03-14 16:06:47

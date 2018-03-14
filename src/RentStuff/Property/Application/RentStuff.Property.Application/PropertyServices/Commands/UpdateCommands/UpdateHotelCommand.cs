@@ -16,8 +16,8 @@ namespace RentStuff.Property.Application.PropertyServices.Commands.UpdateCommand
             bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
             bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating,
             string landlineNumber, string fax, bool elevator, bool restaurant, bool airportShuttle, bool breakfastIncluded, bool sittingArea, bool carRental,
-            bool spa, bool salon, bool bathtub, bool swimmingPool, bool kitchen,
-            int numberOfAdults, int numberOfChildren)
+            bool spa, bool salon, bool bathtub, bool swimmingPool, bool kitchen, List<Bed> beds,
+            Occupants occupants)
             : base(title, rentPrice, internetAvailable, cableTvAvailable, parkingAvailable,
                 propertyType, ownerEmail, ownerPhoneNumber, area, ownerName, description, genderRestriction,
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony, lawn,
@@ -34,8 +34,8 @@ namespace RentStuff.Property.Application.PropertyServices.Commands.UpdateCommand
             Bathtub = bathtub;
             SwimmingPool = swimmingPool;
             Kitchen = kitchen;
-            NumberOfAdults = numberOfAdults;
-            NumberOfChildren = numberOfChildren;
+            Beds = beds;
+            Occupants = occupants;
         }
 
         public bool Restaurant { get; private set; }
@@ -63,5 +63,7 @@ namespace RentStuff.Property.Application.PropertyServices.Commands.UpdateCommand
         public int NumberOfChildren { get; private set; }
 
         public List<Bed> Beds { get; set; }
+
+        public Occupants Occupants { get; set; }
     }
 }

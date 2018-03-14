@@ -15,6 +15,7 @@ using RentStuff.Property.Application.PropertyServices.Commands.UpdateCommands;
 using RentStuff.Property.Application.PropertyServices.Representation;
 using RentStuff.Property.Application.PropertyServices.Representation.FullRepresentations;
 using RentStuff.Property.Application.PropertyServices.Representation.PartialRepresentations;
+using RentStuff.Property.Domain.Model.HotelAggregate;
 
 namespace RentStuff.Property.Application.IntegrationTests
 {
@@ -329,7 +330,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                 lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                 airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                kitchen, numberOfAdults, numberOfChildren);
+                kitchen, null, new Occupants(numberOfAdults, numberOfChildren));
             // Save the Hotel
             var hotelId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHotelCommand), email);
 
@@ -445,7 +446,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                 lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                 airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                kitchen, numberOfAdults, numberOfChildren);
+                kitchen, null, new Occupants(numberOfAdults, numberOfChildren));
             // Save the Hotel
             var guestHouseId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createHotelCommand), email);
 
@@ -755,13 +756,23 @@ namespace RentStuff.Property.Application.IntegrationTests
             string fax = "0510000000";
             bool elevator = false;
 
-           var createNewHotelCommand = new CreateHotelCommand(title, monthlyRent, internet,
+            List<Bed> beds = new List<Bed>()
+            {
+                new Bed(1, BedType.Single, null),
+                new Bed(2, BedType.Double, null),
+                new Bed(1, BedType.Single, null),
+                new Bed(1, BedType.Double, null),
+                new Bed(2, BedType.Single, null),
+                new Bed(1, BedType.Double, null),
+            };
+
+            var createNewHotelCommand = new CreateHotelCommand(title, monthlyRent, internet,
                 cableTv, parking, propertyType, email, phoneNumber, area, name, description,
                 genderRestriction.ToString(),
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                 lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                 airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                kitchen, numberOfAdults, numberOfChildren);
+                kitchen, beds, new Occupants(numberOfAdults, numberOfChildren));
             // Save the Hotel
             var hotelId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHotelCommand), email);
 
@@ -873,7 +884,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             CreateHotelCommand hotel1 = new CreateHotelCommand(title2, monthlyRent2, false, false, false,
                 propertyType2, email2, phoneNumber2, area2, name2, null, genderRestriction2.ToString(), false, rentUnit2, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
-                false, false, false, false, false, false, false, false, 2, 1);
+                false, false, false, false, false, false, false, false, null, new Occupants(2, 1));
             var hotel1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(hotel1), email2);
 
             // Saving Property # 3: Apartment. Should be in the search results
@@ -907,7 +918,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 propertyType4, email4, phoneNumber4, area4, name4, null, genderRestriction4.ToString(), false, 
                 rentUnit4, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
-                false, false, false, false, false, false, false, false, 2, 1);
+                false, false, false, false, false, false, false, false, null, new Occupants(2, 1));
             var guestHouse1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(guestHouse1), email4);
 
             // Saving House # 5: Hostel. Should be in the search results
@@ -956,7 +967,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 propertyType7, email7, phoneNumber7, area7, name7, null, genderRestriction7.ToString(), false, 
                 rentUnit7, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
-                false, false, false, false, false, false, false, false, 2, 1);
+                false, false, false, false, false, false, false, false, null, new Occupants(2, 1));
             var hotel2Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(hotel2), email7);
 
             // Saving Property # 8: Guest House. Outside bounds, should NOT be in the search results
@@ -974,7 +985,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 propertyType8, email8, phoneNumber8, area8, name8, null, genderRestriction8.ToString(), false,
                 rentUnit8, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
-                false, false, false, false, false, false, false, false, 2, 1);
+                false, false, false, false, false, false, false, false, null, new Occupants(2, 1));
             var guestHouse2Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(guestHouse2), email8);
 
             // Saving Property # 9: Aparment. Outside bounds, should NOT be in the search results
@@ -1258,7 +1269,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             CreateHotelCommand hotel1 = new CreateHotelCommand(title2, monthlyRent2, false, false, false,
                 propertyType2, email2, phoneNumber2, area2, name2, null, genderRestriction2.ToString(), false, rentUnit2, false,
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
-                false, false, false, false, false, false, false, false, 2, 1);
+                false, false, false, false, false, false, false, false, null, new Occupants(2, 1));
             var hotel1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(hotel1), email2);
 
             var retrievedHouse = propertyApplicationService.GetPropertyById(hotel1Id, propertyType2);
@@ -1565,7 +1576,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                 lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                 airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                kitchen, numberOfAdults, numberOfChildren);
+                kitchen,null, new Occupants(numberOfAdults, numberOfChildren));
             // Save the Hotel
             var hotelId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHotelCommand), email);
 
@@ -1625,8 +1636,8 @@ namespace RentStuff.Property.Application.IntegrationTests
                 updatedIroning, updatedBalcony, updatedLawn, updatedCctvCameras, updatedBackupElectricity,
                 updatedHeating, updatedLandlineNumber, updatedFax, updatedElevator, updatedRestaurant,
                 updatedAirportShuttle, updatedBreakfastIncluded, updatedSittingArea, updatedCarRental, updatedSpa,
-                updatedSalon, updatedBathtub, updatedSwimmingPool, updatedKitchen, updatedNumberOfAdults,
-                updatedNumberOfChildren);
+                updatedSalon, updatedBathtub, updatedSwimmingPool, updatedKitchen, null,
+                new Occupants(updatedNumberOfAdults, updatedNumberOfChildren));
 
             // Update the Hotel
             propertyApplicationService.UpdateProperty(JsonConvert.SerializeObject(updateHotelCommand), email);

@@ -53,7 +53,6 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
                 _session.Session.SaveOrUpdate(dimension);
                 transaction.Commit();
             }
-            
         }
         
         /// <summary>

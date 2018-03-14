@@ -54,13 +54,19 @@
     <property name="SwimmingPool" column="swimming_pool"/>
     <property name="Kitchen"/>
 
-    <!--ToDo: Provide a mapping for Beds-->
+    <bag name="Beds" table="hotelbeds" inverse="true"  lazy="false">
+      <key column="hotel_id" />
+      <one-to-many class="Bed" />
+    </bag>
 
-    <idbag name="Images" table="hostelimages" lazy="false">
+    <many-to-one name="Occupants" unique="true" column="occupants_id" cascade="all">
+    </many-to-one>
+
+    <idbag name="Images" table="hotelimages" lazy="false">
       <collection-id column="ID" type="Int64">
         <generator class="native"/>
       </collection-id>
-      <key column="hostel_id" />
+      <key column="hotel_id" />
       <element column="image_id" type="string" />
     </idbag>
     <!--<many-to-one name="Location" unique="true" column="location_id"/>-->

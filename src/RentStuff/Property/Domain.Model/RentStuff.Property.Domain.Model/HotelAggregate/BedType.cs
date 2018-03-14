@@ -12,7 +12,6 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
     public enum BedType
     {
         Single,
-        Double,
-        Multiple
+        Double
     }
 }

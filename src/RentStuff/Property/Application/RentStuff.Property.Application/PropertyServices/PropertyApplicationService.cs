@@ -660,9 +660,14 @@ namespace RentStuff.Property.Application.PropertyServices
                 .Bathtub(createHotelCommand.Bathtub)
                 .SwimmingPool(createHotelCommand.SwimmingPool)
                 .Kitchen(createHotelCommand.Kitchen)
-                .Beds(createHotelCommand.Beds)
-                .Occupants(new Occupants(createHotelCommand.NumberOfAdults, createHotelCommand.NumberOfChildren))
+                //.Beds(createHotelCommand.Beds)
+                //.Occupants(createHotelCommand.Occupants)
                 .Build();
+            
+            var parsedBedsAndOccupants = GetParsedBedsAndOccupants(hotel, createHotelCommand.Beds, createHotelCommand.Occupants);
+            
+            hotel.Beds = parsedBedsAndOccupants.Item1;
+            hotel.Occupants = parsedBedsAndOccupants.Item2;
             return hotel;
         }
 
@@ -750,7 +755,7 @@ namespace RentStuff.Property.Application.PropertyServices
                     throw new InvalidOperationException("Emails in original Hostel and updated Hostel do not match");
                 }
             }
-
+            
             hostel.Update(updateHostelCommand.Title,
                             updateHostelCommand.RentPrice,
                             updateHostelCommand.OwnerEmail,
@@ -816,6 +821,7 @@ namespace RentStuff.Property.Application.PropertyServices
                 }
             }
 
+            var parsedBedsAndOccupants = GetParsedBedsAndOccupants(hotel, updateHotelCommand.Beds, updateHotelCommand.Occupants);
             hotel.Update(updateHotelCommand.Title,
                 updateHotelCommand.RentPrice,
                 updateHotelCommand.OwnerEmail,
@@ -853,8 +859,8 @@ namespace RentStuff.Property.Application.PropertyServices
                 updateHotelCommand.Bathtub,
                 updateHotelCommand.SwimmingPool,
                 updateHotelCommand.Kitchen,
-                updateHotelCommand.Beds,
-                new Occupants(updateHotelCommand.NumberOfAdults, updateHotelCommand.NumberOfChildren),
+                parsedBedsAndOccupants.Item1,
+                parsedBedsAndOccupants.Item2,
                 updateHotelCommand.LandlineNumber,
                 updateHotelCommand.Fax,
                 updateHotelCommand.Elevator);
@@ -986,16 +992,17 @@ namespace RentStuff.Property.Application.PropertyServices
             {
                 return null;
             }
-            Hotel house = (Hotel)property;
+            Hotel hotel = (Hotel)property;
 
-            return new HotelFullRepresentation(house.Id, house.Title, house.RentPrice, house.OwnerEmail,
-                house.OwnerPhoneNumber, house.Area, house.OwnerName, house.Description, house.GenderRestriction.ToString(),
-                house.IsShared, house.RentUnit, house.InternetAvailable, house.CableTvAvailable, 
-                house.ParkingAvailable, house.PropertyType, house.Laundry, house.AC, house.Geyser, 
-                house.FitnessCentre, house.AttachedBathroom, house.Ironing, house.Balcony, house.Lawn,
-                house.CctvCameras, house.BackupElectricity, house.Heating, house.Restaurant, house.AirportShuttle,
-                house.BreakfastIncluded, house.SittingArea, house.CarRental, house.Spa, house.Salon, house.Bathtub,
-                house.SwimmingPool, house.Kitchen, house.Occupants, house.LandlineNumber, house.Fax, house.Elevator, house.Images);
+            return new HotelFullRepresentation(hotel.Id, hotel.Title, hotel.RentPrice, hotel.OwnerEmail,
+                hotel.OwnerPhoneNumber, hotel.Area, hotel.OwnerName, hotel.Description, hotel.GenderRestriction.ToString(),
+                hotel.IsShared, hotel.RentUnit, hotel.InternetAvailable, hotel.CableTvAvailable, 
+                hotel.ParkingAvailable, hotel.PropertyType, hotel.Laundry, hotel.AC, hotel.Geyser, 
+                hotel.FitnessCentre, hotel.AttachedBathroom, hotel.Ironing, hotel.Balcony, hotel.Lawn,
+                hotel.CctvCameras, hotel.BackupElectricity, hotel.Heating, hotel.Restaurant, hotel.AirportShuttle,
+                hotel.BreakfastIncluded, hotel.SittingArea, hotel.CarRental, hotel.Spa, hotel.Salon, hotel.Bathtub,
+                hotel.SwimmingPool, hotel.Kitchen, hotel.Occupants, hotel.LandlineNumber, hotel.Fax, hotel.Elevator, hotel.Images,
+                hotel.Beds);
         }
 
         private IList<ResidentialPropertyPartialBaseImplementation> ConvertPropertiesToPartialRepresentation(
@@ -1142,8 +1149,39 @@ namespace RentStuff.Property.Application.PropertyServices
                 hotel.IsShared, hotel.RentUnit, hotel.InternetAvailable, hotel.CableTvAvailable,
                 hotel.ParkingAvailable, hotel.PropertyType, hotel.AC, hotel.Geyser,
                 hotel.AttachedBathroom, hotel.FitnessCentre, hotel.BackupElectricity, hotel.Heating, hotel.AirportShuttle,
-                hotel.BreakfastIncluded, hotel.Occupants, hotel.LandlineNumber, firstImage);
+                hotel.BreakfastIncluded, hotel.Occupants, hotel.LandlineNumber, firstImage, hotel.Beds);
             return hotelRepresentation;
+        }
+
+        /// <summary>
+        /// Assigns the given Hotel to the Beds and Occupants and returns both of them as Tuple
+        /// </summary>
+        /// <returns>Item1 = Beds, Item2 = Occupants</returns>
+        private Tuple<IList<Bed>, Occupants> GetParsedBedsAndOccupants(Hotel hotel, IList<Bed> beds, 
+            Occupants occupants)
+        {
+            if (hotel == null)
+            {
+                throw new NullReferenceException("No Hotel found");
+            }
+            // Due to NHibernate one-to-many contraints, we have to assign Hotel instance to Bed and then the Bed
+            // instance to Hotel
+            if (beds != null)
+            {
+                foreach (var bed in beds)
+                {
+                    bed.Hotel = hotel;
+                }
+            }
+
+            // Due to NHibernate one-to-one contraints, we have to assign Hotel instance to Occupants and then 
+            // the Occupants instance to Hotel
+            if (occupants != null)
+            {
+                occupants.Hotel = hotel;
+            }
+
+            return new Tuple<IList<Bed>, Occupants>(beds, occupants);
         }
 
         #endregion Convert to representations

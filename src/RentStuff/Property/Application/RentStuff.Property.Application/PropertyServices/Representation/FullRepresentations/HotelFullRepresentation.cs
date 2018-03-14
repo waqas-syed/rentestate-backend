@@ -20,7 +20,7 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.FullRep
                 bool restaurant, bool airportShuttle, bool breakfastIncluded, bool sittingArea, bool carRental,
                 bool spa, bool salon, bool bathtub, bool swimmingPool, bool kitchen,
                 Occupants occupants, string landlineNumber, string fax, 
-                bool elevator, IList<string> images)
+                bool elevator, IList<string> images, IList<Bed> beds)
             // Initiate the parent GuerstPropertyAbstraction class as well
             : base(id, title, rentPrice, internetAvailable, cableTvAvailable, parkingAvailable, propertyType,
                   ownerEmail, ownerPhoneNumber, area, ownerName, description, genderRestriction, isShared,
@@ -37,6 +37,7 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.FullRep
             Bathtub = bathtub;
             SwimmingPool = swimmingPool;
             Kitchen = kitchen;
+            Beds = beds;
             Occupants = occupants;
         }
 
@@ -59,6 +60,8 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.FullRep
         public bool SwimmingPool { get; private set; }
 
         public bool Kitchen { get; private set; }
+
+        public IList<Bed> Beds { get; set; }
         
         public Occupants Occupants { get; private set; }
     }

@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Web.Http;
 using System.Web.Http.Results;
+using RentStuff.Property.Domain.Model.HotelAggregate;
 
 namespace RentStuff.Property.Ports.Tests
 {
@@ -384,13 +385,20 @@ namespace RentStuff.Property.Ports.Tests
                 string fax = "0510000000";
                 bool elevator = false;
 
+                var beds = new List<Bed>()
+                {
+                    new Bed(2, BedType.Double, null),
+                    new Bed(1, BedType.Single, null),
+                    new Bed(2, BedType.Double, null),
+                    new Bed(1, BedType.Single, null),
+                };
                 var createNewHotelCommand = new CreateHotelCommand(title, monthlyRent, internet,
                     cableTv, parking, propertyType, email, phoneNumber, area, name, description,
                     genderRestriction.ToString(),
                     isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                     lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                     airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                    kitchen, numberOfAdults, numberOfChildren);
+                    kitchen, beds, new Occupants(numberOfAdults, numberOfChildren));
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -448,6 +456,11 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(swimmingPool, retrievedHotel.SwimmingPool);
                 Assert.AreEqual(kitchen, retrievedHotel.Kitchen);
 
+                Assert.AreEqual(2, retrievedHotel.Beds.Count);
+                Assert.AreEqual(4, retrievedHotel.Beds[0].BedCount);
+                Assert.AreEqual(BedType.Double, retrievedHotel.Beds[0].BedType);
+                Assert.AreEqual(2, retrievedHotel.Beds[1].BedCount);
+                Assert.AreEqual(BedType.Single, retrievedHotel.Beds[1].BedType);
                 Assert.AreEqual(numberOfAdults, retrievedHotel.Occupants.Adults);
                 Assert.AreEqual(numberOfChildren, retrievedHotel.Occupants.Children);
                 Assert.AreEqual(numberOfAdults + numberOfChildren, retrievedHotel.Occupants.TotalOccupants);
@@ -509,13 +522,19 @@ namespace RentStuff.Property.Ports.Tests
                 string fax = "0510000000";
                 bool elevator = false;
 
+                var beds = new List<Bed>()
+                {
+                    new Bed(2, BedType.Double, null),
+                    new Bed(2, BedType.Double, null),
+                };
+
                 var createNewHotelCommand = new CreateHotelCommand(title, monthlyRent, internet,
                     cableTv, parking, propertyType, email, phoneNumber, area, name, description,
                     genderRestriction.ToString(),
                     isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                     lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                     airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                    kitchen, numberOfAdults, numberOfChildren);
+                    kitchen, beds, new Occupants(numberOfAdults, numberOfChildren));
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -572,6 +591,10 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(bathtub, retrievedHotel.Bathtub);
                 Assert.AreEqual(swimmingPool, retrievedHotel.SwimmingPool);
                 Assert.AreEqual(kitchen, retrievedHotel.Kitchen);
+
+                Assert.AreEqual(1, retrievedHotel.Beds.Count);
+                Assert.AreEqual(4, retrievedHotel.Beds[0].BedCount);
+                Assert.AreEqual(BedType.Double, retrievedHotel.Beds[0].BedType);
 
                 Assert.AreEqual(numberOfAdults, retrievedHotel.Occupants.Adults);
                 Assert.AreEqual(numberOfChildren, retrievedHotel.Occupants.Children);
@@ -1041,13 +1064,18 @@ namespace RentStuff.Property.Ports.Tests
                 string fax = "0510000000";
                 bool elevator = false;
 
+                var beds = new List<Bed>()
+                {
+                    new Bed(2, BedType.Single, null)
+                };
+
                 var createNewHotelCommand = new CreateHotelCommand(title, monthlyRent, internet,
                     cableTv, parking, propertyType, email, phoneNumber, area, name, description,
                     genderRestriction.ToString(),
                     isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                     lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                     airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                    kitchen, numberOfAdults, numberOfChildren);
+                    kitchen, beds, new Occupants(numberOfAdults, numberOfChildren));
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -1109,6 +1137,11 @@ namespace RentStuff.Property.Ports.Tests
                 string updatedFax = "0510000001";
                 bool updatedElevator = true;
 
+                var updatedBeds = new List<Bed>()
+                {
+                    new Bed(2, BedType.Double, null)
+                };
+
                 var updateHotelCommand = new UpdateHotelCommand(hotelId, updatedTitle, updatedMonthlyRent, updatedInternet,
                     updatedCableTv, updatedParking, updatedPropertyType, email, updatedPhoneNumber, updatedArea,
                     updatedName, updatedDescription, updatedGenderRestriction.ToString(), updatedIsShared, updatedRentUnit,
@@ -1116,8 +1149,8 @@ namespace RentStuff.Property.Ports.Tests
                     updatedIroning, updatedBalcony, updatedLawn, updatedCctvCameras, updatedBackupElectricity,
                     updatedHeating, updatedLandlineNumber, updatedFax, updatedElevator, updatedRestaurant,
                     updatedAirportShuttle, updatedBreakfastIncluded, updatedSittingArea, updatedCarRental, updatedSpa,
-                    updatedSalon, updatedBathtub, updatedSwimmingPool, updatedKitchen, updatedNumberOfAdults,
-                    updatedNumberOfChildren);
+                    updatedSalon, updatedBathtub, updatedSwimmingPool, updatedKitchen, updatedBeds,
+                    new Occupants(updatedNumberOfAdults, updatedNumberOfChildren));
 
                 houseController.Put(JsonConvert.SerializeObject(updateHotelCommand));
                 var response = (IHttpActionResult)houseController.Get(houseId: hotelId, propertyType: updatedPropertyType);
@@ -1162,6 +1195,9 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(updatedSwimmingPool, retrievedUpdatedHotel.SwimmingPool);
                 Assert.AreEqual(updatedKitchen, retrievedUpdatedHotel.Kitchen);
 
+                Assert.AreEqual(1, retrievedUpdatedHotel.Beds.Count);
+                Assert.AreEqual(2, retrievedUpdatedHotel.Beds[0].BedCount);
+                Assert.AreEqual(BedType.Double, retrievedUpdatedHotel.Beds[0].BedType);
                 Assert.AreEqual(updatedNumberOfAdults, retrievedUpdatedHotel.Occupants.Adults);
                 Assert.AreEqual(updatedNumberOfChildren, retrievedUpdatedHotel.Occupants.Children);
                 Assert.AreEqual(updatedNumberOfAdults + updatedNumberOfChildren, retrievedUpdatedHotel.Occupants.TotalOccupants);
@@ -1223,13 +1259,18 @@ namespace RentStuff.Property.Ports.Tests
                 string fax = "0510000000";
                 bool elevator = false;
 
+                var beds = new List<Bed>()
+                {
+                    new Bed(2, BedType.Single, null)
+                };
+
                 var createNewHotelCommand = new CreateHotelCommand(title, monthlyRent, internet,
                     cableTv, parking, propertyType, email, phoneNumber, area, name, description,
                     genderRestriction.ToString(),
                     isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                     lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                     airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                    kitchen, numberOfAdults, numberOfChildren);
+                    kitchen, beds, new Occupants(numberOfAdults, numberOfChildren));
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -1291,6 +1332,12 @@ namespace RentStuff.Property.Ports.Tests
                 string updatedFax = "0510000001";
                 bool updatedElevator = true;
 
+                var updatedBeds = new List<Bed>()
+                {
+                    new Bed(2, BedType.Single, null),
+                    new Bed(1, BedType.Double, null)
+                };
+
                 var updateHotelCommand = new UpdateHotelCommand(hotelId, updatedTitle, updatedMonthlyRent, updatedInternet,
                     updatedCableTv, updatedParking, updatedPropertyType, email, updatedPhoneNumber, updatedArea,
                     updatedName, updatedDescription, updatedGenderRestriction.ToString(), updatedIsShared, updatedRentUnit,
@@ -1298,8 +1345,8 @@ namespace RentStuff.Property.Ports.Tests
                     updatedIroning, updatedBalcony, updatedLawn, updatedCctvCameras, updatedBackupElectricity,
                     updatedHeating, updatedLandlineNumber, updatedFax, updatedElevator, updatedRestaurant,
                     updatedAirportShuttle, updatedBreakfastIncluded, updatedSittingArea, updatedCarRental, updatedSpa,
-                    updatedSalon, updatedBathtub, updatedSwimmingPool, updatedKitchen, updatedNumberOfAdults,
-                    updatedNumberOfChildren);
+                    updatedSalon, updatedBathtub, updatedSwimmingPool, updatedKitchen, updatedBeds, 
+                    new Occupants(updatedNumberOfAdults, updatedNumberOfChildren));
 
                 houseController.Put(JsonConvert.SerializeObject(updateHotelCommand));
                 var response = (IHttpActionResult)houseController.Get(houseId: hotelId, propertyType: updatedPropertyType);
@@ -1343,6 +1390,12 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(updatedBathtub, retrievedUpdatedHotel.Bathtub);
                 Assert.AreEqual(updatedSwimmingPool, retrievedUpdatedHotel.SwimmingPool);
                 Assert.AreEqual(updatedKitchen, retrievedUpdatedHotel.Kitchen);
+
+                Assert.AreEqual(2, retrievedUpdatedHotel.Beds.Count);
+                Assert.AreEqual(2, retrievedUpdatedHotel.Beds[0].BedCount);
+                Assert.AreEqual(BedType.Single, retrievedUpdatedHotel.Beds[0].BedType);
+                Assert.AreEqual(1, retrievedUpdatedHotel.Beds[1].BedCount);
+                Assert.AreEqual(BedType.Double, retrievedUpdatedHotel.Beds[1].BedType);
 
                 Assert.AreEqual(updatedNumberOfAdults, retrievedUpdatedHotel.Occupants.Adults);
                 Assert.AreEqual(updatedNumberOfChildren, retrievedUpdatedHotel.Occupants.Children);
@@ -1453,7 +1506,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHotelCommand hotel4 = new CreateHotelCommand("title 4", 1000, false, false, false, 
                     Constants.Hotel, ownerEmail4, "03000000000", area4, "someone", "", GenderRestriction.BoysOnly.ToString(),
                     false, Constants.Daily, true,true,true,true, true, true, false, false, false, false, false,
-                    "", "", true, true, true, true, true, true, true, true, true, true, true, 2, 0);
+                    "", "", true, true, true, true, true, true, true, true, true, true, true, null, new Occupants(2, 0));
                 IHttpActionResult houseSaveResult4 = houseController.Post(JsonConvert.SerializeObject(hotel4));
                 string hotelId4 = ((OkNegotiatedContentResult<string>)houseSaveResult4).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(hotelId4));
@@ -1471,7 +1524,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHotelCommand hotel5 = new CreateHotelCommand("title 4", 1000, false, false, false,
                     Constants.Hotel, ownerEmail5, "03234567894", area5, "someone", "", GenderRestriction.BoysOnly.ToString(),
                     false, Constants.Daily, true, true, true, true, true, true, false, false, false, false, false,
-                    "", "", true, true, true, true, true, true, true, true, true, true, true, 2, 0);
+                    "", "", true, true, true, true, true, true, true, true, true, true, true, null, new Occupants(2, 0));
                 IHttpActionResult houseSaveResult5 = houseController.Post(JsonConvert.SerializeObject(hotel5));
                 string hotelId5 = ((OkNegotiatedContentResult<string>)houseSaveResult5).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(hotelId5));
@@ -1526,7 +1579,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHotelCommand guestHouse8 = new CreateHotelCommand("title 8", 1000, false, false, false,
                     Constants.GuestHouse, ownerEmail8, ownerPhoneNumber8, area8, "someone", "", GenderRestriction.BoysOnly.ToString(),
                     false, Constants.Daily, true, true, true, true, true, true, false, false, false, false, false,
-                    "", "", true, true, true, true, true, true, true, true, true, true, true, 2, 0);
+                    "", "", true, true, true, true, true, true, true, true, true, true, true, null, new Occupants(2, 0));
                 IHttpActionResult houseSaveResult8 = houseController.Post(JsonConvert.SerializeObject(guestHouse8));
                 string guestHouseId8 = ((OkNegotiatedContentResult<string>)houseSaveResult8).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(guestHouseId8));
@@ -1544,7 +1597,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHotelCommand guestHouse9 = new CreateHotelCommand("title 4", 1000, false, false, false,
                     Constants.GuestHouse, ownerEmail9, "03234967894", area9, "someone", "", GenderRestriction.BoysOnly.ToString(),
                     false, Constants.Daily, true, true, true, true, true, true, false, false, false, false, false,
-                    "", "", true, true, true, true, true, true, true, true, true, true, true, 2, 0);
+                    "", "", true, true, true, true, true, true, true, true, true, true, true, null, new Occupants(2, 0));
                 IHttpActionResult houseSaveResult9 = houseController.Post(JsonConvert.SerializeObject(guestHouse9));
                 string guestHouseId9 = ((OkNegotiatedContentResult<string>)houseSaveResult9).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(guestHouseId9));
@@ -1711,7 +1764,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHotelCommand hotel4 = new CreateHotelCommand("title 4", 1000, false, false, false,
                     Constants.Hotel, ownerEmail4, "03000000000", area4, "someone", "", GenderRestriction.BoysOnly.ToString(),
                     false, Constants.Daily, true, true, true, true, true, true, false, false, false, false, false,
-                    "", "", true, true, true, true, true, true, true, true, true, true, true, 2, 0);
+                    "", "", true, true, true, true, true, true, true, true, true, true, true, null, new Occupants(2, 0));
                 IHttpActionResult houseSaveResult4 = houseController.Post(JsonConvert.SerializeObject(hotel4));
                 string hotelId4 = ((OkNegotiatedContentResult<string>)houseSaveResult4).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(hotelId4));
@@ -1729,7 +1782,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHotelCommand hotel5 = new CreateHotelCommand("title 4", 1000, false, false, false,
                     Constants.Hotel, ownerEmail5, "03234567894", area5, "someone", "", GenderRestriction.BoysOnly.ToString(),
                     false, Constants.Daily, true, true, true, true, true, true, false, false, false, false, false,
-                    "", "", true, true, true, true, true, true, true, true, true, true, true, 2, 0);
+                    "", "", true, true, true, true, true, true, true, true, true, true, true, null, new Occupants(2, 0));
                 IHttpActionResult houseSaveResult5 = houseController.Post(JsonConvert.SerializeObject(hotel5));
                 string hotelId5 = ((OkNegotiatedContentResult<string>)houseSaveResult5).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(hotelId5));
@@ -1784,7 +1837,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHotelCommand guestHouse8 = new CreateHotelCommand("title 8", 1000, false, false, false,
                     Constants.GuestHouse, ownerEmail8, ownerPhoneNumber8, area8, "someone", "", GenderRestriction.BoysOnly.ToString(),
                     false, Constants.Daily, true, true, true, true, true, true, false, false, false, false, false,
-                    "", "", true, true, true, true, true, true, true, true, true, true, true, 2, 0);
+                    "", "", true, true, true, true, true, true, true, true, true, true, true, null, new Occupants(2, 0));
                 IHttpActionResult houseSaveResult8 = houseController.Post(JsonConvert.SerializeObject(guestHouse8));
                 string guestHouseId8 = ((OkNegotiatedContentResult<string>)houseSaveResult8).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(guestHouseId8));
@@ -1802,7 +1855,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHotelCommand guestHouse9 = new CreateHotelCommand("title 4", 1000, false, false, false,
                     Constants.GuestHouse, ownerEmail9, "03234967894", area9, "someone", "", GenderRestriction.BoysOnly.ToString(),
                     false, Constants.Daily, true, true, true, true, true, true, false, false, false, false, false,
-                    "", "", true, true, true, true, true, true, true, true, true, true, true, 2, 0);
+                    "", "", true, true, true, true, true, true, true, true, true, true, true, null, new Occupants(2, 0));
                 IHttpActionResult houseSaveResult9 = houseController.Post(JsonConvert.SerializeObject(guestHouse9));
                 string guestHouseId9 = ((OkNegotiatedContentResult<string>)houseSaveResult9).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(guestHouseId9));
@@ -1985,7 +2038,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHotelCommand hotel4 = new CreateHotelCommand("title 4", 1000, false, false, false,
                     Constants.Hotel, propertySearchedEmail, "03000000000", area4, "someone", "", GenderRestriction.BoysOnly.ToString(),
                     false, Constants.Daily, true, true, true, true, true, true, false, false, false, false, false,
-                    "", "", true, true, true, true, true, true, true, true, true, true, true, 2, 0);
+                    "", "", true, true, true, true, true, true, true, true, true, true, true, null, new Occupants(2, 0));
                 IHttpActionResult houseSaveResult4 = houseController.Post(JsonConvert.SerializeObject(hotel4));
                 string hotelId4 = ((OkNegotiatedContentResult<string>)houseSaveResult4).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(hotelId4));
@@ -2002,7 +2055,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHotelCommand hotel5 = new CreateHotelCommand("title 4", 1000, false, false, false,
                     Constants.Hotel, propertyNonSearchedEmail, "03234567894", area5, "someone", "", GenderRestriction.BoysOnly.ToString(),
                     false, Constants.Daily, true, true, true, true, true, true, false, false, false, false, false,
-                    "", "", true, true, true, true, true, true, true, true, true, true, true, 2, 0);
+                    "", "", true, true, true, true, true, true, true, true, true, true, true, null, new Occupants(2, 0));
                 IHttpActionResult houseSaveResult5 = houseController.Post(JsonConvert.SerializeObject(hotel5));
                 string hotelId5 = ((OkNegotiatedContentResult<string>)houseSaveResult5).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(hotelId5));
@@ -2055,7 +2108,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHotelCommand guestHouse8 = new CreateHotelCommand("title 8", 1000, false, false, false,
                     Constants.GuestHouse, propertyNonSearchedEmail, ownerPhoneNumber8, area8, "someone", "", GenderRestriction.BoysOnly.ToString(),
                     false, Constants.Daily, true, true, true, true, true, true, false, false, false, false, false,
-                    "", "", true, true, true, true, true, true, true, true, true, true, true, 2, 0);
+                    "", "", true, true, true, true, true, true, true, true, true, true, true, null, new Occupants(2, 0));
                 IHttpActionResult houseSaveResult8 = houseController.Post(JsonConvert.SerializeObject(guestHouse8));
                 string guestHouseId8 = ((OkNegotiatedContentResult<string>)houseSaveResult8).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(guestHouseId8));
@@ -2072,7 +2125,7 @@ namespace RentStuff.Property.Ports.Tests
                 CreateHotelCommand guestHouse9 = new CreateHotelCommand("title 4", 1000, false, false, false,
                     Constants.GuestHouse, propertySearchedEmail, "03234967894", area9, "someone", "", GenderRestriction.BoysOnly.ToString(),
                     false, Constants.Daily, true, true, true, true, true, true, false, false, false, false, false,
-                    "", "", true, true, true, true, true, true, true, true, true, true, true, 2, 0);
+                    "", "", true, true, true, true, true, true, true, true, true, true, true, null, new Occupants(2, 0));
                 IHttpActionResult houseSaveResult9 = houseController.Post(JsonConvert.SerializeObject(guestHouse9));
                 string guestHouseId9 = ((OkNegotiatedContentResult<string>)houseSaveResult9).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(guestHouseId9));
@@ -2428,13 +2481,18 @@ namespace RentStuff.Property.Ports.Tests
                 string fax = "0510000000";
                 bool elevator = false;
 
+                var beds = new List<Bed>()
+                {
+                    new Bed(2, BedType.Single, null)
+                };
+
                 var createNewHotelCommand = new CreateHotelCommand(title, monthlyRent, internet,
                     cableTv, parking, propertyType, email, phoneNumber, area, name, description,
                     genderRestriction.ToString(),
                     isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                     lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                     airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                    kitchen, numberOfAdults, numberOfChildren);
+                    kitchen, beds, new Occupants(numberOfAdults, numberOfChildren));
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -2473,6 +2531,10 @@ namespace RentStuff.Property.Ports.Tests
                 
                 Assert.AreEqual(airportShuttle, retrievedHotel[0].AirportShuttle);
                 Assert.AreEqual(breakfastIncluded, retrievedHotel[0].BreakfastIncluded);
+
+                Assert.AreEqual(1, retrievedHotel[0].Beds.Count);
+                Assert.AreEqual(2, retrievedHotel[0].Beds[0].BedCount);
+                Assert.AreEqual(BedType.Single, retrievedHotel[0].Beds[0].BedType);
 
                 Assert.AreEqual(numberOfAdults, retrievedHotel[0].Occupants.Adults);
                 Assert.AreEqual(numberOfChildren, retrievedHotel[0].Occupants.Children);
@@ -2530,13 +2592,18 @@ namespace RentStuff.Property.Ports.Tests
                 string fax = "0510000000";
                 bool elevator = false;
 
+                var beds = new List<Bed>()
+                {
+                    new Bed(2, BedType.Single, null)
+                };
+
                 var createNewHotelCommand = new CreateHotelCommand(title, monthlyRent, internet,
                     cableTv, parking, propertyType, email, phoneNumber, area, name, description,
                     genderRestriction.ToString(),
                     isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                     lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                     airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                    kitchen, numberOfAdults, numberOfChildren);
+                    kitchen, beds, new Occupants(numberOfAdults, numberOfChildren));
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -2879,7 +2946,7 @@ namespace RentStuff.Property.Ports.Tests
                     isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                     lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                     airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                    kitchen, numberOfAdults, numberOfChildren);
+                    kitchen,null, new Occupants(numberOfAdults, numberOfChildren));
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -2981,7 +3048,7 @@ namespace RentStuff.Property.Ports.Tests
                     isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                     lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                     airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                    kitchen, numberOfAdults, numberOfChildren);
+                    kitchen, null, new Occupants(numberOfAdults, numberOfChildren));
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -3325,7 +3392,7 @@ namespace RentStuff.Property.Ports.Tests
                     isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                     lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                     airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                    kitchen, numberOfAdults, numberOfChildren);
+                    kitchen, null, new Occupants(numberOfAdults, numberOfChildren));
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -3428,7 +3495,7 @@ namespace RentStuff.Property.Ports.Tests
                     isShared, rentUnit, laundry, ac, geyser, fitnessCentre, attachedBathroom, ironing, balcony,
                     lawn, cctvCameras, backupElectricity, heating, landlineNumber, fax, elevator, restaurant,
                     airportShuttle, breakfastIncluded, sittingArea, carRental, spa, salon, bathtub, swimmingPool,
-                    kitchen, numberOfAdults, numberOfChildren);
+                    kitchen, null, new Occupants(numberOfAdults, numberOfChildren));
 
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
@@ -3645,7 +3712,7 @@ namespace RentStuff.Property.Ports.Tests
             CreateHotelCommand hotel = new CreateHotelCommand("Title", 34000, false, false, false, propertyType, 
                 ownerEmail, ownerPhoneNumber, area, "None", "", GenderRestriction.FamiliesOnly.ToString(),
                 false, Constants.Daily, false, false, false, false, false, true, true, false, false, false, false,
-                "", "", true, true, true, true, true, true, true, true, true, true, true, 2, 0);
+                "", "", true, true, true, true, true, true, true, true, true, true, true, null, new Occupants(2, 0));
             IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(hotel));
             string hotelId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
@@ -3684,7 +3751,7 @@ namespace RentStuff.Property.Ports.Tests
             CreateHotelCommand hotel = new CreateHotelCommand("Title", 34000, false, false, false, propertyType,
                 ownerEmail, ownerPhoneNumber, area, "None", "", GenderRestriction.FamiliesOnly.ToString(),
                 false, Constants.Daily, false, false, false, false, false, true, true, false, false, false, false,
-                "", "", true, true, true, true, true, true, true, true, true, true, true, 2, 0);
+                "", "", true, true, true, true, true, true, true, true, true, true, true, null, new Occupants(2, 0));
             IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(hotel));
             string hotelId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 

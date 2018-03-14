@@ -958,6 +958,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.OwnerName, retreivedHouse.OwnerName);
 
             // Verfication of House # 2
+            retreivedHouse = (House)retreivedHouses[1];
             Assert.AreEqual(house2.Title, retreivedHouse.Title);
             Assert.AreEqual(house2.Description, retreivedHouse.Description);
             Assert.AreEqual(house2.PropertyType, retreivedHouse.PropertyType);

@@ -205,9 +205,48 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
         
         public bool Kitchen { get; private set; }
 
-        public IList<Bed> Beds { get; private set; }
+        private IList<Bed> _beds;
 
-        public Occupants Occupants { get; private set; }
+        public virtual IList<Bed> Beds
+        {
+            get
+            {
+                return _beds;
+            }
+
+            set
+            {
+                if (value != null)
+                {
+                    _beds = new List<Bed>();
+                    foreach (var currentValue in value)
+                    {
+                        if (_beds.Count > 0)
+                        {
+                            var bedTypeFound = false;
+                            for (int i = 0; i < _beds.Count; i++)
+                            {
+                                if (_beds[i].BedType == currentValue.BedType)
+                                {
+                                    _beds[i].BedCount += currentValue.BedCount;
+                                    bedTypeFound = true;
+                                }
+                            }
+                            if (!bedTypeFound)
+                            {
+                                _beds.Add(currentValue);
+                            }
+                        }
+                        else
+                        {
+                            _beds.Add(currentValue);
+                        }
+                    }
+                }
+            }
+        }
+
+        public Occupants Occupants { get; set; }
 
         /// <summary>
         /// Hotel Builder, using the builder pattern that allows easy refactoring of the initialization of the Hotel

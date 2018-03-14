@@ -84,10 +84,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool bathtub = true;
             bool swimmingPool = true;
             bool kitchen = true;
-            IList<Bed> beds = new List<Bed>()
-            {
-                new Bed(2, BedType.Single)
-            };
+            
             Occupants occupants = new Occupants(2, 1);
 
             string landlineNumber = "0510000000";
@@ -103,11 +100,21 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .CctvCameras(cctvCameras).BackupElectricity(backupElectricity)
                 .Restaurant(restaurant).AirportShuttle(airportShuttle).BreakfastIncluded(breakfastIncluded)
                 .SittingArea(sittingArea).CarRental(carRental).Spa(spa).Salon(salon).Bathtub(bathtub)
-                .SwimmingPool(swimmingPool).Kitchen(kitchen).Beds(beds).Occupants(occupants)
+                .SwimmingPool(swimmingPool).Kitchen(kitchen).Occupants(occupants)
                 .LandlineNumber(landlineNumber).Fax(fax).Elevator(elevator)
                 .Build();
             hotel.AddImage(image1);
             hotel.AddImage(image2);
+            IList<Bed> beds = new List<Bed>()
+            {
+                new Bed(1, BedType.Single, hotel),
+                new Bed(2, BedType.Double, hotel),
+                new Bed(1, BedType.Single, hotel),
+                new Bed(1, BedType.Double, hotel),
+                new Bed(2, BedType.Single, hotel),
+                new Bed(1, BedType.Double, hotel),
+            };
+            hotel.Beds = beds;
 
             //Save the Hotel
             propertyRepository.SaveorUpdate(hotel);
@@ -154,9 +161,11 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(bathtub, retrievedHotel.Bathtub);
             Assert.AreEqual(swimmingPool, retrievedHotel.SwimmingPool);
             Assert.AreEqual(kitchen, retrievedHotel.Kitchen);
-            Assert.AreEqual(beds.Count, retrievedHotel.Beds.Count);
-            Assert.AreEqual(beds[0].BedCount, retrievedHotel.Beds[0].BedCount);
-            Assert.AreEqual(beds[0].BedType, retrievedHotel.Beds[0].BedType);
+            Assert.AreEqual(2, retrievedHotel.Beds.Count);
+            Assert.AreEqual(4, retrievedHotel.Beds[0].BedCount);
+            Assert.AreEqual(BedType.Single, retrievedHotel.Beds[0].BedType);
+            Assert.AreEqual(4, retrievedHotel.Beds[1].BedCount);
+            Assert.AreEqual(BedType.Double, retrievedHotel.Beds[1].BedType);
 
             Assert.AreEqual(occupants.Adults, retrievedHotel.Occupants.Adults);
             Assert.AreEqual(occupants.Children, retrievedHotel.Occupants.Children);
@@ -210,7 +219,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool kitchen2 = false;
             IList<Bed> beds2 = new List<Bed>()
             {
-                new Bed(1, BedType.Double)
+                new Bed(1, BedType.Double, hotel)
             };
             Occupants occupants2 = new Occupants(3, 0);
 
@@ -284,7 +293,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(image4, retrievedHotel2.Images[3]);
             Assert.AreEqual(elevator2, retrievedHotel2.Elevator);
         }
-
+        
         // Create and then Delete a Hotel
         [Test]
         public void DeleteHotelInstanceSuccessTest_TestsThatAHotelInstanceIsCreatedAndDeletedAsExpected_VerifiesByTheReturnValue()
@@ -330,10 +339,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool bathtub = true;
             bool swimmingPool = true;
             bool kitchen = true;
-            IList<Bed> beds = new List<Bed>()
-            {
-                new Bed(2, BedType.Single)
-            };
+            
             Occupants occupants = new Occupants(2, 1);
 
             string landlineNumber = "0510000000";
@@ -349,11 +355,16 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .CctvCameras(cctvCameras).BackupElectricity(backupElectricity)
                 .Restaurant(restaurant).AirportShuttle(airportShuttle).BreakfastIncluded(breakfastIncluded)
                 .SittingArea(sittingArea).CarRental(carRental).Spa(spa).Salon(salon).Bathtub(bathtub)
-                .SwimmingPool(swimmingPool).Kitchen(kitchen).Beds(beds).Occupants(occupants)
+                .SwimmingPool(swimmingPool).Kitchen(kitchen).Occupants(occupants)
                 .LandlineNumber(landlineNumber).Fax(fax).Elevator(elevator)
                 .Build();
             hotel.AddImage(image1);
             hotel.AddImage(image2);
+            IList<Bed> beds = new List<Bed>()
+            {
+                new Bed(2, BedType.Single, hotel)
+            };
+            hotel.Beds = beds;
 
             //Save the Hotel
             propertyRepository.SaveorUpdate(hotel);
@@ -419,10 +430,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool bathtub = true;
             bool swimmingPool = true;
             bool kitchen = true;
-            IList<Bed> beds = new List<Bed>()
-            {
-                new Bed(2, BedType.Single)
-            };
+            
             Occupants occupants = new Occupants(2, 1);
 
             string landlineNumber = "0510000000";
@@ -438,11 +446,16 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .CctvCameras(cctvCameras).BackupElectricity(backupElectricity)
                 .Restaurant(restaurant).AirportShuttle(airportShuttle).BreakfastIncluded(breakfastIncluded)
                 .SittingArea(sittingArea).CarRental(carRental).Spa(spa).Salon(salon).Bathtub(bathtub)
-                .SwimmingPool(swimmingPool).Kitchen(kitchen).Beds(beds).Occupants(occupants)
+                .SwimmingPool(swimmingPool).Kitchen(kitchen).Occupants(occupants)
                 .LandlineNumber(landlineNumber).Fax(fax).Elevator(elevator)
                 .Build();
             hotel.AddImage(image1);
             hotel.AddImage(image2);
+            IList<Bed> beds = new List<Bed>()
+            {
+                new Bed(2, BedType.Single, hotel)
+            };
+            hotel.Beds = beds;
 
             //Save the Hotel
             propertyRepository.SaveorUpdate(hotel);
@@ -614,10 +627,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool bathtub = true;
             bool swimmingPool = true;
             bool kitchen = true;
-            IList<Bed> beds = new List<Bed>()
-            {
-                new Bed(2, BedType.Single)
-            };
             Occupants occupants = new Occupants(2, 1);
 
             string landlineNumber = "0510000000";
@@ -633,11 +642,17 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .CctvCameras(cctvCameras).BackupElectricity(backupElectricity)
                 .Restaurant(restaurant).AirportShuttle(airportShuttle).BreakfastIncluded(breakfastIncluded)
                 .SittingArea(sittingArea).CarRental(carRental).Spa(spa).Salon(salon).Bathtub(bathtub)
-                .SwimmingPool(swimmingPool).Kitchen(kitchen).Beds(beds).Occupants(occupants)
+                .SwimmingPool(swimmingPool).Kitchen(kitchen).Occupants(occupants)
                 .LandlineNumber(landlineNumber).Fax(fax).Elevator(elevator)
                 .Build();
             hotel.AddImage(image1);
             hotel.AddImage(image2);
+
+            IList<Bed> beds = new List<Bed>()
+            {
+                new Bed(2, BedType.Single, hotel)
+            };
+            hotel.Beds = beds;
 
             //Save the Hotel
             propertyRepository.SaveorUpdate(hotel);
@@ -809,10 +824,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool bathtub = true;
             bool swimmingPool = true;
             bool kitchen = true;
-            IList<Bed> beds = new List<Bed>()
-            {
-                new Bed(2, BedType.Single)
-            };
+            
             Occupants occupants = new Occupants(2, 1);
 
             string landlineNumber = "0510000000";
@@ -828,9 +840,15 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .CctvCameras(cctvCameras).BackupElectricity(backupElectricity)
                 .Restaurant(restaurant).AirportShuttle(airportShuttle).BreakfastIncluded(breakfastIncluded)
                 .SittingArea(sittingArea).CarRental(carRental).Spa(spa).Salon(salon).Bathtub(bathtub)
-                .SwimmingPool(swimmingPool).Kitchen(kitchen).Beds(beds).Occupants(occupants)
+                .SwimmingPool(swimmingPool).Kitchen(kitchen).Occupants(occupants)
                 .LandlineNumber(landlineNumber).Fax(fax).Elevator(elevator)
                 .Build();
+
+            IList<Bed> beds = new List<Bed>()
+            {
+                new Bed(2, BedType.Single, hotel)
+            };
+            hotel.Beds = beds;
 
             //Save the Hotel
             propertyRepository.SaveorUpdate(hotel);
@@ -899,11 +917,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool kitchen3 = true;
             GenderRestriction genderRestriction3 = GenderRestriction.NoRestriction;
             long monthlyRent3 = 93000;
-
-            IList<Bed> beds3 = new List<Bed>()
-            {
-                new Bed(2, BedType.Single)
-            };
+            
             Occupants occupants3 = new Occupants(2, 1);
 
             string landlineNumber3 = "0510000000";
@@ -921,11 +935,17 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .CctvCameras(cctvCameras3).BackupElectricity(backupElectricity3)
                 .Restaurant(restaurant3).AirportShuttle(airportShuttle3).BreakfastIncluded(breakfastIncluded3)
                 .SittingArea(sittingArea3).CarRental(carRental3).Spa(spa3).Salon(salon3).Bathtub(bathtub3)
-                .SwimmingPool(swimmingPool3).Kitchen(kitchen3).Beds(beds3).Occupants(occupants3)
+                .SwimmingPool(swimmingPool3).Kitchen(kitchen3).Occupants(occupants3)
                 .LandlineNumber(landlineNumber3).Fax(fax3).Elevator(elevator3)
                 .Build();
             hotel3.AddImage(image1);
             hotel3.AddImage(image2);
+
+            IList<Bed> beds3 = new List<Bed>()
+            {
+                new Bed(2, BedType.Single, hotel)
+            };
+            hotel3.Beds = beds3;
 
             //Save the Guest House
             propertyRepository.SaveorUpdate(hotel3);

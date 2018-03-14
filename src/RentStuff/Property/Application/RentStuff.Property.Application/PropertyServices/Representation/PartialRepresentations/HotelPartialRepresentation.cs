@@ -1,4 +1,5 @@
-﻿using RentStuff.Property.Application.PropertyServices.Representation.AbstractRepresentations;
+﻿using System.Collections.Generic;
+using RentStuff.Property.Application.PropertyServices.Representation.AbstractRepresentations;
 using RentStuff.Property.Domain.Model.HotelAggregate;
 
 namespace RentStuff.Property.Application.PropertyServices.Representation.PartialRepresentations
@@ -15,7 +16,7 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.Partial
             bool geyser, bool attachedBathroom, bool fitnessCenter,
             bool backupElectricity, bool heating,
             bool airportShuttle, bool breakfastIncluded,
-            Occupants occupants, string landlineNumber, string defaultImage) 
+            Occupants occupants, string landlineNumber, string defaultImage, IList<Bed> beds)
             : base(id, title, rentPrice, ownerPhoneNumber, landlineNumber, area, ownerName, genderRestriction,
                   isShared, rentUnit, internetAvailable, cableTvAvailable, propertyType, defaultImage)
         {
@@ -28,6 +29,7 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.Partial
             Heating = heating;
             AirportShuttle = airportShuttle;
             BreakfastIncluded = breakfastIncluded;
+            Beds = beds;
             Occupants = occupants;
         }
 
@@ -40,6 +42,7 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.Partial
         public bool Heating { get; private set; }
         public bool AirportShuttle { get; private set; }
         public bool BreakfastIncluded { get; private set; }
+        public IList<Bed> Beds { get; set; }
         public Occupants Occupants { get; private set; }
     }
 }

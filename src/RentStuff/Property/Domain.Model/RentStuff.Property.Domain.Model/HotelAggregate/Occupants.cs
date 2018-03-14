@@ -1,23 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RentStuff.Common.Domain.Model;
+using System;
 
 namespace RentStuff.Property.Domain.Model.HotelAggregate
 {
     /// <summary>
     /// The Number of occupants this room can accommodate
     /// </summary>
-    public class Occupants
+    [Serializable]
+    public class Occupants : Entity
     {
-        private int _adults;
-        private int _children;
+        public Occupants()
+        {
+            
+        }
 
         public Occupants(int adults, int children)
         {
             Adults = adults;
             Children = children;
+        }
+
+        public Occupants(int adults, int children, Hotel hotel)
+        {
+            Adults = adults;
+            Children = children;
+            Hotel = hotel;
         }
 
         public void Update(int adults, int children)
@@ -26,10 +33,12 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             Children = children;
         }
 
-        public int Adults { get { return _adults; } private set { _adults = value; } }
+        public int Adults { get; set; }
 
-        public int Children { get { return _children; } private set { _children = value; } }
+        public int Children { get; set; }
 
-        public int TotalOccupants { get { return _adults + _children; } private set {} }
+        public int TotalOccupants { get { return Adults + Children; } private set {} }
+
+        public Hotel Hotel { get; set; }
     }
 }
