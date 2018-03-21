@@ -54,7 +54,7 @@
     <property name="SwimmingPool" column="swimming_pool"/>
     <property name="Kitchen"/>
 
-    <bag name="Beds" table="bed" lazy="true" inverse="true" batch-size="25" cascade="all-delete-orphan">
+    <bag name="Beds" table="bed" lazy="true" access="field.camelcase-underscore" inverse="true" batch-size="25" cascade="all-delete-orphan">
       <key column="hotel_id" />
       <one-to-many class="Bed" />
     </bag>

@@ -77,6 +77,13 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         IList<Hotel> GetGuestHousesByOwnerEmail(string email, int pageNo = 0);
 
         /// <summary>
+        /// Gets all of the properties from the database
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        IList<Property> GetAllProperties(int pageNo = 0);
+
+        /// <summary>
         /// Get All houses
         /// </summary>
         /// <param name="pageNo"></param>

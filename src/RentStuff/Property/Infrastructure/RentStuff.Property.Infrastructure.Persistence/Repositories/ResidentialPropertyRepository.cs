@@ -175,6 +175,22 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         }
 
         /// <summary>
+        /// Gets all of the proeprties from the database
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        public IList<Domain.Model.PropertyAggregate.Property> GetAllProperties(int pageNo = 0)
+        {
+            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return _session.Session.QueryOver<Domain.Model.PropertyAggregate.Property>()
+                    .Skip(pageNo * _resultsPerPage)
+                    .Take(_resultsPerPage)
+                    .List<Domain.Model.PropertyAggregate.Property>();
+            }
+        }
+
+        /// <summary>
         /// Get the house by latitude and longitude
         /// </summary>
         /// <param name="latitude"></param>

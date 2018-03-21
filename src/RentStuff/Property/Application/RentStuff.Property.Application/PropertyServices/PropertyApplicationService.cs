@@ -228,6 +228,30 @@ namespace RentStuff.Property.Application.PropertyServices
             }
         }
 
+        public IList<ResidentialPropertyPartialBaseImplementation> GetAllProperties(int pageNo = 0)
+        {
+            IList<Domain.Model.PropertyAggregate.Property> properties =
+                 _residentialPropertyRepository.GetAllProperties();
+
+            var propertyRepresentations = new List<ResidentialPropertyPartialBaseImplementation>();
+            foreach (var property in properties)
+            {
+                if (property is House)
+                {
+                    propertyRepresentations.Add(ConvertHouseToPartialRepresentation((House)property));
+                }
+                else if (property is Hostel)
+                {
+                    propertyRepresentations.Add(ConvertHostelToPartialRepresentation((Hostel)property));
+                }
+                else if (property is Hotel)
+                {
+                    propertyRepresentations.Add(ConvertHotelToPartialRepresentation((Hotel)property));
+                }
+            }
+            return propertyRepresentations;
+        }
+
         /// <summary>
         /// Gets the house by providing the owner's email id
         /// </summary>

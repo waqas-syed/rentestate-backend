@@ -32,6 +32,13 @@ namespace RentStuff.Property.Application.PropertyServices
         void DeleteHouse(string houseId, string currentUserEmail);
 
         /// <summary>
+        /// Gets all of the properties from the database
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <returns></returns>
+        IList<ResidentialPropertyPartialBaseImplementation> GetAllProperties(int pageNo = 0);
+
+        /// <summary>
         /// Get House by it's ID
         /// </summary>
         /// <param name="id"></param>

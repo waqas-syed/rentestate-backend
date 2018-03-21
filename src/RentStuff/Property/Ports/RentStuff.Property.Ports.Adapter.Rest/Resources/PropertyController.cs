@@ -247,7 +247,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 // If both area and property type are given
                 if (!string.IsNullOrWhiteSpace(area) && !string.IsNullOrWhiteSpace(propertyType))
                 {
-                    _logger.Info("Get House by Area {0} and Property Type {1}", area, propertyType);
+                    _logger.Info("Get properties by Area {0} and Property Type {1}", area, propertyType);
                     return Ok(_houseApplicationService.SearchPropertiesByAreaAndPropertyType(area, propertyType, pageNo));
                 }
                 // If only email is given
@@ -261,7 +261,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                         // forward, otherwise return an error.
                         if (email.Equals(emailFromClaims))
                         {
-                            _logger.Info("Get House by Email {0}", email);
+                            _logger.Info("Get properties by Email {0}", email);
                             return Ok(_houseApplicationService.GetPropertiesByEmail(email, pageNo));
                         }
                         else
@@ -279,18 +279,20 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 // If both property type and ID are given
                 else if (!string.IsNullOrEmpty(houseId) && !string.IsNullOrWhiteSpace(propertyType))
                 {
-                    _logger.Info("Get House by HouseId {0}", houseId);
+                    _logger.Info("Get property by HouseId {0}", houseId);
                     return Ok(_houseApplicationService.GetPropertyById(houseId, propertyType));
                 }
                 // If only property type is given
                 else if (!string.IsNullOrWhiteSpace(propertyType))
                 {
-                    _logger.Info("Get House by Property Type {0}", propertyType);
+                    _logger.Info("Get property by Property Type {0}", propertyType);
                     return Ok(_houseApplicationService.SearchPropertiesByPropertyType(propertyType, pageNo));
                 }
                 else
                 {
-                    return BadRequest("An appropriate parameter must be supplied to return data");
+                    _logger.Info("Get all properties");
+                    return Ok(_houseApplicationService.GetAllProperties(pageNo));
+                    //return BadRequest("An appropriate parameter must be supplied to return data");
                 }
             }
             catch (Exception exception)
