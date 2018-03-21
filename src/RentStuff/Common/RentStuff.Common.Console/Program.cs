@@ -6,6 +6,7 @@
         {
             //IdentityBcAuthenticationTests.InitializeTests();
             //CreateHouseTestData.Initialize();
+            ConvertHouseToHostel.Initialize();
         }
     }
 }
