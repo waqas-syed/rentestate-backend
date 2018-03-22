@@ -84,6 +84,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool bathtub = true;
             bool swimmingPool = true;
             bool kitchen = true;
+            int numberOfSingleBeds = 0;
+            int numberOfDoubleBeds = 1;
             
             Occupants occupants = new Occupants(2, 1);
 
@@ -101,20 +103,11 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .Restaurant(restaurant).AirportShuttle(airportShuttle).BreakfastIncluded(breakfastIncluded)
                 .SittingArea(sittingArea).CarRental(carRental).Spa(spa).Salon(salon).Bathtub(bathtub)
                 .SwimmingPool(swimmingPool).Kitchen(kitchen).Occupants(occupants)
-                .LandlineNumber(landlineNumber).Fax(fax).Elevator(elevator)
+                .LandlineNumber(landlineNumber).Fax(fax).Elevator(elevator).NumberOfSingleBeds(numberOfSingleBeds)
+                .NumberOfDoubleBeds(numberOfDoubleBeds)
                 .Build();
             hotel.AddImage(image1);
             hotel.AddImage(image2);
-            IList<Bed> beds = new List<Bed>()
-            {
-                new Bed(1, BedType.Single, hotel),
-                new Bed(2, BedType.Double, hotel),
-                new Bed(1, BedType.Single, hotel),
-                new Bed(1, BedType.Double, hotel),
-                new Bed(2, BedType.Single, hotel),
-                new Bed(1, BedType.Double, hotel),
-            };
-            hotel.Beds = beds;
 
             //Save the Hotel
             propertyRepository.SaveorUpdate(hotel);
@@ -161,12 +154,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(bathtub, retrievedHotel.Bathtub);
             Assert.AreEqual(swimmingPool, retrievedHotel.SwimmingPool);
             Assert.AreEqual(kitchen, retrievedHotel.Kitchen);
-            Assert.AreEqual(2, retrievedHotel.Beds.Count);
-            Assert.AreEqual(4, retrievedHotel.Beds[0].BedCount);
-            Assert.AreEqual(BedType.Single, retrievedHotel.Beds[0].BedType);
-            Assert.AreEqual(4, retrievedHotel.Beds[1].BedCount);
-            Assert.AreEqual(BedType.Double, retrievedHotel.Beds[1].BedType);
 
+            Assert.AreEqual(numberOfSingleBeds, retrievedHotel.NumberOfSingleBeds);
+            Assert.AreEqual(numberOfDoubleBeds, retrievedHotel.NumberOfDoubleBeds);
             Assert.AreEqual(occupants.Adults, retrievedHotel.Occupants.Adults);
             Assert.AreEqual(occupants.Children, retrievedHotel.Occupants.Children);
             Assert.AreEqual(occupants.TotalOccupants, retrievedHotel.Occupants.TotalOccupants);
@@ -217,10 +207,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool bathtub2 = true;
             bool swimmingPool2 = false;
             bool kitchen2 = false;
-            IList<Bed> beds2 = new List<Bed>()
-            {
-                new Bed(1, BedType.Double, hotel)
-            };
+            int numberOfSingleBeds2 = 1;
+            int numberOfDoubleBeds2 = 0;
+
             Occupants occupants2 = new Occupants(3, 0);
 
             string landlineNumber2 = "0510000001";
@@ -231,7 +220,8 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 description2, genderRestriction2, isShared2, rentUnit2, internet2, cableTv2, parking2,
                 propertyType2, laundry2, ac2, geyser2, fitnessCentre2, attachedBathroom2, ironing2, balcony2, lawn2,
                 cctvCameras2, backupElectricity2, heating2, restaurant2, airportShuttle2, breakfastIncluded2,
-                sittingArea2, carRental2, spa2, salon2, bathtub2, swimmingPool2, kitchen2, beds2, occupants2,
+                sittingArea2, carRental2, spa2, salon2, bathtub2, swimmingPool2, kitchen2, numberOfSingleBeds2, 
+                numberOfDoubleBeds2, occupants2,
                 landlineNumber2, fax2, elevator2);
             hotel.AddImage(image3);
             hotel.AddImage(image4);
@@ -278,9 +268,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(bathtub2, retrievedHotel2.Bathtub);
             Assert.AreEqual(swimmingPool2, retrievedHotel2.SwimmingPool);
             Assert.AreEqual(kitchen2, retrievedHotel2.Kitchen);
-            Assert.AreEqual(beds2.Count, retrievedHotel2.Beds.Count);
-            Assert.AreEqual(beds2[0].BedCount, retrievedHotel2.Beds[0].BedCount);
-            Assert.AreEqual(beds2[0].BedType, retrievedHotel2.Beds[0].BedType);
+
+            Assert.AreEqual(numberOfSingleBeds2, retrievedHotel.NumberOfSingleBeds);
+            Assert.AreEqual(numberOfDoubleBeds2, retrievedHotel.NumberOfDoubleBeds);
 
             Assert.AreEqual(occupants2.Adults, retrievedHotel2.Occupants.Adults);
             Assert.AreEqual(occupants2.Children, retrievedHotel2.Occupants.Children);
@@ -360,12 +350,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .Build();
             hotel.AddImage(image1);
             hotel.AddImage(image2);
-            IList<Bed> beds = new List<Bed>()
-            {
-                new Bed(2, BedType.Single, hotel)
-            };
-            hotel.Beds = beds;
-
             //Save the Hotel
             propertyRepository.SaveorUpdate(hotel);
 
@@ -451,12 +435,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .Build();
             hotel.AddImage(image1);
             hotel.AddImage(image2);
-            IList<Bed> beds = new List<Bed>()
-            {
-                new Bed(2, BedType.Single, hotel)
-            };
-            hotel.Beds = beds;
-
             //Save the Hotel
             propertyRepository.SaveorUpdate(hotel);
             
@@ -549,9 +527,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(bathtub, retrievedHotel[0].Bathtub);
             Assert.AreEqual(swimmingPool, retrievedHotel[0].SwimmingPool);
             Assert.AreEqual(kitchen, retrievedHotel[0].Kitchen);
-            Assert.AreEqual(beds.Count, retrievedHotel[0].Beds.Count);
-            Assert.AreEqual(beds[0].BedCount, retrievedHotel[0].Beds[0].BedCount);
-            Assert.AreEqual(beds[0].BedType, retrievedHotel[0].Beds[0].BedType);
 
             Assert.AreEqual(occupants.Adults, retrievedHotel[0].Occupants.Adults);
             Assert.AreEqual(occupants.Children, retrievedHotel[0].Occupants.Children);
@@ -647,13 +622,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .Build();
             hotel.AddImage(image1);
             hotel.AddImage(image2);
-
-            IList<Bed> beds = new List<Bed>()
-            {
-                new Bed(2, BedType.Single, hotel)
-            };
-            hotel.Beds = beds;
-
+            
             //Save the Hotel
             propertyRepository.SaveorUpdate(hotel);
 
@@ -747,9 +716,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(bathtub, retrievedHotel[0].Bathtub);
             Assert.AreEqual(swimmingPool, retrievedHotel[0].SwimmingPool);
             Assert.AreEqual(kitchen, retrievedHotel[0].Kitchen);
-            Assert.AreEqual(beds.Count, retrievedHotel[0].Beds.Count);
-            Assert.AreEqual(beds[0].BedCount, retrievedHotel[0].Beds[0].BedCount);
-            Assert.AreEqual(beds[0].BedType, retrievedHotel[0].Beds[0].BedType);
 
             Assert.AreEqual(occupants.Adults, retrievedHotel[0].Occupants.Adults);
             Assert.AreEqual(occupants.Children, retrievedHotel[0].Occupants.Children);
@@ -843,13 +809,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .SwimmingPool(swimmingPool).Kitchen(kitchen).Occupants(occupants)
                 .LandlineNumber(landlineNumber).Fax(fax).Elevator(elevator)
                 .Build();
-
-            IList<Bed> beds = new List<Bed>()
-            {
-                new Bed(2, BedType.Single, hotel)
-            };
-            hotel.Beds = beds;
-
+            
             //Save the Hotel
             propertyRepository.SaveorUpdate(hotel);
 
@@ -940,13 +900,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .Build();
             hotel3.AddImage(image1);
             hotel3.AddImage(image2);
-
-            IList<Bed> beds3 = new List<Bed>()
-            {
-                new Bed(2, BedType.Single, hotel)
-            };
-            hotel3.Beds = beds3;
-
+            
             //Save the Guest House
             propertyRepository.SaveorUpdate(hotel3);
 
@@ -994,10 +948,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(bathtub3, retrievedHotel[0].Bathtub);
             Assert.AreEqual(swimmingPool3, retrievedHotel[0].SwimmingPool);
             Assert.AreEqual(kitchen3, retrievedHotel[0].Kitchen);
-            Assert.AreEqual(beds3.Count, retrievedHotel[0].Beds.Count);
-            Assert.AreEqual(beds3[0].BedCount, retrievedHotel[0].Beds[0].BedCount);
-            Assert.AreEqual(beds3[0].BedType, retrievedHotel[0].Beds[0].BedType);
-
             Assert.AreEqual(occupants3.Adults, retrievedHotel[0].Occupants.Adults);
             Assert.AreEqual(occupants3.Children, retrievedHotel[0].Occupants.Children);
             Assert.AreEqual(occupants3.TotalOccupants, retrievedHotel[0].Occupants.TotalOccupants);

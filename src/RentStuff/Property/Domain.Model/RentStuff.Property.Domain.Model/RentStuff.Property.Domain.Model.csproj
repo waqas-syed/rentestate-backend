@@ -46,8 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HostelAggregate\Hostel.cs" />
-    <Compile Include="HotelAggregate\Bed.cs" />
-    <Compile Include="HotelAggregate\BedType.cs" />
     <Compile Include="HotelAggregate\Hotel.cs" />
     <Compile Include="HotelAggregate\Occupants.cs" />
     <Compile Include="HouseAggregate\DimensionType.cs" />
@@ -87,11 +85,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="HotelAggregate\Mappings\Hotel.hbm.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="HotelAggregate\Mappings\Bed.hbm.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

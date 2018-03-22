@@ -295,6 +295,8 @@ CREATE TABLE `hotel` (
   `heating` tinyint(1) DEFAULT NULL,
   `bathtub` tinyint(1) DEFAULT NULL,
   `occupants_id` varchar(100) DEFAULT NULL,
+  `number_of_single_beds` int(11) DEFAULT '0',
+  `number_of_double_beds` int(11) DEFAULT '0',
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -402,4 +404,4 @@ CREATE TABLE `occupants` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-14 16:06:47
+-- Dump completed on 2018-03-22 16:18:33
