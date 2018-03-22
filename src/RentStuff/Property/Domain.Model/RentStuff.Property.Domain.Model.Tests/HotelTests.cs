@@ -59,6 +59,8 @@ namespace RentStuff.Property.Domain.Model.Tests
             bool swimmingPool = true;
             bool kitchen = true;
             bool elevator = false;
+            int numberOfSingleBeds = 2;
+            int numberOfDoubleBeds = 1;
             
             Occupants occupants = new Occupants(2, 1);
 
@@ -75,19 +77,12 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .Restaurant(restaurant).AirportShuttle(airportShuttle).BreakfastIncluded(breakfastIncluded)
                 .SittingArea(sittingArea).CarRental(carRental).Spa(spa).Salon(salon).Bathtub(bathtub)
                 .SwimmingPool(swimmingPool).Kitchen(kitchen).Occupants(occupants).Elevator(elevator)
-                .LandlineNumber(landlineNumber).Fax(fax)
+                .LandlineNumber(landlineNumber).Fax(fax).NumberOfSingleBeds(numberOfSingleBeds)
+                .NumberOfDoubleBeds(numberOfDoubleBeds)
                 .Build();
             hotel.AddImage(image1);
             hotel.AddImage(image2);
-
-            IList<Bed> beds = new List<Bed>()
-            {
-                new Bed(2, BedType.Single, hotel),
-                new Bed(1, BedType.Double, hotel),
-                new Bed(1, BedType.Double, hotel),
-                new Bed(1, BedType.Single, hotel)
-            };
-            hotel.Beds = beds;
+            
 
             Assert.IsNotNull(hotel);
             Assert.AreEqual(title, hotel.Title);
@@ -130,11 +125,8 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(elevator, hotel.Elevator);
             Assert.AreEqual(landlineNumber, hotel.LandlineNumber);
             Assert.AreEqual(fax, hotel.Fax);
-            Assert.AreEqual(2, hotel.Beds.Count);
-            Assert.AreEqual(3, hotel.Beds[0].BedCount);
-            Assert.AreEqual(BedType.Single, hotel.Beds[0].BedType);
-            Assert.AreEqual(2, hotel.Beds[1].BedCount);
-            Assert.AreEqual(BedType.Double, hotel.Beds[1].BedType);
+            Assert.AreEqual(numberOfSingleBeds, hotel.NumberOfSingleBeds);
+            Assert.AreEqual(numberOfDoubleBeds, hotel.NumberOfDoubleBeds);
 
             Assert.AreEqual(occupants.Adults, hotel.Occupants.Adults);
             Assert.AreEqual(occupants.Children, hotel.Occupants.Children);
@@ -194,6 +186,8 @@ namespace RentStuff.Property.Domain.Model.Tests
 
             string landlineNumber = "0510000000";
             string fax = "0510000000";
+            int numberOfSingleBeds = 1;
+            int numberOfDoubleBeds = 1;
 
             Hotel hotel = new Hotel.HotelBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title)
                 .OwnerName(name).CableTvAvailable(cableTv).ParkingAvailable(parking).WithInternetAvailable(internet)
@@ -205,18 +199,12 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .Restaurant(restaurant).AirportShuttle(airportShuttle).BreakfastIncluded(breakfastIncluded)
                 .SittingArea(sittingArea).CarRental(carRental).Spa(spa).Salon(salon).Bathtub(bathtub)
                 .SwimmingPool(swimmingPool).Kitchen(kitchen).Occupants(occupants).Elevator(elevator)
-                .LandlineNumber(landlineNumber).Fax(fax)
+                .LandlineNumber(landlineNumber).Fax(fax).NumberOfSingleBeds(numberOfSingleBeds)
+                .NumberOfDoubleBeds(numberOfDoubleBeds)
                 .Build();
             hotel.AddImage(image1);
             hotel.AddImage(image2);
-
-            IList<Bed> beds = new List<Bed>()
-            {
-                new Bed(2, BedType.Single, hotel),
-                new Bed(1, BedType.Single, hotel)
-            };
-            hotel.Beds = beds;
-
+            
             Assert.IsNotNull(hotel);
             Assert.AreEqual(title, hotel.Title);
             Assert.AreEqual(description, hotel.Description);
@@ -255,9 +243,9 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(bathtub, hotel.Bathtub);
             Assert.AreEqual(swimmingPool, hotel.SwimmingPool);
             Assert.AreEqual(kitchen, hotel.Kitchen);
-            Assert.AreEqual(1, hotel.Beds.Count);
-            Assert.AreEqual(3, hotel.Beds[0].BedCount);
-            Assert.AreEqual(BedType.Single, hotel.Beds[0].BedType);
+
+            Assert.AreEqual(numberOfSingleBeds, hotel.NumberOfSingleBeds);
+            Assert.AreEqual(numberOfDoubleBeds, hotel.NumberOfDoubleBeds);
 
             Assert.AreEqual(occupants.Adults, hotel.Occupants.Adults);
             Assert.AreEqual(occupants.Children, hotel.Occupants.Children);
@@ -307,11 +295,8 @@ namespace RentStuff.Property.Domain.Model.Tests
             bool bathtub2 = true;
             bool swimmingPool2 = false;
             bool kitchen2 = false;
-            IList<Bed> beds2 = new List<Bed>()
-            {
-                new Bed(1, BedType.Double, hotel),
-                new Bed(1, BedType.Double, hotel)
-            };
+            int numberOfSingleBeds2 = 1;
+            int numberOfDoubleBeds2 = 1;
             Occupants occupants2 = new Occupants(3, 0);
 
             string landlineNumber2 = "0510000001";
@@ -322,8 +307,8 @@ namespace RentStuff.Property.Domain.Model.Tests
                 description2, genderRestriction2, isShared2, rentUnit2, internet2, cableTv2, parking2,
                 propertyType2, laundry2, ac2, geyser2, fitnessCentre2, attachedBathroom2, ironing2, balcony2, lawn2,
                 cctvCameras2, backupElectricity2, heating2, restaurant2, airportShuttle2, breakfastIncluded2,
-                sittingArea2, carRental2, spa2, salon2, bathtub2, swimmingPool2, kitchen2, beds2, occupants2,
-                landlineNumber2, fax2, elevator2);
+                sittingArea2, carRental2, spa2, salon2, bathtub2, swimmingPool2, kitchen2, numberOfSingleBeds2,
+                numberOfDoubleBeds2, occupants2, landlineNumber2, fax2, elevator2);
             hotel.AddImage(image3);
             hotel.AddImage(image4);
 
@@ -368,9 +353,8 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(kitchen2, hotel.Kitchen);
             Assert.AreEqual(landlineNumber2, hotel.LandlineNumber);
             Assert.AreEqual(fax2, hotel.Fax);
-            Assert.AreEqual(1, hotel.Beds.Count);
-            Assert.AreEqual(2, hotel.Beds[0].BedCount);
-            Assert.AreEqual(BedType.Double, hotel.Beds[0].BedType);
+            Assert.AreEqual(numberOfSingleBeds2, hotel.NumberOfSingleBeds);
+            Assert.AreEqual(numberOfDoubleBeds2, hotel.NumberOfDoubleBeds);
 
             Assert.AreEqual(occupants2.Adults, hotel.Occupants.Adults);
             Assert.AreEqual(occupants2.Children, hotel.Occupants.Children);
@@ -450,13 +434,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 .Build();
             hotel.AddImage(image1);
             hotel.AddImage(image2);
-
-            IList<Bed> beds = new List<Bed>()
-            {
-                new Bed(1, BedType.Single, hotel)
-            };
-            hotel.Beds = beds;
-
+            
             Assert.IsNotNull(hotel);
             Assert.AreEqual(title, hotel.Title);
             Assert.AreEqual(description, hotel.Description);
@@ -496,9 +474,6 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(bathtub, hotel.Bathtub);
             Assert.AreEqual(swimmingPool, hotel.SwimmingPool);
             Assert.AreEqual(kitchen, hotel.Kitchen);
-            Assert.AreEqual(beds.Count, hotel.Beds.Count);
-            Assert.AreEqual(beds[0].BedCount, hotel.Beds[0].BedCount);
-            Assert.AreEqual(beds[0].BedType, hotel.Beds[0].BedType);
 
             Assert.AreEqual(occupants.Adults, hotel.Occupants.Adults);
             Assert.AreEqual(occupants.Children, hotel.Occupants.Children);
@@ -550,11 +525,6 @@ namespace RentStuff.Property.Domain.Model.Tests
             bool bathtub2 = true;
             bool swimmingPool2 = false;
             bool kitchen2 = false;
-            IList<Bed> beds2 = new List<Bed>()
-            {
-                new Bed(1, BedType.Single, hotel),
-                new Bed(1, BedType.Single, hotel)
-            };
             Occupants occupants2 = new Occupants(3, 0);
 
             string landlineNumber2 = "0510000001";
@@ -565,7 +535,7 @@ namespace RentStuff.Property.Domain.Model.Tests
                 description2, genderRestriction2, isShared2, rentUnit2, internet2, cableTv2, parking2,
                 propertyType2, laundry2, ac2, geyser2, fitnessCentre2, attachedBathroom2, ironing2, balcony2, lawn2,
                 cctvCameras2, backupElectricity2, heating2, restaurant2, airportShuttle2, breakfastIncluded2, 
-                sittingArea2, carRental2, spa2, salon2, bathtub2, swimmingPool2, kitchen2, beds2, occupants2,
+                sittingArea2, carRental2, spa2, salon2, bathtub2, swimmingPool2, kitchen2, 0, 0, occupants2,
                 landlineNumber2, fax2, elevator2);
             hotel.AddImage(image3);
             hotel.AddImage(image4);
@@ -609,9 +579,8 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(bathtub2, hotel.Bathtub);
             Assert.AreEqual(swimmingPool2, hotel.SwimmingPool);
             Assert.AreEqual(kitchen2, hotel.Kitchen);
-            Assert.AreEqual(1, hotel.Beds.Count);
-            Assert.AreEqual(2, hotel.Beds[0].BedCount);
-            Assert.AreEqual(BedType.Single, hotel.Beds[0].BedType);
+            Assert.AreEqual(0, hotel.NumberOfSingleBeds);
+            Assert.AreEqual(0, hotel.NumberOfDoubleBeds);
 
             Assert.AreEqual(occupants2.Adults, hotel.Occupants.Adults);
             Assert.AreEqual(occupants2.Children, hotel.Occupants.Children);

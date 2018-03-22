@@ -1,8 +1,6 @@
-﻿using RentStuff.Property.Domain.Model.PropertyAggregate;
+﻿using RentStuff.Common.Utilities;
+using RentStuff.Property.Domain.Model.PropertyAggregate;
 using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using RentStuff.Common.Utilities;
 
 namespace RentStuff.Property.Domain.Model.HotelAggregate
 {
@@ -59,7 +57,8 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
         /// <param name="bathtub"></param>
         /// <param name="swimmingPool"></param>
         /// <param name="kitchen"></param>
-        /// <param name="beds"></param>
+        /// <param name="numberOfSingleBeds"></param>
+        /// <param name="numberOfDoubleBeds"></param>
         /// <param name="occupants"></param>
         /// <param name="landlineNumber"></param>
         /// <param name="fax"></param>
@@ -73,8 +72,8 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
                 bool geyser, bool fitnessCentre, bool attachedBathroom, bool ironing,
                 bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating,
                 bool restaurant, bool airportShuttle, bool breakfastIncluded, bool sittingArea, bool carRental,
-                bool spa, bool salon, bool bathtub, bool swimmingPool, bool kitchen, IList<Bed> beds,
-                Occupants occupants, string landlineNumber, string fax, bool elevator)
+                bool spa, bool salon, bool bathtub, bool swimmingPool, bool kitchen, int numberOfSingleBeds,
+                int numberOfDoubleBeds, Occupants occupants, string landlineNumber, string fax, bool elevator)
             // Initiate the parent GuerstPropertyAbstraction class as well
             : base(title, rentPrice, ownerEmail,
                 ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
@@ -98,8 +97,10 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             Bathtub = bathtub;
             SwimmingPool = swimmingPool;
             Kitchen = kitchen;
-            Beds = beds;
+            NumberOfSingleBeds = numberOfSingleBeds;
+            NumberOfDoubleBeds = numberOfDoubleBeds;
             Occupants = occupants;
+            Occupants.Hotel = this;
         }
 
         /// <summary>
@@ -131,11 +132,8 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
         /// <param name="lawn"></param>
         /// <param name="cctvCameras"></param>
         /// <param name="backupElectricity"></param>
-        /// <param name="meals"></param>
-        /// <param name="picknDrop"></param>
-        /// <param name="numberOfSeats"></param>
         /// <param name="heating"></param>
-        /// <param name="beds"></param>
+        /// <param name="numberOfDoubleBeds"></param>
         /// <param name="occupants"></param>
         /// <param name="landlineNumber"></param>
         /// <param name="fax"></param>
@@ -150,6 +148,7 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
         /// <param name="swimmingPool"></param>
         /// <param name="kitchen"></param>
         /// <param name="elevator"></param>
+        /// <param name="numberOfSingleBeds"></param>
         public void Update(string title, long rentPrice, string ownerEmail,
             string ownerPhoneNumber,
             decimal latitude, decimal longitude, string area, string ownerName,
@@ -160,7 +159,7 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating, bool restaurant,
             bool airportShuttle, bool breakfastIncluded, 
             bool sittingArea, bool carRental, bool spa, bool salon, bool bathtub, bool swimmingPool, bool kitchen, 
-            IList<Bed> beds, Occupants occupants, string landlineNumber, string fax, bool elevator)
+            int numberOfSingleBeds, int numberOfDoubleBeds, Occupants occupants, string landlineNumber, string fax, bool elevator)
         {
             // Property Type must be Hotel. Will be used by Frontend client to check the type and proceed accordingly
             if (!propertyType.Equals(Constants.Hotel) && !propertyType.Equals(Constants.GuestHouse))
@@ -182,8 +181,10 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             Bathtub = bathtub;
             SwimmingPool = swimmingPool;
             Kitchen = kitchen;
-            Beds = beds;
-            Occupants = occupants;
+            NumberOfSingleBeds = numberOfSingleBeds;
+            NumberOfDoubleBeds = numberOfDoubleBeds;
+            Occupants.Adults = occupants.Adults;
+            Occupants.Children = occupants.Children;
         }
 
         public bool Restaurant { get; private set; }
@@ -205,49 +206,11 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
         public bool SwimmingPool { get; private set; }
         
         public bool Kitchen { get; private set; }
+        
+        public int NumberOfSingleBeds { get; private set; }
 
-        private IList<Bed> _beds;
-
-        [JsonIgnore]
-        public virtual IList<Bed> Beds
-        {
-            get
-            {
-                return _beds;
-            }
-
-            set
-            {
-                if (value != null)
-                {
-                    _beds = new List<Bed>();
-                    foreach (var currentValue in value)
-                    {
-                        if (_beds.Count > 0)
-                        {
-                            var bedTypeFound = false;
-                            for (int i = 0; i < _beds.Count; i++)
-                            {
-                                if (_beds[i].BedType == currentValue.BedType)
-                                {
-                                    _beds[i].BedCount += currentValue.BedCount;
-                                    bedTypeFound = true;
-                                }
-                            }
-                            if (!bedTypeFound)
-                            {
-                                _beds.Add(currentValue);
-                            }
-                        }
-                        else
-                        {
-                            _beds.Add(currentValue);
-                        }
-                    }
-                }
-            }
-        }
-
+        public int NumberOfDoubleBeds { get; private set; }
+        
         public Occupants Occupants { get; set; }
 
         /// <summary>
@@ -501,7 +464,8 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             private bool _bathtub;
             private bool _swimmingPool;
             private bool _kitchen;
-            private IList<Bed> _beds;
+            private int _numberOfSingleBeds;
+            private int _numberOfDoubleBeds;
             private Occupants _occupants;
             private bool _elevator;
 
@@ -631,9 +595,15 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
                 return this;
             }
 
-            public HotelBuilder Beds(IList<Bed> beds)
+            public HotelBuilder NumberOfSingleBeds(int numberOfSingleBeds)
             {
-                _beds = beds;
+                _numberOfSingleBeds = numberOfSingleBeds;
+                return this;
+            }
+
+            public HotelBuilder NumberOfDoubleBeds(int numberOfDoubleBeds)
+            {
+                _numberOfDoubleBeds = numberOfDoubleBeds;
                 return this;
             }
 
@@ -662,7 +632,8 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
                     _cableTvAvailable, _parkingAvailable, _propertyType, _laundry, _ac, _geyser, _fitnessCentre, _attachedBathroom,
                     _ironing, _balcony, _lawn, _cctvCameras, _backupElectricity, _heating, _restaurant,
                     _airportShuttle, _breakfastIncluded, _sittingArea, _carRental, _spa, _salon, _bathtub, 
-                    _swimmingPool, _kitchen, _beds, _occupants, _landlineNumber, _fax, _elevator);
+                    _swimmingPool, _kitchen, _numberOfSingleBeds, _numberOfDoubleBeds, _occupants, 
+                    _landlineNumber, _fax, _elevator);
             }
         }
     }

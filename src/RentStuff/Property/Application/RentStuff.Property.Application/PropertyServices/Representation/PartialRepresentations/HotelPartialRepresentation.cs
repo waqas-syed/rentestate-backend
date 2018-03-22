@@ -16,7 +16,8 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.Partial
             bool geyser, bool attachedBathroom, bool fitnessCenter,
             bool backupElectricity, bool heating,
             bool airportShuttle, bool breakfastIncluded,
-            Occupants occupants, string landlineNumber, string defaultImage, IList<Bed> beds)
+            Occupants occupants, string landlineNumber, string defaultImage, int numberOfSingleBeds, 
+            int numberOfDoubleBeds)
             : base(id, title, rentPrice, ownerPhoneNumber, landlineNumber, area, ownerName, genderRestriction,
                   isShared, rentUnit, internetAvailable, cableTvAvailable, propertyType, defaultImage)
         {
@@ -29,7 +30,8 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.Partial
             Heating = heating;
             AirportShuttle = airportShuttle;
             BreakfastIncluded = breakfastIncluded;
-            Beds = beds;
+            NumberOfSingleBeds = numberOfSingleBeds;
+            NumberOfDoubleBeds = numberOfDoubleBeds;
             Occupants = occupants;
         }
 
@@ -42,7 +44,8 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.Partial
         public bool Heating { get; private set; }
         public bool AirportShuttle { get; private set; }
         public bool BreakfastIncluded { get; private set; }
-        public IList<Bed> Beds { get; set; }
+        public int NumberOfSingleBeds { get; private set; }
+        public int NumberOfDoubleBeds { get; private set; }
         public Occupants Occupants { get; private set; }
     }
 }
