@@ -686,9 +686,9 @@ namespace RentStuff.Property.Application.PropertyServices
                 .Kitchen(createHotelCommand.Kitchen)
                 .NumberOfSingleBeds(createHotelCommand.NumberOfSingleBeds)
                 .NumberOfDoubleBeds(createHotelCommand.NumberOfDoubleBeds)
-                .Occupants(createHotelCommand.Occupants)
                 .Build();
-            
+            createHotelCommand.Occupants.Hotel = hotel;
+            hotel.Occupants = createHotelCommand.Occupants;
             return hotel;
         }
 

@@ -100,7 +100,6 @@ namespace RentStuff.Property.Domain.Model.HotelAggregate
             NumberOfSingleBeds = numberOfSingleBeds;
             NumberOfDoubleBeds = numberOfDoubleBeds;
             Occupants = occupants;
-            Occupants.Hotel = this;
         }
 
         /// <summary>
