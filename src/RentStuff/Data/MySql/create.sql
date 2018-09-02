@@ -1,6 +1,6 @@
--- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.18, for Win64 (x86_64)
 --
--- Host: localhost    Database: rentstuff
+-- Host: 127.0.0.1    Database: rentstuff
 -- ------------------------------------------------------
 -- Server version	5.7.18-log
 
@@ -126,22 +126,6 @@ CREATE TABLE `aspnetusers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `bed`
---
-
-DROP TABLE IF EXISTS `bed`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `bed` (
-  `id` varchar(100) NOT NULL,
-  `bed_count` int(11) NOT NULL,
-  `bed_type` varchar(50) DEFAULT NULL,
-  `hotel_id` varchar(100) DEFAULT NULL,
-  UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `dimension`
 --
 
@@ -222,7 +206,7 @@ CREATE TABLE `hostel` (
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -237,7 +221,7 @@ CREATE TABLE `hostelimages` (
   `hostel_id` varchar(100) NOT NULL,
   `image_id` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=164 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -300,7 +284,7 @@ CREATE TABLE `hotel` (
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -315,7 +299,7 @@ CREATE TABLE `hotelimages` (
   `hotel_id` varchar(100) NOT NULL,
   `image_id` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -352,16 +336,16 @@ CREATE TABLE `house` (
   `owner_name` varchar(100) NOT NULL,
   `is_shared` tinyint(1) NOT NULL DEFAULT '0',
   `rent_unit` varchar(50) NOT NULL DEFAULT 'Month',
-  `landline_number` varchar(25) DEFAULT NULL,
-  `fax` varchar(25) DEFAULT NULL,
   `date_created` datetime DEFAULT NULL,
   `last_modified` datetime DEFAULT NULL,
+  `landline_number` varchar(25) DEFAULT NULL,
+  `fax` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`db_id`),
   UNIQUE KEY `db_id_UNIQUE` (`db_id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `dimension_id_fk_idx` (`dimension_id`),
   CONSTRAINT `dimension_id_fk` FOREIGN KEY (`dimension_id`) REFERENCES `dimension` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=475 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=488 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -376,7 +360,7 @@ CREATE TABLE `houseimages` (
   `house_id` varchar(100) NOT NULL,
   `image_id` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=271 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=302 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -404,4 +388,4 @@ CREATE TABLE `occupants` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-22 16:18:33
+-- Dump completed on 2018-09-02 18:05:53
