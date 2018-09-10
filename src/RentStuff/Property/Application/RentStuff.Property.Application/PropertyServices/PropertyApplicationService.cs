@@ -231,7 +231,7 @@ namespace RentStuff.Property.Application.PropertyServices
         public IList<ResidentialPropertyPartialBaseImplementation> GetAllProperties(int pageNo = 0)
         {
             IList<Domain.Model.PropertyAggregate.Property> properties =
-                 _residentialPropertyRepository.GetAllProperties();
+                 _residentialPropertyRepository.GetAllProperties(pageNo);
 
             var propertyRepresentations = new List<ResidentialPropertyPartialBaseImplementation>();
             foreach (var property in properties)

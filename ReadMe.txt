@@ -21,7 +21,7 @@
 		- MySql Community Server
 		- MySql .NET Connector
 		- MySql Workbench (Optional - for convenience)
-	- A new MySql user needs to be created in order to make the application connect to the MySql database. The credentials of the user can be requested from the project lead. The permissions allowed to this user are:
+	- A new MySql user needs to be created apart from the root user in order to make the application connect to the MySql database. The credentials of the user can be requested from the project lead. The permissions allowed to this user are:
 		- CREATE
 		- ALTER
 		- DROP
@@ -30,10 +30,13 @@
 		- UPDATE
 		- DELETE
 		- REFERENCES
+	- Create a new database named rentstuff
+	- Import the database from a .sql dump and import the data using MySql WorkBench: 
+		- Server > Data Import > Select the File > Choose from dumping the structure and data, or only data or only structure.
 		
 - Google Cloud Storage - For uploading Photos
 	- We have created Service account credentials on Google Cloud Console and downloaded a json file. Get this file from the project lead and place it somewhere on your computer.
-	- Create a new environment variable called GOOGLE_APPLICATION_CREDENTIALS and point it's vaue to the json file.
+	- Create a new environment variable called GOOGLE_APPLICATION_CREDENTIALS and point it's value to the json file.
 
 - Facebook Login:
 	- For OWIN pipeline in ASP.NET, the redirect url that we provide to Facebook is https://ourdomain.com/signin-facebook. So in our case it is https://api.zarqoon.com/signin-facebook.
