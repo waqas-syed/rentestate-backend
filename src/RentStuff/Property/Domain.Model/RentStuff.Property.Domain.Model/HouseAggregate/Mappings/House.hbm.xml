@@ -34,6 +34,14 @@ assembly="RentStuff.Property.Domain.Model" namespace="RentStuff.Property.Domain.
     <property name="StreetNo" column="street_no"/>
     <property name="LandlineNumber" column="landline_number"/>
     <property name="Fax"/>
+    <property name="AC"/>
+    <property name="Geyser"/>
+    <property name="Balcony"/>
+    <property name="Lawn"/>
+    <property name="CctvCameras" column="cctv_cameras" />
+    <property name="BackupElectricity" column="backup_electricity" />
+    <property name="Heating"/>
+    <property name="Elevator"/>
     
     <many-to-one name="Dimension" unique="true" column="dimension_id" cascade="all">
     </many-to-one>

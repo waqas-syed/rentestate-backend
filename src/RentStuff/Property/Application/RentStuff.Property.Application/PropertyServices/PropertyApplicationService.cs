@@ -55,24 +55,23 @@ namespace RentStuff.Property.Application.PropertyServices
             
             // The Id of whichever property gets created
             string id = null;
-            CreateHouseCommand createHouseCommand =
-                    JsonConvert.DeserializeObject<CreateHouseCommand>(propertyBaseCommand.ToString());
 
-            House house = CreateHouseInstance(createHouseCommand, coordinates.Item1, coordinates.Item2,
-                genderRestriction);
-            // Save the new house instance
-            _residentialPropertyRepository.SaveorUpdate(house);
-            _logger.Info("House uploaded Successfully: {0}", house);
-            id = house.Id;
-            
             // Now check what type of command it is, and cast it to that property type
-            /*if (propertyBaseCommand.PropertyType.Value.Equals(Constants.House) ||
+            if (propertyBaseCommand.PropertyType.Value.Equals(Constants.House) ||
                 propertyBaseCommand.PropertyType.Value.Equals(Constants.Apartment))
             {
-                
+                CreateHouseCommand createHouseCommand =
+                    JsonConvert.DeserializeObject<CreateHouseCommand>(propertyBaseCommand.ToString());
+
+                House house = CreateHouseInstance(createHouseCommand, coordinates.Item1, coordinates.Item2,
+                    genderRestriction);
+                // Save the new house instance
+                _residentialPropertyRepository.SaveorUpdate(house);
+                _logger.Info("House uploaded Successfully: {0}", house);
+                id = house.Id;    
             }
             // If the request is for creating a new Hostel
-            else if (propertyBaseCommand.PropertyType.Value.Equals(Constants.Hostel))
+            /*else if (propertyBaseCommand.PropertyType.Value.Equals(Constants.Hostel))
             {
                 CreateHostelCommand createHostelCommand = 
                     JsonConvert.DeserializeObject<CreateHostelCommand>(propertyBaseCommand.ToString());
