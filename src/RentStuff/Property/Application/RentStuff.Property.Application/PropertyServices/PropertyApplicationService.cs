@@ -52,22 +52,24 @@ namespace RentStuff.Property.Application.PropertyServices
             // Get the coordinates for the location using the Geocoding API service
             Tuple<decimal, decimal> coordinates = _geocodingService.GetCoordinatesFromAddress(propertyBaseCommand.Area.Value);
             var genderRestriction = ParseGenderRestriction(propertyBaseCommand.GenderRestriction.Value);
-
+            
             // The Id of whichever property gets created
             string id = null;
+            CreateHouseCommand createHouseCommand =
+                    JsonConvert.DeserializeObject<CreateHouseCommand>(propertyBaseCommand.ToString());
+
+            House house = CreateHouseInstance(createHouseCommand, coordinates.Item1, coordinates.Item2,
+                genderRestriction);
+            // Save the new house instance
+            _residentialPropertyRepository.SaveorUpdate(house);
+            _logger.Info("House uploaded Successfully: {0}", house);
+            id = house.Id;
+            
             // Now check what type of command it is, and cast it to that property type
-            if (propertyBaseCommand.PropertyType.Value.Equals(Constants.House) ||
+            /*if (propertyBaseCommand.PropertyType.Value.Equals(Constants.House) ||
                 propertyBaseCommand.PropertyType.Value.Equals(Constants.Apartment))
             {
-                CreateHouseCommand createHouseCommand = 
-                    JsonConvert.DeserializeObject<CreateHouseCommand>(propertyBaseCommand.ToString());
                 
-                House house = CreateHouseInstance(createHouseCommand, coordinates.Item1, coordinates.Item2,
-                    genderRestriction);
-                // Save the new house instance
-                _residentialPropertyRepository.SaveorUpdate(house);
-                _logger.Info("House uploaded Successfully: {0}", house);
-                id = house.Id;
             }
             // If the request is for creating a new Hostel
             else if (propertyBaseCommand.PropertyType.Value.Equals(Constants.Hostel))
@@ -97,7 +99,7 @@ namespace RentStuff.Property.Application.PropertyServices
             else
             {
                 throw new NotImplementedException("Only residential Property types are supported yet");
-            }
+            }*/
 
             return id;
         }
@@ -574,6 +576,15 @@ namespace RentStuff.Property.Application.PropertyServices
                 .RentUnit(createHouseCommand.RentUnit)
                 .LandlineNumber(createHouseCommand.LandlineNumber)
                 .Fax(createHouseCommand.Fax)
+                .Bathtub(createHouseCommand.Bathtub)
+                .AC(createHouseCommand.AC)
+                .Geyser(createHouseCommand.Geyser)
+                .Balcony(createHouseCommand.Balcony)
+                .Lawn(createHouseCommand.Lawn)
+                .CctvCameras(createHouseCommand.CctvCameras)
+                .BackupElectricity(createHouseCommand.BackupElectricity)
+                .Heating(createHouseCommand.Heating)
+                .Elevator(createHouseCommand.Elevator)
                 .Build();
 
             house.Dimension = CreateDimensionInstance(createHouseCommand.DimensionType,
@@ -750,7 +761,16 @@ namespace RentStuff.Property.Application.PropertyServices
                 updateHouseCommand.IsShared,
                 updateHouseCommand.RentUnit,
                 updateHouseCommand.LandlineNumber,
-                updateHouseCommand.Fax);
+                updateHouseCommand.Fax,
+                updateHouseCommand.AC,
+                updateHouseCommand.Geyser,
+                updateHouseCommand.Balcony,
+                updateHouseCommand.Lawn,
+                updateHouseCommand.CctvCameras,
+                updateHouseCommand.BackupElectricity,
+                updateHouseCommand.Heating,
+                updateHouseCommand.Bathtub,
+                updateHouseCommand.Elevator);
 
             // Save the new house instance
             _residentialPropertyRepository.SaveorUpdate(house);
@@ -965,15 +985,14 @@ namespace RentStuff.Property.Application.PropertyServices
 
             return new HouseFullRepresentation(house.Id, house.Title, house.RentPrice, house.NumberOfBedrooms,
                 house.NumberOfKitchens, house.NumberOfBathrooms, house.InternetAvailable,
-                house.LandlinePhoneAvailable,
-                house.CableTvAvailable, dimension, house.GarageAvailable, house.SmokingAllowed,
-                house.PropertyType,
-                house.OwnerEmail, house.OwnerPhoneNumber, house.HouseNo,
-                house.StreetNo,
-                house.Area,
-                house.GetImageList(), house.OwnerName, house.Description, house.GenderRestriction.ToString(),
-                house.IsShared,
-                house.RentUnit, house.LandlineNumber, house.Fax);
+                house.LandlinePhoneAvailable, house.CableTvAvailable, dimension, 
+                house.GarageAvailable, house.SmokingAllowed, house.PropertyType, house.OwnerEmail, 
+                house.OwnerPhoneNumber, house.HouseNo, house.StreetNo, house.Area,
+                house.GetImageList(), house.OwnerName, house.Description, 
+                house.GenderRestriction.ToString(), house.IsShared,
+                house.RentUnit, house.LandlineNumber, house.Fax, house.AC, house.Geyser, house.Balcony,
+                house.Lawn, house.CctvCameras, house.BackupElectricity, house.Heating, house.Bathtub,
+                house.Elevator);
         }
 
         /// <summary>
@@ -1088,7 +1107,8 @@ namespace RentStuff.Property.Application.PropertyServices
                 house.OwnerPhoneNumber, house.LandlineNumber, firstImage, house.OwnerName,
                 house.IsShared, house.GenderRestriction.ToString(), house.RentUnit, house.InternetAvailable,
                 house.CableTvAvailable, house.NumberOfBedrooms, house.NumberOfBathrooms,
-                house.NumberOfKitchens);
+                house.NumberOfKitchens, house.AC, house.Geyser, house.Balcony, house.Lawn, house.CctvCameras,
+                house.BackupElectricity, house.Heating, house.Bathtub, house.Elevator);
             return houseRepresentation;
         }
 

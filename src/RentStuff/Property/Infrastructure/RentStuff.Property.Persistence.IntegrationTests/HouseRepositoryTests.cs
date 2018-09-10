@@ -217,6 +217,15 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             bool isShared = true;
             string landlineNumber = "0510000000";
             string fax = "0510000000";
+            bool ac = true;
+            bool geyser = true;
+            bool balcony = true;
+            bool lawn = true;
+            bool heating = false;
+            bool cctvCameras = true;
+            bool backupElectricity = true;
+            bool bathtub = true;
+            bool elevator = true;
 
             House house = new House.HouseBuilder().Title(title).OwnerEmail(email).OwnerPhoneNumber(phoneNumber)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
@@ -225,7 +234,9 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 .PropertyType(propertyType).RentPrice(price).Latitude(latitude).Longitude(longitude)
                 .HouseNo(houseNo).Area(area).StreetNo(streetNo).OwnerName(ownerName).Description(description)
                 .GenderRestriction(genderRestriction).IsShared(isShared).LandlineNumber(landlineNumber).Fax(fax)
-                .Build();
+                .AC(ac).Geyser(geyser).Balcony(balcony).Lawn(lawn).Heating(heating)
+                .CctvCameras(cctvCameras).BackupElectricity(backupElectricity).Bathtub(bathtub)
+                .Elevator(elevator).Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, null, 5, house);
             house.Dimension = dimension;
             //houseRepository.SaveorUpdateDimension(dimension);
@@ -260,6 +271,16 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             Assert.AreEqual(house.LastModified, retreivedHouse.LastModified);
             Assert.AreEqual(landlineNumber, retreivedHouse.LandlineNumber);
             Assert.AreEqual(fax, retreivedHouse.Fax);
+
+            Assert.AreEqual(ac, retreivedHouse.AC);
+            Assert.AreEqual(geyser, retreivedHouse.Geyser);
+            Assert.AreEqual(balcony, retreivedHouse.Balcony);
+            Assert.AreEqual(lawn, retreivedHouse.Lawn);
+            Assert.AreEqual(cctvCameras, retreivedHouse.CctvCameras);
+            Assert.AreEqual(backupElectricity, retreivedHouse.BackupElectricity);
+            Assert.AreEqual(heating, retreivedHouse.Heating);
+            Assert.AreEqual(bathtub, retreivedHouse.Bathtub);
+            Assert.AreEqual(elevator, retreivedHouse.Elevator);
 
             // Get the value of last modified
             DateTime? lastModifiedInitialValue = house.LastModified;
@@ -296,10 +317,21 @@ namespace RentStuff.Property.Persistence.IntegrationTests
             string landlineNumber2 = "0510000001";
             string fax2 = "0510000001";
 
+            bool ac2 = true;
+            bool geyser2 = true;
+            bool balcony2 = true;
+            bool lawn2 = true;
+            bool heating2 = false;
+            bool cctvCameras2 = true;
+            bool backupElectricity2 = true;
+            bool bathtub2 = true;
+            bool elevator2 = true;
+
             Dimension dimension2 = new Dimension(DimensionType.Marla, "20", 0, house);
             house.UpdateHouse(title2, monthlyRent2, numberOfBedrooms2, numberOfKitchens2, numberofBathrooms2, internet2, landline2,
                 cableTv2, dimension2, garage2, smokingAllowed2, propertyType2, email2, phoneNumber2, null, null, area2, name2,
-                description2, genderRestriction2, latitude2, longitude2, isShared2, rentUnit2, landlineNumber2, fax2);
+                description2, genderRestriction2, latitude2, longitude2, isShared2, rentUnit2, landlineNumber2, fax2,
+                ac2, geyser2, balcony2, lawn2, cctvCameras2, backupElectricity2, heating2, bathtub2, elevator2);
             houseRepository.SaveorUpdate(house);
             House retreivedHouse2 = (House)houseRepository.GetPropertyById(house.Id);
 
@@ -337,6 +369,16 @@ namespace RentStuff.Property.Persistence.IntegrationTests
 
             Assert.AreEqual(landlineNumber2, retreivedHouse.LandlineNumber);
             Assert.AreEqual(fax2, retreivedHouse.Fax);
+
+            Assert.AreEqual(ac2, retreivedHouse.AC);
+            Assert.AreEqual(geyser2, retreivedHouse.Geyser);
+            Assert.AreEqual(balcony2, retreivedHouse.Balcony);
+            Assert.AreEqual(lawn2, retreivedHouse.Lawn);
+            Assert.AreEqual(cctvCameras2, retreivedHouse.CctvCameras);
+            Assert.AreEqual(backupElectricity2, retreivedHouse.BackupElectricity);
+            Assert.AreEqual(heating2, retreivedHouse.Heating);
+            Assert.AreEqual(bathtub2, retreivedHouse.Bathtub);
+            Assert.AreEqual(elevator2, retreivedHouse.Elevator);
         }
 
         #endregion Save and Get Houses By Id

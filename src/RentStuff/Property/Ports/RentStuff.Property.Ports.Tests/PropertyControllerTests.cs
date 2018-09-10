@@ -96,6 +96,16 @@ namespace RentStuff.Property.Ports.Tests
                 string landlineNumber = "0510000000";
                 string fax = "0510000000";
 
+                bool ac = true;
+                bool geyser = true;
+                bool balcony = true;
+                bool lawn = true;
+                bool heating = false;
+                bool cctvCameras = true;
+                bool backupElectricity = true;
+                bool bathtub = true;
+                bool elevator = true;
+
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
                 {
@@ -108,7 +118,8 @@ namespace RentStuff.Property.Ports.Tests
                     numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
                     houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction,
-                    isShared, rentUnit, landlineNumber, fax);
+                    isShared, rentUnit, landlineNumber, fax, ac, geyser, balcony, lawn, cctvCameras, backupElectricity,
+                    heating, bathtub, elevator);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
@@ -140,6 +151,16 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(rentUnit, retreivedHouse.RentUnit);
                 Assert.AreEqual(landlineNumber, retreivedHouse.LandlineNumber);
                 Assert.AreEqual(fax, retreivedHouse.Fax);
+
+                Assert.AreEqual(ac, house.AC);
+                Assert.AreEqual(geyser, house.Geyser);
+                Assert.AreEqual(balcony, house.Balcony);
+                Assert.AreEqual(lawn, house.Lawn);
+                Assert.AreEqual(cctvCameras, house.CctvCameras);
+                Assert.AreEqual(backupElectricity, house.BackupElectricity);
+                Assert.AreEqual(heating, house.Heating);
+                Assert.AreEqual(bathtub, house.Bathtub);
+                Assert.AreEqual(elevator, house.Elevator);
             }
         }
 
@@ -184,6 +205,16 @@ namespace RentStuff.Property.Ports.Tests
                 string landlineNumber = "0510000000";
                 string fax = "0510000000";
 
+                bool ac = true;
+                bool geyser = true;
+                bool balcony = false;
+                bool lawn = true;
+                bool heating = false;
+                bool cctvCameras = true;
+                bool backupElectricity = true;
+                bool bathtub = true;
+                bool elevator = false;
+
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
                 {
@@ -196,7 +227,8 @@ namespace RentStuff.Property.Ports.Tests
                     numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
                     houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction,
-                    isShared, rentUnit, landlineNumber, fax);
+                    isShared, rentUnit, landlineNumber, fax, ac, geyser, balcony, lawn, cctvCameras,
+                    backupElectricity, heating, bathtub, elevator);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
@@ -639,6 +671,16 @@ namespace RentStuff.Property.Ports.Tests
                 string landlineNumber = "0510000000";
                 string fax = "0510000000";
 
+                bool ac = true;
+                bool geyser = true;
+                bool balcony = true;
+                bool lawn = true;
+                bool heating = false;
+                bool cctvCameras = true;
+                bool backupElectricity = true;
+                bool bathtub = true;
+                bool elevator = true;
+
                 // Set the Current User's username(which is the same as his email), otherwise the request for posting a new house will fail
                 houseController.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
                 {
@@ -651,7 +693,8 @@ namespace RentStuff.Property.Ports.Tests
                     numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
                     houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction,
-                    isShared, rentUnit, landlineNumber, fax);
+                    isShared, rentUnit, landlineNumber, fax, ac, geyser, balcony, lawn, cctvCameras, backupElectricity,
+                    heating, bathtub, elevator);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
@@ -688,12 +731,24 @@ namespace RentStuff.Property.Ports.Tests
                 string updatedLandlineNumber = "0510000001";
                 string updatedFax = "0510000001";
 
+                bool updatedAc = false;
+                bool updatedGeyser = false;
+                bool updatedBalcony = false;
+                bool updatedLawn = false;
+                bool updatedHeating = true;
+                bool updatedCctvCameras = false;
+                bool updatedBackupElectricity = false;
+                bool updatedBathtub = false;
+                bool updatedElevator = false;
+
                 UpdateHouseCommand updateHouseCommand = new UpdateHouseCommand(houseId, updatedTitle, updatedRent, updatedNumberOfBedrooms,
                     updatedNumberOfKitchens, updatedNumberOfBathrooms, updatedInternetAvailable, updatedLandlinePhoneAvailable,
                     updatedCableTvAvailable, updatedGarageAvailable, updatedSmokingAllowed, updatedPropertyType, updatedOwnerEmail,
                     updatedOwnerPhoneNumber, updatedHouseNo, updatedStreetNo, updatedArea, updatedDimensionType, updatedDimensionString,
                     updatedDimensionDecimal, updatedOwnerName, updatedDescription, updatedGenderRestriction, updatedIsShared,
-                    updatedRentUnit, updatedLandlineNumber, updatedFax);
+                    updatedRentUnit, updatedLandlineNumber, updatedFax, updatedAc, updatedGeyser, updatedBalcony,
+                    updatedLawn, updatedCctvCameras, updatedBackupElectricity, updatedHeating, updatedBathtub,
+                    updatedElevator);
 
                 houseController.Put(JsonConvert.SerializeObject(updateHouseCommand));
                 response = (IHttpActionResult)houseController.Get(houseId: houseId, propertyType: updatedPropertyType);
@@ -724,6 +779,16 @@ namespace RentStuff.Property.Ports.Tests
                 Assert.AreEqual(updatedRentUnit, retreivedUpdatedHouse.RentUnit);
                 Assert.AreEqual(updatedLandlineNumber, retreivedUpdatedHouse.LandlineNumber);
                 Assert.AreEqual(updatedFax, retreivedUpdatedHouse.Fax);
+
+                Assert.AreEqual(updatedAc, house.AC);
+                Assert.AreEqual(updatedGeyser, house.Geyser);
+                Assert.AreEqual(updatedBalcony, house.Balcony);
+                Assert.AreEqual(updatedLawn, house.Lawn);
+                Assert.AreEqual(updatedCctvCameras, house.CctvCameras);
+                Assert.AreEqual(updatedBackupElectricity, house.BackupElectricity);
+                Assert.AreEqual(updatedHeating, house.Heating);
+                Assert.AreEqual(updatedBathtub, house.Bathtub);
+                Assert.AreEqual(updatedElevator, house.Elevator);
             }
         }
 
@@ -780,7 +845,8 @@ namespace RentStuff.Property.Ports.Tests
                     numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
                     houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction,
-                    isShared, rentUnit, landlineNumber, fax);
+                    isShared, rentUnit, landlineNumber, fax, false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
@@ -822,7 +888,8 @@ namespace RentStuff.Property.Ports.Tests
                     updatedCableTvAvailable, updatedGarageAvailable, updatedSmokingAllowed, updatedPropertyType, updatedOwnerEmail,
                     updatedOwnerPhoneNumber, updatedHouseNo, updatedStreetNo, updatedArea, updatedDimensionType, updatedDimensionString,
                     updatedDimensionDecimal, updatedOwnerName, updatedDescription, updatedGenderRestriction, updatedIsShared,
-                    updatedRentUnit, updatedLandlineNumber, updatedFax);
+                    updatedRentUnit, updatedLandlineNumber, updatedFax, false, false, false, false, false, false, false,
+                    false, false);
 
                 houseController.Put(JsonConvert.SerializeObject(updateHouseCommand));
                 response = (IHttpActionResult)houseController.Get(houseId: houseId, propertyType: updatedPropertyType);
@@ -1422,7 +1489,8 @@ namespace RentStuff.Property.Ports.Tests
                 });
                 CreateHouseCommand house = new CreateHouseCommand("title", 22000000, 1, 1, 1, true, false, false, true,
                     false, Constants.House, ownerEmail, "03000000000", "1", "1", area, "Kanal", "1", 0, "Some name",
-                    "", GenderRestriction.NoRestriction.ToString(), false, "Day", "", "");
+                    "", GenderRestriction.NoRestriction.ToString(), false, "Day", "", "", false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>) houseSaveResult).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
@@ -1440,7 +1508,9 @@ namespace RentStuff.Property.Ports.Tests
                 });
                 CreateHouseCommand house2 = new CreateHouseCommand("Title # 2", 1400000, 1, 1,
                     1, true, false, false, false, true, Constants.House, ownerEmail2, "03000000000",
-                    "", "", area2, "Kanal", "2", 0, "Name", "", GenderRestriction.GirlsOnly.ToString(), true, Constants.Daily, "", "");
+                    "", "", area2, "Kanal", "2", 0, "Name", "", GenderRestriction.GirlsOnly.ToString(), 
+                    true, Constants.Daily, "", "", false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult2 = houseController.Post(JsonConvert.SerializeObject(house2));
                 string houseId2 = ((OkNegotiatedContentResult<string>)houseSaveResult2).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId2));
@@ -1460,7 +1530,8 @@ namespace RentStuff.Property.Ports.Tests
                     1, false, true,
                     true, false, false, Constants.Apartment, ownerEmail3, "03000000000",
                     "", "", area3, DimensionType.Acre.ToString(), "2", 0, "Name 3", "", 
-                    GenderRestriction.NoRestriction.ToString(), false, Constants.Daily, "", "");
+                    GenderRestriction.NoRestriction.ToString(), false, Constants.Daily, "", "", 
+                    false, false, false, false, false, false, false, false, false);
                 IHttpActionResult houseSaveResult3 = houseController.Post(JsonConvert.SerializeObject(apartment3));
                 Assert.IsFalse(string.IsNullOrWhiteSpace(((OkNegotiatedContentResult<string>)houseSaveResult3).Content));
                 string apartmentId3 = ((OkNegotiatedContentResult<string>)houseSaveResult3).Content;
@@ -1589,7 +1660,8 @@ namespace RentStuff.Property.Ports.Tests
                     1, false, true,
                     true, false, false, Constants.Apartment, ownerEmail10, "03000000000",
                     "", "", area10, DimensionType.Acre.ToString(), "2", 0, "Owner name", "",
-                    GenderRestriction.GirlsOnly.ToString(), false, Constants.Daily, "", "");
+                    GenderRestriction.GirlsOnly.ToString(), false, Constants.Daily, "", "", false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult10 = houseController.Post(JsonConvert.SerializeObject(apartment10));
                 Assert.IsFalse(string.IsNullOrWhiteSpace(((OkNegotiatedContentResult<string>)houseSaveResult10).Content));
                 string apartmentId10 = ((OkNegotiatedContentResult<string>)houseSaveResult10).Content;
@@ -1680,7 +1752,8 @@ namespace RentStuff.Property.Ports.Tests
                 });
                 CreateHouseCommand house = new CreateHouseCommand("title", 22000000, 1, 1, 1, true, false, false, true,
                     false, Constants.House, ownerEmail, "03000000000", "1", "1", area, "Kanal", "1", 0, "Some name",
-                    "", GenderRestriction.NoRestriction.ToString(), false, "Day", "", "");
+                    "", GenderRestriction.NoRestriction.ToString(), false, "Day", "", "", false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
@@ -1698,7 +1771,9 @@ namespace RentStuff.Property.Ports.Tests
                 });
                 CreateHouseCommand house2 = new CreateHouseCommand("Title # 2", 1400000, 1, 1,
                     1, true, false, false, false, true, Constants.House, ownerEmail2, "03000000000",
-                    "", "", area2, "Kanal", "2", 0, "Name", "", GenderRestriction.GirlsOnly.ToString(), true, Constants.Daily, "", "");
+                    "", "", area2, "Kanal", "2", 0, "Name", "", GenderRestriction.GirlsOnly.ToString(), true, Constants.Daily, "", ""
+                    , false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult2 = houseController.Post(JsonConvert.SerializeObject(house2));
                 string houseId2 = ((OkNegotiatedContentResult<string>)houseSaveResult2).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId2));
@@ -1718,7 +1793,8 @@ namespace RentStuff.Property.Ports.Tests
                     1, false, true,
                     true, false, false, Constants.Apartment, ownerEmail3, "03000000000",
                     "", "", area3, DimensionType.Acre.ToString(), "2", 0, "Name 3", "",
-                    GenderRestriction.NoRestriction.ToString(), false, Constants.Daily, "", "");
+                    GenderRestriction.NoRestriction.ToString(), false, Constants.Daily, "", "", false, false, false, false, false, false, false,
+                false, false);
                 IHttpActionResult houseSaveResult3 = houseController.Post(JsonConvert.SerializeObject(apartment3));
                 Assert.IsFalse(string.IsNullOrWhiteSpace(((OkNegotiatedContentResult<string>)houseSaveResult3).Content));
                 string apartmentId3 = ((OkNegotiatedContentResult<string>)houseSaveResult3).Content;
@@ -1847,7 +1923,8 @@ namespace RentStuff.Property.Ports.Tests
                     1, false, true,
                     true, false, false, Constants.Apartment, ownerEmail10, "03000000000",
                     "", "", area10, DimensionType.Acre.ToString(), "2", 0, "Owner name", "",
-                    GenderRestriction.GirlsOnly.ToString(), false, Constants.Daily, "", "");
+                    GenderRestriction.GirlsOnly.ToString(), false, Constants.Daily, "", "", false, false, false, false, false, false, false,
+                false, false);
                 IHttpActionResult houseSaveResult10 = houseController.Post(JsonConvert.SerializeObject(apartment10));
                 Assert.IsFalse(string.IsNullOrWhiteSpace(((OkNegotiatedContentResult<string>)houseSaveResult10).Content));
                 string apartmentId10 = ((OkNegotiatedContentResult<string>)houseSaveResult10).Content;
@@ -1955,7 +2032,8 @@ namespace RentStuff.Property.Ports.Tests
                 });
                 CreateHouseCommand house = new CreateHouseCommand("title", 22000000, 1, 1, 1, true, false, false, true,
                     false, Constants.House, propertySearchedEmail, "03000000000", "1", "1", area, "Kanal", "1", 0, "Some name",
-                    "", GenderRestriction.NoRestriction.ToString(), false, "Day", "", "");
+                    "", GenderRestriction.NoRestriction.ToString(), false, "Day", "", "", false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
@@ -1972,7 +2050,9 @@ namespace RentStuff.Property.Ports.Tests
                 });
                 CreateHouseCommand house2 = new CreateHouseCommand("Title # 2", 1400000, 1, 1,
                     1, true, false, false, false, true, Constants.House, propertyNonSearchedEmail, "03000000000",
-                    "", "", area2, "Kanal", "2", 0, "Name", "", GenderRestriction.GirlsOnly.ToString(), true, Constants.Daily, "", "");
+                    "", "", area2, "Kanal", "2", 0, "Name", "", GenderRestriction.GirlsOnly.ToString(), true, Constants.Daily, "", ""
+                    , false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult2 = houseController.Post(JsonConvert.SerializeObject(house2));
                 string houseId2 = ((OkNegotiatedContentResult<string>)houseSaveResult2).Content;
                 Assert.IsFalse(string.IsNullOrWhiteSpace(houseId2));
@@ -1992,7 +2072,8 @@ namespace RentStuff.Property.Ports.Tests
                     1, false, true,
                     true, false, false, Constants.Apartment, propertyNonSearchedEmail, "03000000000",
                     "", "", area3, DimensionType.Acre.ToString(), "2", 0, "Name 3", "",
-                    GenderRestriction.NoRestriction.ToString(), false, Constants.Daily, "", "");
+                    GenderRestriction.NoRestriction.ToString(), false, Constants.Daily, "", "", false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult3 = houseController.Post(JsonConvert.SerializeObject(apartment3));
                 Assert.IsFalse(string.IsNullOrWhiteSpace(((OkNegotiatedContentResult<string>)houseSaveResult3).Content));
                 string apartmentId3 = ((OkNegotiatedContentResult<string>)houseSaveResult3).Content;
@@ -2116,7 +2197,8 @@ namespace RentStuff.Property.Ports.Tests
                     1, false, true,
                     true, false, false, Constants.Apartment, propertySearchedEmail, "03000000000",
                     "", "", area10, DimensionType.Acre.ToString(), "2", 0, "Owner name", "",
-                    GenderRestriction.GirlsOnly.ToString(), false, Constants.Daily, "", "");
+                    GenderRestriction.GirlsOnly.ToString(), false, Constants.Daily, "", "", false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult10 = houseController.Post(JsonConvert.SerializeObject(apartment10));
                 Assert.IsFalse(string.IsNullOrWhiteSpace(((OkNegotiatedContentResult<string>)houseSaveResult10).Content));
                 string apartmentId10 = ((OkNegotiatedContentResult<string>)houseSaveResult10).Content;
@@ -2219,7 +2301,8 @@ namespace RentStuff.Property.Ports.Tests
                     numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
                     houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction,
-                    isShared, rentUnit, landlineNumber, fax);
+                    isShared, rentUnit, landlineNumber, fax, false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
@@ -2295,7 +2378,8 @@ namespace RentStuff.Property.Ports.Tests
                     numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
                     houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction,
-                    isShared, rentUnit, landlineNumber, fax);
+                    isShared, rentUnit, landlineNumber, fax, false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
@@ -2676,7 +2760,8 @@ namespace RentStuff.Property.Ports.Tests
                     numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
                     houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction,
-                    isShared, rentUnit, landlineNumber, fax);
+                    isShared, rentUnit, landlineNumber, fax, false, false, false, false, false, false, false, 
+                    false, false);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
@@ -2752,7 +2837,8 @@ namespace RentStuff.Property.Ports.Tests
                     numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
                     houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction,
-                    isShared, rentUnit, landlineNumber, fax);
+                    isShared, rentUnit, landlineNumber, fax, false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
@@ -3121,7 +3207,8 @@ namespace RentStuff.Property.Ports.Tests
                     numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
                     houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction,
-                    isShared, rentUnit, landlineNumber, fax);
+                    isShared, rentUnit, landlineNumber, fax, false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
@@ -3197,7 +3284,8 @@ namespace RentStuff.Property.Ports.Tests
                     numberOfBathrooms, internetAvailable, landlinePhoneAvailable,
                     cableTvAvailable, garageAvailable, smokingAllowed, propertyType, ownerEmail, ownerPhoneNumber,
                     houseNo, streetNo, area, dimensionType, dimensionString, dimensionDecimal, ownerName, description, genderRestriction,
-                    isShared, rentUnit, landlineNumber, fax);
+                    isShared, rentUnit, landlineNumber, fax, false, false, false, false, false, false, false,
+                    false, false);
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
@@ -3570,7 +3658,8 @@ namespace RentStuff.Property.Ports.Tests
                 });
             CreateHouseCommand house = new CreateHouseCommand("Title", 45000, 1, 1, 1, false, false, false,
                 false, false, propertyType, ownerEmail, ownerPhoneNumber, "", "", area, DimensionType.Acre.ToString(), "2",
-                1, "None", "", GenderRestriction.GirlsOnly.ToString(), false, Constants.Hourly, "", "");
+                1, "None", "", GenderRestriction.GirlsOnly.ToString(), false, Constants.Hourly, "", "", false,
+                false, false, false, false, false, false, false, false);
             IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
             string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
@@ -3607,7 +3696,8 @@ namespace RentStuff.Property.Ports.Tests
                 });
             CreateHouseCommand house = new CreateHouseCommand("Title", 45000, 1, 1, 1, false, false, false,
                 false, false, propertyType, ownerEmail, ownerPhoneNumber, "", "", area, DimensionType.Acre.ToString(), "2",
-                1, "None", "", GenderRestriction.GirlsOnly.ToString(), false, Constants.Hourly, "", "");
+                1, "None", "", GenderRestriction.GirlsOnly.ToString(), false, Constants.Hourly, "", ""
+                , false, false, false, false, false, false, false, false, false);
             IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
             string apartmentId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 

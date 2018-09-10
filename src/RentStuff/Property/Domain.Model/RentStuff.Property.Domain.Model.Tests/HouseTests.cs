@@ -37,14 +37,26 @@ namespace RentStuff.Property.Domain.Model.Tests
             bool isShared = true;
             string landlineNumber = "0510000000";
             string fax = "0510000000";
-            
+
+            bool ac = true;
+            bool geyser = true;
+            bool balcony = false;
+            bool lawn = true;
+            bool heating = false;
+            bool cctvCameras = true;
+            bool backupElectricity = true;
+            bool bathtub = true;
+            bool elevator = false;
+
             House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(cableTv)
                 .GarageAvailable(garage).LandlinePhoneAvailable(landline).SmokingAllowed(smokingAllowed).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
-                .IsShared(isShared).LandlineNumber(landlineNumber).Fax(fax)
+                .IsShared(isShared).LandlineNumber(landlineNumber).Fax(fax).AC(ac).Geyser(geyser)
+                .Balcony(balcony).Lawn(lawn).Heating(heating).CctvCameras(cctvCameras)
+                .BackupElectricity(backupElectricity).Bathtub(bathtub).Elevator(elevator)
                 .Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
             house.Dimension = dimension;
@@ -82,6 +94,16 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(rentUnit, house.RentUnit);
             Assert.AreEqual(landlineNumber, house.LandlineNumber);
             Assert.AreEqual(fax, house.Fax);
+
+            Assert.AreEqual(ac, house.AC);
+            Assert.AreEqual(geyser, house.Geyser);
+            Assert.AreEqual(balcony, house.Balcony);
+            Assert.AreEqual(lawn, house.Lawn);
+            Assert.AreEqual(cctvCameras, house.CctvCameras);
+            Assert.AreEqual(backupElectricity, house.BackupElectricity);
+            Assert.AreEqual(heating, house.Heating);
+            Assert.AreEqual(bathtub, house.Bathtub);
+            Assert.AreEqual(elevator, house.Elevator);
         }
 
         [Test]
@@ -114,13 +136,25 @@ namespace RentStuff.Property.Domain.Model.Tests
             string rentUnit = "Hour";
             bool isShared = true;
 
+            bool ac = true;
+            bool geyser = true;
+            bool balcony = true;
+            bool lawn = true;
+            bool heating = true;
+            bool cctvCameras = true;
+            bool backupElectricity = true;
+            bool bathtub = true;
+            bool elevator = true;
+
             House house = new House.HouseBuilder().OwnerEmail(email).OwnerPhoneNumber(phoneNumber).Title(title).OwnerName(name)
                 .NumberOfBedrooms(numberOfBedrooms).NumberOfBathrooms(numberofBathrooms)
                 .NumberOfKitchens(numberOfKitchens).CableTvAvailable(cableTv)
                 .GarageAvailable(garage).LandlinePhoneAvailable(landline).SmokingAllowed(smokingAllowed).WithInternetAvailable(internet)
                 .PropertyType(propertyType).RentPrice(monthlyRent).Latitude(latitude).Longitude(longitude)
                 .Area(area).GenderRestriction(genderRestriction).Description(description).RentUnit(rentUnit)
-                .IsShared(isShared).LandlineNumber(null).Fax(null)
+                .IsShared(isShared).LandlineNumber(null).Fax(null).AC(ac).Geyser(geyser)
+                .Balcony(balcony).Lawn(lawn).Heating(heating).CctvCameras(cctvCameras)
+                .BackupElectricity(backupElectricity).Bathtub(bathtub).Elevator(elevator)
                 .Build();
             Dimension dimension = new Dimension(DimensionType.Kanal, "10", 0, house);
             house.Dimension = dimension;
@@ -157,6 +191,16 @@ namespace RentStuff.Property.Domain.Model.Tests
             Assert.AreEqual(isShared, house.IsShared);
             Assert.AreEqual(rentUnit, house.RentUnit);
 
+            Assert.AreEqual(ac, house.AC);
+            Assert.AreEqual(geyser, house.Geyser);
+            Assert.AreEqual(balcony, house.Balcony);
+            Assert.AreEqual(lawn, house.Lawn);
+            Assert.AreEqual(cctvCameras, house.CctvCameras);
+            Assert.AreEqual(backupElectricity, house.BackupElectricity);
+            Assert.AreEqual(heating, house.Heating);
+            Assert.AreEqual(bathtub, house.Bathtub);
+            Assert.AreEqual(elevator, house.Elevator);
+
             // NOW UDPATE THE VALUES
             // Create and save the instance and then update it with new values
             string title2 = "Title No 2";
@@ -164,7 +208,7 @@ namespace RentStuff.Property.Domain.Model.Tests
             string email2 = "w@12344321-3.com";
             string name2 = "OwnerName2";
             string phoneNumber2 = "03455138018";
-
+            
             // No Latitude is given. So the house instance should not be created
             int numberOfBedrooms2 = 3;
             int numberofBathrooms2 = 3;
@@ -183,10 +227,22 @@ namespace RentStuff.Property.Domain.Model.Tests
             string rentUnit2 = "Day";
             bool isShared2 = false;
 
+            bool ac2 = false;
+            bool geyser2 = false;
+            bool balcony2 = false;
+            bool lawn2 = false;
+            bool heating2 = false;
+            bool cctvCameras2 = false;
+            bool backupElectricity2 = false;
+            bool bathtub2 = false;
+            bool elevator2 = false;
+
             Dimension dimension2 = new Dimension(DimensionType.Marla, "20", 0, house);
             house.UpdateHouse(title2,monthlyRent2, numberOfBedrooms2, numberOfKitchens2, numberofBathrooms2, internet2, landline2,
                 cableTv2, dimension2, garage2, smokingAllowed2, propertyType2, email2, phoneNumber2, null, null, area2, name2, 
-                description2, genderRestriction2, latitude2, longitude2, isShared2, rentUnit2, null, null);
+                description2, genderRestriction2, latitude2, longitude2, isShared2, rentUnit2, null, null,
+                ac2,geyser2, balcony2, lawn2, cctvCameras2, backupElectricity2, heating2, bathtub2,
+                elevator2);
             
             Assert.AreEqual(title2, house.Title);
             Assert.AreEqual(description2, house.Description);
@@ -214,6 +270,16 @@ namespace RentStuff.Property.Domain.Model.Tests
             
             Assert.AreEqual(isShared2, house.IsShared);
             Assert.AreEqual(rentUnit2, house.RentUnit);
+
+            Assert.AreEqual(ac2, house.AC);
+            Assert.AreEqual(geyser2, house.Geyser);
+            Assert.AreEqual(balcony2, house.Balcony);
+            Assert.AreEqual(lawn2, house.Lawn);
+            Assert.AreEqual(cctvCameras2, house.CctvCameras);
+            Assert.AreEqual(backupElectricity2, house.BackupElectricity);
+            Assert.AreEqual(heating2, house.Heating);
+            Assert.AreEqual(bathtub2, house.Bathtub);
+            Assert.AreEqual(elevator2, house.Elevator);
         }
 
         [Test]

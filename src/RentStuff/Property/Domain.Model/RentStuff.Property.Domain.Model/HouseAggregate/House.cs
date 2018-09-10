@@ -6,17 +6,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
     /// <summary>
     /// House Aggregate. A house that can be put on rent or sale
     /// </summary>
-    public class House : PropertyAggregate.ResidentialProperty
+    public class House : ResidentialProperty
     {
-        private int _numberOfBedrooms;
-        private int _numberOfKitchens;
-        private int _numberOfBathrooms;
-        private bool _landlinePhoneAvailable;
-        private Dimension _dimension;
-        private bool _smokingAllowed;
-        private string _houseNo;
-        private string _streetNo;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Object"/> class.
         /// </summary>
@@ -32,12 +23,15 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension, 
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
             decimal latitude, decimal longitude, string houseNo, string streetNo, string area, string ownerName, 
-            string description, 
-            GenderRestriction genderRestriction, bool isShared, string rentUnit, string landlineNumber, string fax) 
+            string description, GenderRestriction genderRestriction, bool isShared, string rentUnit, 
+            string landlineNumber, string fax, bool ac,
+                bool geyser,
+                bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating,
+                bool bathtub, bool elevator) 
             // Initiate the parent Property class as well
             : base(title, rentPrice, ownerEmail,
-                ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, isShared,
-                rentUnit, internetAvailable, cableTvAvailable, propertyType, landlineNumber, fax)
+                ownerPhoneNumber, latitude, longitude, area, ownerName, description, genderRestriction, 
+                isShared, rentUnit, internetAvailable, cableTvAvailable, propertyType, landlineNumber, fax)
         {
             if (string.IsNullOrWhiteSpace(propertyType))
             {
@@ -57,6 +51,15 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             HouseNo = houseNo;
             StreetNo = streetNo;
             GarageAvailable = garageAvailable;
+            Bathtub = bathtub;
+            AC = ac;
+            Geyser = geyser;
+            Balcony = balcony;
+            Lawn = lawn;
+            CctvCameras = cctvCameras;
+            BackupElectricity = backupElectricity;
+            Heating = heating;
+            Elevator = elevator;
         }
 
         /// <summary>
@@ -91,7 +94,11 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             bool internetAvailable, bool landlinePhoneAvailable, bool cableTvAvailable, Dimension dimension,
             bool garageAvailable, bool smokingAllowed, string propertyType, string ownerEmail, string ownerPhoneNumber,
             string houseNo, string streetNo, string area, string ownerName, string description, GenderRestriction genderRestriction,
-            decimal latitude, decimal longitude, bool isShared, string rentUnit, string landlineNumber, string fax)
+            decimal latitude, decimal longitude, bool isShared, string rentUnit, string landlineNumber, string fax,
+            bool ac,
+            bool geyser,
+            bool balcony, bool lawn, bool cctvCameras, bool backupElectricity, bool heating,
+            bool bathtub, bool elevator)
         {
             if (!propertyType.Equals("House") && !propertyType.Equals("Apartment"))
             {
@@ -107,6 +114,15 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             HouseNo = houseNo;
             StreetNo = streetNo;
             GarageAvailable = garageAvailable;
+            Bathtub = bathtub;
+            AC = ac;
+            Geyser = geyser;
+            Balcony = balcony;
+            Lawn = lawn;
+            CctvCameras = cctvCameras;
+            BackupElectricity = backupElectricity;
+            Heating = heating;
+            Elevator = elevator;
             // Update the parent property class
             base.Update(title, rentPrice, ownerEmail, ownerPhoneNumber, area, ownerName, description,
                 genderRestriction, latitude, longitude, isShared, rentUnit, internetAvailable, cableTvAvailable,
@@ -118,8 +134,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         public int NumberOfBedrooms
         {
-            get { return _numberOfBedrooms; }
-            set { _numberOfBedrooms = value; }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -127,8 +143,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         public int NumberOfKitchens
         {
-            get { return _numberOfKitchens; }
-            set { _numberOfKitchens = value; }
+            get;
+            private set;
         }
         
         /// <summary>
@@ -136,8 +152,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         public int NumberOfBathrooms
         {
-            get { return _numberOfBathrooms; }
-            set { _numberOfBathrooms = value; }
+            get;
+            private set;
         }
         
         /// <summary>
@@ -145,8 +161,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         public bool LandlinePhoneAvailable
         {
-            get { return _landlinePhoneAvailable; }
-            set { _landlinePhoneAvailable = value; }
+            get;
+            private set;
         }
         
         /// <summary>
@@ -154,8 +170,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         public Dimension Dimension
         {
-            get { return _dimension; } 
-            set { _dimension = value; }
+            get;
+            set;
         }
         
         /// <summary>
@@ -163,8 +179,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         public bool SmokingAllowed
         {
-            get { return _smokingAllowed; }
-            set { _smokingAllowed = value; }
+            get;
+            private set;
         }
         
         /// <summary>
@@ -172,12 +188,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         public string HouseNo
         {
-            get { return _houseNo; }
-            set
-            {
-                //Assertion.AssertStringNotNullorEmpty(value);
-                _houseNo = value;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -185,12 +197,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
         /// </summary>
         public string StreetNo
         {
-            get { return _streetNo; }
-            set
-            {
-                //Assertion.AssertStringNotNullorEmpty(value);
-                _streetNo = value;
-            }
+            get;
+            private set;
         }
         
         /// <summary>
@@ -202,6 +210,48 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private set;
         }
         
+        public bool Bathtub { get; private set; }
+        
+        /// <summary>
+        /// Is AC available
+        /// </summary>
+        public bool AC { get; private set; }
+
+        /// <summary>
+        /// Is Geyser available
+        /// </summary>
+        public bool Geyser { get; private set; }
+        
+        /// <summary>
+        /// Is Balcony available
+        /// </summary>
+        public bool Balcony { get; private set; }
+
+        /// <summary>
+        /// Is Elevator available in the building
+        /// </summary>
+        public bool Elevator { get; set; }
+
+        /// <summary>
+        /// Is Lawn available
+        /// </summary>
+        public bool Lawn { get; private set; }
+
+        /// <summary>
+        /// Are CCTV Cameras available
+        /// </summary>
+        public bool CctvCameras { get; private set; }
+
+        /// <summary>
+        /// Is backup electricity available
+        /// </summary>
+        public bool BackupElectricity { get; set; }
+
+        /// <summary>
+        /// Does the place have Heating facility
+        /// </summary>
+        public bool Heating { get; set; }
+
         /// <summary>
         /// House Builder, using the builder pattern that allows easy refactoring of the references and usages of
         /// the initialization of the House entity
@@ -439,6 +489,16 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             private bool _landlinePhoneAvailable;
             private string _houseNo;
             private string _streetNo;
+            private bool _ac;
+            private bool _geyser;
+            private bool _balcony;
+            private bool _lawn;
+            private bool _cctvCameras;
+            private bool _backupElectricity;
+            private bool _heating;
+            private bool _bathtub;
+            private int _numberOfBeds;
+            private bool _elevator;
 
             /// <summary>
             /// Number of Bedrooms
@@ -528,6 +588,60 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                 return this;
             }
 
+            public HouseBuilder AC(bool ac)
+            {
+                _ac = ac;
+                return this;
+            }
+
+            public HouseBuilder Geyser(bool geyser)
+            {
+                _geyser = geyser;
+                return this;
+            }
+
+            public HouseBuilder Balcony(bool balcony)
+            {
+                _balcony = balcony;
+                return this;
+            }
+
+            public HouseBuilder Lawn(bool lawn)
+            {
+                _lawn = lawn;
+                return this;
+            }
+
+            public HouseBuilder CctvCameras(bool cctvCameras)
+            {
+                _cctvCameras = cctvCameras;
+                return this;
+            }
+
+            public HouseBuilder BackupElectricity(bool backupElectricity)
+            {
+                _backupElectricity = backupElectricity;
+                return this;
+            }
+
+            public HouseBuilder Heating(bool heating)
+            {
+                _heating = heating;
+                return this;
+            }
+
+            public HouseBuilder Bathtub(bool bathtub)
+            {
+                _bathtub = bathtub;
+                return this;
+            }
+            
+            public HouseBuilder Elevator(bool elevator)
+            {
+                _elevator = elevator;
+                return this;
+            }
+
             #endregion House Specific Properties 
 
             /// <summary>
@@ -541,7 +655,9 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
                                  _landlinePhoneAvailable, _cableTvAvailable, _dimension, _garageAvailable,
                                  _smokingAllowed, _propertyType, _ownerEmail, _ownerPhoneNumber, _latitude, 
                                  _longitude, _houseNo, _streetNo, _area, _ownerName, _description, 
-                                 _genderRestriction, _isShared, _rentUnit, _landlineNumber, _fax);
+                                 _genderRestriction, _isShared, _rentUnit, _landlineNumber, _fax,
+                                 _ac, _geyser, _balcony, _lawn, _cctvCameras, _backupElectricity,
+                                 _heating, _bathtub, _elevator);
             }
         }
     }

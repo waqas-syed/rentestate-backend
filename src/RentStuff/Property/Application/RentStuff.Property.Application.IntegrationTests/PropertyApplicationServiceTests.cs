@@ -80,10 +80,22 @@ namespace RentStuff.Property.Application.IntegrationTests
             string rentUnit = "Hour";
             string landlineNumber = "0510000000";
             string fax = "0510000000";
+
+            bool ac = true;
+            bool geyser = true;
+            bool balcony = false;
+            bool lawn = true;
+            bool heating = false;
+            bool cctvCameras = true;
+            bool backupElectricity = true;
+            bool bathtub = true;
+            bool elevator = false;
+
             var createNewHouseCommand = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 internet, landline, cableTv, garage, smokingAllowed, propertyType, email, phoneNumber, houseNo, streetNo, area,
                 dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared, rentUnit,
-                landlineNumber, fax);
+                landlineNumber, fax, ac, geyser, balcony, lawn, cctvCameras, backupElectricity,
+                heating, bathtub, elevator);
             string houseId = houseApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHouseCommand), email);
 
             HouseFullRepresentation retreivedHouse = 
@@ -116,6 +128,16 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(rentUnit, retreivedHouse.RentUnit);
             Assert.AreEqual(landlineNumber, retreivedHouse.LandlineNumber);
             Assert.AreEqual(fax, retreivedHouse.Fax);
+
+            Assert.AreEqual(ac, retreivedHouse.AC);
+            Assert.AreEqual(geyser, retreivedHouse.Geyser);
+            Assert.AreEqual(balcony, retreivedHouse.Balcony);
+            Assert.AreEqual(lawn, retreivedHouse.Lawn);
+            Assert.AreEqual(cctvCameras, retreivedHouse.CctvCameras);
+            Assert.AreEqual(backupElectricity, retreivedHouse.BackupElectricity);
+            Assert.AreEqual(heating, retreivedHouse.Heating);
+            Assert.AreEqual(bathtub, retreivedHouse.Bathtub);
+            Assert.AreEqual(elevator, retreivedHouse.Elevator);
         }
 
         // Save and retrieve a full Apartment Representation
@@ -150,10 +172,21 @@ namespace RentStuff.Property.Application.IntegrationTests
             string rentUnit = "Hour";
             string landlineNumber = "0510000000";
             string fax = "0510000000";
+            bool ac = true;
+            bool geyser = true;
+            bool balcony = false;
+            bool lawn = true;
+            bool heating = false;
+            bool cctvCameras = true;
+            bool backupElectricity = true;
+            bool bathtub = true;
+            bool elevator = false;
+
             var createNewHouseCommand = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 internet, landline, cableTv, garage, smokingAllowed, propertyType, email, phoneNumber, houseNo, streetNo, area,
                 dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared, rentUnit,
-                landlineNumber, fax);
+                landlineNumber, fax, ac, geyser, balcony, lawn, cctvCameras, backupElectricity,
+                heating, bathtub, elevator);
             string houseId = houseApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHouseCommand), email);
 
             HouseFullRepresentation retreivedHouse =
@@ -531,6 +564,15 @@ namespace RentStuff.Property.Application.IntegrationTests
             string propertyType = Constants.House;
             string genderRestriction = GenderRestriction.GirlsOnly.ToString();
             bool isShared = false;
+            bool ac = true;
+            bool geyser = true;
+            bool balcony = true;
+            bool lawn = true;
+            bool heating = false;
+            bool cctvCameras = true;
+            bool backupElectricity = true;
+            bool bathtub = true;
+            bool elevator = false;
             // Null value should never be assigned, defalt value i going to be assigned instead. So pass NULL deliberately
             string rentUnit = Constants.Monthly;
 
@@ -541,7 +583,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             var house = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 true, true, true, true, true, propertyType, email, phoneNumber, houseNo, streetNo, area,
                 dimensionType, dimensionString, 0, ownerName, description, genderRestriction,isShared, rentUnit,
-                null, null);
+                null, null, false, false, false, false, false, false, false, false
+                , false);
             string houseCreated = houseApplicationService.SaveNewProperty(JsonConvert.SerializeObject(house),email);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseCreated));
 
@@ -568,6 +611,16 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(house.NumberOfBathrooms, retreivedHouse.NumberOfBathrooms);
             Assert.AreEqual(house.NumberOfKitchens, retreivedHouse.NumberOfKitchens);
             Assert.AreEqual(rentUnit, retreivedHouse.RentUnit);
+
+            Assert.AreEqual(ac, retreivedHouse.AC);
+            Assert.AreEqual(geyser, retreivedHouse.Geyser);
+            Assert.AreEqual(balcony, retreivedHouse.Balcony);
+            Assert.AreEqual(lawn, retreivedHouse.Lawn);
+            Assert.AreEqual(cctvCameras, retreivedHouse.CctvCameras);
+            Assert.AreEqual(backupElectricity, retreivedHouse.BackupElectricity);
+            Assert.AreEqual(heating, retreivedHouse.Heating);
+            Assert.AreEqual(bathtub, retreivedHouse.Bathtub);
+            Assert.AreEqual(elevator, retreivedHouse.Elevator);
 
             // BY PROPERTY TYPE ONLY
             houses =
@@ -857,7 +910,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             string rentUnit = Constants.Hourly;
             CreateHouseCommand house = new CreateHouseCommand(title, rent, 3, 2, 3, true, true, true,
                 false, false, propertyType, email, phoneNumber, null, null, area, null, null, 0, ownerName,
-                null, null, false, rentUnit, null, null);
+                null, null, false, rentUnit, null, null, false, false, false, false, false, false, false, false
+                , false);
             var hosue1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(house), email);
 
             // Saving Property # 2: Hotel. Near the search location, should be in the search results
@@ -890,7 +944,8 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             CreateHouseCommand apartment = new CreateHouseCommand(title2, rent3, 3, 2, 3, true, true, true,
                 false, false, propertyType3, email3, phoneNumber3, null, null, area3, null, null, 0, ownerName3,
-                null, null, false, rentUnit3, null, null);
+                null, null, false, rentUnit3, null, null, false, false, false, false, false, false, false, false
+                , false);
             var apartment1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(apartment), email3);
 
             // Saving House # 4: Guest House. Should be in the search results
@@ -939,7 +994,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             string rentUnit6 = Constants.Daily;
             CreateHouseCommand house2 = new CreateHouseCommand(title6, rent6, 3, 2, 3, true, true, true,
                 false, false, propertyType6, email6, phoneNumber6, null, null, area6, null, null, 0, ownerName6,
-                null, null, false, rentUnit6, null, null);
+                null, null, false, rentUnit6, null, null, false, false, false, false, false, false, false, false
+                , false);
             var hosue2Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(house2), email6);
 
             // Saving Property # 7: Hotel. Outside bounds, should NOT be in the search results
@@ -990,7 +1046,8 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             CreateHouseCommand apartment2 = new CreateHouseCommand(title9, rent9, 3, 2, 3, true, true, true,
                 false, false, propertyType9, email9, phoneNumber9, null, null, area9, null, null, 0, ownerName9,
-                null, null, false, rentUnit9, null, null);
+                null, null, false, rentUnit9, null, null, false, false, false, false, false, false, false, false
+                , false);
             var apartment2Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(apartment2), email9);
 
             // Saving Property # 10: Hostel. Should be in the search results, again
@@ -1197,7 +1254,8 @@ namespace RentStuff.Property.Application.IntegrationTests
             string rentUnit = Constants.Hourly;
             CreateHouseCommand house = new CreateHouseCommand(title, rent, 3, 2, 3, true, true, true,
                 false, false, propertyType, email, phoneNumber, null, null, area, null, null, 0, ownerName,
-                null, null, false, rentUnit, null, null);
+                null, null, false, rentUnit, null, null, false, false, false, false, false, false, false, false
+                , false);
             var hosue1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(house), email);
 
             var retrievedHouse = propertyApplicationService.GetPropertyById(hosue1Id, propertyType);
@@ -1306,10 +1364,22 @@ namespace RentStuff.Property.Application.IntegrationTests
             string rentUnit = "Hour";
             string landlineNumber = "0510000000";
             string fax = "0510000000";
+
+            bool ac = true;
+            bool geyser = true;
+            bool balcony = true;
+            bool lawn = true;
+            bool heating = true;
+            bool cctvCameras = true;
+            bool backupElectricity = true;
+            bool bathtub = true;
+            bool elevator = true;
+
             var createNewHouseCommand = new CreateHouseCommand(title, monthlyRent, numberOfBedrooms, numberOfKitchens, numberofBathrooms,
                 internet, landline, cableTv, garage, smokingAllowed, propertyType, email, phoneNumber, houseNo, streetNo, area,
                 dimensionType, dimensionString, 0, ownerName, description, genderRestriction, isShared, rentUnit,
-                landlineNumber, fax);
+                landlineNumber, fax, ac, geyser, balcony, lawn, cctvCameras, backupElectricity,
+                heating, bathtub, elevator);
             string houseId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHouseCommand), email);
 
             HouseFullRepresentation retreivedHouse =
@@ -1343,13 +1413,24 @@ namespace RentStuff.Property.Application.IntegrationTests
             string updatedRentUnit = "Hour";
             string updatedLandlineNumber = "0510000000";
             string updatedFax = "0510000000";
+            bool updatedAc = false;
+            bool updatedGeyser = false;
+            bool updatedBalcony = false;
+            bool updatedLawn = false;
+            bool updatedHeating = false;
+            bool updatedCctvCameras = true;
+            bool updatedBackupElectricity = false;
+            bool updatedBathtub = false;
+            bool updatedElevator = false;
             var updateHouseCommand = new UpdateHouseCommand(retreivedHouse.Id, updatedTitle, updatedMonthlyRent,
                 updatedNumberOfBedrooms, updatedNumberOfKitchens, updatedNumberofBathrooms, updatedInternet,
                 updatedLandline, updatedCableTv, updatedGarage, updatedSmokingAllowed, updatedPropertyType,
                 email, updatedPhoneNumber, updatedHouseNo, updatedStreetNo, updatedArea,
                 updatedDimensionType, updatedDimensionString, updatedDimensionIntValue, updatedOwnerName,
                 updatedDescription, updatedGenderRestriction, updatedIsShared, updatedRentUnit, 
-                updatedLandlineNumber, updatedFax);
+                updatedLandlineNumber, updatedFax, updatedAc, updatedGeyser, updatedBalcony,
+                updatedLawn, updatedCctvCameras, updatedBackupElectricity, updatedHeating,
+                updatedBathtub, updatedElevator);
             propertyApplicationService.UpdateProperty(JsonConvert.SerializeObject(updateHouseCommand), email);
 
             // Now Update the House
@@ -1381,6 +1462,16 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(updatedRentUnit, updatedRetrievedHouse.RentUnit);
             Assert.AreEqual(updatedLandlineNumber, updatedRetrievedHouse.LandlineNumber);
             Assert.AreEqual(updatedFax, updatedRetrievedHouse.Fax);
+
+            Assert.AreEqual(updatedAc, retreivedHouse.AC);
+            Assert.AreEqual(updatedGeyser, retreivedHouse.Geyser);
+            Assert.AreEqual(updatedBalcony, retreivedHouse.Balcony);
+            Assert.AreEqual(updatedLawn, retreivedHouse.Lawn);
+            Assert.AreEqual(updatedCctvCameras, retreivedHouse.CctvCameras);
+            Assert.AreEqual(updatedBackupElectricity, retreivedHouse.BackupElectricity);
+            Assert.AreEqual(updatedHeating, retreivedHouse.Heating);
+            Assert.AreEqual(updatedBathtub, retreivedHouse.Bathtub);
+            Assert.AreEqual(updatedElevator, retreivedHouse.Elevator);
         }
 
         // Update a Hostel

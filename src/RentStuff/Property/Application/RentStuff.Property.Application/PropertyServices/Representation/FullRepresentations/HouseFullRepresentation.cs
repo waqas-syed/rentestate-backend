@@ -15,7 +15,9 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.FullRep
             bool landlinePhoneAvailable, bool cableTvAvailable, string dimension, bool garageAvailable, bool smokingAllowed, 
             string propertyType, string ownerEmail, string ownerPhoneNumber, string houseNo, 
             string streetNo, string area, IList<string> houseImages, string ownerName, string description,
-            string genderRestriction, bool isShared, string rentUnit, string landlineNumber, string fax)
+            string genderRestriction, bool isShared, string rentUnit, string landlineNumber, string fax,
+            bool ac, bool geyser, bool balcony, bool lawn, bool cctvCameras, bool backupElectricity,
+            bool heating, bool bathtub, bool elevator)
             : base(id, title, rentPrice, internetAvailable, cableTvAvailable, propertyType, ownerEmail, 
                   ownerPhoneNumber, area, ownerName, description, genderRestriction, isShared, rentUnit, 
                   landlineNumber, fax, houseImages)
@@ -29,6 +31,16 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.FullRep
             SmokingAllowed = smokingAllowed;
             HouseNo = houseNo;
             StreetNo = streetNo;
+
+            AC = ac;
+            Bathtub = bathtub;
+            Geyser = geyser;
+            Balcony = balcony;
+            Lawn = lawn;
+            CctvCameras = cctvCameras;
+            BackupElectricity = backupElectricity;
+            Heating = heating;
+            Elevator = elevator;
         }
         
         public int NumberOfBedrooms
@@ -85,5 +97,44 @@ namespace RentStuff.Property.Application.PropertyServices.Representation.FullRep
         {
             get; private set;
         }
+
+        public bool Bathtub { get; private set; }
+
+        public bool AC { get; private set; }
+
+        /// <summary>
+        /// Is Geyser available
+        /// </summary>
+        public bool Geyser { get; private set; }
+
+        /// <summary>
+        /// Is Balcony available
+        /// </summary>
+        public bool Balcony { get; private set; }
+
+        /// <summary>
+        /// Is Elevator available in the building
+        /// </summary>
+        public bool Elevator { get; set; }
+
+        /// <summary>
+        /// Is Lawn available
+        /// </summary>
+        public bool Lawn { get; private set; }
+
+        /// <summary>
+        /// Are CCTV Cameras available
+        /// </summary>
+        public bool CctvCameras { get; private set; }
+
+        /// <summary>
+        /// Is backup electricity available
+        /// </summary>
+        public bool BackupElectricity { get; set; }
+
+        /// <summary>
+        /// Does the place have Heating facility
+        /// </summary>
+        public bool Heating { get; set; }
     }
 }
