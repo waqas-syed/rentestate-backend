@@ -1,4 +1,20 @@
-- Install Visual Studio. Currently used version is 2017.
+- FOR LOCAL DEVELOPMENT
+	- Visual Studio Installation
+		- Install Visual Studio. Currently used version is 2017.
+			- Install .net core 1.0 as part of the Visual Studio installation. Otherwise the frontend project will not run.
+			
+	- Web.Config
+		- In Rentstuff.Frontend.WebHost, go to web.config
+		- Comment out the <Rewrite> tag.
+		- In the AppSettings > FrontendUrl, change the url to the localhost url specified in the RentStuff.Frontend project. This should be http://localhost:11803
+
+- IIS
+	- Go to ‘Turn Windows features on or off’, check Internet Information Services.
+	- It’s important to enable the following setting manually:
+		>Internet Information Services 
+			> World Wide Web Services 
+				> Application Development Features 
+					> ASP.NET 4.5
 
 - MySql
 	- Download MySql Installer from here https://dev.mysql.com/downloads/installer/ and install the following tools:
