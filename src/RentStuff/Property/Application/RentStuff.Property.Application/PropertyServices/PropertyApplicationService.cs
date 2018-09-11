@@ -68,8 +68,9 @@ namespace RentStuff.Property.Application.PropertyServices
                 // Save the new house instance
                 _residentialPropertyRepository.SaveorUpdate(house);
                 _logger.Info("House uploaded Successfully: {0}", house);
-                id = house.Id;    
+                return house.Id;
             }
+            throw new NotImplementedException("Only residential Property types are supported yet");
             // If the request is for creating a new Hostel
             /*else if (propertyBaseCommand.PropertyType.Value.Equals(Constants.Hostel))
             {
@@ -97,10 +98,8 @@ namespace RentStuff.Property.Application.PropertyServices
             }
             else
             {
-                throw new NotImplementedException("Only residential Property types are supported yet");
+                
             }*/
-
-            return id;
         }
 
         /// <summary>
@@ -324,7 +323,7 @@ namespace RentStuff.Property.Application.PropertyServices
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public IList<ResidentialPropertyPartialBaseImplementation> SearchPropertiesByPropertyType(string propertyType, int pageNo = 0)
+        /*public IList<ResidentialPropertyPartialBaseImplementation> SearchPropertiesByPropertyType(string propertyType, int pageNo = 0)
         {
             switch (propertyType)
             {
@@ -346,7 +345,7 @@ namespace RentStuff.Property.Application.PropertyServices
                 default:
                     throw new NotImplementedException("Requested Proeprty type is not supported");
             }
-        }
+        }*/
 
         /// <summary>
         /// Search nearby houses by providing the area and property type
@@ -355,17 +354,18 @@ namespace RentStuff.Property.Application.PropertyServices
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public IList<ResidentialPropertyPartialBaseImplementation> SearchPropertiesByAreaAndPropertyType(string address, 
-            string propertyType, int pageNo = 0)
+        public IList<ResidentialPropertyPartialBaseImplementation> SearchPropertiesByArea(
+            string address, int pageNo = 0)
         {
             // Get the coordinates for the location using the Geocoding API service
             var coordinates = _geocodingService.GetCoordinatesFromAddress(address);
 
-            switch (propertyType)
+            var houses = _residentialPropertyRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, pageNo);
+            return ConvertHousesToPartialRepresentations(houses);
+            /*switch (propertyType)
             {
                 case Constants.House:
-                    var houses = _residentialPropertyRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, Constants.House, pageNo);
-                    return ConvertHousesToPartialRepresentations(houses);
+                    
                 case Constants.Apartment:
                     var apartments = _residentialPropertyRepository.SearchHousesByCoordinates(coordinates.Item1, coordinates.Item2, Constants.Apartment, pageNo);
                     return ConvertHousesToPartialRepresentations(apartments);
@@ -379,7 +379,7 @@ namespace RentStuff.Property.Application.PropertyServices
                     var guestHouses = _residentialPropertyRepository.SearchHotelByCoordinates(coordinates.Item1, coordinates.Item2, Constants.GuestHouse, pageNo);
                     return ConvertHotelsToPartialRepresentations(guestHouses);
             }
-            throw new NotImplementedException("Requested property Type is not supported");
+            throw new NotImplementedException("Requested property Type is not supported");*/
         }
 
         /// <summary>
@@ -397,6 +397,10 @@ namespace RentStuff.Property.Application.PropertyServices
             {
                 // Get the coordinates for the location using the Geocoding API service
                 var coordinates = _geocodingService.GetCoordinatesFromAddress(location);
+                recordCount = _residentialPropertyRepository.GetRecordCountByLocation(coordinates.Item1, coordinates.Item2);
+                return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
+                
+                /*
                 // And property type is also not null
                 if (!string.IsNullOrWhiteSpace(propertyType))
                 {
@@ -410,13 +414,13 @@ namespace RentStuff.Property.Application.PropertyServices
                 {
                     recordCount = _residentialPropertyRepository.GetRecordCountByLocation(coordinates.Item1, coordinates.Item2);
                     return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
-                }
+                }*/
             }
-            if (!string.IsNullOrWhiteSpace(propertyType))
+            /*if (!string.IsNullOrWhiteSpace(propertyType))
             {
                 recordCount = _residentialPropertyRepository.GetRecordCountByPropertyType(propertyType);
                 return new HouseCountRepresentation(recordCount.Item1, recordCount.Item2);
-            }
+            }*/
             if (!string.IsNullOrWhiteSpace(email))
             {
                 recordCount = _residentialPropertyRepository.GetRecordCountByEmail(email);

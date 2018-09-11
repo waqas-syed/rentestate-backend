@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using RentStuff.Property.Application.PropertyServices.Commands.UpdateCommands;
 using RentStuff.Property.Application.PropertyServices.Representation;
 using RentStuff.Property.Application.PropertyServices.Representation.AbstractRepresentations;
 
@@ -58,17 +57,15 @@ namespace RentStuff.Property.Application.PropertyServices
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<ResidentialPropertyPartialBaseImplementation> SearchPropertiesByPropertyType(string propertyType, int pageNo = 0);
+        //IList<ResidentialPropertyPartialBaseImplementation> SearchPropertiesByPropertyType(string propertyType, int pageNo = 0);
 
         /// <summary>
         /// Search the house by providing the address and propertyType
         /// </summary>
         /// <param name="area"></param>
-        /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<ResidentialPropertyPartialBaseImplementation> SearchPropertiesByAreaAndPropertyType(string area, string propertyType, 
-            int pageNo = 0);
+        IList<ResidentialPropertyPartialBaseImplementation> SearchPropertiesByArea(string area, int pageNo = 0);
 
 
         /// <summary>

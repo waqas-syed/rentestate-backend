@@ -50,7 +50,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="email"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<House> GetApartmentByOwnerEmail(string email, int pageNo = 0);
+       // IList<House> GetApartmentByOwnerEmail(string email, int pageNo = 0);
 
         /// <summary>
         /// Gets all the Hostels by the poster's email address
@@ -58,7 +58,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="email"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<Hostel> GetHostelsByOwnerEmail(string email, int pageNo = 0);
+        //IList<Hostel> GetHostelsByOwnerEmail(string email, int pageNo = 0);
 
         /// <summary>
         /// Get all the Hotels and Guest Houses by Owners email address
@@ -66,7 +66,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="email"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<Hotel> GetHotelsByOwnerEmail(string email, int pageNo = 0);
+        //IList<Hotel> GetHotelsByOwnerEmail(string email, int pageNo = 0);
 
         /// <summary>
         /// Get all guest houses by owner email
@@ -74,7 +74,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="email"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<Hotel> GetGuestHousesByOwnerEmail(string email, int pageNo = 0);
+        //IList<Hotel> GetGuestHousesByOwnerEmail(string email, int pageNo = 0);
 
         /// <summary>
         /// Gets all of the properties from the database
@@ -95,28 +95,28 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// </summary>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<House> GetAllApartments(int pageNo = 0);
+        //IList<House> GetAllApartments(int pageNo = 0);
 
         /// <summary>
         /// Search All Hostels
         /// </summary>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<Hostel> GetAllHostels(int pageNo = 0);
+       // IList<Hostel> GetAllHostels(int pageNo = 0);
 
         /// <summary>
         /// Search all the hotels
         /// </summary>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<Hotel> GetAllHotels(int pageNo = 0);
+        //IList<Hotel> GetAllHotels(int pageNo = 0);
 
         /// <summary>
         /// Search all the Guest Houses
         /// </summary>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<Hotel> GetAllGuestHouses(int pageNo = 0);
+        //IList<Hotel> GetAllGuestHouses(int pageNo = 0);
 
         /// <summary>
         /// Gets the houses by coordinates and property type
@@ -126,7 +126,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude, string propertyType, int pageNo = 0);
+        IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude, int pageNo = 0);
 
         /// <summary>
         /// Search Hostels in the radius sorrounding the given location
@@ -135,7 +135,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="longitude"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<Hostel> SearchHostelByCoordinates(decimal latitude, decimal longitude, int pageNo = 0);
+        //IList<Hostel> SearchHostelByCoordinates(decimal latitude, decimal longitude, int pageNo = 0);
 
         /// <summary>
         /// Search Hotels in the radius sorrounding the given location
@@ -145,14 +145,14 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="propertyType"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        IList<Hotel> SearchHotelByCoordinates(decimal latitude, decimal longitude, string propertyType, int pageNo = 0);
+        //IList<Hotel> SearchHotelByCoordinates(decimal latitude, decimal longitude, string propertyType, int pageNo = 0);
 
         /// <summary>
         /// Get the total number of houses with the given property type present in the database
         /// </summary>
         /// <param name="propertyType"></param>
         /// <returns></returns>
-        Tuple<int,int> GetRecordCountByPropertyType(string propertyType);
+        Tuple<int,int> GetRecordCountOfHouse();
 
         /// <summary>
         /// Get the total number of houses with the given location present in the database
@@ -175,7 +175,7 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <param name="longitude"></param>
         /// <param name="propertyType"></param>
         /// <returns></returns>
-        Tuple<int, int> GetRecordCountByLocationAndPropertyType(decimal latitude, decimal longitude, string propertyType);
+        //Tuple<int, int> GetRecordCountByLocationAndPropertyType(decimal latitude, decimal longitude, string propertyType);
 
         /// <summary>
         /// Get the total number of houses present in the database

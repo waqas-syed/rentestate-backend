@@ -17,7 +17,7 @@ namespace RentStuff.Property.Persistence.IntegrationTests
     [TestFixture]
     class HotelRepositoryTests
     {
-        private DatabaseUtility _databaseUtility;
+       /* private DatabaseUtility _databaseUtility;
         private IKernel _kernel;
 
         [SetUp]
@@ -1041,5 +1041,6 @@ namespace RentStuff.Property.Persistence.IntegrationTests
                 houseRepository.SaveorUpdate(hostel);
             }
         }
+        */
     }
 }

@@ -108,7 +108,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="pageNo"></param>
         /// <returns></returns>
         //[Transaction]
-        public IList<House> GetApartmentByOwnerEmail(string email, int pageNo = 0)
+        /*public IList<House> GetApartmentByOwnerEmail(string email, int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
@@ -118,7 +118,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
                     .Take(_resultsPerPage)
                     .List<House>();
             }
-        }
+        }*/
 
         /// <summary>
         /// Get all the Hostels by the poster's email
@@ -126,7 +126,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="email"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public IList<Hostel> GetHostelsByOwnerEmail(string email, int pageNo = 0)
+        /*public IList<Hostel> GetHostelsByOwnerEmail(string email, int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
@@ -172,14 +172,14 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
                     .Take(_resultsPerPage)
                     .List<Hotel>();
             }
-        }
+        }*/
 
         /// <summary>
         /// Gets all of the proeprties from the database
         /// </summary>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public IList<Domain.Model.PropertyAggregate.Property> GetAllProperties(int pageNo = 0)
+        public IList<Property.Domain.Model.PropertyAggregate.Property> GetAllProperties(int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
@@ -189,25 +189,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
                     .List<Domain.Model.PropertyAggregate.Property>();
             }
         }
-
-        /// <summary>
-        /// Get the house by latitude and longitude
-        /// </summary>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
-        /// <returns></returns>
-        //[Transaction]
-        public IList<House> GetHouseByCoordinates(decimal latitude, decimal longitude)
-        {
-            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
-            {
-                return _session.Session.QueryOver<House>()
-                        .Where(x => x.Latitude == latitude)
-                        .Where(x => x.Longitude == longitude)
-                        .List<House>();
-            }
-        }
-
+        
         /// <summary>
         /// Gets houses with reference to their PropertyType
         /// </summary>
@@ -219,7 +201,6 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 return _session.Session.QueryOver<House>()
-                    .Where(x => x.PropertyType == Constants.House)
                         .Skip(pageNo*_resultsPerPage)
                         .Take(_resultsPerPage)
                         .List<House>();
@@ -237,7 +218,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="pageNo"></param>
         /// <returns></returns>
         //[Transaction]
-        public IList<House> GetAllApartments(int pageNo = 0)
+       /* public IList<House> GetAllApartments(int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
@@ -297,7 +278,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
                     .Take(_resultsPerPage)
                     .List<Hotel>();
             }
-        }
+        }*/
 
         /// <summary>
         /// Searches houses by coordinates and given propertytype
@@ -308,19 +289,19 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="pageNo"></param>
         /// <returns></returns>
         //[Transaction]
-        public IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude, string propertyType, int pageNo = 0)
+        public IList<House> SearchHousesByCoordinates(decimal latitude, decimal longitude, int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 IList houses = _session.Session.CreateSQLQuery(
-                            "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house WHERE property_type = :propertyType HAVING distance < :radius ORDER BY distance")
+                            "SELECT *, ( 6371 * acos( cos( radians(:inputLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:inputLongitude) ) + sin( radians(:inputLatitude) ) * sin( radians( latitude ) ) ) ) AS distance FROM house HAVING distance < :radius ORDER BY distance")
                         .AddEntity(typeof(House))
                         //.AddScalar("latitude", NHibernateUtil.Decimal)
                         //.AddScalar("longitude", NHibernateUtil.Decimal)
                         //.AddScalar("distance", NHibernateUtil.Decimal)
                         .SetParameter("inputLatitude", latitude)
                         .SetParameter("inputLongitude", longitude)
-                        .SetParameter("propertyType", propertyType)
+                        //.SetParameter("propertyType", propertyType)
                         .SetParameter("radius", _radius)
                         .SetFirstResult(pageNo*_resultsPerPage)
                         .SetMaxResults(_resultsPerPage)
@@ -337,7 +318,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="longitude"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public IList<Hostel> SearchHostelByCoordinates(decimal latitude, decimal longitude, int pageNo = 0)
+       /* public IList<Hostel> SearchHostelByCoordinates(decimal latitude, decimal longitude, int pageNo = 0)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
@@ -378,7 +359,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
 
                 return houses.Cast<Hotel>().ToList();
             }
-        }
+        }*/
         
         /// <summary>
         /// Gets the number of records for the given criteria in the database
@@ -387,14 +368,13 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// </summary>
         /// <returns></returns>
         //[Transaction]
-        public Tuple<int, int> GetRecordCountByPropertyType(string propertyType)
+        public Tuple<int, int> GetRecordCountOfHouse()
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 return new Tuple<int, int>(
                     _session.Session
                     .QueryOver<House>()
-                    .Where(x => x.PropertyType == propertyType)
                     .RowCount(),
                     _resultsPerPage);
             }
@@ -452,7 +432,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         /// <param name="propertyType"></param>
         /// <returns></returns>
         //[Transaction]
-        public Tuple<int, int> GetRecordCountByLocationAndPropertyType(decimal latitude, decimal longitude, 
+        /*public Tuple<int, int> GetRecordCountByLocationAndPropertyType(decimal latitude, decimal longitude, 
             string propertyType)
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
@@ -467,7 +447,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
                         .SetParameter("radius", _radius)
                         .List().Count, _resultsPerPage);
             }
-        }
+        }*/
 
         /// <summary>
         /// Get the total number of houses present in the database

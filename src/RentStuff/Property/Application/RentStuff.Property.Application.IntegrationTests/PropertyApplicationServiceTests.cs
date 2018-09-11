@@ -621,9 +621,9 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(bathtub, retreivedHouse.Bathtub);
             Assert.AreEqual(elevator, retreivedHouse.Elevator);
 
-            // BY PROPERTY TYPE ONLY
+            // GET ALL PROPERTIES
             houses =
-                houseApplicationService.SearchPropertiesByPropertyType(Constants.House).Cast<HousePartialRepresentation>().ToList();
+                houseApplicationService.GetAllProperties().Cast<HousePartialRepresentation>().ToList();
             retreivedHouse = houses[0];
 
             Assert.NotNull(retreivedHouse);
@@ -974,7 +974,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false, false,
                 false, false, false, false, false, false, false, false, 0, 0, new Occupants(2, 1));
             var guestHouse1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(guestHouse1), email4);
-            */
+            
             // Saving House # 5: Hostel. Should be in the search results
             string area5 = "Gulberg Greens, Gulberg, Islamabad Capital Territory, Pakistan";
             string title5 = "Title No 5";
@@ -991,7 +991,7 @@ namespace RentStuff.Property.Application.IntegrationTests
                 false, false, false, false, false, false, false, false, false, false, null, null, false, false,
                 false, 3);
             var hostel1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(hostel), email5);
-
+            */
             // Saving Property # 6: House. Outside Bounds, should NOT be in search results
             string area6 = "Nara, Rawalpindi, Pakistan";
             string title6 = "Title # 6";
@@ -1081,7 +1081,7 @@ namespace RentStuff.Property.Application.IntegrationTests
 
             // SEARCH BY PROPERTY TYPE ONLY
             // Verification of House
-            var retreivedHouses = propertyApplicationService.SearchPropertiesByPropertyType(Constants.House);
+           /* var retreivedHouses = propertyApplicationService.SearchPropertiesByPropertyType(Constants.House);
             Assert.NotNull(retreivedHouses);
             Assert.AreEqual(2, retreivedHouses.Count);
             // House # 1
@@ -1147,29 +1147,22 @@ namespace RentStuff.Property.Application.IntegrationTests
             */
             #endregion PROPERTY TYPE ONLY SEARCH
 
-            #region AREA + PROPERTY TYPE ONLY SEARCH
+            #region AREA ONLY SEARCH
 
             string searchLocation = "Pindora, Rawalpindi, Pakistan";
 
             // Verification of House
-            retreivedHouses = propertyApplicationService.SearchPropertiesByAreaAndPropertyType(searchLocation, 
-                Constants.House);
+            var retreivedHouses = propertyApplicationService.SearchPropertiesByArea(searchLocation);
             Assert.NotNull(retreivedHouses);
-            Assert.AreEqual(1, retreivedHouses.Count);
+            Assert.AreEqual(2, retreivedHouses.Count);
             // House # 1
             Assert.AreEqual(hosue1Id, retreivedHouses[0].Id);
             Assert.AreEqual(title, retreivedHouses[0].Title);
             Assert.AreEqual(Constants.House, retreivedHouses[0].PropertyType);
-
-            // Verification of Apartments
-            retreivedHouses = propertyApplicationService.SearchPropertiesByAreaAndPropertyType(searchLocation,
-                Constants.Apartment);
-            Assert.NotNull(retreivedHouses);
-            Assert.AreEqual(1, retreivedHouses.Count);
             // Apartment # 1
-            Assert.AreEqual(apartment1Id, retreivedHouses[0].Id);
-            Assert.AreEqual(apartment.Title, retreivedHouses[0].Title);
-            Assert.AreEqual(Constants.Apartment, retreivedHouses[0].PropertyType);
+            Assert.AreEqual(apartment1Id, retreivedHouses[1].Id);
+            Assert.AreEqual(apartment.Title, retreivedHouses[1].Title);
+            Assert.AreEqual(Constants.Apartment, retreivedHouses[1].PropertyType);
 
             // Verification of 2 Hostels
            /* retreivedHostels = propertyApplicationService.SearchPropertiesByAreaAndPropertyType(searchLocation, 
@@ -1205,7 +1198,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             Assert.AreEqual(guestHouse1.Title, retreivedHotels[0].Title);
             Assert.AreEqual(Constants.GuestHouse, retreivedHotels[0].PropertyType);
             */
-            #endregion AREA + PROPERTY TYPE ONLY SEARCH
+            #endregion AREA ONLY SEARCH
 
             #region EMAIL ONLY SEARCH
 

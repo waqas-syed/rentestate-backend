@@ -245,10 +245,10 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 }
                 _logger.Info("Get House request received");
                 // If both area and property type are given
-                if (!string.IsNullOrWhiteSpace(area) && !string.IsNullOrWhiteSpace(propertyType))
+                if (!string.IsNullOrWhiteSpace(area))
                 {
                     _logger.Info("Get properties by Area {0} and Property Type {1}", area, propertyType);
-                    return Ok(_houseApplicationService.SearchPropertiesByAreaAndPropertyType(area, propertyType, pageNo));
+                    return Ok(_houseApplicationService.SearchPropertiesByArea(area, pageNo));
                 }
                 // If only email is given
                 else if (!string.IsNullOrWhiteSpace(email))
@@ -283,11 +283,11 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     return Ok(_houseApplicationService.GetPropertyById(houseId, propertyType));
                 }
                 // If only property type is given
-                else if (!string.IsNullOrWhiteSpace(propertyType))
+                /*else if (!string.IsNullOrWhiteSpace(propertyType))
                 {
                     _logger.Info("Get property by Property Type {0}", propertyType);
                     return Ok(_houseApplicationService.SearchPropertiesByPropertyType(propertyType, pageNo));
-                }
+                }*/
                 else
                 {
                     _logger.Info("Get all properties");
