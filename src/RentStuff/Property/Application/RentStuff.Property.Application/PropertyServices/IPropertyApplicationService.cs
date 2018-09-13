@@ -43,7 +43,7 @@ namespace RentStuff.Property.Application.PropertyServices
         /// <param name="id"></param>
         /// <param name="propertyType"></param>
         /// <returns></returns>
-        PropertyBaseRepresentation GetPropertyById(string id, string propertyType);
+        PropertyBaseRepresentation GetPropertyById(string id);
 
         /// <summary>
         /// Gets the house by providing the owner's email id

@@ -277,10 +277,10 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                     }
                 }
                 // If both property type and ID are given
-                else if (!string.IsNullOrEmpty(houseId) && !string.IsNullOrWhiteSpace(propertyType))
+                else if (!string.IsNullOrEmpty(houseId))
                 {
                     _logger.Info("Get property by HouseId {0}", houseId);
-                    return Ok(_houseApplicationService.GetPropertyById(houseId, propertyType));
+                    return Ok(_houseApplicationService.GetPropertyById(houseId));
                 }
                 // If only property type is given
                 /*else if (!string.IsNullOrWhiteSpace(propertyType))

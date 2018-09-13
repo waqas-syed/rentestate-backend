@@ -282,9 +282,10 @@ namespace RentStuff.Property.Application.PropertyServices
         /// <param name="id"></param>
         /// <param name="propertyType"></param>
         /// <returns></returns>
-        public PropertyBaseRepresentation GetPropertyById(string id, string propertyType)
+        public PropertyBaseRepresentation GetPropertyById(string id)
         {
-            switch (propertyType)
+            return ConvertHouseToRepresentation(id);
+            /*switch (propertyType)
             {
                 case Constants.House:
                     return ConvertHouseToRepresentation(id);
@@ -303,7 +304,7 @@ namespace RentStuff.Property.Application.PropertyServices
 
                 default:
                     throw new NotImplementedException("Request property type is not supported yet");
-            }
+            }*/
         }
         
         /// <summary>
