@@ -204,7 +204,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                return _session.Session.QueryOver<Domain.Model.PropertyAggregate.Property>()
+                return _session.Session.QueryOver<House>()
                     .Skip(pageNo * _resultsPerPage)
                     .Take(_resultsPerPage)
                     .List<Domain.Model.PropertyAggregate.Property>();
