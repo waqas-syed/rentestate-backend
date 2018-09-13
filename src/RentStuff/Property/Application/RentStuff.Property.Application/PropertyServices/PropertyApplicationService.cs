@@ -1100,7 +1100,8 @@ namespace RentStuff.Property.Application.PropertyServices
                 house.IsShared, house.GenderRestriction.ToString(), house.RentUnit, house.InternetAvailable,
                 house.CableTvAvailable, house.NumberOfBedrooms, house.NumberOfBathrooms,
                 house.NumberOfKitchens, house.AC, house.Geyser, house.Balcony, house.Lawn, house.CctvCameras,
-                house.BackupElectricity, house.Heating, house.Bathtub, house.Elevator);
+                house.BackupElectricity, house.Heating, house.Bathtub, house.Elevator, house.GarageAvailable,
+                house.LandlinePhoneAvailable);
             return houseRepresentation;
         }
 

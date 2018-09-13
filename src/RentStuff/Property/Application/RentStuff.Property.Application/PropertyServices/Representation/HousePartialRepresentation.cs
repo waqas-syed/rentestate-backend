@@ -19,7 +19,8 @@ namespace RentStuff.Property.Application.PropertyServices.Representation
             string image, string ownerName, bool isShared, string genderRestriction, 
             string rentUnit, bool internet, bool cableTv, int numberOfBedrooms, int numberOfBathrooms,
             int numberOfKitchens, bool ac, bool geyser, bool balcony, bool lawn, bool cctvCameras,
-            bool backupElectricity, bool heating, bool bathtub, bool elevator)
+            bool backupElectricity, bool heating, bool bathtub, bool elevator, bool garageAvailable,
+            bool landlinePhoneAvailable)
             : base(houseId, title, rentPrice, ownerPhoneNumber, ownerLandlineNumber, area, ownerName,
                   genderRestriction, isShared, rentUnit, internet, cableTv, propertyType, image)
         {
@@ -38,6 +39,8 @@ namespace RentStuff.Property.Application.PropertyServices.Representation
             NumberOfBathrooms = numberOfBathrooms;
             NumberOfKitchens = numberOfKitchens;
 
+            GarageAvailable = garageAvailable;
+            LandlinePhoneAvailable = landlinePhoneAvailable;
             AC = ac;
             Bathtub = bathtub;
             Geyser = geyser;
@@ -58,6 +61,10 @@ namespace RentStuff.Property.Application.PropertyServices.Representation
         public int NumberOfKitchens { get; set; }
 
         public bool Bathtub { get; private set; }
+
+        public bool GarageAvailable { get; private set; }
+
+        public bool LandlinePhoneAvailable { get; private set; }
 
         public bool AC { get; private set; }
 

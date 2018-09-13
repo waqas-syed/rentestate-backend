@@ -93,12 +93,33 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                return _session.Session.QueryOver<Domain.Model.PropertyAggregate.Property>()
+                return _session.Session.QueryOver<House>()
                     .Where(x => x.OwnerEmail == email)
-                    .Skip(pageNo*_resultsPerPage)
+                    .Skip(pageNo * _resultsPerPage)
                     .Take(_resultsPerPage)
                     .List<Domain.Model.PropertyAggregate.Property>();
             }
+
+            /* List<Domain.Model.PropertyAggregate.Property> properties = new List<Domain.Model.PropertyAggregate.Property>();
+             
+             if (houses.Count > 0)
+             {
+                 properties.AddRange(houses);
+             }
+             if (houses.Count == 0)
+             {
+                 var hostels = _session.Session.QueryOver<Hostel>()
+                     .Where(x => x.OwnerEmail == email)
+                     .Skip(pageNo * _resultsPerPage)
+                     .Take(_resultsPerPage)
+                     .List<Hostel>();
+                 if (hostels.Count > 0)
+                 {
+                     properties.AddRange(hostels);
+                 }
+             }
+
+             return properties;*/
         }
 
         /// <summary>
@@ -415,7 +436,7 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
         {
             using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                return new Tuple<int, int>(_session.Session
+                return new Tuple<int,int>(_session.Session
                                             .QueryOver<House>()
                                             .Where(x => x.OwnerEmail == email)
                                             .RowCount(), _resultsPerPage);
