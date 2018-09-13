@@ -232,7 +232,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
         /// <returns></returns>
         [Route("house")]
         [HttpGet]
-        public IHttpActionResult Get(string email = null, string area = null, string propertyType = null, 
+        public IHttpActionResult Get(string email = null, string area = null,
             string houseId = null, int pageNo = 1)
         {
             try
@@ -247,7 +247,7 @@ namespace RentStuff.Property.Ports.Adapter.Rest.Resources
                 // If both area and property type are given
                 if (!string.IsNullOrWhiteSpace(area))
                 {
-                    _logger.Info("Get properties by Area {0} and Property Type {1}", area, propertyType);
+                    _logger.Info("Get properties by Area {0}", area);
                     return Ok(_houseApplicationService.SearchPropertiesByArea(area, pageNo));
                 }
                 // If only email is given
