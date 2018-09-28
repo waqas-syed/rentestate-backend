@@ -123,7 +123,7 @@ namespace RentStuff.Property.Ports.Tests
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
-                IHttpActionResult response = (IHttpActionResult)houseController.Get(houseId: houseId, propertyType: propertyType);
+                IHttpActionResult response = (IHttpActionResult)houseController.Get(houseId: houseId);
                 dynamic retreivedHouse = ((OkNegotiatedContentResult<PropertyBaseRepresentation>)response).Content;
                 Assert.NotNull(retreivedHouse);
                 Assert.AreEqual(houseId, retreivedHouse.Id);
@@ -232,7 +232,7 @@ namespace RentStuff.Property.Ports.Tests
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
-                IHttpActionResult response = (IHttpActionResult)houseController.Get(houseId: houseId, propertyType: propertyType);
+                IHttpActionResult response = (IHttpActionResult)houseController.Get(houseId: houseId);
                 dynamic retreivedHouse = ((OkNegotiatedContentResult<PropertyBaseRepresentation>)response).Content;
                 Assert.NotNull(retreivedHouse);
                 Assert.AreEqual(houseId, retreivedHouse.Id);
@@ -700,7 +700,7 @@ namespace RentStuff.Property.Ports.Tests
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
-                IHttpActionResult response = (IHttpActionResult)houseController.Get(houseId: houseId, propertyType: propertyType);
+                IHttpActionResult response = (IHttpActionResult)houseController.Get(houseId: houseId);
                 dynamic retreivedHouse = ((OkNegotiatedContentResult<PropertyBaseRepresentation>)response).Content;
                 Assert.NotNull(retreivedHouse);
 
@@ -753,7 +753,7 @@ namespace RentStuff.Property.Ports.Tests
                     updatedElevator);
 
                 houseController.Put(JsonConvert.SerializeObject(updateHouseCommand));
-                response = (IHttpActionResult)houseController.Get(houseId: houseId, propertyType: updatedPropertyType);
+                response = (IHttpActionResult)houseController.Get(houseId: houseId);
                 dynamic retreivedUpdatedHouse = ((OkNegotiatedContentResult<PropertyBaseRepresentation>)response).Content;
                 Assert.NotNull(retreivedUpdatedHouse);
                 Assert.AreEqual(houseId, retreivedUpdatedHouse.Id);
@@ -852,7 +852,7 @@ namespace RentStuff.Property.Ports.Tests
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
-                IHttpActionResult response = (IHttpActionResult)houseController.Get(houseId: houseId, propertyType: propertyType);
+                IHttpActionResult response = (IHttpActionResult)houseController.Get(houseId: houseId);
                 dynamic retreivedHouse = ((OkNegotiatedContentResult<PropertyBaseRepresentation>)response).Content;
                 Assert.NotNull(retreivedHouse);
 
@@ -894,7 +894,7 @@ namespace RentStuff.Property.Ports.Tests
                     false, false);
 
                 houseController.Put(JsonConvert.SerializeObject(updateHouseCommand));
-                response = (IHttpActionResult)houseController.Get(houseId: houseId, propertyType: updatedPropertyType);
+                response = (IHttpActionResult)houseController.Get(houseId: houseId);
                 dynamic retreivedUpdatedHouse = ((OkNegotiatedContentResult<PropertyBaseRepresentation>)response).Content;
                 Assert.NotNull(retreivedUpdatedHouse);
                 Assert.AreEqual(houseId, retreivedUpdatedHouse.Id);
@@ -1535,7 +1535,7 @@ namespace RentStuff.Property.Ports.Tests
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
-                IHttpActionResult response = (IHttpActionResult)houseController.Get(area: area, propertyType: propertyType);
+                IHttpActionResult response = (IHttpActionResult)houseController.Get(area: area);
                 dynamic retreivedHouse = ((OkNegotiatedContentResult<IList<ResidentialPropertyPartialBaseImplementation>>)response).Content;
                 Assert.NotNull(retreivedHouse);
                 Assert.AreEqual(houseId, retreivedHouse[0].Id);
@@ -1621,7 +1621,7 @@ namespace RentStuff.Property.Ports.Tests
                 IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
                 string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
-                IHttpActionResult response = (IHttpActionResult)houseController.Get(area: area, propertyType: propertyType);
+                IHttpActionResult response = (IHttpActionResult)houseController.Get(area: area);
                 dynamic retreivedHouse = ((OkNegotiatedContentResult<IList<ResidentialPropertyPartialBaseImplementation>>)response).Content;
                 Assert.NotNull(retreivedHouse);
                 Assert.AreEqual(houseId, retreivedHouse[0].Id);
@@ -1846,7 +1846,7 @@ namespace RentStuff.Property.Ports.Tests
 
                 // ###### Location 1 Search ######
                 IHttpActionResult response = (IHttpActionResult)houseController.Get(
-                    area: searchLocation1, propertyType: Constants.House);
+                    area: searchLocation1);
                 dynamic retreivedHouses = ((OkNegotiatedContentResult
                     <IList<ResidentialPropertyPartialBaseImplementation>>)response).Content;
                 Assert.NotNull(retreivedHouses);
@@ -1870,7 +1870,7 @@ namespace RentStuff.Property.Ports.Tests
                 // Location 2 Search
                 var searchLocation2 = "Shahdara, Lahore";
                 IHttpActionResult apartmentResponse = (IHttpActionResult)houseController.Get(
-                    area: searchLocation2, propertyType: Constants.Apartment);
+                    area: searchLocation2);
                 dynamic retreivedHouses2 = ((OkNegotiatedContentResult
                     <IList<ResidentialPropertyPartialBaseImplementation>>)apartmentResponse).Content;
                 Assert.NotNull(retreivedHouses2);
@@ -3224,13 +3224,13 @@ namespace RentStuff.Property.Ports.Tests
             IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
             string houseId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
-            IHttpActionResult response = (IHttpActionResult)houseController.Get(houseId: houseId, propertyType: propertyType);
+            IHttpActionResult response = (IHttpActionResult)houseController.Get(houseId: houseId);
             dynamic retreivedHouse = ((OkNegotiatedContentResult<PropertyBaseRepresentation>)response).Content;
             Assert.NotNull(retreivedHouse);
             Assert.AreEqual(houseId, retreivedHouse.Id);
 
             houseController.Delete(houseId);
-            response = (IHttpActionResult)houseController.Get(houseId: houseId, propertyType: propertyType);
+            response = (IHttpActionResult)houseController.Get(houseId: houseId);
             retreivedHouse = ((OkNegotiatedContentResult<PropertyBaseRepresentation>)response).Content;
             Assert.IsNull(retreivedHouse);
         }
@@ -3262,13 +3262,13 @@ namespace RentStuff.Property.Ports.Tests
             IHttpActionResult houseSaveResult = houseController.Post(JsonConvert.SerializeObject(house));
             string apartmentId = ((OkNegotiatedContentResult<string>)houseSaveResult).Content;
 
-            IHttpActionResult response = (IHttpActionResult)houseController.Get(houseId: apartmentId, propertyType: propertyType);
+            IHttpActionResult response = (IHttpActionResult)houseController.Get(houseId: apartmentId);
             dynamic retreivedHouse = ((OkNegotiatedContentResult<PropertyBaseRepresentation>)response).Content;
             Assert.NotNull(retreivedHouse);
             Assert.AreEqual(apartmentId, retreivedHouse.Id);
 
             houseController.Delete(apartmentId);
-            response = (IHttpActionResult)houseController.Get(houseId: apartmentId, propertyType: propertyType);
+            response = (IHttpActionResult)houseController.Get(houseId: apartmentId);
             retreivedHouse = ((OkNegotiatedContentResult<PropertyBaseRepresentation>)response).Content;
             Assert.IsNull(retreivedHouse);
         }

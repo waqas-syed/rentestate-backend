@@ -99,7 +99,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string houseId = houseApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHouseCommand), email);
 
             HouseFullRepresentation retreivedHouse = 
-                (HouseFullRepresentation)houseApplicationService.GetPropertyById(houseId, Constants.House);
+                (HouseFullRepresentation)houseApplicationService.GetPropertyById(houseId);
 
             Assert.NotNull(retreivedHouse);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
@@ -190,7 +190,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string houseId = houseApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHouseCommand), email);
 
             HouseFullRepresentation retreivedHouse =
-                (HouseFullRepresentation)houseApplicationService.GetPropertyById(houseId, Constants.House);
+                (HouseFullRepresentation)houseApplicationService.GetPropertyById(houseId);
 
             Assert.NotNull(retreivedHouse);
             Assert.IsFalse(string.IsNullOrWhiteSpace(houseId));
@@ -1260,12 +1260,12 @@ namespace RentStuff.Property.Application.IntegrationTests
                 , false);
             var hosue1Id = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(house), email);
 
-            var retrievedHouse = propertyApplicationService.GetPropertyById(hosue1Id, propertyType);
+            var retrievedHouse = propertyApplicationService.GetPropertyById(hosue1Id);
             Assert.IsNotNull(retrievedHouse);
 
             propertyApplicationService.DeleteHouse(hosue1Id, email);
 
-            retrievedHouse = propertyApplicationService.GetPropertyById(hosue1Id, propertyType);
+            retrievedHouse = propertyApplicationService.GetPropertyById(hosue1Id);
             Assert.IsNull(retrievedHouse);
         }
 
@@ -1387,7 +1387,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             string houseId = propertyApplicationService.SaveNewProperty(JsonConvert.SerializeObject(createNewHouseCommand), email);
 
             HouseFullRepresentation retreivedHouse =
-                (HouseFullRepresentation)propertyApplicationService.GetPropertyById(houseId, Constants.House);
+                (HouseFullRepresentation)propertyApplicationService.GetPropertyById(houseId);
 
             Assert.NotNull(retreivedHouse);
 
@@ -1438,7 +1438,7 @@ namespace RentStuff.Property.Application.IntegrationTests
             propertyApplicationService.UpdateProperty(JsonConvert.SerializeObject(updateHouseCommand), email);
 
             // Now Update the House
-            var updatedRetrievedHouse = (HouseFullRepresentation)propertyApplicationService.GetPropertyById(retreivedHouse.Id, propertyType);
+            var updatedRetrievedHouse = (HouseFullRepresentation)propertyApplicationService.GetPropertyById(retreivedHouse.Id);
             Assert.IsNotNull(updatedRetrievedHouse);
 
             Assert.AreEqual(retreivedHouse.Id, updatedRetrievedHouse.Id);
