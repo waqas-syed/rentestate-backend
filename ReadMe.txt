@@ -34,6 +34,13 @@
 	- Import the database from a .sql dump and import the data using MySql WorkBench: 
 		- Server > Data Import > Select the File > Choose from dumping the structure and data, or only data or only structure.
 		
+- FLYWAY - To setup the database up to the latest version. This is crucial in the case of Continuous Integration of TeamCity on the server.
+	- Download and install Flyway: https://flywaydb.org/download/. Lets say the location where you copied the Flyway directory is this: C:\Program Files\flyway-5.1.4
+	- Set the environment variable for the Flyway installation directory.
+	- Copy the content of the folder src\RentStuff\Data\MySql\Migrations to the '/sql' folder of the flyway installation. E.g., C:\Program Files\flyway-5.1.4\sql
+	- Run the following on an elevated command prompt:
+		flyway migrate
+		
 - Google Cloud Storage - For uploading Photos
 	- We have created Service account credentials on Google Cloud Console and downloaded a json file. Get this file from the project lead and place it somewhere on your computer.
 	- Create a new environment variable called GOOGLE_APPLICATION_CREDENTIALS and point it's value to the json file.
