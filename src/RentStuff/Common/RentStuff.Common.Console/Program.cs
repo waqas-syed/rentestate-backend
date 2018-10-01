@@ -6,7 +6,9 @@
         {
             //IdentityBcAuthenticationTests.InitializeTests();
             //CreateHouseTestData.Initialize();
-            ConvertHouseToHostel.Initialize();
+            //ConvertHouseToHostel.Initialize();
+            ConvertHostelsToHouses.Initialize();
+            System.Console.ReadLine();
         }
     }
 }

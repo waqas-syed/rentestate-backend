@@ -128,6 +128,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConvertHostelsToHouses.cs" />
     <Compile Include="ConvertHouseToHostel.cs" />
     <Compile Include="CreateHouseTestData.cs" />
     <Compile Include="DTOs\AccountActivationModel.cs" />

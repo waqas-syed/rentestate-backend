@@ -1,4 +1,5 @@
 ﻿using System;
+using RentStuff.Common.Utilities;
 using RentStuff.Property.Domain.Model.PropertyAggregate;
 
 namespace RentStuff.Property.Domain.Model.HouseAggregate
@@ -37,7 +38,8 @@ namespace RentStuff.Property.Domain.Model.HouseAggregate
             {
                 throw new NullReferenceException("PropertyType is required");
             }
-            if (!propertyType.Equals("House") && !propertyType.Equals("Apartment"))
+            if (!propertyType.Equals(Constants.House) && !propertyType.Equals(Constants.Apartment) 
+                && !propertyType.Equals(Constants.Hostel))
             {
                 throw new InvalidOperationException("House/Apartment instance can only be created with type House/Apartment");
             }

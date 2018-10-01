@@ -233,6 +233,15 @@ namespace RentStuff.Property.Infrastructure.Persistence.Repositories
             .Future<House>().ToList();*/
         }
 
+        public IList<Hostel> GetAllHostels(int pageNo = 0)
+        {
+            using (_session.Session.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                return _session.Session.QueryOver<Hostel>()
+                    .List<Hostel>();
+            }
+        }
+
         /// <summary>
         /// Gets Apartments with reference to their PropertyType
         /// </summary>

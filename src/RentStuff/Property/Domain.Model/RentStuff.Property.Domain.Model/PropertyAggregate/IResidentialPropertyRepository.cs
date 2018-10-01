@@ -90,6 +90,8 @@ namespace RentStuff.Property.Domain.Model.PropertyAggregate
         /// <returns></returns>
         IList<House> GetAllHouses(int pageNo = 0);
 
+        IList<Hostel> GetAllHostels(int pageNo = 0);
+
         /// <summary>
         /// Get All Apartments
         /// </summary>
